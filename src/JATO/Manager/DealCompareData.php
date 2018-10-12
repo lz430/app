@@ -168,7 +168,10 @@ class DealCompareData
         switch ($equipment->name) {
             case 'External dimensions':
                 if (isset($attributes['overall length (in)'])) {
-                    $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$attributes['overall length (in)']->value}\" - W: {$attributes['overall width (in)']->value}\" - H: {$attributes['overall height (in)']->value}\"";
+                    $overallLength = isset($attributes['overall length (in)']) ? $attributes['overall length (in)']->value : '';
+                    $overallWidth = isset($attributes['overall width (in)']) ? $attributes['overall width (in)']->value : '';
+                    $overallHeight = isset($attributes['overall height (in)']) ? $attributes['overall height (in)']->value : '';
+                    $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$overallLength}\" - W: {$overallWidth}\" - H: {$overallHeight}\"";
                 }
                 break;
             case 'Fuel economy':
