@@ -114,4 +114,9 @@ class Dealer extends Model
             'dealer_id'
         );
     }
+
+    public function contacts(): HasMany
+    {
+        return $this->hasMany(DealerContact::class, 'dealer_id', 'dealer_id');
+    }
 }
