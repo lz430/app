@@ -1,27 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
+//import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'next/router';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
 import UserLocationModal from './UserLocationModal';
 import UserContactModal from './UserContactModal';
 import CompareWidget from './CompareWidget';
-import { getUserLocation } from 'apps/user/selectors';
-import { requestLocation } from 'apps/user/actions';
-import { getCurrentPageIsInCheckout } from 'apps/page/selectors';
-import { toggleCompare } from 'apps/common/actions';
+import { getUserLocation } from '../../../apps/user/selectors';
+import { requestLocation } from '../../../apps/user/actions';
+import { getCurrentPageIsInCheckout } from '../../../apps/page/selectors';
+import { toggleCompare } from '../../../apps/common/actions';
 
-import Location from 'icons/zondicons/Location';
-import Help from 'icons/zondicons/Question';
+import Location from '../../../icons/zondicons/Location';
+import Help from '../../../icons/zondicons/Question';
 
 import SearchWidget from './SearchWidget';
-import { headerRequestAutocomplete } from 'apps/page/actions';
-import { getSearchQuery } from 'pages/deal-list/selectors';
+import { headerRequestAutocomplete } from '../../../apps/page/actions';
+import { getSearchQuery } from '../../../pages/deal-list/selectors';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -33,9 +33,11 @@ class Header extends React.PureComponent {
         onRequestSearch: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
+        /*
         history: ReactRouterPropTypes.history.isRequired,
         location: ReactRouterPropTypes.location.isRequired,
         match: ReactRouterPropTypes.match.isRequired,
+        */
     };
 
     state = {
@@ -126,7 +128,10 @@ class Header extends React.PureComponent {
         return (
             <Navbar expand="md">
                 <NavbarBrand href="/">
-                    <img alt="Deliver My Ride" src="/images/dmr-logo.svg" />
+                    <img
+                        alt="Deliver My Ride"
+                        src="/static/images/dmr-logo.svg"
+                    />
                 </NavbarBrand>
                 {/* <div className="mr-auto" /> */}
                 <SearchWidget

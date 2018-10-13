@@ -1,10 +1,10 @@
 import { takeEvery, select } from 'redux-saga/effects';
 
-import { initPage } from 'apps/page/sagas';
+import { initPage } from '../../apps/page/sagas';
 
 import { INIT } from './consts';
-import { track } from 'services';
-import { checkout as getCheckout } from 'apps/checkout/selectors';
+import { track } from '../../services';
+import { checkout as getCheckout } from '../../apps/checkout/selectors';
 
 /*******************************************************************
  * Init

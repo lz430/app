@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dealType } from 'types';
-import Loading from 'icons/miscicons/Loading';
+import { dealType } from '../../types';
+import Loading from '../../icons/miscicons/Loading';
 
 import DealPriceExplanationModal from './DealPriceExplanationModal';
-import { dealPricingFactory } from 'src/DealPricing';
+import { dealPricingFactory } from '../../src/DealPricing';
 
-import InformationOutline from 'icons/zondicons/InformationOutline';
+import InformationOutline from '../../icons/zondicons/InformationOutline';
 
 class DealPrice extends React.Component {
     static propTypes = {
@@ -87,7 +87,7 @@ class DealPrice extends React.Component {
             case 'lease':
                 return 'Monthly Lease Payment';
             default:
-                return 'Price'
+                return 'Price';
         }
     }
 
@@ -99,7 +99,7 @@ class DealPrice extends React.Component {
             case 'lease':
                 return 'Includes All Taxes and Fees';
             default:
-                return 'Your price'
+                return 'Your price';
         }
     }
 

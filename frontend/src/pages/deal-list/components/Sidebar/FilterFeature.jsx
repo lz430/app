@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filterItemType } from 'types';
+import { filterItemType } from '../../../../types';
 import FilterFeatureList from './FilterFeatureList';
 import SidebarFilter from './SidebarFilter';
 

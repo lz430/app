@@ -8,7 +8,10 @@ import {
     CardBody,
 } from 'reactstrap';
 
-import { ExtraLargeAndUp, LargeAndDown } from 'components/Responsive';
+import {
+    ExtraLargeAndUp,
+    LargeAndDown,
+} from '../../../../components/Responsive';
 
 class ListTopMessaging extends React.PureComponent {
     state = {

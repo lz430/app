@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Loading from 'icons/miscicons/Loading';
+import Loading from '../../../icons/miscicons/Loading';
 
-import ModelYear from 'components/Deals/ModelYear';
+import ModelYear from '../../../components/Deals/ModelYear';
 import { selectModelYear } from '../actions';
 import { getUserPurchaseStrategy } from '../../../apps/user/selectors';
 import CardCta from './Cta/CardCta';

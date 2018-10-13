@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { modelYearType } from 'types';
+import { modelYearType } from '../../types';
 
 import LazyLoad from 'react-lazyload';
 

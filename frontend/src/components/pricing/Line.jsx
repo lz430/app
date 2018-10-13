@@ -1,6 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Line extends React.PureComponent {
+    static propTypes = {
+        isSemiImportant: PropTypes.bool.isRequired,
+        isImportant: PropTypes.bool.isRequired,
+        isSectionTotal: PropTypes.bool.isRequired,
+        style: PropTypes.object,
+    };
+
     static defaultProps = {
         isImportant: false,
         isSemiImportant: false,

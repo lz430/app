@@ -8,7 +8,7 @@ import {
     DropdownItem,
 } from 'reactstrap';
 import DealImage from '../../Deals/DealImage';
-import CloseSolid from 'icons/zondicons/CloseSolid';
+import CloseSolid from '../../../icons/zondicons/CloseSolid';
 import { Link } from 'react-router-dom';
 
 class CompareWidget extends React.PureComponent {

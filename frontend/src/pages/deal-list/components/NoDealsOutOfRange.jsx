@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import ApiClient from 'store/api';
+import ApiClient from '../../../store/api';
 
-import ZipcodeFinder from 'pages/deal-list/components/Sidebar/ZipcodeFinder';
+import ZipcodeFinder from '../../../pages/deal-list/components/Sidebar/ZipcodeFinder';
 
 import { Button, Form, FormGroup, Input } from 'reactstrap';
 

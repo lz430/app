@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'next/router';
 
 import Header from './Header/Header';
 import LiveChat from 'react-livechat';
-import config from 'config';
+import config from '../../config';
 
-import { ChatContext } from 'contexts';
+import { ChatContext } from '../../contexts';
 
 class App extends React.Component {
     static propTypes = {

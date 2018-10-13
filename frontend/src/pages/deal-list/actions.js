@@ -1,4 +1,4 @@
-import { track } from 'services';
+import { track } from '../../services';
 
 import * as ActionTypes from './consts';
 

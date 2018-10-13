@@ -12,8 +12,8 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import Bolt from 'icons/zondicons/Bolt';
-import Location from 'icons/zondicons/Location';
+import Bolt from '../../../icons/zondicons/Bolt';
+import Location from '../../../icons/zondicons/Location';
 
 class UserLocationModal extends React.PureComponent {
     static propTypes = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
-import { dealType } from 'types';
+import { dealType } from '../../types';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
@@ -56,8 +56,8 @@ export default class DealImage extends React.PureComponent {
                 {thumbnail && <img alt="" {...imageProps} src={thumbnail} />}
                 {!thumbnail && (
                     <img
-                      alt=""
-                      className="placeholder"
+                        alt=""
+                        className="placeholder"
                         src={this.state.fallbackDealImage}
                     />
                 )}

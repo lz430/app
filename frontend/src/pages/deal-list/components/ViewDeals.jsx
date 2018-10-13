@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
-import { dealType } from 'types';
-import Loading from 'icons/miscicons/Loading';
+import { dealType } from '../../../types';
+import Loading from '../../../icons/miscicons/Loading';
 
-import Deal from 'components/Deals/Deal';
+import Deal from '../../../components/Deals/Deal';
 
-import { toggleCompare } from 'apps/common/actions';
+import { toggleCompare } from '../../../apps/common/actions';
 import { requestMoreDeals } from '../actions';
 import { getLoadingSearchResults } from '../selectors';
 import { Link } from 'react-router-dom';

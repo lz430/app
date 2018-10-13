@@ -1,17 +1,18 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-
+import { StickyContainer } from 'react-sticky';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
-import { dealType, filterItemType } from 'types';
-import Loading from 'icons/miscicons/Loading';
+import { dealType, filterItemType } from '../../types';
+import Loading from '../../icons/miscicons/Loading';
 
-import { StickyContainer } from 'react-sticky';
-
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import { getIsPageLoading } from 'apps/page/selectors';
-import PageContent from 'components/App/PageContent';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
+import { getIsPageLoading } from '../../apps/page/selectors';
+import PageContent from '../../components/App/PageContent';
 
 import ResultsList from './components/ResultsList';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
@@ -20,8 +21,7 @@ import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom'
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
-
-import { LargeAndUp, MediumAndDown } from 'components/Responsive';
+import { LargeAndUp, MediumAndDown } from '../../components/Responsive';
 import { buildSearchQueryUrl } from './helpers';
 import { forceCheck } from 'react-lazyload';
 
@@ -37,9 +37,10 @@ import {
     getSearchQuery,
     getSelectedFiltersByCategory,
 } from './selectors';
-import { setPurchaseStrategy } from 'apps/user/actions';
+import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
-import withTracker from 'components/withTracker';
+import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
 
 class Container extends React.Component {
     static propTypes = {
@@ -60,16 +61,18 @@ class Container extends React.Component {
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
 
-        history: ReactRouterPropTypes.history.isRequired,
-        location: ReactRouterPropTypes.location.isRequired,
-        match: ReactRouterPropTypes.match.isRequired,
+        //history: ReactRouterPropTypes.history.isRequired,
+        //location: ReactRouterPropTypes.location.isRequired,
+        //match: ReactRouterPropTypes.match.isRequired,
     };
 
     componentDidMount() {
+        console.log(this.props);
         this.props.onInit({ location: this.props.location });
     }
 
     componentDidUpdate(prevProps) {
+        /*
         if (this.props.location.search !== prevProps.location.search) {
             // Handling user clicking back button here.
             const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
@@ -95,6 +98,7 @@ class Container extends React.Component {
                 });
             }
         }
+        */
     }
 
     renderMakeSelectionModal() {
@@ -211,6 +215,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

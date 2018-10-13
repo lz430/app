@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { filterItemType } from 'types';
+import { filterItemType } from '../../../../types';
 
 import * as R from 'ramda';
 
-import Checkmark from 'icons/zondicons/Checkmark';
+import Checkmark from '../../../../icons/zondicons/Checkmark';
 
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {

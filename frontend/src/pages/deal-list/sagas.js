@@ -8,8 +8,8 @@ import {
     cancel,
     cancelled,
 } from 'redux-saga/effects';
-import ApiClient from 'store/api';
-import { cancelRequest } from 'store/httpclient';
+import ApiClient from '../../store/api';
+import { cancelRequest } from '../../store/httpclient';
 import * as R from 'ramda';
 
 import {
@@ -20,14 +20,14 @@ import {
     SEARCH_TOGGLE_FILTER,
 } from './consts';
 
-import { batchRequestDealQuotes } from 'apps/pricing/sagas';
+import { batchRequestDealQuotes } from '../../apps/pricing/sagas';
 import * as DealListActions from './actions';
 
 import getDealList, { getSearchQuery } from './selectors';
-import { getUserLocation } from 'apps/user/selectors';
-import { initPage } from 'apps/page/sagas';
+import { getUserLocation } from '../../apps/user/selectors';
+import { initPage } from '../../apps/page/sagas';
 
-import { track } from 'services';
+import { track } from '../../services';
 import * as ActionTypes from './consts';
 
 import { push } from 'connected-react-router';

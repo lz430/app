@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dealType, dealPricingType } from 'types';
+import { dealType, dealPricingType } from '../../types';
 
 import Line from '../pricing/Line';
 import CashPriceExplanation from './CashPriceExplanation';

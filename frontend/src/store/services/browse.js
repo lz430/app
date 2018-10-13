@@ -1,4 +1,4 @@
-import httpclient from 'store/httpclient';
+import httpclient from '../httpclient';
 
 /**
  * Browse specific API calls.

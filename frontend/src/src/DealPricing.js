@@ -1,11 +1,11 @@
-import formulas from 'src/formulas';
-import { moneyFormat } from 'src/util';
+import formulas from './formulas';
+import { moneyFormat } from './util';
 import * as R from 'ramda';
 import Decimal from 'decimal.js';
 
-import { dealPricingData } from 'apps/common/selectors';
-import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
-import { getClosestNumberInRange } from 'src/util';
+import { dealPricingData } from '../apps/common/selectors';
+import { dealPricingFromCheckoutData } from '../apps/checkout/selectors';
+import { getClosestNumberInRange } from '../src/util';
 
 /**
  * Generate a deal pricing class using an object literal
@@ -20,7 +20,7 @@ export const dealPricingFromDataFactory = data => {
 /**
  * Generate a deal pricing class from an existing
  * pricing instance.
- * @param dealPricing
+ * @param pricing
  * @returns {DealPricing}
  */
 export const dealPricingFromPricingFactory = pricing => {

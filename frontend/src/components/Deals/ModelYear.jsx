@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { modelYearType } from 'types';
+import { modelYearType } from '../../types';
 
-import { moneyFormat } from 'src/util';
-import ModelYearImage from 'components/Deals/ModelYearImage';
+import { moneyFormat } from '../../src/util';
+import ModelYearImage from '../../components/Deals/ModelYearImage';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
 class ModelYear extends React.Component {

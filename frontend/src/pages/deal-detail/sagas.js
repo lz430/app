@@ -1,13 +1,16 @@
 import { takeEvery, select, put, call } from 'redux-saga/effects';
-import { track } from 'services';
-import ApiClient from 'store/api';
+import { track } from '../../services';
+import ApiClient from '../../store/api';
 
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import { requestDealQuote as requestDealQuoteAction } from 'apps/pricing/actions';
-import { requestDealQuote } from 'apps/pricing/sagas';
-import { discountType as getDiscountType } from 'apps/common/selectors';
-import { initPage } from 'apps/page/sagas';
-import { pageLoadingFinished, pageLoadingStart } from 'apps/page/actions';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
+import { requestDealQuote as requestDealQuoteAction } from '../../apps/pricing/actions';
+import { requestDealQuote } from '../../apps/pricing/sagas';
+import { discountType as getDiscountType } from '../../apps/common/selectors';
+import { initPage } from '../../apps/page/sagas';
+import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
 import { getConditionalRoles, getDeal } from './selectors';

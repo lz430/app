@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ArrowOutlineLeft from 'icons/zondicons/ArrowOutlineLeft';
+import ArrowOutlineLeft from '../../../../icons/zondicons/ArrowOutlineLeft';
 
 import SidebarFilter from './SidebarFilter';
 import FilterStyleList from './FilterStyleList';
 import FilterMakeList from './FilterMakeList';
-import { MediumAndUp } from 'components/Responsive';
+import { MediumAndUp } from '../../../../components/Responsive';
 
 class PrimaryFilters extends React.PureComponent {
     static propTypes = {

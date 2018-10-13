@@ -1,5 +1,5 @@
 import * as ActionTypes from './consts';
-import { track } from 'services';
+import { track } from '../../services';
 
 export function receiveLocation(data) {
     if (data && data['location']) {

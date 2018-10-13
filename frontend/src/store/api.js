@@ -1,7 +1,7 @@
-import BrowseService from 'store/services/browse';
-import DealService from 'store/services/deal';
-import UserService from 'store/services/user';
-import CheckoutService from 'store/services/checkout';
+import BrowseService from './services/browse';
+import DealService from './services/deal';
+import UserService from './services/user';
+import CheckoutService from './services/checkout';
 
 class API {
     constructor() {

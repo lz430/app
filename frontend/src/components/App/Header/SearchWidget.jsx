@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { MediumAndUp, SmallAndDown } from 'components/Responsive';
+import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
-import { buildSearchQueryUrl } from 'pages/deal-list/helpers';
-import StyleIcon from 'components/Deals/StyleIcon';
-import Search from 'icons/zondicons/Search';
-import Close from 'icons/zondicons/Close';
+import { buildSearchQueryUrl } from '../../../pages/deal-list/helpers';
+import StyleIcon from '../../../components/Deals/StyleIcon';
+import Search from '../../../icons/zondicons/Search';
+import Close from '../../../icons/zondicons/Close';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {

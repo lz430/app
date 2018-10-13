@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { requestLocation } from 'apps/user/actions';
+import { requestLocation } from '../../../../apps/user/actions';
 
 class ZipcodeFinder extends React.PureComponent {
     static propTypes = {

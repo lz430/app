@@ -1,5 +1,5 @@
 import React from 'react';
-import { dealType } from 'types';
+import { dealType } from '../../types';
 
 export default class DealStockNumber extends React.PureComponent {
     static propTypes = {
@@ -7,6 +7,11 @@ export default class DealStockNumber extends React.PureComponent {
     };
 
     render() {
-        return <span>Stock # DMR-{this.props.deal.id}</span>;
+        return (
+            <span>
+                Stock # DMR-
+                {this.props.deal.id}
+            </span>
+        );
     }
 }

@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import {
     getCurrentPage,
     getCurrentPageIsInCheckout,
-} from 'apps/page/selectors';
-import { checkout } from 'apps/checkout/selectors';
+} from '../../apps/page/selectors';
+import { checkout } from '../../apps/checkout/selectors';
 
 class BackButton extends React.PureComponent {
     static propTypes = {

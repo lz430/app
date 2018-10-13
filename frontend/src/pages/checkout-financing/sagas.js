@@ -1,12 +1,12 @@
 import { takeEvery, select, put, call } from 'redux-saga/effects';
 
-import { initPage } from 'apps/page/sagas';
+import { initPage } from '../../apps/page/sagas';
 
 import { INIT } from './consts';
-import { checkout as getCheckout } from 'apps/checkout/selectors';
-import { track } from 'services';
-import { pageLoadingFinished, pageLoadingStart } from 'apps/page/actions';
-import ApiClient from 'store/api';
+import { checkout as getCheckout } from '../../apps/checkout/selectors';
+import { track } from '../../services';
+import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
+import ApiClient from '../../store/api';
 import { receiveFinancingUrl } from './actions';
 
 /*******************************************************************

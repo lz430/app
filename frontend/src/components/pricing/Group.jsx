@@ -1,6 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Group extends React.PureComponent {
+    static propTypes = {
+        showIf: PropTypes.bool.isRequired,
+        children: PropTypes.node.isRequired,
+    };
     static defaultProps = {
         showIf: true,
     };

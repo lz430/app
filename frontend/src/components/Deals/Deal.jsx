@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DealImage from 'components/Deals/DealImage';
-import DealPrice from 'components/Deals/DealPrice';
-import { dealType } from 'types';
+import DealImage from './DealImage';
+import DealPrice from './DealPrice';
+import { dealType } from '../../types';
 
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';

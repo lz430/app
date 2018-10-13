@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
-import CheveronUp from 'icons/zondicons/CheveronUp';
-import CheveronDown from 'icons/zondicons/CheveronDown';
+import CheveronUp from '../../../../icons/zondicons/CheveronUp';
+import CheveronDown from '../../../../icons/zondicons/CheveronDown';
 
 class SidebarFilter extends React.PureComponent {
     static propTypes = {

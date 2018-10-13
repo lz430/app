@@ -1,20 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 
 import PrimaryFilters from './Sidebar/PrimaryFilters';
 import SecondaryFilters from './Sidebar/SecondaryFilters';
 import MobileFilterClose from './Sidebar/MobileFilterClose';
-import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
-
-import { toggleSearchFilter, clearModelYear } from 'pages/deal-list/actions';
+import GlobalSelectPurchaseStrategy from '../../../apps/user/components/GlobalSelectPurchaseStrategy';
+import {
+    toggleSearchFilter,
+    clearModelYear,
+} from '../../../pages/deal-list/actions';
 import {
     getLoadingSearchResults,
     getSelectedFiltersByCategory,
 } from '../selectors';
 import { requestSearch } from '../actions';
-
-import classNames from 'classnames';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {

@@ -1,7 +1,7 @@
 import { put, select, takeLatest, call, cancelled } from 'redux-saga/effects';
 
-import { requestIpLocation } from 'apps/user/sagas';
-import { getUserLocation } from 'apps/user/selectors';
+import { requestIpLocation } from '../../apps/user/sagas';
+import { getUserLocation } from '../../apps/user/selectors';
 
 import {
     setCurrentPage,
@@ -9,9 +9,9 @@ import {
     pageLoadingFinished,
     headerReceiveAutocomplete,
 } from './actions';
-import { cancelRequest } from 'store/httpclient';
+import { cancelRequest } from '../../store/httpclient';
 
-import ApiClient from 'store/api';
+import ApiClient from '../../store/api';
 import { REQUEST_AUTOCOMPLETE } from './consts';
 
 /**

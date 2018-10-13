@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ChatBubbleDots from 'icons/zondicons/ChatBubbleDots';
+import ChatBubbleDots from '../../icons/zondicons/ChatBubbleDots';
 import classNames from 'classnames';
 
-import { ChatContext } from 'contexts';
-import config from 'config';
+import { ChatContext } from '../../contexts';
+import config from '../../config';
 
 class ChatWidget extends React.PureComponent {
     static propTypes = {
