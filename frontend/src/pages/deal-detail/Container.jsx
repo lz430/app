@@ -50,7 +50,6 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     componentDidMount() {
-        console.log(this.props);
         this.props.initPage(this.props.router.query.id);
     }
 
@@ -164,9 +163,12 @@ class DealDetailContainer extends React.PureComponent {
 
         if (!this.props.deal) {
             return (
-                <Container>
-                    <Alert color="danger">Unable to load deal.</Alert>
-                </Container>
+                <PageContent>
+                    {this.renderBreadcrumb()}
+                    <Container>
+                        <Alert color="danger">Unable to load deal.</Alert>
+                    </Container>
+                </PageContent>
             );
         }
 

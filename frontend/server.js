@@ -1,3 +1,5 @@
+const { join } = require('path');
+
 const express = require('express');
 const next = require('next');
 
@@ -8,6 +10,11 @@ const handle = app.getRequestHandler();
 app.prepare()
     .then(() => {
         const server = express();
+
+        server.get('/favicon.ico', (req, res) => {
+            const path = join(__dirname, 'static', 'favicon.ico');
+            app.serveStatic(req, res, path);
+        });
 
         server.get('/filter', (req, res) => {
             const actualPage = '/deal-list';

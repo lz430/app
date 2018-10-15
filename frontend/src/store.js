@@ -1,5 +1,4 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 
@@ -37,12 +36,10 @@ export default (
         return makeConfiguredStore(rootReducer, initialState);
     } else {
         const { persistStore, persistReducer } = require('redux-persist');
-        const storage = require('redux-persist/lib/storage').default;
         const persistConfig = {
             ...basePersistConfig,
             key: 'root',
             blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
-            storage,
         };
 
         const persistedReducer = persistReducer(persistConfig, rootReducer);

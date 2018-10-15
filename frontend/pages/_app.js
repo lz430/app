@@ -19,17 +19,34 @@ class MyApp extends App {
 
     render() {
         const { Component, pageProps, store } = this.props;
+
+        //
+        // Client
+        if (store.__persistor) {
+            return (
+                <Container>
+                    <Provider store={store}>
+                        <DeliverMyRide>
+                            <PersistGate
+                                persistor={store.__persistor}
+                                loading={null}
+                            >
+                                <Component {...pageProps} />
+                            </PersistGate>
+                        </DeliverMyRide>
+                    </Provider>
+                </Container>
+            );
+        }
+
+        //
+        // Server
         return (
             <Container>
                 <Provider store={store}>
-                    <PersistGate
-                        persistor={store.__persistor}
-                        loading={<div>Loading</div>}
-                    >
-                        <DeliverMyRide>
-                            <Component {...pageProps} />
-                        </DeliverMyRide>
-                    </PersistGate>
+                    <DeliverMyRide>
+                        <Component {...pageProps} />
+                    </DeliverMyRide>
                 </Provider>
             </Container>
         );
