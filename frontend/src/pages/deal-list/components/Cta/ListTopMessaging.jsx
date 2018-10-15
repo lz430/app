@@ -51,7 +51,9 @@ class ListTopMessaging extends React.PureComponent {
 
     next() {
         const count = Math.ceil(this.items.length / 2);
-        if (this.animating) return;
+        if (this.animating) {
+            return;
+        }
         const nextIndex =
             this.state.activeIndex === count - 1
                 ? 0
@@ -60,7 +62,10 @@ class ListTopMessaging extends React.PureComponent {
     }
 
     previous() {
-        if (this.animating) return;
+        if (this.animating) {
+            return;
+        }
+
         const count = Math.ceil(this.items.length / 2);
 
         const nextIndex =
@@ -70,7 +75,7 @@ class ListTopMessaging extends React.PureComponent {
         this.setState({ activeIndex: nextIndex });
     }
 
-    renderCta(item, style) {
+    renderCta(item) {
         return (
             <Card key={item.title} className="inventory-summary cta-message">
                 <CardBody>

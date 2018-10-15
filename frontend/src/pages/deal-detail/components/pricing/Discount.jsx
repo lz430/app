@@ -11,11 +11,7 @@ import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 export default class Discount extends React.PureComponent {
     static propTypes = {
         pricing: PropTypes.object.isRequired,
-        onChange: PropTypes.func,
-    };
-
-    static defaultProps = {
-        onChange: (deal, newValue) => {},
+        onChange: PropTypes.func.isRequired,
     };
 
     handleChange = e => {
