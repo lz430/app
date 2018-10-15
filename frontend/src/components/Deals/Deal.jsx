@@ -6,7 +6,7 @@ import DealPrice from './DealPrice';
 import { dealType } from '../../types';
 
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class Deal extends React.Component {
     static propTypes = {
@@ -21,23 +21,22 @@ class Deal extends React.Component {
         const deal = this.props.deal;
 
         return (
-            <Link
-                to={`/deals/${deal.id}`}
-                className="deal__basic-info-year-and-model"
-            >
-                <div className="deal__basic-info-year-and-make">
-                    {`${deal.year} ${deal.make}`}
-                </div>
+            <Link href={`/deals?id=${deal.id}`} as={`/deals/${deal.id}`}>
+                <div className="deal__basic-info-year-and-model">
+                    <div className="deal__basic-info-year-and-make">
+                        {`${deal.year} ${deal.make}`}
+                    </div>
 
-                <div className="deal__basic-info-model-and-series">
-                    {`${deal.model} ${deal.series}`}
+                    <div className="deal__basic-info-model-and-series">
+                        {`${deal.model} ${deal.series}`}
+                    </div>
+                    {deal.color &&
+                        deal.interior_color && (
+                            <div className="deal__basic-info-color">
+                                {deal.color}, {deal.interior_color}
+                            </div>
+                        )}
                 </div>
-                {deal.color &&
-                    deal.interior_color && (
-                        <div className="deal__basic-info-color">
-                            {deal.color}, {deal.interior_color}
-                        </div>
-                    )}
             </Link>
         );
     }

@@ -6,7 +6,7 @@ import Line from '../pricing/Line';
 import CashPriceExplanation from './CashPriceExplanation';
 import FinancePriceExplanation from './FinancePriceExplanation';
 import LeasePriceExplanation from './LeasePriceExplanation';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class DealPriceExplanationModalData extends React.PureComponent {
     static propTypes = {

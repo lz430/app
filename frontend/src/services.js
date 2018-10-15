@@ -1,6 +1,5 @@
-/* global mixpanel */
-
 import config from './config';
+import mixpanel from 'mixpanel-browser';
 
 /**
  *
@@ -8,7 +7,8 @@ import config from './config';
  * @param properties
  */
 export function track(event, properties = {}) {
-    if (config['MIXPANEL_TRACK']) {
+    if (config['MIXPANEL_TOKEN']) {
+        mixpanel.init(config['MIXPANEL_TOKEN']);
         mixpanel.track(event, properties);
     }
 }

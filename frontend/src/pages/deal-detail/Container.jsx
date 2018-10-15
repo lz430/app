@@ -1,28 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dealType } from 'types';
-import { track } from 'services';
+import { compose } from 'redux';
+
+import { dealType } from '../../types';
+import { track } from '../../services';
 
 import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
-import Loading from 'icons/miscicons/Loading';
-import { toggleCompare } from 'apps/common/actions';
-import { getIsPageLoading } from 'apps/page/selectors';
-import { setPurchaseStrategy } from 'apps/user/actions';
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import { setCheckoutData, checkoutStart } from 'apps/checkout/actions';
+import Loading from '../../icons/miscicons/Loading';
+import { toggleCompare } from '../../apps/common/actions';
+import { getIsPageLoading } from '../../apps/page/selectors';
+import { setPurchaseStrategy } from '../../apps/user/actions';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
+import { setCheckoutData, checkoutStart } from '../../apps/checkout/actions';
 import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
 import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
-import { pricingFromStateFactory } from 'src/pricing/factory';
-import PageContent from 'components/App/PageContent';
-import { Link } from 'react-router-dom';
-import { compose } from 'redux';
-import withTracker from 'components/withTracker';
+import { pricingFromStateFactory } from '../../src/pricing/factory';
+import PageContent from '../../components/App/PageContent';
+import Link from 'next/link';
+import withTracker from '../../components/withTracker';
+import { nextRouterType } from '../../types';
+import { withRouter } from 'next/router';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -40,10 +46,12 @@ class DealDetailContainer extends React.PureComponent {
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
+        router: nextRouterType,
     };
 
     componentDidMount() {
-        this.props.initPage(this.props.match.params.id);
+        console.log(this.props);
+        this.props.initPage(this.props.router.query.id);
     }
 
     handlePaymentTypeChange = strategy => {
@@ -139,7 +147,9 @@ class DealDetailContainer extends React.PureComponent {
             <Container>
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link to="/filter">Search Results</Link>
+                        <Link href="/filter">
+                            <a>Search Results</a>
+                        </Link>
                     </BreadcrumbItem>
                     <BreadcrumbItem active>View Deal</BreadcrumbItem>
                 </Breadcrumb>
@@ -229,6 +239,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
 });
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

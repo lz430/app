@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
-import { dealType, filterItemType } from '../../types';
+import { dealType, filterItemType, nextRouterType } from '../../types';
 import Loading from '../../icons/miscicons/Loading';
 
 import {
@@ -60,7 +60,7 @@ class Container extends React.Component {
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
-
+        router: nextRouterType,
         //history: ReactRouterPropTypes.history.isRequired,
         //location: ReactRouterPropTypes.location.isRequired,
         //match: ReactRouterPropTypes.match.isRequired,
@@ -68,7 +68,7 @@ class Container extends React.Component {
 
     componentDidMount() {
         console.log(this.props);
-        this.props.onInit({ location: this.props.location });
+        this.props.onInit({ router: this.props.router });
     }
 
     componentDidUpdate(prevProps) {

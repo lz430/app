@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { batchRequestDealQuotes } from 'apps/pricing/actions';
 import { getComparedDeals } from '../selectors';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class ToolbarPrice extends React.PureComponent {
     static propTypes = {

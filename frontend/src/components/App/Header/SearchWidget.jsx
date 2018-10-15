@@ -14,7 +14,7 @@ class SearchWidget extends React.PureComponent {
         currentPageIsInCheckout: PropTypes.bool,
         onRequestSearch: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
-        history: ReactRouterPropTypes.history.isRequired,
+        //history: ReactRouterPropTypes.history.isRequired,
         searchQuery: PropTypes.object,
     };
 
@@ -68,8 +68,9 @@ class SearchWidget extends React.PureComponent {
         if (item.query.filters) {
             newSearchQuery.filters = item.query.filters;
         }
+
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        this.props.history.push('/filter?' + urlQuery);
+        //this.props.history.push('/filter?' + urlQuery);
         this.setState({ query: '' });
         this.setState({ SearchMessage: false });
         this.toggleSearchMobile();

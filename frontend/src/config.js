@@ -2,6 +2,7 @@ export default {
     RECAPTCHA_PUBLIC_KEY: process.env.REACT_APP_RECAPTCHA_PUBLIC_KEY,
     MARKETING_URL: process.env.REACT_APP_MARKETING_URL,
     MIXPANEL_TRACK: process.env.REACT_APP_MIXPANEL_TRACK,
+    MIXPANEL_TOKEN: process.env.REACT_APP_MIXPANEL_TOKEN,
     GOOGLE_ANALYTICS_UA: process.env.REACT_APP_GA_TOKEN,
     LIVECHAT_LICENSE: process.env.REACT_APP_LIVECHAT_LICENSE,
     API_URL: process.env.REACT_APP_API_URL,
@@ -47,4 +48,4 @@ export default {
         cadillaclease: 'cadlease',
         gmloyalty: 'gmloyalty',
     },
-}
+};

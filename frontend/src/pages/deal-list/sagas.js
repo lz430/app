@@ -192,7 +192,7 @@ function* searchToggleFilter(action) {
  * Init
  ********************************************************************/
 function* init(action) {
-    const { location, dataOnly } = action.data;
+    const { router, dataOnly } = action.data;
     if (!dataOnly) {
         yield* initPage('deal-list');
     }

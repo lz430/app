@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazyload';
 import { dealType } from '../../types';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export default class DealImage extends React.PureComponent {
     static propTypes = {
@@ -51,16 +51,27 @@ export default class DealImage extends React.PureComponent {
 
         const thumbnail = this.featuredImageUrl();
 
+        if (thumbnail) {
+            return (
+                <Link
+                    href={`/deals?id=${this.props.deal.id}`}
+                    as={`/deals/${this.props.deal.id}`}
+                >
+                    <img alt="" {...imageProps} src={thumbnail} />
+                </Link>
+            );
+        }
+
         return (
-            <Link to={`/deals/${this.props.deal.id}`}>
-                {thumbnail && <img alt="" {...imageProps} src={thumbnail} />}
-                {!thumbnail && (
-                    <img
-                        alt=""
-                        className="placeholder"
-                        src={this.state.fallbackDealImage}
-                    />
-                )}
+            <Link
+                href={`/deals?id=${this.props.deal.id}`}
+                as={`/deals/${this.props.deal.id}`}
+            >
+                <img
+                    alt=""
+                    className="placeholder"
+                    src={this.state.fallbackDealImage}
+                />
             </Link>
         );
     }

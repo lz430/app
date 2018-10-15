@@ -85,3 +85,15 @@ export const moneyValueType = PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
 ]);
+
+export const nextRouterType = shape({
+    asPath: string.isRequired,
+    pathname: string.isRequired,
+    route: string.isRequired,
+    query: object,
+    back: PropTypes.func.isRequired,
+    beforePopState: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+    reload: PropTypes.func.isRequired,
+    replace: PropTypes.func.isRequired,
+});

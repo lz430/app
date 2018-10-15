@@ -9,7 +9,7 @@ import {
 } from 'reactstrap';
 import DealImage from '../../Deals/DealImage';
 import CloseSolid from '../../../icons/zondicons/CloseSolid';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class CompareWidget extends React.PureComponent {
     static propTypes = {

@@ -11,7 +11,7 @@ import Deal from '../../../components/Deals/Deal';
 import { toggleCompare } from '../../../apps/common/actions';
 import { requestMoreDeals } from '../actions';
 import { getLoadingSearchResults } from '../selectors';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import classNames from 'classnames';
 import CardCta from './Cta/CardCta';
 
@@ -71,10 +71,10 @@ class ViewDeals extends React.PureComponent {
                             : 'Compare'}{' '}
                     </button>
                     <Link
-                        className="btn btn-outline-success btn-sm"
-                        to={`/deals/${deal.id}`}
+                        href={`/deals?id=${deal.id}`}
+                        as={`/deals/${deal.id}`}
                     >
-                        View
+                        <a className="btn btn-outline-success btn-sm">View</a>
                     </Link>
                 </div>
             </Deal>

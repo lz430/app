@@ -188,9 +188,9 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withRouter
+    )
 )(Header);
