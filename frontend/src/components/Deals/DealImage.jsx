@@ -21,7 +21,7 @@ export default class DealImage extends React.PureComponent {
     };
 
     state = {
-        fallbackDealImage: '/images/deal-missing-thumbnail.jpg',
+        fallbackDealImage: '/static/images/deal-missing-thumbnail.jpg',
     };
 
     featuredImageUrl() {
