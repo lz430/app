@@ -36,7 +36,6 @@ import { buildSearchQueryUrl } from './helpers';
 
 import Router from 'next/router';
 
-import queryString from 'query-string';
 import { setPurchaseStrategy } from '../../apps/user/actions';
 
 /*******************************************************************
@@ -204,31 +203,30 @@ function* searchToggleFilter(action) {
  * Init
  ********************************************************************/
 function* init(action) {
-    const { router, dataOnly } = action.data;
+    const { initialQuery, dataOnly } = action.data;
     if (!dataOnly) {
         yield* initPage('deal-list');
     }
 
-    // User is coming in fresh without any existing state.
-    // Means the user either clicked a deep link or came from
-    // the brochure site.
-    /*
-    if (location.state === undefined) {
-        const query = queryString.parse(location.search, {
-            arrayFormat: 'bracket',
-        });
-
+    if (initialQuery) {
         // Not from the brochure site
-        if (query.purchaseStrategy && query.entity) {
-            yield put(setPurchaseStrategy(query.purchaseStrategy));
+        if (initialQuery.purchaseStrategy && initialQuery.entity) {
+            yield put(setPurchaseStrategy(initialQuery.purchaseStrategy));
 
+            let filters = [];
+            if (Array.isArray(initialQuery.filters)) {
+                filters = initialQuery.filters;
+            } else if (initialQuery.filters) {
+                filters.push(initialQuery.filters);
+            }
+            delete initialQuery.filters;
             const data = {
-                page: query.page,
+                page: 1,
                 searchQuery: {
                     entity: 'model',
                     sort: 'payment',
-                    filters: [],
-                    ...query,
+                    filters: filters,
+                    ...initialQuery,
                 },
             };
 
@@ -236,7 +234,7 @@ function* init(action) {
             yield put(DealListActions.searchReset(data));
         }
     }
-    */
+
     if (!dataOnly) {
         const dealListPage = yield select(getDealList);
         let userCurrentLocation = yield select(getUserLocation);
@@ -251,7 +249,7 @@ function* init(action) {
         track('page:search:view');
     }
 
-    yield put(requestSearchAction(router));
+    yield put(requestSearchAction());
 }
 
 /*******************************************************************

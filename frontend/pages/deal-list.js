@@ -1,13 +1,18 @@
 import '../styles/app.scss';
+import React from 'react';
+import PropTypes from 'prop-types';
+
 import DealList from '../src/pages/deal-list/Container';
 import Head from 'next/head';
-import React from 'react';
 
 export default class Page extends React.Component {
-    static async getInitialProps(chx) {
-        console.log('getInitialProps');
-        console.log(chx);
-        return {};
+    static propTypes = {
+        query: PropTypes.object,
+    };
+    static async getInitialProps({ ctx }) {
+        return {
+            query: ctx.query,
+        };
     }
 
     render() {
@@ -16,7 +21,7 @@ export default class Page extends React.Component {
                 <Head>
                     <title>Deliver My Ride</title>
                 </Head>
-                <DealList />
+                <DealList initialQuery={this.props.query} />
             </div>
         );
     }

@@ -2,7 +2,6 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import PropTypes from 'prop-types';
 import { dealType, filterItemType, nextRouterType } from '../../types';
 import Loading from '../../icons/miscicons/Loading';
@@ -44,7 +43,6 @@ import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
-import Router from 'next/router';
 
 class Container extends React.Component {
     static propTypes = {
@@ -70,18 +68,11 @@ class Container extends React.Component {
         onRequestSearch: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         router: nextRouterType,
+        initialQuery: PropTypes.object,
     };
 
     componentDidMount() {
-        this.props.onInit({ router: this.props.router });
-
-        Router.beforePopState(({ url, as, options }) => {
-            console.log('beforePopState');
-            console.log(url);
-            console.log(as);
-            console.log(options);
-            return true;
-        });
+        this.props.onInit({ initialQuery: this.props.initialQuery });
     }
 
     componentDidUpdate(prevProps) {
@@ -101,34 +92,6 @@ class Container extends React.Component {
                 return true;
             });
         }
-
-        /*
-        if (this.props.location.search !== prevProps.location.search) {
-            // Handling user clicking back button here.
-            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
-            if (
-                expectedQuery &&
-                '?' + expectedQuery !== this.props.location.search &&
-                this.props.location.state &&
-                this.props.location.state.query
-            ) {
-                this.props.onSetPurchaseStrategy(
-                    this.props.location.state.query.purchaseStrategy
-                );
-
-                this.props.onUpdateEntirePageState(
-                    this.props.location.state.page
-                );
-
-                forceCheck();
-            } else {
-                this.props.onInit({
-                    location: this.props.location,
-                    dataOnly: true,
-                });
-            }
-        }
-        */
     }
 
     onToggleSearchFilter(category, item) {
@@ -248,8 +211,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInit: url => {
-            return dispatch(initDealListData(url));
+        onInit: initialQuery => {
+            return dispatch(initDealListData(initialQuery));
         },
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));

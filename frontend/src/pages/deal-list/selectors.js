@@ -37,7 +37,15 @@ export const getShouldShowLoading = createSelector(
 export const getSelectedFiltersByCategory = createSelector(
     [getSearchQuery],
     searchQuery => {
-        const filters = searchQuery.filters;
+        console.log(searchQuery);
+
+        let filters = [];
+
+        if (Array.isArray(searchQuery.filters)) {
+            filters = searchQuery.filters;
+        } else if (searchQuery.filters) {
+            filters.push(searchQuery.filters);
+        }
 
         if (!filters) {
             return {};

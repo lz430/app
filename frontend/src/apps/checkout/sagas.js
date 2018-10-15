@@ -1,5 +1,4 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
 import ApiClient from '../../store/api';
 
 import {
@@ -17,6 +16,8 @@ import {
 import { checkout as getCheckout } from './selectors';
 import { track } from '../../services';
 
+import Router from 'next/router';
+
 function toDollarsAndCents(input) {
     return input.toFormat('0.00');
 }
@@ -29,7 +30,6 @@ export function* checkoutStart(action) {
 
     const checkout = yield select(getCheckout);
     const pricing = action.pricing;
-    const router = action.router;
 
     let amounts = {
         role: checkout.role,
@@ -77,7 +77,7 @@ export function* checkoutStart(action) {
     if (results) {
         yield put(receivePurchase(results.data));
         yield put(checkoutFinishedLoading());
-        yield put(router.push('/checkout/contact'));
+        yield put(Router.push('checkout-contact', '/checkout/contact'));
     }
 }
 
@@ -113,14 +113,14 @@ export function* checkoutContact(action) {
 
     if (results) {
         yield put(receivePurchase(results.data));
-        yield put(router.push(results.data.destination));
+        yield put(Router.push(results.data.destination));
     }
 }
 
 /*******************************************************************
  * Checkout Financing Compete Form
  *******************************************************************/
-export function* checkoutFinancingComplete() {
+export function* checkoutFinancingComplete(action) {
     const checkout = yield select(getCheckout);
 
     let results = null;
@@ -133,7 +133,7 @@ export function* checkoutFinancingComplete() {
     } catch (e) {}
 
     if (results) {
-        yield put(push('/checkout/complete'));
+        yield put(Router.push('checkout-complete', '/checkout/complete'));
     }
 }
 
