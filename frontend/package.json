@@ -5,15 +5,22 @@
     "devDependencies": {
         "@svgr/cli": "^2.1.1",
         "axios": "^0.18.0",
+        "@babel/core": "^7.1.2",
+        "babel-core": "^7.0.0-bridge",
         "babel-eslint": "^10.0.1",
         "babel-plugin-root-import": "^6.1.0",
+        "babel-jest": "^23.6.0",
+        "enzyme": "3.4.3",
+        "enzyme-adapter-react-16": "1.2.0",
+        "jest": "23.5.0",
+        "react-addons-test-utils": "15.6.2",
+        "react-test-renderer": "16.4.2",
         "cross-env": "^5.0.5",
         "dotenv": "^6.0.0",
         "eslint": "5.6.0",
         "eslint-plugin-babel": "^5.2.1",
         "eslint-plugin-import": "^2.14.0",
         "eslint-plugin-react": "^7.11.1",
-        "jest": "^23.4.1",
         "jquery": "^3.3.1",
         "prop-types": "^15.6.2",
         "webpack": "4.19.1"
@@ -58,6 +65,8 @@
         "titlecase": "^1.1.2"
     },
     "scripts": {
+        "lint": "eslint --ext js,jsx .",
+        "test": "NODE_ENV=test jest",
         "dev": "node server.js",
         "build": "next build",
         "start": "NODE_ENV=production node server.js"
