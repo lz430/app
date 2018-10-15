@@ -46,6 +46,12 @@ app.prepare()
             app.render(req, res, actualPage, queryParams);
         });
 
+        server.get('/compare', (req, res) => {
+            const actualPage = '/compare';
+            const queryParams = { ...req.query };
+            app.render(req, res, actualPage, queryParams);
+        });
+
         server.get('*', (req, res) => {
             return handle(req, res);
         });

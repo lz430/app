@@ -28,14 +28,12 @@ class CompareWidget extends React.PureComponent {
         });
     }
 
-    redirectToCompare() {
-        return (
-            '/compare?' +
-            this.props.compareList.map(
-                dealAndSelectedFilters =>
-                    `deals[]=${dealAndSelectedFilters.deal.id}`
-            )
-        );
+    dealIds() {
+        let ids = [];
+        this.props.compareList.map(dealAndSelectedFilters => {
+            ids.push(dealAndSelectedFilters.deal.id);
+        });
+        return ids;
     }
 
     compareReady() {
@@ -103,7 +101,12 @@ class CompareWidget extends React.PureComponent {
                     })}
                     {this.compareReady() && (
                         <DropdownItem className="dropdown-footer-cta">
-                            <Link to={this.redirectToCompare()}>
+                            <Link
+                                href={{
+                                    pathname: '/compare',
+                                    query: { deals: this.dealIds() },
+                                }}
+                            >
                                 Compare Deals
                             </Link>
                         </DropdownItem>

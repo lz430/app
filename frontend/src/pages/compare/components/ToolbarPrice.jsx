@@ -22,7 +22,9 @@ class ToolbarPrice extends React.PureComponent {
             <div className="compare-page__toolbar">
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link to="/filter">Search Results</Link>
+                        <Link href="/deal-list" as="/filter">
+                            <a>Search Results</a>
+                        </Link>
                     </BreadcrumbItem>
                     <BreadcrumbItem active>Compare Deals</BreadcrumbItem>
                 </Breadcrumb>
