@@ -29,6 +29,7 @@ export function* checkoutStart(action) {
 
     const checkout = yield select(getCheckout);
     const pricing = action.pricing;
+    const router = action.router;
 
     let amounts = {
         role: checkout.role,
@@ -76,7 +77,8 @@ export function* checkoutStart(action) {
     if (results) {
         yield put(receivePurchase(results.data));
         yield put(checkoutFinishedLoading());
-        yield put(push('/checkout/contact'));
+        console.log('FUCK');
+        yield put(router.push('/checkout/contact'));
     }
 }
 
@@ -85,6 +87,7 @@ export function* checkoutStart(action) {
  *******************************************************************/
 export function* checkoutContact(action) {
     const fields = action.fields;
+    const router = action.router;
     const checkout = yield select(getCheckout);
 
     let results = null;
@@ -111,7 +114,7 @@ export function* checkoutContact(action) {
 
     if (results) {
         yield put(receivePurchase(results.data));
-        yield put(push(results.data.destination));
+        yield put(router.push(results.data.destination));
     }
 }
 

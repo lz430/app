@@ -28,6 +28,24 @@ app.prepare()
             app.render(req, res, actualPage, queryParams);
         });
 
+        server.get('/checkout/contact', (req, res) => {
+            const actualPage = '/checkout-contact';
+            const queryParams = { ...req.params };
+            app.render(req, res, actualPage, queryParams);
+        });
+
+        server.get('/checkout/financing', (req, res) => {
+            const actualPage = '/checkout-financing';
+            const queryParams = { ...req.params };
+            app.render(req, res, actualPage, queryParams);
+        });
+
+        server.get('/checkout/complete', (req, res) => {
+            const actualPage = '/checkout-complete';
+            const queryParams = { ...req.params };
+            app.render(req, res, actualPage, queryParams);
+        });
+
         server.get('*', (req, res) => {
             return handle(req, res);
         });

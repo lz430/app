@@ -126,6 +126,11 @@ class DealDetailContainer extends React.PureComponent {
         this.props.leaseActions.update(annualMileage, term, cashDue);
     };
 
+    onSelectDeal(pricing) {
+        console.log('SUP');
+        return this.props.checkoutStart(pricing, this.props.router);
+    }
+
     renderPageLoadingIcon() {
         return <Loading />;
     }
@@ -195,7 +200,7 @@ class DealDetailContainer extends React.PureComponent {
                     )}
                     handleLeaseChange={this.handleLeaseChange.bind(this)}
                     setCheckoutData={this.props.setCheckoutData}
-                    checkoutStart={this.props.checkoutStart}
+                    checkoutStart={this.onSelectDeal.bind(this)}
                     onToggleCompare={this.props.toggleCompare}
                     compareList={this.props.compareList}
                     userLocation={this.props.userLocation}
