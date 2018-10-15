@@ -1,0 +1,81 @@
+.steps-bar {
+    height: 3.5rem;
+    background-color: $color-sidebar-background-primary;
+    color: #fff;
+    padding-left: 0.5em;
+    display: none;
+
+    @include media-breakpoint-up(sm) {
+        display: block;
+    }
+
+    .inner {
+        display: flex;
+        align-items: center;
+    }
+
+    &__page-title {
+        font-size: 0.75rem;
+        flex: 1;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 1rem;
+        }
+        cursor: pointer;
+        a:link {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #999;
+            text-decoration: underline;
+        }
+    }
+}
+
+.steps {
+    display: flex;
+    margin-top: 5px;
+}
+
+.step {
+    align-items: center;
+    color: $color-darkgrey;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    font-size: 0.8rem;
+    margin: 2px 0.75em;
+    text-align: center;
+
+    &__icon {
+        border: 1px solid $color-darkgrey;
+        border-radius: 50%;
+        margin-bottom: 2px;
+        padding: 2px 0.25em;
+        height: 2em;
+        width: 2em;
+
+        svg {
+            fill: $color-darkgrey;
+            transform: scale(0.8);
+        }
+    }
+
+    &__label {
+        font-size: 0.75rem;
+    }
+
+    &--active {
+        .step__icon {
+            background: #fff;
+            color: $color-sidebar-background-primary;
+            padding-top: 0;
+        }
+
+        .step__label {
+            color: #fff;
+        }
+    }
+}

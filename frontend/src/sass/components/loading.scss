@@ -1,0 +1,25 @@
+.loading {
+    display: flex;
+    justify-content: center;
+
+    svg path,
+    svg rect {
+        fill: $color-blue;
+    }
+}
+
+[data-loading-size='regular'] .loading svg {
+    height: 1em;
+    width: auto;
+}
+
+.btn {
+    .loading {
+        display: inline;
+        margin-right: 1rem;
+        svg path,
+        svg rect {
+            fill: #fff;
+        }
+    }
+}
