@@ -76,7 +76,10 @@ jobs:
       #- run:
       #    name: Run PHPunit tests
       #    command:  vendor/bin/phpunit
+      - run:
+          name: Run JavaScript linting
+          command: cd frontend && yarn lint
 
       - run:
-          name: Run Javascript tests
+          name: Run JavaScript tests
           command: cd frontend && yarn test
