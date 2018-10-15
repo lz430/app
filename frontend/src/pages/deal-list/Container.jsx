@@ -30,10 +30,13 @@ import {
     updateEntirePageState,
     closeMakeSelectorModal,
     toggleSearchFilter,
+    clearModelYear,
+    requestSearch,
 } from './actions';
 
 import {
     getAllMakes,
+    getLoadingSearchResults,
     getSearchQuery,
     getSelectedFiltersByCategory,
 } from './selectors';
@@ -41,10 +44,13 @@ import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
+import Router from 'next/router';
 
 class Container extends React.Component {
     static propTypes = {
+        filters: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
         searchQuery: PropTypes.object.isRequired,
         modelYears: PropTypes.array,
         deals: PropTypes.arrayOf(dealType),
@@ -58,20 +64,44 @@ class Container extends React.Component {
         onInit: PropTypes.func.isRequired,
         onUpdateEntirePageState: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+        onToggleMakeFilter: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
+        onRequestSearch: PropTypes.func.isRequired,
+        onClearModelYear: PropTypes.func.isRequired,
         router: nextRouterType,
-        //history: ReactRouterPropTypes.history.isRequired,
-        //location: ReactRouterPropTypes.location.isRequired,
-        //match: ReactRouterPropTypes.match.isRequired,
     };
 
     componentDidMount() {
-        console.log(this.props);
         this.props.onInit({ router: this.props.router });
+
+        Router.beforePopState(({ url, as, options }) => {
+            console.log('beforePopState');
+            console.log(url);
+            console.log(as);
+            console.log(options);
+            return true;
+        });
     }
 
     componentDidUpdate(prevProps) {
+        if (this.props.router.beforePopState) {
+            this.props.router.beforePopState(({ options }) => {
+                const data = options.data;
+                if (data) {
+                    this.props.onSetPurchaseStrategy(
+                        data.query.purchaseStrategy
+                    );
+
+                    this.props.onUpdateEntirePageState(data.page);
+
+                    forceCheck();
+                }
+
+                return true;
+            });
+        }
+
         /*
         if (this.props.location.search !== prevProps.location.search) {
             // Handling user clicking back button here.
@@ -101,6 +131,14 @@ class Container extends React.Component {
         */
     }
 
+    onToggleSearchFilter(category, item) {
+        this.props.onToggleSearchFilter(category, item);
+    }
+
+    onRequestSearch() {
+        this.props.onRequestSearch(this.props.router);
+    }
+
     renderMakeSelectionModal() {
         return (
             <ModalMakeSelector
@@ -108,7 +146,7 @@ class Container extends React.Component {
                 isOpen={this.props.makeSelectorModalIsOpen}
                 selectedFiltersByCategory={this.props.selectedFiltersByCategory}
                 makes={this.props.makes}
-                onToggleSearchFilter={this.props.onToggleSearchFilter}
+                onToggleSearchFilter={this.props.onToggleMakeFilter}
                 fallbackLogoImage={this.props.fallbackLogoImage}
             />
         );
@@ -128,7 +166,19 @@ class Container extends React.Component {
         return (
             <StickyContainer className="filter-page">
                 <LargeAndUp>
-                    <FilterPanel />
+                    <FilterPanel
+                        filters={this.props.filters}
+                        searchQuery={this.props.searchQuery}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
+                        loadingSearchResults={this.props.loadingSearchResults}
+                        onToggleSearchFilter={this.onToggleSearchFilter.bind(
+                            this
+                        )}
+                        onClearModelYear={this.props.onClearModelYear}
+                        onRequestSearch={this.onRequestSearch.bind(this)}
+                    />
                 </LargeAndUp>
                 {this.renderDeals()}
                 <MediumAndDown>
@@ -191,6 +241,8 @@ const mapStateToProps = state => {
         makes: getAllMakes(state),
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
+        filters: state.pages.dealList.filters,
+        loadingSearchResults: getLoadingSearchResults(state),
     };
 };
 
@@ -208,8 +260,17 @@ const mapDispatchToProps = dispatch => {
         onSetPurchaseStrategy: strategy => {
             return dispatch(setPurchaseStrategy(strategy));
         },
-        onToggleSearchFilter: item => {
+        onToggleMakeFilter: item => {
             return dispatch(toggleSearchFilter('make', item));
+        },
+        onToggleSearchFilter: (category, item) => {
+            return dispatch(toggleSearchFilter(category, item));
+        },
+        onClearModelYear: () => {
+            return dispatch(clearModelYear());
+        },
+        onRequestSearch: () => {
+            return dispatch(requestSearch());
         },
     };
 };

@@ -22,6 +22,7 @@ import Help from '../../../icons/zondicons/Question';
 import SearchWidget from './SearchWidget';
 import { headerRequestAutocomplete } from '../../../apps/page/actions';
 import { getSearchQuery } from '../../../pages/deal-list/selectors';
+import { nextRouterType } from '../../../types';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -33,6 +34,8 @@ class Header extends React.PureComponent {
         onRequestSearch: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
+        router: nextRouterType,
+
         /*
         history: ReactRouterPropTypes.history.isRequired,
         location: ReactRouterPropTypes.location.isRequired,
@@ -137,7 +140,7 @@ class Header extends React.PureComponent {
                 <SearchWidget
                     onRequestSearch={this.props.onRequestSearch}
                     autocompleteResults={this.props.autocompleteResults}
-                    history={this.props.history}
+                    router={this.props.router}
                     searchQuery={this.props.searchQuery}
                 />
                 <div className="navbar-text">

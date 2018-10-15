@@ -13,16 +13,21 @@ const composeEnhancers =
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
     compose;
 
-const makeConfiguredStore = function(reducer, initialState) {
-    const sagaMiddleware = createSagaMiddleware();
+const sagaMiddleware = createSagaMiddleware();
 
+const makeConfiguredStore = function(reducer, initialState) {
     const store = createStore(
         reducer,
         initialState,
         composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
 
-    sagaMiddleware.run(rootSaga);
+    store.runSagaTask = () => {
+        store.sagaTask = sagaMiddleware.run(rootSaga);
+    };
+
+    // run the rootSaga initially
+    store.runSagaTask();
 
     return store;
 };

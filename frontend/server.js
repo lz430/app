@@ -18,7 +18,7 @@ app.prepare()
 
         server.get('/filter', (req, res) => {
             const actualPage = '/deal-list';
-            const queryParams = { ...req.params };
+            const queryParams = { ...req.query };
             app.render(req, res, actualPage, queryParams);
         });
 
@@ -30,19 +30,19 @@ app.prepare()
 
         server.get('/checkout/contact', (req, res) => {
             const actualPage = '/checkout-contact';
-            const queryParams = { ...req.params };
+            const queryParams = { ...req.query };
             app.render(req, res, actualPage, queryParams);
         });
 
         server.get('/checkout/financing', (req, res) => {
             const actualPage = '/checkout-financing';
-            const queryParams = { ...req.params };
+            const queryParams = { ...req.query };
             app.render(req, res, actualPage, queryParams);
         });
 
         server.get('/checkout/complete', (req, res) => {
             const actualPage = '/checkout-complete';
-            const queryParams = { ...req.params };
+            const queryParams = { ...req.query };
             app.render(req, res, actualPage, queryParams);
         });
 

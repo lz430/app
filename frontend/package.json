@@ -32,6 +32,7 @@
         "lodash.isequal": "^4.5.0",
         "mixpanel-browser": "^2.22.4",
         "next": "^7.0.1",
+        "next-redux-saga": "^3.0.0",
         "next-redux-wrapper": "^2.0.0",
         "node-sass": "^4.9.3",
         "query-string": "5.1.1",

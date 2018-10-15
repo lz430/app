@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
@@ -8,13 +7,14 @@ import { buildSearchQueryUrl } from '../../../pages/deal-list/helpers';
 import StyleIcon from '../../../components/Deals/StyleIcon';
 import Search from '../../../icons/zondicons/Search';
 import Close from '../../../icons/zondicons/Close';
+import { nextRouterType } from '../../../types';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
         currentPageIsInCheckout: PropTypes.bool,
         onRequestSearch: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
-        //history: ReactRouterPropTypes.history.isRequired,
+        router: nextRouterType,
         searchQuery: PropTypes.object,
     };
 
@@ -70,7 +70,7 @@ class SearchWidget extends React.PureComponent {
         }
 
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        //this.props.history.push('/filter?' + urlQuery);
+        this.props.router.push('/filter?' + urlQuery);
         this.setState({ query: '' });
         this.setState({ SearchMessage: false });
         this.toggleSearchMobile();

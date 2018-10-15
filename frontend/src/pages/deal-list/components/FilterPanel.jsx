@@ -1,21 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import PrimaryFilters from './Sidebar/PrimaryFilters';
 import SecondaryFilters from './Sidebar/SecondaryFilters';
 import MobileFilterClose from './Sidebar/MobileFilterClose';
 import GlobalSelectPurchaseStrategy from '../../../apps/user/components/GlobalSelectPurchaseStrategy';
-import {
-    toggleSearchFilter,
-    clearModelYear,
-} from '../../../pages/deal-list/actions';
-import {
-    getLoadingSearchResults,
-    getSelectedFiltersByCategory,
-} from '../selectors';
-import { requestSearch } from '../actions';
 
 class FilterPanel extends React.PureComponent {
     static propTypes = {
@@ -116,30 +106,4 @@ class FilterPanel extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        filters: state.pages.dealList.filters,
-        searchQuery: state.pages.dealList.searchQuery,
-        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-        loadingSearchResults: getLoadingSearchResults(state),
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onToggleSearchFilter: (category, item) => {
-            return dispatch(toggleSearchFilter(category, item));
-        },
-        onClearModelYear: () => {
-            return dispatch(clearModelYear());
-        },
-        onRequestSearch: () => {
-            return dispatch(requestSearch());
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FilterPanel);
+export default FilterPanel;

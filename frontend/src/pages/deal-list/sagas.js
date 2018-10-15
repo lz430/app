@@ -20,6 +20,8 @@ import {
     SEARCH_TOGGLE_FILTER,
 } from './consts';
 
+import { requestSearch as requestSearchAction } from './actions';
+
 import { batchRequestDealQuotes } from '../../apps/pricing/sagas';
 import * as DealListActions from './actions';
 
@@ -30,9 +32,10 @@ import { initPage } from '../../apps/page/sagas';
 import { track } from '../../services';
 import * as ActionTypes from './consts';
 
-import { push } from 'connected-react-router';
-
 import { buildSearchQueryUrl } from './helpers';
+
+import Router from 'next/router';
+
 import queryString from 'query-string';
 import { setPurchaseStrategy } from '../../apps/user/actions';
 
@@ -112,14 +115,23 @@ function* requestSearch(action) {
 
     yield put({ type: SEARCH_LOADING_FINISHED });
 
-    const urlQuery = buildSearchQueryUrl(searchQuery);
+    const urlQuery = buildSearchQueryUrl(searchQuery, 'object');
     if (urlQuery) {
         const dealListPage = yield select(getDealList);
-        yield put(
-            push('/filter?' + urlQuery, {
-                query: searchQuery,
-                page: dealListPage,
-            })
+        const state = {
+            query: searchQuery,
+            page: dealListPage,
+        };
+        Router.push(
+            {
+                pathname: '/deal-list',
+                query: urlQuery,
+            },
+            {
+                pathname: '/filter',
+                query: urlQuery,
+            },
+            { shallow: true, data: state }
         );
     }
 }
@@ -185,7 +197,7 @@ function* searchToggleFilter(action) {
     }
 
     yield put(DealListActions.setSearchFilters(currentFilters));
-    yield put({ type: SEARCH_REQUEST });
+    yield put(requestSearchAction(null));
 }
 
 /*******************************************************************
@@ -200,6 +212,7 @@ function* init(action) {
     // User is coming in fresh without any existing state.
     // Means the user either clicked a deep link or came from
     // the brochure site.
+    /*
     if (location.state === undefined) {
         const query = queryString.parse(location.search, {
             arrayFormat: 'bracket',
@@ -223,7 +236,7 @@ function* init(action) {
             yield put(DealListActions.searchReset(data));
         }
     }
-
+    */
     if (!dataOnly) {
         const dealListPage = yield select(getDealList);
         let userCurrentLocation = yield select(getUserLocation);
@@ -238,7 +251,7 @@ function* init(action) {
         track('page:search:view');
     }
 
-    yield put({ type: SEARCH_REQUEST });
+    yield put(requestSearchAction(router));
 }
 
 /*******************************************************************

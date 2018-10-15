@@ -127,7 +127,6 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     onSelectDeal(pricing) {
-        console.log('SUP');
         return this.props.checkoutStart(pricing, this.props.router);
     }
 

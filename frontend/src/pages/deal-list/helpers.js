@@ -3,8 +3,10 @@ import queryString from 'query-string';
 /**
  *
  * @param searchQuery
+ * @param format
+ * @returns {*}
  */
-export const buildSearchQueryUrl = searchQuery => {
+export const buildSearchQueryUrl = (searchQuery, format = 'string') => {
     const qsData = { ...searchQuery };
     delete qsData.location;
     delete qsData.page;
@@ -13,6 +15,8 @@ export const buildSearchQueryUrl = searchQuery => {
     if (qs === defaultQs) {
         return false;
     }
-
-    return qs;
+    if (format === 'string') {
+        return qs;
+    }
+    return qsData;
 };

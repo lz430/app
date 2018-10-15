@@ -4,16 +4,16 @@ import { Provider } from 'react-redux';
 import DeliverMyRide from '../src/components/App/App';
 import configureStore from '../src/store';
 import withRedux from 'next-redux-wrapper';
+import withReduxSaga from 'next-redux-saga';
+
 import { PersistGate } from 'redux-persist/integration/react';
 
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
         let pageProps = {};
-
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps({ ctx });
         }
-
         return { pageProps };
     }
 
@@ -53,4 +53,4 @@ class MyApp extends App {
     }
 }
 
-export default withRedux(configureStore)(MyApp);
+export default withRedux(configureStore)(withReduxSaga({ async: true })(MyApp));

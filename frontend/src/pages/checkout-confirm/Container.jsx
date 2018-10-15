@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { withRouter } from 'next/router';
 
 import { Container, Row, Col } from 'reactstrap';
 
 import strings from '../../src/strings';
 import DealImage from '../../components/Deals/DealImage';
-import { pricingFromCheckoutFactory } from 'src/pricing/factory';
+import { pricingFromCheckoutFactory } from '../../src/pricing/factory';
 import {
     checkoutContact,
     clearCheckoutContactFormErrors,
@@ -28,10 +30,9 @@ import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import PageContent from '../../components/App/PageContent';
 import ContactForm from './components/ContactForm';
-import { compose } from 'redux';
+
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
-import { withRouter } from 'next/router';
 import { nextRouterType } from '../../types';
 
 class CheckoutConfirmContainer extends React.PureComponent {
