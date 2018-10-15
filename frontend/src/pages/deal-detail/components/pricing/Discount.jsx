@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import config from 'config';
+import config from '../../../../config';
 
-import Line from 'components/pricing/Line';
-import Label from 'components/pricing/Label';
-import Value from 'components/pricing/Value';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 export default class Discount extends React.PureComponent {

@@ -5,8 +5,12 @@ import DeliverMyRide from '../src/components/App/App';
 import configureStore from '../src/store';
 import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
+import * as Sentry from '@sentry/browser';
+import config from '../src/config';
 
 import { PersistGate } from 'redux-persist/integration/react';
+
+const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
 class MyApp extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -15,6 +19,27 @@ class MyApp extends App {
             pageProps = await Component.getInitialProps({ ctx });
         }
         return { pageProps };
+    }
+
+    constructor(...args) {
+        super(...args);
+        if (SENTRY_PUBLIC_DSN) {
+            Sentry.init({ dsn: SENTRY_PUBLIC_DSN });
+        }
+    }
+
+    componentDidCatch(error, errorInfo) {
+        if (config['SENTRY_DSN']) {
+            Sentry.configureScope(scope => {
+                Object.keys(errorInfo).forEach(key => {
+                    scope.setExtra(key, errorInfo[key]);
+                });
+            });
+            Sentry.captureException(error);
+        }
+
+        // This is needed to render errors correctly in development / production
+        super.componentDidCatch(error, errorInfo);
     }
 
     render() {

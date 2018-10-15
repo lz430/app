@@ -26,21 +26,17 @@ export default function withTracker(WrappedComponent, options = {}) {
 
     return class extends Component {
         componentDidMount() {
-            /*
-            const page = this.props.location.pathname;
+            const page = this.props.router.asPath;
             trackPage(page);
-            */
         }
 
-        componentDidUpdate(nextProps) {
-            /*
-            const currentPage = this.props.location.pathname;
-            const nextPage = nextProps.location.pathname;
+        componentDidUpdate(prevProps) {
+            const currentPage = this.props.router.asPath;
+            const nextPage = prevProps.router.asPath;
 
             if (currentPage !== nextPage) {
-                trackPage(nextPage);
+                trackPage(currentPage);
             }
-            */
         }
 
         render() {
