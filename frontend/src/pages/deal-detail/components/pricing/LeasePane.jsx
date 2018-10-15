@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Compose from 'icons/zondicons/Compose';
-import Loading from 'icons/miscicons/Loading';
+import Compose from '../../../../icons/zondicons/Compose';
+import Loading from '../../../../icons/miscicons/Loading';
 
-import Line from 'components/pricing/Line';
-import Label from 'components/pricing/Label';
-import Value from 'components/pricing/Value';
-import Group from 'components/pricing/Group';
-import Header from 'components/pricing/Header';
-import Separator from 'components/pricing/Separator';
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
+import Group from '../../../../components/pricing/Group';
+import Header from '../../../../components/pricing/Header';
+import Separator from '../../../../components/pricing/Separator';
 
 import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';

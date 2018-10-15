@@ -7,30 +7,49 @@ import rootSaga from './sagas';
 import rootReducer from './reducers';
 import { basePersistConfig } from './persist';
 
-const initialState = {};
+const initialAppState = {};
 
 const composeEnhancers =
     (typeof window !== 'undefined' &&
         window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
     compose;
 
-const config = {
-    ...basePersistConfig,
-    key: 'root',
-    blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
-};
-
-export default () => {
+const makeConfiguredStore = function(reducer, initialState) {
     const sagaMiddleware = createSagaMiddleware();
 
     const store = createStore(
-        persistReducer(config, rootReducer),
+        reducer,
         initialState,
         composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
 
-    const persistor = persistStore(store, null, () => {});
-
     sagaMiddleware.run(rootSaga);
-    return { store, persistor };
+
+    return store;
+};
+
+export default (
+    initialState = initialAppState,
+    { isServer, req, debug, storeKey }
+) => {
+    if (isServer) {
+        initialState = initialState || { fromServer: 'foo' };
+        return makeConfiguredStore(rootReducer, initialState);
+    } else {
+        const { persistStore, persistReducer } = require('redux-persist');
+        const storage = require('redux-persist/lib/storage').default;
+        const persistConfig = {
+            ...basePersistConfig,
+            key: 'root',
+            blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
+            storage,
+        };
+
+        const persistedReducer = persistReducer(persistConfig, rootReducer);
+        const store = makeConfiguredStore(persistedReducer, initialState);
+
+        store.__persistor = persistStore(store); // Nasty hack
+
+        return store;
+    }
 };
