@@ -34,6 +34,7 @@
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>VIN</th>
                             <th>Title</th>
                             <th>Source Price Fields</th>
                         </tr>
@@ -43,6 +44,9 @@
                             <tr>
                                 <td>
                                     {{$deal->id}}
+                                </td>
+                                <td>
+                                    {{$deal->vin}}
                                 </td>
                                 <td>
                                     {{$deal->title()}}
