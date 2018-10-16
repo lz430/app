@@ -21,7 +21,6 @@ import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 import { LargeAndUp, MediumAndDown } from '../../components/Responsive';
-import { buildSearchQueryUrl } from './helpers';
 import { forceCheck } from 'react-lazyload';
 
 import {
@@ -75,7 +74,7 @@ class Container extends React.Component {
         this.props.onInit({ initialQuery: this.props.initialQuery });
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         if (this.props.router.beforePopState) {
             this.props.router.beforePopState(({ options }) => {
                 const data = options.data;

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import Discount from './Discount';
 import Rebates from './Rebates';
 import Line from '../../../../components/pricing/Line';
@@ -14,11 +16,8 @@ import { pricingType } from '../../../../types';
 export default class CashPane extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
-    };
-
-    static defaultProps = {
-        onDiscountChange: (discountType, make = null) => {},
-        onRebatesChange: () => {},
+        onDiscountChange: PropTypes.func.isRequired,
+        onRebatesChange: PropTypes.func.isRequired,
     };
 
     render() {

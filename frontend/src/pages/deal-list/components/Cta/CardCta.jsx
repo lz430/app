@@ -11,8 +11,8 @@ class CardCta extends React.PureComponent {
                         <Phone />
                     </div>
                     <div>
-                        Can't find what you're looking for? Questions about
-                        trade in?
+                        Can&#39;t find what you&#39;re looking for? Questions
+                        about trade in?
                     </div>
                     <div className="mt-4">
                         Contact Us: <br />
