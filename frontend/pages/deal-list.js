@@ -9,6 +9,7 @@ export default class Page extends React.Component {
     static propTypes = {
         query: PropTypes.object,
     };
+
     static async getInitialProps({ ctx }) {
         return {
             query: ctx.query,
@@ -17,12 +18,12 @@ export default class Page extends React.Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <Head>
                     <title>Deliver My Ride</title>
                 </Head>
                 <DealList initialQuery={this.props.query} />
-            </div>
+            </React.Fragment>
         );
     }
 }
