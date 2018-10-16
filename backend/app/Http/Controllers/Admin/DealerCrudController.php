@@ -54,37 +54,16 @@ class DealerCrudController extends CrudController
             'tab'   => 'General',
         ]);
 
-        /*$this->crud->addField([
-            'name'  => 'phone',
-            'label' => 'Phone',
-            'type'  => 'text',
-            'tab'   => 'General',
-        ]);
-
-        $this->crud->addField([
-            'name'  => 'contact_name',
-            'label' => 'Contact Name',
-            'type'  => 'text',
-            'tab'   => 'General',
-        ]);
-
-        $this->crud->addField([
-            'name'  => 'contact_email',
-            'label' => 'Contact Email',
-            'type'  => 'email',
-            'tab'   => 'General',
-        ]);
-
-        $this->crud->addField([
-            'name'  => 'contact_title',
-            'label' => 'Contact Title',
-            'type'  => 'text',
-            'tab'   => 'General',
-        ]);*/
-
         $this->crud->addField([
             'name'  => 'route_one_id',
             'label' => 'Route One ID',
+            'type'  => 'text',
+            'tab'   => 'General',
+        ]);
+
+        $this->crud->addField([
+            'name'  => 'money_factor',
+            'label' => 'Increase MoneyFactor by',
             'type'  => 'text',
             'tab'   => 'General',
         ]);
