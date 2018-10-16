@@ -101,6 +101,7 @@ class Dealer extends Model
         'contact_name',
         'contact_title',
         'price_rules',
+        'money_factor',
     ];
 
     /**
