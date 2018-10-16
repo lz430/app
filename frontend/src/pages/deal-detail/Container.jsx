@@ -47,6 +47,20 @@ class DealDetailContainer extends React.PureComponent {
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
+        pricing: PropTypes.object,
+        selectDiscountActions: PropTypes.shape({
+            selectDmrDiscount: PropTypes.func.isRequired,
+            selectEmployeeDiscount: PropTypes.func.isRequired,
+            selectSupplierDiscount: PropTypes.func.isRequired,
+            selectConditionalRoles: PropTypes.func.isRequired,
+        }),
+        financeActions: PropTypes.shape({
+            updateDownPayment: PropTypes.func.isRequired,
+            updateTerm: PropTypes.func.isRequired,
+        }),
+        leaseActions: PropTypes.shape({
+            update: PropTypes.func.isRequired,
+        }),
     };
 
     componentDidMount() {
@@ -170,7 +184,7 @@ class DealDetailContainer extends React.PureComponent {
             <Container>
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link href="/filter">
+                        <Link href="/deal-list" as="/filter">
                             <a>Search Results</a>
                         </Link>
                     </BreadcrumbItem>

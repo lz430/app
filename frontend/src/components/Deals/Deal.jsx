@@ -21,7 +21,10 @@ class Deal extends React.Component {
         const deal = this.props.deal;
 
         return (
-            <Link href={`/deals?id=${deal.id}`} as={`/deals/${deal.id}`}>
+            <Link
+                href={`/deal-detail?id=${this.props.deal.id}`}
+                as={`/deals/${this.props.deal.id}`}
+            >
                 <div className="deal__basic-info-year-and-model">
                     <div className="deal__basic-info-year-and-make">
                         {`${deal.year} ${deal.make}`}

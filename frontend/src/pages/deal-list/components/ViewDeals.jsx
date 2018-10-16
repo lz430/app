@@ -71,7 +71,7 @@ class ViewDeals extends React.PureComponent {
                             : 'Compare'}{' '}
                     </button>
                     <Link
-                        href={`/deals?id=${deal.id}`}
+                        href={`/deal-detail?id=${deal.id}`}
                         as={`/deals/${deal.id}`}
                     >
                         <a className="btn btn-outline-success btn-sm">View</a>
