@@ -202,7 +202,7 @@ class ContactForm extends React.PureComponent {
                             type="text"
                             className="request-dl__number-label"
                         >
-                            Driver's License Number
+                            Driver&apos;s License Number
                         </label>
                         <label
                             htmlFor="drivers_license_state"

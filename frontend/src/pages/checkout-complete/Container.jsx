@@ -31,6 +31,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
         init: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
+        pricing: PropTypes.object,
     };
 
     componentDidMount() {
@@ -111,7 +112,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
                         <Col className="confirm">
                             <Group>
                                 <Header style={{ fontSize: '1.5em' }}>
-                                    What's next?
+                                    What&apos;s next?
                                 </Header>
                                 <p>
                                     A Deliver My Ride affiliate dealer
@@ -122,7 +123,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
                                 </p>
 
                                 <Header>
-                                    To finalize your purchase, you'll need:
+                                    To finalize your purchase, you&apos;ll need:
                                 </Header>
                                 <ul>
                                     <li>Drivers License</li>

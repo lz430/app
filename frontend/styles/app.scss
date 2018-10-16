@@ -3,20 +3,6 @@
 // Variables
 @import 'variables';
 
-/*
-@font-face {
-    font-family: 'Gotham Narrow Book';
-    font-weight: normal;
-    src: url('/fonts/GothamNarrow-Book.woff') format('opentype');
-}
-
-@font-face {
-    font-family: 'Gotham Narrow Book';
-    font-weight: bold;
-    src: url('/fonts/GothamNarrow-Bold.otf') format('opentype');
-}
-*/
-
 @import 'mixins/button';
 @import 'mixins/constrained';
 @import 'mixins/input';
@@ -109,7 +95,6 @@
 @import 'pages/checkout-complete';
 
 // Vendor
-@import '~animate.css';
 @import '~react-image-gallery/styles/scss/image-gallery.scss';
 
 // Helpers

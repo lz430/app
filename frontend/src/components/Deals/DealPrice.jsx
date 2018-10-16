@@ -13,6 +13,7 @@ class DealPrice extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        dealPricing: PropTypes.object,
     };
 
     state = {

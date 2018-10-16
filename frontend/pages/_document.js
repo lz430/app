@@ -1,7 +1,6 @@
 import Document, { Head, Main, NextScript } from 'next/document';
 import React from 'react';
 import config from '../src/config';
-import OptinMonster from '../src/components/OptinMonster';
 
 export default class MyDocument extends Document {
     render() {

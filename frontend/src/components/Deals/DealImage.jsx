@@ -64,7 +64,7 @@ export default class DealImage extends React.PureComponent {
 
         return (
             <Link
-                href={`/deals?id=${this.props.deal.id}`}
+                href={`/deal-detail?id=${this.props.deal.id}`}
                 as={`/deals/${this.props.deal.id}`}
             >
                 <img

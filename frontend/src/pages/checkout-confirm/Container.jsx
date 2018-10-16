@@ -41,6 +41,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
         init: PropTypes.func.isRequired,
         clearCheckoutContactFormErrors: PropTypes.func.isRequired,
         checkoutContact: PropTypes.func.isRequired,
+        pricing: PropTypes.object,
         router: nextRouterType,
     };
 

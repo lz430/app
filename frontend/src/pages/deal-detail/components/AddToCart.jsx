@@ -69,7 +69,8 @@ export default class AddToCart extends React.PureComponent {
                                 fontWeight: 'bold',
                             }}
                         >
-                            We're sorry, this vehicle is no longer available.{' '}
+                            We&apos;re sorry, this vehicle is no longer
+                            available.{' '}
                             <span
                                 style={{
                                     fontWeight: 'normal',
@@ -98,8 +99,8 @@ export default class AddToCart extends React.PureComponent {
                                 fontWeight: 'bold',
                             }}
                         >
-                            We're sorry, this vehicle is not available in your
-                            area{' '}
+                            We&apos;re sorry, this vehicle is not available in
+                            your area{' '}
                             <span
                                 style={{
                                     fontWeight: 'normal',
