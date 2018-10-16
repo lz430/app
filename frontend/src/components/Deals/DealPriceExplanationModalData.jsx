@@ -87,12 +87,13 @@ class DealPriceExplanationModalData extends React.PureComponent {
 
                         <div className="deal__buttons">
                             <Link
-                                className="btn btn-primary btn-block"
                                 to={
                                     '/deals/' + this.props.dealPricing.deal().id
                                 }
                             >
-                                View Details
+                                <a className="btn btn-primary btn-block">
+                                    View Details
+                                </a>
                             </Link>
                         </div>
                     </div>

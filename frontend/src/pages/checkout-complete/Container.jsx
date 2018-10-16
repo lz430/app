@@ -25,6 +25,7 @@ import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import PageContent from '../../components/App/PageContent';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
+import { withRouter } from 'next/router';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
@@ -167,6 +168,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
 });
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

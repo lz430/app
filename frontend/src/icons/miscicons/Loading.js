@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Loading = props => (
+const Loading = () => (
     <div className="loading" title="5">
         <svg
             version="1.1"

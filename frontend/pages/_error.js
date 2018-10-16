@@ -2,8 +2,13 @@ import '../styles/app.scss';
 
 import React from 'react';
 import PageContent from '../src/components/App/PageContent';
+import PropTypes from 'prop-types';
 
 export default class Page extends React.Component {
+    static propTypes = {
+        statusCode: PropTypes.string.isRequired,
+    };
+
     static getInitialProps({ res, err }) {
         const statusCode = res ? res.statusCode : err ? err.statusCode : null;
         return { statusCode };

@@ -23,7 +23,7 @@ class ContactForm extends React.PureComponent {
         this.props.clearCheckoutContactFormErrors();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (
             this.props.checkout.contactFormErrors !==
             prevProps.checkout.contactFormErrors

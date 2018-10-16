@@ -37,7 +37,9 @@ class ZipcodeFinder extends React.PureComponent {
     }
 
     saveZip(event) {
-        if (event) event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
 
         if (this.isValid() && this.state.zipcode !== this.props.zipcode) {
             this.props.onSearchForLocation(this.state.zipcode);

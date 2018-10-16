@@ -32,10 +32,7 @@ const makeConfiguredStore = function(reducer, initialState) {
     return store;
 };
 
-export default (
-    initialState = initialAppState,
-    { isServer, req, debug, storeKey }
-) => {
+export default (initialState = initialAppState, { isServer }) => {
     if (isServer) {
         initialState = initialState || { fromServer: 'foo' };
         return makeConfiguredStore(rootReducer, initialState);

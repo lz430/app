@@ -7,11 +7,13 @@ import {
     getCurrentPageIsInCheckout,
 } from '../../apps/page/selectors';
 import { checkout } from '../../apps/checkout/selectors';
+import { checkoutType } from '../../types';
 
 class BackButton extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
         isCurrentPageInCheckout: PropTypes.bool,
+        checkout: checkoutType,
     };
 
     /**

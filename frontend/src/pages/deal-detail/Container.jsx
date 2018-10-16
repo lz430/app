@@ -131,7 +131,27 @@ class DealDetailContainer extends React.PureComponent {
     }
 
     renderPageLoadingIcon() {
-        return <Loading />;
+        return (
+            <PageContent>
+                {this.renderBreadcrumb()}
+                <Container className="pt-5 pb-5">
+                    <Loading />
+                </Container>
+            </PageContent>
+        );
+    }
+
+    renderDealLoadingError() {
+        return (
+            <PageContent>
+                {this.renderBreadcrumb()}
+                <Container>
+                    <Alert className="mb-5 mt-5" color="danger">
+                        Unable to load deal.
+                    </Alert>
+                </Container>
+            </PageContent>
+        );
     }
 
     renderDealOutOfRange() {
@@ -161,19 +181,12 @@ class DealDetailContainer extends React.PureComponent {
     }
 
     render() {
-        if (this.props.isLoading) {
+        if (this.props.isLoading || this.props.deal === null) {
             return this.renderPageLoadingIcon();
         }
 
-        if (!this.props.deal) {
-            return (
-                <PageContent>
-                    {this.renderBreadcrumb()}
-                    <Container>
-                        <Alert color="danger">Unable to load deal.</Alert>
-                    </Container>
-                </PageContent>
-            );
+        if (this.props.deal === false) {
+            return this.renderDealLoadingError();
         }
 
         return (

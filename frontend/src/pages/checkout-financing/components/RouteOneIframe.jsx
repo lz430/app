@@ -19,7 +19,7 @@ class RouteOneIframe extends Component {
         return false;
     }
 
-    handleFrameTasks = e => {};
+    handleFrameTasks = () => {};
 
     render() {
         return (

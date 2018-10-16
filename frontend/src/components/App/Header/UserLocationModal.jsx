@@ -39,7 +39,9 @@ class UserLocationModal extends React.PureComponent {
     }
 
     onSubmit(event) {
-        if (event) event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         if (this.isValid()) {
             this.props.setNewLocation(this.state.location);
         }

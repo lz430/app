@@ -107,7 +107,7 @@ class CompareWidget extends React.PureComponent {
                                     query: { deals: this.dealIds() },
                                 }}
                             >
-                                Compare Deals
+                                <a>Compare Deals</a>
                             </Link>
                         </DropdownItem>
                     )}

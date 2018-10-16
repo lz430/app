@@ -27,12 +27,14 @@
         "no-console": "off",
         "strict": ["error", "global"],
         "curly": "warn",
-        "babel/new-cap": 1,
+        "babel/new-cap": 0,
         "babel/no-invalid-this": 1,
         "babel/object-curly-spacing": 0,
         "babel/quotes": 0,
         "babel/semi": 1,
         "babel/no-unused-expressions": 1,
-        "babel/valid-typeof": 1
+        "babel/valid-typeof": 1,
+        "react/display-name": 0,
+        "no-case-declarations": 0
     }
 }
