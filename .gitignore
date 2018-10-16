@@ -1,4 +1,4 @@
-.next
+frontend/.next/
 /node_modules
 /backend/public/storage
 /backend/public/css/
