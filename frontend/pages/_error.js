@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 export default class Page extends React.Component {
     static propTypes = {
-        statusCode: PropTypes.string.isRequired,
+        statusCode: PropTypes.string,
     };
 
     static getInitialProps({ res, err }) {

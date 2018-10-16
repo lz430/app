@@ -33,8 +33,8 @@ Route::get('location', 'UserLocationController@show')->name('location.show');
 /**
  * Third-party
  */
-
 Route::post('hubspot/not-in-area', 'HubspotController@notInServiceArea')->name('hubspot.notInArea');
+Route::post('set-email', 'OptinMonsterController@setEmailSession')->name('set-email');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::post('route-one', 'RouteOneWebhookController@handleWebhook')->name('route-one-webhook');
