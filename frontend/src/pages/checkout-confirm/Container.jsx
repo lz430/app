@@ -69,7 +69,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
             <PageContent>
                 <HeaderToolbar />
                 <Container className="checkout-confirm">
-                    <Row className="checkout-confirm__header">
+                    <Row>
                         <Col>
                             <h1>Say hello to your new car!</h1>
                         </Col>

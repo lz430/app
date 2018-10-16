@@ -7,6 +7,7 @@ export default class Line extends React.PureComponent {
         isImportant: PropTypes.bool.isRequired,
         isSectionTotal: PropTypes.bool.isRequired,
         style: PropTypes.object,
+        children: PropTypes.node.isRequired,
     };
 
     static defaultProps = {

@@ -97,3 +97,7 @@ export const nextRouterType = shape({
     reload: PropTypes.func.isRequired,
     replace: PropTypes.func.isRequired,
 });
+
+export const checkoutType = shape({
+    deal: shape(dealType),
+});

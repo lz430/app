@@ -196,7 +196,7 @@ class SearchWidget extends React.PureComponent {
                                 active: !this.state.SearchMobile,
                                 hidden: this.state.SearchMobile,
                             })}
-                            onClick={e => {
+                            onClick={() => {
                                 this.toggleSearchMobile();
                                 this.setState({ SearchMessage: true });
                             }}
@@ -208,7 +208,7 @@ class SearchWidget extends React.PureComponent {
                                 active: this.state.SearchMobile,
                                 hidden: !this.state.SearchMobile,
                             })}
-                            onClick={e => {
+                            onClick={() => {
                                 this.toggleSearchMobile();
                             }}
                         />

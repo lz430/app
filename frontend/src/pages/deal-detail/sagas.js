@@ -63,6 +63,7 @@ function* init(action) {
         results = results.data;
     } catch (e) {
         console.log(e);
+        results = false;
     }
 
     yield put(receiveDeal(results));

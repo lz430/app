@@ -6,7 +6,7 @@ export default class InvalidCheckoutPage extends React.PureComponent {
         return (
             <PageContent>
                 <h2 className="text-center mb-4 mt-4">
-                    We're sorry, this page is invalid.
+                    We&#39;re sorry, this page is invalid.
                 </h2>
             </PageContent>
         );

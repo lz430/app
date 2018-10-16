@@ -19,7 +19,8 @@ import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
-
+import { nextRouterType } from '../../types';
+import { withRouter } from 'next/router';
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
@@ -27,6 +28,7 @@ class CheckoutFinancingContainer extends Component {
         financing: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
         checkoutFinancingComplete: PropTypes.func.isRequired,
+        router: nextRouterType,
     };
 
     state = {
@@ -100,6 +102,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
 });
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

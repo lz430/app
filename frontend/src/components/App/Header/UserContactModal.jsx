@@ -31,10 +31,10 @@ class UserContactModal extends React.PureComponent {
                             <Col>
                                 <h2 className="icon__help text-center">?</h2>
                                 <p className="text-center">
-                                    Have any questions? Can't find what you're
-                                    looking for? Have a trade-in or lease
-                                    turn-in? Our car professionals are here to
-                                    help.
+                                    Have any questions? Can&#39;t find what
+                                    you&#39;re looking for? Have a trade-in or
+                                    lease turn-in? Our car professionals are
+                                    here to help.
                                 </p>
                             </Col>
                         </Row>

@@ -33,6 +33,7 @@
         "babel/quotes": 0,
         "babel/semi": 1,
         "babel/no-unused-expressions": 1,
-        "babel/valid-typeof": 1
+        "babel/valid-typeof": 1,
+        "react/display-name": 0
     }
 }

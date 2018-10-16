@@ -77,7 +77,7 @@ export function* checkoutStart(action) {
     if (results) {
         yield put(receivePurchase(results.data));
         yield put(checkoutFinishedLoading());
-        yield put(Router.push('checkout-contact', '/checkout/contact'));
+        yield put(Router.push('/checkout-contact', '/checkout/contact'));
     }
 }
 
@@ -86,7 +86,6 @@ export function* checkoutStart(action) {
  *******************************************************************/
 export function* checkoutContact(action) {
     const fields = action.fields;
-    const router = action.router;
     const checkout = yield select(getCheckout);
 
     let results = null;
@@ -120,7 +119,7 @@ export function* checkoutContact(action) {
 /*******************************************************************
  * Checkout Financing Compete Form
  *******************************************************************/
-export function* checkoutFinancingComplete(action) {
+export function* checkoutFinancingComplete() {
     const checkout = yield select(getCheckout);
 
     let results = null;
@@ -130,7 +129,9 @@ export function* checkoutFinancingComplete(action) {
             checkout.purchase.id,
             checkout.userToken
         );
-    } catch (e) {}
+    } catch (e) {
+        results = false;
+    }
 
     if (results) {
         yield put(Router.push('checkout-complete', '/checkout/complete'));
