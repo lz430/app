@@ -181,6 +181,11 @@ class CheckoutController extends BaseAPIController
                 'contractTerms_term' => $purchase->term,
                 'vehicle_image_url' => ($photo ? $photo->url : ''),
                 'dealership_name' => $deal->dealer->name,
+                'first_name' => $purchase->buyer->first_name,
+                'last_name' => $purchase->buyer->last_name,
+                'phone' => $purchase->buyer->phone_number,
+                'drivers_license_number' => $purchase->buyer->drivers_license_number,
+                'drivers_license_state' => $purchase->buyer->drivers_license_state,
             ];
 
             if (config('services.routeone.test_mode')) {
