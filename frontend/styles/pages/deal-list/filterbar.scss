@@ -4,7 +4,8 @@
     border-bottom: 1px solid $color-section-bottom-border;
     display: none;
     height: $filterbar-height;
-    max-height: 38px;
+    min-height: 44px;
+    max-height: 44px;
     padding: 3px 23px;
 
     @include media-breakpoint-up(md) {
