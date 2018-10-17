@@ -172,20 +172,14 @@ class Container extends React.Component {
 
     render() {
         if (this.props.isLoading) {
-            return (
-                <PageContent desktopOnlyFooter={true}>
-                    <Loading />
-                </PageContent>
-            );
+            return <Loading />;
         }
 
         if (this.props.modelYears === false || this.props.deals === false) {
             return (
-                <PageContent desktopOnlyFooter={true}>
-                    <h1 className="mb-5 mt-5 text-center">
-                        Unable to fetch results.
-                    </h1>
-                </PageContent>
+                <h1 className="mb-5 mt-5 text-center">
+                    Unable to fetch results.
+                </h1>
             );
         }
 
@@ -194,18 +188,14 @@ class Container extends React.Component {
             (this.props.userLocation.latitude &&
                 !this.props.userLocation.has_results)
         ) {
-            return (
-                <PageContent desktopOnlyFooter={true}>
-                    <NoDealsOutOfRange />
-                </PageContent>
-            );
+            return <NoDealsOutOfRange />;
         }
 
         return (
-            <PageContent desktopOnlyFooter={true}>
+            <React.Fragment>
                 {this.renderFilterPanelAndDeals()}
                 {this.renderMakeSelectionModal()}
-            </PageContent>
+            </React.Fragment>
         );
     }
 }

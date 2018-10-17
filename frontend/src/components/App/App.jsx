@@ -7,10 +7,17 @@ import LiveChat from 'react-livechat';
 import config from '../../config';
 
 import { ChatContext } from '../../contexts';
+import { LargeAndUp } from '../Responsive';
+import Footer from './Footer';
 
 class App extends React.Component {
     static propTypes = {
         children: PropTypes.node.isRequired,
+        desktopOnlyFooter: PropTypes.bool.isRequired,
+    };
+
+    static defaultProps = {
+        desktopOnlyFooter: false,
     };
 
     state = {
@@ -46,6 +53,18 @@ class App extends React.Component {
         }
     }
 
+    renderFooter() {
+        if (this.props.desktopOnlyFooter) {
+            return (
+                <LargeAndUp>
+                    <Footer />
+                </LargeAndUp>
+            );
+        }
+
+        return <Footer />;
+    }
+
     render() {
         return (
             <div className="app">
@@ -57,8 +76,13 @@ class App extends React.Component {
                     }}
                 >
                     <Header />
-                    {this.props.children}
+
+                    <div className="app-content-wrapper">
+                        <div className="app-content">{this.props.children}</div>
+                        {this.renderFooter()}
+                    </div>
                 </ChatContext.Provider>
+
                 {config.LIVECHAT_LICENSE &&
                     this.state.initChat && (
                         <LiveChat

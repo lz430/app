@@ -22,6 +22,12 @@ class MyApp extends App {
         return { pageProps };
     }
 
+    /**
+     * List of pages that we only expose the footer on the desktop view port
+     * @type {string[]}
+     */
+    desktopOnlyFooter = ['/deal-list'];
+
     constructor(...args) {
         super(...args);
         if (SENTRY_PUBLIC_DSN) {
@@ -45,13 +51,19 @@ class MyApp extends App {
 
     render() {
         const { Component, pageProps, store } = this.props;
+        const pathname = this.props.router.pathname;
+
         //
         // Client
         if (store.__persistor) {
             return (
                 <Container>
                     <Provider store={store}>
-                        <DeliverMyRide>
+                        <DeliverMyRide
+                            desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                                pathname
+                            )}
+                        >
                             <PersistGate
                                 persistor={store.__persistor}
                                 loading={null}
@@ -70,7 +82,11 @@ class MyApp extends App {
         return (
             <Container>
                 <Provider store={store}>
-                    <DeliverMyRide>
+                    <DeliverMyRide
+                        desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                            pathname
+                        )}
+                    >
                         <Component {...pageProps} />
                     </DeliverMyRide>
                 </Provider>
