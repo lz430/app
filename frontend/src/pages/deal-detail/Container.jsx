@@ -24,7 +24,6 @@ import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
 import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from '../../src/pricing/factory';
-import PageContent from '../../components/App/PageContent';
 import Link from 'next/link';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../types';
@@ -146,25 +145,25 @@ class DealDetailContainer extends React.PureComponent {
 
     renderPageLoadingIcon() {
         return (
-            <PageContent>
+            <React.Fragment>
                 {this.renderBreadcrumb()}
                 <Container className="pt-5 pb-5">
                     <Loading />
                 </Container>
-            </PageContent>
+            </React.Fragment>
         );
     }
 
     renderDealLoadingError() {
         return (
-            <PageContent>
+            <React.Fragment>
                 {this.renderBreadcrumb()}
                 <Container>
                     <Alert className="mb-5 mt-5" color="danger">
                         Unable to load deal.
                     </Alert>
                 </Container>
-            </PageContent>
+            </React.Fragment>
         );
     }
 
@@ -204,7 +203,7 @@ class DealDetailContainer extends React.PureComponent {
         }
 
         return (
-            <PageContent>
+            <React.Fragment>
                 {this.renderBreadcrumb()}
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
@@ -231,7 +230,7 @@ class DealDetailContainer extends React.PureComponent {
                     compareList={this.props.compareList}
                     userLocation={this.props.userLocation}
                 />
-            </PageContent>
+            </React.Fragment>
         );
     }
 }
