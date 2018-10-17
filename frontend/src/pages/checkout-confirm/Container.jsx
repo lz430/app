@@ -33,6 +33,7 @@ import ContactForm from './components/ContactForm';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 import { nextRouterType } from '../../types';
+import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 
 class CheckoutConfirmContainer extends React.PureComponent {
     static propTypes = {
@@ -46,10 +47,12 @@ class CheckoutConfirmContainer extends React.PureComponent {
 
     state = {
         recaptchaToken: null,
+        renderPage: false,
         isPageValid: true,
     };
 
     componentDidMount() {
+        this.setState({ renderPage: true });
         this.props.init();
     }
 
@@ -58,6 +61,10 @@ class CheckoutConfirmContainer extends React.PureComponent {
     }
 
     render() {
+        if (!this.state.renderPage) {
+            return <CheckoutPageLoading />;
+        }
+
         if (!this.props.checkout.deal.id) {
             return <InvalidCheckoutPage />;
         }

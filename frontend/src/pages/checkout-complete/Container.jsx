@@ -25,6 +25,7 @@ import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 import { withRouter } from 'next/router';
+import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
@@ -33,11 +34,20 @@ class CheckoutCompleteContainer extends React.PureComponent {
         pricing: PropTypes.object,
     };
 
+    state = {
+        renderPage: false,
+    };
+
     componentDidMount() {
+        this.setState({ renderPage: true });
         this.props.init();
     }
 
     render() {
+        if (!this.state.renderPage) {
+            return <CheckoutPageLoading />;
+        }
+
         if (!this.props.checkout.deal.id) {
             return <InvalidCheckoutPage />;
         }

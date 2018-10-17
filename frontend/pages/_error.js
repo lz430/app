@@ -15,11 +15,11 @@ export default class Page extends React.Component {
 
     render() {
         return (
-            <p className="text-center mb-5 mt-5">
+            <h3 className="text-center mb-5 mt-5">
                 {this.props.statusCode
                     ? `An error ${this.props.statusCode} occurred on server`
-                    : 'An error occurred on client'}
-            </p>
+                    : '404: Page Not Found'}
+            </h3>
         );
     }
 }

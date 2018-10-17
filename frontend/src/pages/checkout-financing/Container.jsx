@@ -20,6 +20,7 @@ import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 import { nextRouterType } from '../../types';
 import { withRouter } from 'next/router';
+import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
@@ -32,9 +33,11 @@ class CheckoutFinancingContainer extends Component {
 
     state = {
         method: 'cash',
+        renderPage: false,
     };
 
     componentDidMount() {
+        this.setState({ renderPage: true });
         this.props.init();
     }
 
@@ -55,6 +58,10 @@ class CheckoutFinancingContainer extends Component {
     }
 
     render() {
+        if (!this.state.renderPage) {
+            return <CheckoutPageLoading />;
+        }
+
         if (!this.props.checkout.deal.id || !this.props.checkout.purchase.id) {
             return <InvalidCheckoutPage />;
         }
