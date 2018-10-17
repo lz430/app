@@ -1,9 +1,18 @@
 import '../styles/app.scss';
 
 import React from 'react';
+import Router from 'next/router';
 
 export default class Page extends React.Component {
-    render() {
-        return <h3>hello</h3>;
+    static async getInitialProps({ ctx }) {
+        if (ctx.res) {
+            ctx.res.writeHead(301, {
+                Location: '/filter',
+            });
+            ctx.res.end();
+        } else {
+            Router.push('/filter');
+        }
+        return {};
     }
 }

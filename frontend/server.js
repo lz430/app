@@ -6,7 +6,6 @@ const next = require('next');
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
 app.prepare()
     .then(() => {
         const server = express();
@@ -14,6 +13,11 @@ app.prepare()
         server.get('/favicon.ico', (req, res) => {
             const path = join(__dirname, 'static', 'favicon.ico');
             app.serveStatic(req, res, path);
+        });
+
+        server.get('/', (req, res) => {
+            const actualPage = '/index';
+            app.render(req, res, actualPage, req.query);
         });
 
         server.get('/filter', (req, res) => {
