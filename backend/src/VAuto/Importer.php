@@ -249,9 +249,9 @@ class Importer
             $this->info("    -- Deal ID: {$deal->id}");
             $this->info("    -- Deal Title: {$deal->title()}");
             $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
-
-            DB::transaction(function () use ($deal, $row) {
-                $debug = (new DealMunger($deal, $this->jatoClient, $row))->import();
+            $dealMunger = resolve('DeliverMyRide\VAuto\Deal\DealMunger');
+            DB::transaction(function () use ($dealMunger, $deal, $row) {
+                $debug = $dealMunger->import($deal, $row);
 
                 // Equipment
                 $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
@@ -268,6 +268,7 @@ class Importer
 
                 // Photos
                 $this->info("    -- Photos: Skipped?: {$debug['deal_photos_skipped']}");
+                $this->info("    -- Photos: Refreshed?: {$debug['deal_photos_refreshed']}");
                 $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
                 $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 
@@ -402,13 +403,13 @@ class Importer
     }
 
     /**
-     * @param $endtime
-     * @param $starttime
+     * @param $endTime
+     * @param $startTime
      * @return string
      */
-    private function formatTimePeriod($endtime, $starttime)
+    private function formatTimePeriod($endTime, $startTime)
     {
-        $duration = $endtime - $starttime;
+        $duration = $endTime - $startTime;
         $hours = (int) ($duration / 60 / 60);
         $minutes = (int) ($duration / 60) - $hours * 60;
         $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
@@ -469,6 +470,9 @@ class Importer
         } else {
             $vauto_features = null;
         }
+
+        $modifiedDate = $row['Photos Last Modified Date'];
+        $modifiedDate = Carbon::parse($modifiedDate);
 
         $deal = Deal::updateOrCreate([
             'vin' => $row['VIN'],

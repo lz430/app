@@ -36,32 +36,41 @@ class DealEquipmentMunger
     private $discovered_features;
 
     /**
-     * @param Deal $deal
      * @param JatoClient $client
      */
-    public function __construct(Deal $deal, JatoClient $client)
+    public function __construct(JatoClient $client)
     {
-
-        $this->deal = $deal;
         $this->client = $client;
+    }
+
+    /**
+     * @param Deal $deal
+     * @param bool $force
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function import(Deal $deal, bool $force = FALSE)
+    {
+        $this->deal = $deal;
         $this->version = $this->deal->version;
+
+        //
+        // Reset importer class
         $this->discovered_features = [];
         $this->vauto_features = [];
+        $this->option_codes = null;
+        $this->vauto_features = null;
+        $this->equipment = null;
+        $this->packages = null;
+        $this->options = null;
+        $this->discovered_features = null;
 
         $this->debug = [
             'equipment_extracted_codes' => [],
             'equipment_feature_count' => 0,
             'equipment_skipped' => 'Yes',
         ];
-    }
 
-    /**
-     * @param bool $force
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function import(bool $force = FALSE)
-    {
         // An iffy way to check if we have updated features. we don't
         // do this often, so probably not that big of a deal right now.
         $updatedFeatures = Feature::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();

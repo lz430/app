@@ -25,29 +25,30 @@ class DealFeaturesMunger
     private $features;
 
     /**
-     * @param Deal $deal
      * @param JatoClient $client
      */
-    public function __construct(Deal $deal, JatoClient $client)
+    public function __construct(JatoClient $client)
     {
-
-        $this->deal = $deal;
         $this->client = $client;
+    }
+
+    /**
+     * @param Deal $deal
+     * @param bool $force
+     * @return array
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function import(Deal $deal, bool $force = FALSE)
+    {
+        $this->deal = $deal;
         $this->version = $this->deal->version;
+        $this->features = null;
 
         $this->debug = [
             'feature_count' => 0,
             'feature_skipped' => 'Yes',
         ];
-    }
 
-    /**
-     * @param bool $force
-     * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function import(bool $force = FALSE)
-    {
         if ($force) {
             $this->deal->jatoFeatures()->sync([]);
         }
