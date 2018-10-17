@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
@@ -7,19 +6,10 @@ import Tuning from '../../../../icons/zondicons/Tuning';
 import CurrencyDollar from '../../../../icons/zondicons/CurrencyDollar';
 import CheveronUp from '../../../../icons/zondicons/CheveronUp';
 
-import { clearModelYear, requestSearch, toggleSearchSort } from '../../actions';
-
-import dealPage, {
-    getSearchQuery,
-    getSelectedFiltersByCategory,
-} from '../../selectors';
-
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
 import ModelWidget from './ModelWidget';
 
-import { getUserPurchaseStrategy } from '../../../../apps/user/selectors';
-import { setPurchaseStrategy } from '../../../../apps/user/actions';
 import TravelCar from '../../../../icons/zondicons/TravelCar';
 import FilterPanel from '../FilterPanel';
 
@@ -36,6 +26,9 @@ class ToolbarMobileBottom extends React.Component {
         onToggleSearchSort: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
+        filters: PropTypes.object.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
+        onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
     state = {
@@ -180,39 +173,19 @@ class ToolbarMobileBottom extends React.Component {
                     isMobile={true}
                     isOpen={this.state.activeTab === 'filter'}
                     onToggleOpen={this.setActiveTab.bind(this)}
+                    filters={this.props.filters}
+                    searchQuery={this.props.searchQuery}
+                    selectedFiltersByCategory={
+                        this.props.selectedFiltersByCategory
+                    }
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                    onClearModelYear={this.props.onClearModelYear}
+                    onRequestSearch={this.props.onRequestSearch}
                 />
             </div>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        searchQuery: getSearchQuery(state),
-        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-        selectedMake: dealPage(state).selectedMake,
-        purchaseStrategy: getUserPurchaseStrategy(state),
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onClearModelYear: () => {
-            return dispatch(clearModelYear());
-        },
-        onToggleSearchSort: sort => {
-            return dispatch(toggleSearchSort(sort));
-        },
-        onSetPurchaseStrategy: strategy => {
-            return dispatch(setPurchaseStrategy(strategy));
-        },
-        onRequestSearch: () => {
-            return dispatch(requestSearch());
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ToolbarMobileBottom);
+export default ToolbarMobileBottom;

@@ -31,6 +31,10 @@ class PrimaryFilters extends React.PureComponent {
     }
 
     render() {
+        if (!this.props.searchQuery) {
+            return false;
+        }
+
         if (this.props.searchQuery.entity === 'deal') {
             return (
                 <MediumAndUp>
