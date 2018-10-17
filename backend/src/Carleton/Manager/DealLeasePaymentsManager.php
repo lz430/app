@@ -4,6 +4,7 @@ namespace DeliverMyRide\Carleton\Manager;
 
 use DeliverMyRide\Carleton\Client;
 use App\Models\Deal;
+use App\Models\Dealer;
 
 /**
  * Gets lease payments for a specific deal with the least amount of info.
@@ -35,7 +36,8 @@ class DealLeasePaymentsManager
                 }
 
                 if (isset($term['moneyFactor'])) {
-                    $data['moneyFactor'] = $term['moneyFactor'];
+                    $additionalFactor = $this->getAdditionalFactor();
+                    $data['moneyFactor'] = ($additionalFactor != null) ? ($term['moneyFactor'] + $additionalFactor) : $term['moneyFactor'];
                 }
 
                 if (!$data['residual']) {
@@ -65,6 +67,12 @@ class DealLeasePaymentsManager
             $msrp,
             $price
         );
+    }
+
+    public function getAdditionalFactor()
+    {
+        $dealer = Dealer::select('money_factor')->where('dealer_id', $this->deal->dealer_id)->first();
+        return $dealer->money_factor;
     }
 }
 
