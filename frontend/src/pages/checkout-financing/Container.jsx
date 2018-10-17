@@ -12,7 +12,6 @@ import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from '../../apps/checkout/selectors';
 import { checkoutFinancingComplete } from '../../apps/checkout/actions';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
-import PageContent from '../../components/App/PageContent';
 import { getIsPageLoading } from '../../apps/page/selectors';
 import Loading from '../../icons/miscicons/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
@@ -65,7 +64,7 @@ class CheckoutFinancingContainer extends Component {
         }
 
         return (
-            <PageContent>
+            <React.Fragment>
                 <HeaderToolbar />
                 <Container className="checkout-financing mb-4">
                     <Row className="checkout-financing__header mt-4">
@@ -83,7 +82,7 @@ class CheckoutFinancingContainer extends Component {
                     </Row>
                     {this.renderRouteOneIFrame()}
                 </Container>
-            </PageContent>
+            </React.Fragment>
         );
     }
 }
