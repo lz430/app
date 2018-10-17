@@ -120,7 +120,7 @@ class DealDataController extends Controller
 
         $groups = [
             [
-                'Vehicle Size' => isset($features['Vehicle Size']) ? $features['Vehicle Size'] : [],
+                'Vehicle Size' => isset($features['Size']) ? $features['Size'] : [],
                 'Drive Train' => isset($features['Drive Train']) ? $features['Drive Train'] : [],
                 'Transmission' => isset($features['Transmission']) ? $features['Transmission'] : [],
                 'Fuel Type' => isset($features['Fuel Type']) ? $features['Fuel Type'] : [],

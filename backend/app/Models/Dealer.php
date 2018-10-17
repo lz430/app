@@ -74,6 +74,7 @@ class Dealer extends Model
      */
     protected $casts = [
         'price_rules' => 'object',
+        'notification_emails' => 'object',
     ];
 
 
@@ -102,6 +103,7 @@ class Dealer extends Model
         'contact_title',
         'price_rules',
         'money_factor',
+        'notification_emails',
     ];
 
     /**
