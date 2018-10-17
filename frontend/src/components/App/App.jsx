@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'next/router';
 
 import Header from './Header/Header';
 import LiveChat from 'react-livechat';
-import config from 'config';
+import config from '../../config';
 
-import { ChatContext } from 'contexts';
+import { ChatContext } from '../../contexts';
 
 class App extends React.Component {
     static propTypes = {
@@ -14,14 +14,17 @@ class App extends React.Component {
     };
 
     state = {
+        initChat: false,
         chatShow: false,
         chatAgents: false,
     };
 
-    componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location) {
-            window.scrollTo(0, 0);
-        }
+    /**
+     * This is not called on the SSRs, and there is a reference to window
+     * in the react-livechat library, breaking SSR real hard.
+     */
+    componentDidMount() {
+        this.setState({ initChat: true });
     }
 
     onOpenChat() {
@@ -56,12 +59,13 @@ class App extends React.Component {
                     <Header />
                     {this.props.children}
                 </ChatContext.Provider>
-                {config.LIVECHAT_LICENSE && (
-                    <LiveChat
-                        onChatLoaded={ref => this.onChatLoaded(ref)}
-                        license={parseInt(config.LIVECHAT_LICENSE)}
-                    />
-                )}
+                {config.LIVECHAT_LICENSE &&
+                    this.state.initChat && (
+                        <LiveChat
+                            onChatLoaded={ref => this.onChatLoaded(ref)}
+                            license={parseInt(config.LIVECHAT_LICENSE)}
+                        />
+                    )}
             </div>
         );
     }

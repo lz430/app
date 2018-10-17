@@ -1,11 +1,11 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects';
 
-import api from 'store/api';
+import api from '../../store/api';
 
 import { REQUEST_IP_LOCATION_INFO, REQUEST_LOCATION } from './consts';
 import { receiveLocation } from './actions';
-import { getCurrentPage } from 'apps/page/selectors';
-import { requestSearch } from 'pages/deal-list/actions';
+import { getCurrentPage } from '../../apps/page/selectors';
+import { requestSearch } from '../../pages/deal-list/actions';
 import { getUserLocation } from './selectors';
 
 /*******************************************************************

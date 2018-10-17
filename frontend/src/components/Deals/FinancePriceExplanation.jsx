@@ -1,5 +1,5 @@
 import React from 'react';
-import { dealPricingType } from 'types';
+import { dealPricingType } from '../../types';
 import Group from '../pricing/Group';
 import Line from '../pricing/Line';
 import Label from '../pricing/Label';

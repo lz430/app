@@ -1,0 +1,40 @@
+{
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "plugins": ["babel"],
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "node": true,
+        "es6": true
+    },
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "settings": {
+        "react": {
+            "createClass": "createReactClass", // Regex for Component Factory to use,
+            "pragma": "React", // Pragma to use, default to "React"
+            "version": "16.5.2" // React version, default to the latest React stable release
+        },
+        "propWrapperFunctions": ["forbidExtraProps"] // The names of any functions used to wrap the
+    },
+    "rules": {
+        "no-console": "off",
+        "strict": ["error", "global"],
+        "curly": "warn",
+        "babel/new-cap": 0,
+        "babel/no-invalid-this": 1,
+        "babel/object-curly-spacing": 0,
+        "babel/quotes": 0,
+        "babel/semi": 1,
+        "babel/no-unused-expressions": 1,
+        "babel/valid-typeof": 1,
+        "react/display-name": 0,
+        "no-case-declarations": 0
+    }
+}

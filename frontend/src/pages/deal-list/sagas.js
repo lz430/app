@@ -8,8 +8,8 @@ import {
     cancel,
     cancelled,
 } from 'redux-saga/effects';
-import ApiClient from 'store/api';
-import { cancelRequest } from 'store/httpclient';
+import ApiClient from '../../store/api';
+import { cancelRequest } from '../../store/httpclient';
 import * as R from 'ramda';
 
 import {
@@ -20,20 +20,22 @@ import {
     SEARCH_TOGGLE_FILTER,
 } from './consts';
 
-import { batchRequestDealQuotes } from 'apps/pricing/sagas';
+import { requestSearch as requestSearchAction } from './actions';
+
+import { batchRequestDealQuotes } from '../../apps/pricing/sagas';
 import * as DealListActions from './actions';
 
 import getDealList, { getSearchQuery } from './selectors';
-import { getUserLocation } from 'apps/user/selectors';
-import { initPage } from 'apps/page/sagas';
+import { getUserLocation } from '../../apps/user/selectors';
+import { initPage } from '../../apps/page/sagas';
 
-import { track } from 'services';
+import { track } from '../../services';
 import * as ActionTypes from './consts';
 
-import { push } from 'connected-react-router';
-
 import { buildSearchQueryUrl } from './helpers';
-import queryString from 'query-string';
+
+import Router from 'next/router';
+
 import { setPurchaseStrategy } from '../../apps/user/actions';
 
 /*******************************************************************
@@ -112,14 +114,23 @@ function* requestSearch(action) {
 
     yield put({ type: SEARCH_LOADING_FINISHED });
 
-    const urlQuery = buildSearchQueryUrl(searchQuery);
+    const urlQuery = buildSearchQueryUrl(searchQuery, 'object');
     if (urlQuery) {
         const dealListPage = yield select(getDealList);
-        yield put(
-            push('/filter?' + urlQuery, {
-                query: searchQuery,
-                page: dealListPage,
-            })
+        const state = {
+            query: searchQuery,
+            page: dealListPage,
+        };
+        Router.push(
+            {
+                pathname: '/deal-list',
+                query: urlQuery,
+            },
+            {
+                pathname: '/filter',
+                query: urlQuery,
+            },
+            { shallow: true, data: state }
         );
     }
 }
@@ -185,37 +196,37 @@ function* searchToggleFilter(action) {
     }
 
     yield put(DealListActions.setSearchFilters(currentFilters));
-    yield put({ type: SEARCH_REQUEST });
+    yield put(requestSearchAction(null));
 }
 
 /*******************************************************************
  * Init
  ********************************************************************/
 function* init(action) {
-    const { location, dataOnly } = action.data;
+    const { initialQuery, dataOnly } = action.data;
     if (!dataOnly) {
         yield* initPage('deal-list');
     }
 
-    // User is coming in fresh without any existing state.
-    // Means the user either clicked a deep link or came from
-    // the brochure site.
-    if (location.state === undefined) {
-        const query = queryString.parse(location.search, {
-            arrayFormat: 'bracket',
-        });
-
+    if (initialQuery) {
         // Not from the brochure site
-        if (query.purchaseStrategy && query.entity) {
-            yield put(setPurchaseStrategy(query.purchaseStrategy));
+        if (initialQuery.purchaseStrategy && initialQuery.entity) {
+            yield put(setPurchaseStrategy(initialQuery.purchaseStrategy));
 
+            let filters = [];
+            if (Array.isArray(initialQuery.filters)) {
+                filters = initialQuery.filters;
+            } else if (initialQuery.filters) {
+                filters.push(initialQuery.filters);
+            }
+            delete initialQuery.filters;
             const data = {
-                page: query.page,
+                page: 1,
                 searchQuery: {
                     entity: 'model',
                     sort: 'payment',
-                    filters: [],
-                    ...query,
+                    filters: filters,
+                    ...initialQuery,
                 },
             };
 
@@ -238,7 +249,7 @@ function* init(action) {
         track('page:search:view');
     }
 
-    yield put({ type: SEARCH_REQUEST });
+    yield put(requestSearchAction());
 }
 
 /*******************************************************************

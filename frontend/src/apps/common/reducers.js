@@ -1,5 +1,5 @@
-import * as ActionTypes from 'apps/common/consts';
-import { basePersistConfig } from 'persist';
+import * as ActionTypes from '../../apps/common/consts';
+import { basePersistConfig } from '../../persist';
 import { persistReducer } from 'redux-persist';
 
 const initialState = {

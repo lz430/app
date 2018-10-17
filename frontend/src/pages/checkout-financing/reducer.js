@@ -1,5 +1,5 @@
 import { persistReducer } from 'redux-persist';
-import { basePersistConfig } from 'persist';
+import { basePersistConfig } from '../../persist';
 
 import * as ActionTypes from './consts';
 

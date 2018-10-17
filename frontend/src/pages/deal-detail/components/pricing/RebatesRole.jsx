@@ -90,7 +90,7 @@ class RebatesRole extends React.Component {
                             type="checkbox"
                             className="form-check-input"
                             checked={this.props.isRoleChecked}
-                            onChange={e => this.props.onChange(role)}
+                            onChange={() => this.props.onChange(role)}
                             id={role['role']}
                         />
                         {canUserHaveRebatePerAffinity}

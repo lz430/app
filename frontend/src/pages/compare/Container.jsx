@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import Deal from 'components/Deals/Deal';
+import Deal from '../../components/Deals/Deal';
 
 import { initPage } from './actions';
 import ToolbarPrice from './components/ToolbarPrice';
@@ -10,12 +10,13 @@ import EquipmentCategory from './components/EquipmentCategory';
 import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
 
 import { getEquipmentCategories } from './selectors';
-import { getIsPageLoading } from 'apps/page/selectors';
+import { getIsPageLoading } from '../../apps/page/selectors';
 
-import Loading from 'icons/miscicons/Loading';
+import Loading from '../../icons/miscicons/Loading';
 import PageContent from '../../components/App/PageContent';
 import { compose } from 'redux';
 import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
@@ -128,6 +129,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

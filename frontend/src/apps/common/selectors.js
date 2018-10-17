@@ -2,11 +2,14 @@ import { createSelector } from 'reselect';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 
 import * as R from 'ramda';
-import { dealQuoteKey as generateDealQuoteKey } from 'apps/pricing/helpers';
+import { dealQuoteKey as generateDealQuoteKey } from '../../apps/pricing/helpers';
 
-import { getUserZipcode, getUserPurchaseStrategy } from 'apps/user/selectors';
+import {
+    getUserZipcode,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
 
-import { getQuotes } from 'apps/pricing/selectors';
+import { getQuotes } from '../../apps/pricing/selectors';
 
 const neverEqualSelector = createSelectorCreator(defaultMemoize, () => false);
 

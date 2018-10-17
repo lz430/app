@@ -12,8 +12,8 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import Bolt from 'icons/zondicons/Bolt';
-import Location from 'icons/zondicons/Location';
+import Bolt from '../../../icons/zondicons/Bolt';
+import Location from '../../../icons/zondicons/Location';
 
 class UserLocationModal extends React.PureComponent {
     static propTypes = {
@@ -39,7 +39,9 @@ class UserLocationModal extends React.PureComponent {
     }
 
     onSubmit(event) {
-        if (event) event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
         if (this.isValid()) {
             this.props.setNewLocation(this.state.location);
         }

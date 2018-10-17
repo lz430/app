@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import StyleIcon from 'components/Deals/StyleIcon';
-import Convertible from 'icons/body-styles/Convertible';
-import Coupe from 'icons/body-styles/Coupe';
-import Hatchback from 'icons/body-styles/Hatchback';
-import Minivan from 'icons/body-styles/Minivan';
-import Pickup from 'icons/body-styles/Pickup';
-import Sedan from 'icons/body-styles/Sedan';
-import Suv from 'icons/body-styles/Suv';
-import Wagon from 'icons/body-styles/Wagon';
-import Loading from 'icons/miscicons/Loading';
+import StyleIcon from '../../../../components/Deals/StyleIcon';
+import Convertible from '../../../../icons/body-styles/Convertible';
+import Coupe from '../../../../icons/body-styles/Coupe';
+import Hatchback from '../../../../icons/body-styles/Hatchback';
+import Minivan from '../../../../icons/body-styles/Minivan';
+import Pickup from '../../../../icons/body-styles/Pickup';
+import Sedan from '../../../../icons/body-styles/Sedan';
+import Suv from '../../../../icons/body-styles/Suv';
+import Wagon from '../../../../icons/body-styles/Wagon';
+import Loading from '../../../../icons/miscicons/Loading';
 import classNames from 'classnames';
 
 class FilterStyleList extends React.PureComponent {

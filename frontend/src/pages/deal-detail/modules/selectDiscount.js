@@ -1,4 +1,4 @@
-import { track } from 'services';
+import { track } from '../../../services';
 
 const namespace = 'DEAL_DETAILS_ROLES';
 

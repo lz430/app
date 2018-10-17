@@ -1,4 +1,4 @@
-import { basePersistConfig } from 'persist';
+import { basePersistConfig } from '../../persist';
 import { persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
 
@@ -39,10 +39,10 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.SET_CHECKOUT_DATA:
-            const { type, ...checkoutData } = action;
+            delete action.type;
             return {
                 ...state,
-                ...checkoutData,
+                ...action,
             };
 
         case ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS:

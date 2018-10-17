@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import PropTypes from 'prop-types';
-import Line from 'components/pricing/Line';
-import Label from 'components/pricing/Label';
-import Value from 'components/pricing/Value';
-import RebatesRole from './RebatesRole';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { sortBy, prop, map } from 'ramda';
+
+import Line from '../../../../components/pricing/Line';
+import Label from '../../../../components/pricing/Label';
+import Value from '../../../../components/pricing/Value';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+
+import RebatesRole from './RebatesRole';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -101,7 +102,7 @@ class Rebates extends React.Component {
         return (
             <div>
                 {this.isAnyRoleChecked() && (
-                    <div class="eligibility">
+                    <div className="eligibility">
                         Proof of eligibility required.
                     </div>
                 )}

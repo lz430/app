@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dealType } from 'types';
+import { dealType } from '../../../types';
 
 import NoDealsInRange from './NoDealsInRange';
 import NoDealsOutOfRange from './NoDealsOutOfRange';
 import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
-import Loading from 'icons/miscicons/Loading';
-import { getUserLocation } from 'apps/user/selectors';
+import Loading from '../../../icons/miscicons/Loading';
+import { getUserLocation } from '../../../apps/user/selectors';
 import { getSearchPage } from '../selectors';
 
 class ResultsList extends React.PureComponent {

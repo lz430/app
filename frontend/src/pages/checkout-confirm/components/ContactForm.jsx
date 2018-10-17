@@ -23,7 +23,7 @@ class ContactForm extends React.PureComponent {
         this.props.clearCheckoutContactFormErrors();
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (
             this.props.checkout.contactFormErrors !==
             prevProps.checkout.contactFormErrors
@@ -202,7 +202,7 @@ class ContactForm extends React.PureComponent {
                             type="text"
                             className="request-dl__number-label"
                         >
-                            Driver's License Number
+                            Driver&apos;s License Number
                         </label>
                         <label
                             htmlFor="drivers_license_state"

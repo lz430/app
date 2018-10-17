@@ -1,11 +1,11 @@
-import formulas from 'src/formulas';
-import { moneyFormat } from 'src/util';
+import formulas from './formulas';
+import { moneyFormat } from './util';
 import * as R from 'ramda';
 import Decimal from 'decimal.js';
 
-import { dealPricingData } from 'apps/common/selectors';
-import { dealPricingFromCheckoutData } from 'apps/checkout/selectors';
-import { getClosestNumberInRange } from 'src/util';
+import { dealPricingData } from '../apps/common/selectors';
+import { dealPricingFromCheckoutData } from '../apps/checkout/selectors';
+import { getClosestNumberInRange } from '../src/util';
 
 /**
  * Generate a deal pricing class using an object literal
@@ -20,7 +20,7 @@ export const dealPricingFromDataFactory = data => {
 /**
  * Generate a deal pricing class from an existing
  * pricing instance.
- * @param dealPricing
+ * @param pricing
  * @returns {DealPricing}
  */
 export const dealPricingFromPricingFactory = pricing => {
@@ -789,58 +789,53 @@ export default class DealPricing {
     }
 
     taxesAndFees() {
-        switch (this.data.paymentType) {
-            case 'cash':
-            case 'finance':
-                const total = new Decimal(this.discountedPriceValue())
-                    .plus(this.docFeeValue())
-                    .plus(this.effCvrFeeValue());
-
-                const salesTax = Math.round(total.times(this.taxRate()));
-
-                return [
-                    {
-                        label: 'Doc Fee',
-                        value: this.docFee(),
-                        rawValue: this.docFeeValue(),
-                    },
-                    {
-                        label: 'Electronic Filing Fee',
-                        value: this.effCvrFee(),
-                        rawValue: this.effCvrFeeValue(),
-                    },
-                    {
-                        label: 'Sales Tax',
-                        value: moneyFormat(salesTax),
-                        rawValue: salesTax,
-                    },
-                ];
-
-            case 'lease':
-                return [
-                    {
-                        label: 'First Payment',
-                        value: this.monthlyPayments(),
-                        rawValue: this.monthlyPaymentsValue(),
-                    },
-                    {
-                        label: 'Doc Fee',
-                        value: this.docFeeWithTaxes(),
-                        rawValue: this.docFeeWithTaxesValue(),
-                    },
-                    {
-                        label: 'Electronic Filing Fee',
-                        value: this.effCvrFeeWithTaxes(),
-                        rawValue: this.effCvrFeeWithTaxesValue(),
-                    },
-                    {
-                        label: 'Tax on Rebates',
-                        value: this.taxOnRebates(),
-                        rawValue: this.taxOnRebatesValue(),
-                    },
-                ];
-            default:
-                return [];
+        if (this.data.paymentType === 'lease') {
+            return [
+                {
+                    label: 'First Payment',
+                    value: this.monthlyPayments(),
+                    rawValue: this.monthlyPaymentsValue(),
+                },
+                {
+                    label: 'Doc Fee',
+                    value: this.docFeeWithTaxes(),
+                    rawValue: this.docFeeWithTaxesValue(),
+                },
+                {
+                    label: 'Electronic Filing Fee',
+                    value: this.effCvrFeeWithTaxes(),
+                    rawValue: this.effCvrFeeWithTaxesValue(),
+                },
+                {
+                    label: 'Tax on Rebates',
+                    value: this.taxOnRebates(),
+                    rawValue: this.taxOnRebatesValue(),
+                },
+            ];
         }
+
+        const total = new Decimal(this.discountedPriceValue())
+            .plus(this.docFeeValue())
+            .plus(this.effCvrFeeValue());
+
+        const salesTax = Math.round(total.times(this.taxRate()));
+
+        return [
+            {
+                label: 'Doc Fee',
+                value: this.docFee(),
+                rawValue: this.docFeeValue(),
+            },
+            {
+                label: 'Electronic Filing Fee',
+                value: this.effCvrFee(),
+                rawValue: this.effCvrFeeValue(),
+            },
+            {
+                label: 'Sales Tax',
+                value: moneyFormat(salesTax),
+                rawValue: salesTax,
+            },
+        ];
     }
 }

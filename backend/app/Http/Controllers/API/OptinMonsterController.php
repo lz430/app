@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Events\UserDataChanged;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class OptinMonsterController extends Controller
+class OptinMonsterController extends BaseAPIController
 {
     public function setEmailSession(Request $request)
     {

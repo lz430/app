@@ -1,10 +1,10 @@
-import { toggleItem } from 'src/util';
-import * as R from 'ramda';
-import * as ActionTypes from './consts';
+import { toggleItem } from '../../src/util';
+import { prop } from 'ramda';
+import { TOGGLE_COMPARE } from './consts';
 
 export function toggleCompare(deal) {
     return (dispatch, getState) => {
-        const deals = getState().common.compareList.map(R.prop('deal'));
+        const deals = getState().common.compareList.map(prop('deal'));
 
         const nextCompareList = toggleItem(deals, deal).map(d => {
             return {
@@ -13,7 +13,7 @@ export function toggleCompare(deal) {
         });
 
         dispatch({
-            type: ActionTypes.TOGGLE_COMPARE,
+            type: TOGGLE_COMPARE,
             compareList: nextCompareList,
         });
     };

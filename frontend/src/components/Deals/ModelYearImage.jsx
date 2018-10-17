@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { modelYearType } from 'types';
+import { modelYearType } from '../../types';
 
 import LazyLoad from 'react-lazyload';
 
@@ -11,7 +11,7 @@ class ModelYearImage extends React.PureComponent {
     };
 
     state = {
-        fallbackDealImage: '/images/deal-missing-thumbnail.jpg',
+        fallbackDealImage: '/static/images/deal-missing-thumbnail.jpg',
     };
 
     featuredImageUrl() {

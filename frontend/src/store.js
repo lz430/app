@@ -1,44 +1,54 @@
 import { createStore, compose, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
 import reduxThunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import { createBrowserHistory } from 'history';
-import { connectRouter, routerMiddleware } from 'connected-react-router';
 
-import rootSaga from 'sagas';
-import rootReducer from 'reducers';
+import rootSaga from './sagas';
+import rootReducer from './reducers';
+import { basePersistConfig } from './persist';
 
-import { basePersistConfig } from 'persist';
+const initialAppState = {};
 
-const initialState = {};
+const composeEnhancers =
+    (typeof window !== 'undefined' &&
+        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+    compose;
 
-export const history = createBrowserHistory();
+const sagaMiddleware = createSagaMiddleware();
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-const config = {
-    ...basePersistConfig,
-    key: 'root',
-    blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
-};
-
-export default () => {
-    const sagaMiddleware = createSagaMiddleware();
-
+const makeConfiguredStore = function(reducer, initialState) {
     const store = createStore(
-        connectRouter(history)(persistReducer(config, rootReducer)),
+        reducer,
         initialState,
-        composeEnhancers(
-            applyMiddleware(
-                routerMiddleware(history),
-                sagaMiddleware,
-                reduxThunk
-            )
-        )
+        composeEnhancers(applyMiddleware(sagaMiddleware, reduxThunk))
     );
 
-    const persistor = persistStore(store, null, () => {});
+    store.runSagaTask = () => {
+        store.sagaTask = sagaMiddleware.run(rootSaga);
+    };
 
-    sagaMiddleware.run(rootSaga);
-    return { store, persistor };
+    // run the rootSaga initially
+    store.runSagaTask();
+
+    return store;
+};
+
+export default (initialState = initialAppState, { isServer }) => {
+    if (isServer) {
+        initialState = initialState || { fromServer: 'foo' };
+        return makeConfiguredStore(rootReducer, initialState);
+    } else {
+        const { persistStore, persistReducer } = require('redux-persist');
+        const persistConfig = {
+            ...basePersistConfig,
+            key: 'root',
+            blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
+        };
+
+        const persistedReducer = persistReducer(persistConfig, rootReducer);
+        const store = makeConfiguredStore(persistedReducer, initialState);
+
+        store.__persistor = persistStore(store); // Nasty hack
+
+        return store;
+    }
 };

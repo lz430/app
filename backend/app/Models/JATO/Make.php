@@ -82,7 +82,7 @@ class Make extends Model
         'Volvo' => self::BASE_PATH . 'volvo.jpg',
     ];
 
-    private const BASE_PATH = '/images/makes/';
+    private const BASE_PATH = '/static/images/makes/';
 
     protected $fillable = [
         'name',

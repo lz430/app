@@ -1,6 +1,6 @@
 import { persistReducer } from 'redux-persist';
 import { combineReducers } from 'redux';
-import { basePersistConfig } from 'persist';
+import { basePersistConfig } from '../../persist';
 
 import selectDiscount from './modules/selectDiscount';
 import finance from './modules/finance';

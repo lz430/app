@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { dealType } from 'types';
+import { dealType } from '../../types';
 
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 

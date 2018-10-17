@@ -5,9 +5,9 @@ import * as R from 'ramda';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-import Loading from 'icons/miscicons/Loading';
+import Loading from '../../../icons/miscicons/Loading';
 
-import { filterItemType } from 'types';
+import { filterItemType } from '../../../types';
 
 class ModalMakeSelector extends React.PureComponent {
     static propTypes = {

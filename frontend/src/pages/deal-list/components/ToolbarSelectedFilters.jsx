@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 import { connect } from 'react-redux';
 
-import Close from 'icons/zondicons/Close';
-import Filter from 'icons/zondicons/Filter';
+import Close from '../../../icons/zondicons/Close';
+import Filter from '../../../icons/zondicons/Filter';
 import ToolbarSort from './ToolbarSort';
 
 import {
     clearAllSecondaryFilters,
     toggleSearchFilter,
-} from 'pages/deal-list/actions';
+} from '../../../pages/deal-list/actions';
 
 import { getSelectedFiltersByCategory } from '../selectors';
 

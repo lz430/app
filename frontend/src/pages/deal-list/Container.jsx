@@ -1,17 +1,17 @@
 import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-
-import ReactRouterPropTypes from 'react-router-prop-types';
-import PropTypes from 'prop-types';
-import { dealType, filterItemType } from 'types';
-import Loading from 'icons/miscicons/Loading';
-
 import { StickyContainer } from 'react-sticky';
+import PropTypes from 'prop-types';
+import { dealType, filterItemType, nextRouterType } from '../../types';
+import Loading from '../../icons/miscicons/Loading';
 
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
-import { getIsPageLoading } from 'apps/page/selectors';
-import PageContent from 'components/App/PageContent';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
+import { getIsPageLoading } from '../../apps/page/selectors';
+import PageContent from '../../components/App/PageContent';
 
 import ResultsList from './components/ResultsList';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';
@@ -20,9 +20,7 @@ import ToolbarMobileBottom from './components/ToolbarMobile/ToolbarMobileBottom'
 import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
-
-import { LargeAndUp, MediumAndDown } from 'components/Responsive';
-import { buildSearchQueryUrl } from './helpers';
+import { LargeAndUp, MediumAndDown } from '../../components/Responsive';
 import { forceCheck } from 'react-lazyload';
 
 import {
@@ -30,20 +28,26 @@ import {
     updateEntirePageState,
     closeMakeSelectorModal,
     toggleSearchFilter,
+    clearModelYear,
+    requestSearch,
 } from './actions';
 
 import {
     getAllMakes,
+    getLoadingSearchResults,
     getSearchQuery,
     getSelectedFiltersByCategory,
 } from './selectors';
-import { setPurchaseStrategy } from 'apps/user/actions';
+import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
-import withTracker from 'components/withTracker';
+import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
 
 class Container extends React.Component {
     static propTypes = {
+        filters: PropTypes.object.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        loadingSearchResults: PropTypes.bool.isRequired,
         searchQuery: PropTypes.object.isRequired,
         modelYears: PropTypes.array,
         deals: PropTypes.arrayOf(dealType),
@@ -57,44 +61,44 @@ class Container extends React.Component {
         onInit: PropTypes.func.isRequired,
         onUpdateEntirePageState: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
+        onToggleMakeFilter: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
-
-        history: ReactRouterPropTypes.history.isRequired,
-        location: ReactRouterPropTypes.location.isRequired,
-        match: ReactRouterPropTypes.match.isRequired,
+        onRequestSearch: PropTypes.func.isRequired,
+        onClearModelYear: PropTypes.func.isRequired,
+        router: nextRouterType,
+        initialQuery: PropTypes.object,
     };
 
     componentDidMount() {
-        this.props.onInit({ location: this.props.location });
+        this.props.onInit({ initialQuery: this.props.initialQuery });
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.location.search !== prevProps.location.search) {
-            // Handling user clicking back button here.
-            const expectedQuery = buildSearchQueryUrl(this.props.searchQuery);
-            if (
-                expectedQuery &&
-                '?' + expectedQuery !== this.props.location.search &&
-                this.props.location.state &&
-                this.props.location.state.query
-            ) {
-                this.props.onSetPurchaseStrategy(
-                    this.props.location.state.query.purchaseStrategy
-                );
+    componentDidUpdate() {
+        if (this.props.router.beforePopState) {
+            this.props.router.beforePopState(({ options }) => {
+                const data = options.data;
+                if (data) {
+                    this.props.onSetPurchaseStrategy(
+                        data.query.purchaseStrategy
+                    );
 
-                this.props.onUpdateEntirePageState(
-                    this.props.location.state.page
-                );
+                    this.props.onUpdateEntirePageState(data.page);
 
-                forceCheck();
-            } else {
-                this.props.onInit({
-                    location: this.props.location,
-                    dataOnly: true,
-                });
-            }
+                    forceCheck();
+                }
+
+                return true;
+            });
         }
+    }
+
+    onToggleSearchFilter(category, item) {
+        this.props.onToggleSearchFilter(category, item);
+    }
+
+    onRequestSearch() {
+        this.props.onRequestSearch(this.props.router);
     }
 
     renderMakeSelectionModal() {
@@ -104,7 +108,7 @@ class Container extends React.Component {
                 isOpen={this.props.makeSelectorModalIsOpen}
                 selectedFiltersByCategory={this.props.selectedFiltersByCategory}
                 makes={this.props.makes}
-                onToggleSearchFilter={this.props.onToggleSearchFilter}
+                onToggleSearchFilter={this.props.onToggleMakeFilter}
                 fallbackLogoImage={this.props.fallbackLogoImage}
             />
         );
@@ -124,7 +128,19 @@ class Container extends React.Component {
         return (
             <StickyContainer className="filter-page">
                 <LargeAndUp>
-                    <FilterPanel />
+                    <FilterPanel
+                        filters={this.props.filters}
+                        searchQuery={this.props.searchQuery}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
+                        loadingSearchResults={this.props.loadingSearchResults}
+                        onToggleSearchFilter={this.onToggleSearchFilter.bind(
+                            this
+                        )}
+                        onClearModelYear={this.props.onClearModelYear}
+                        onRequestSearch={this.onRequestSearch.bind(this)}
+                    />
                 </LargeAndUp>
                 {this.renderDeals()}
                 <MediumAndDown>
@@ -187,13 +203,15 @@ const mapStateToProps = state => {
         makes: getAllMakes(state),
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
+        filters: state.pages.dealList.filters,
+        loadingSearchResults: getLoadingSearchResults(state),
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onInit: url => {
-            return dispatch(initDealListData(url));
+        onInit: initialQuery => {
+            return dispatch(initDealListData(initialQuery));
         },
         onUpdateEntirePageState: data => {
             return dispatch(updateEntirePageState(data));
@@ -204,13 +222,23 @@ const mapDispatchToProps = dispatch => {
         onSetPurchaseStrategy: strategy => {
             return dispatch(setPurchaseStrategy(strategy));
         },
-        onToggleSearchFilter: item => {
+        onToggleMakeFilter: item => {
             return dispatch(toggleSearchFilter('make', item));
+        },
+        onToggleSearchFilter: (category, item) => {
+            return dispatch(toggleSearchFilter(category, item));
+        },
+        onClearModelYear: () => {
+            return dispatch(clearModelYear());
+        },
+        onRequestSearch: () => {
+            return dispatch(requestSearch());
         },
     };
 };
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps

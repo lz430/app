@@ -1,6 +1,5 @@
 import { put, call, select, takeEvery } from 'redux-saga/effects';
-import { push } from 'connected-react-router';
-import ApiClient from 'store/api';
+import ApiClient from '../../store/api';
 
 import {
     CHECKOUT_START,
@@ -15,7 +14,9 @@ import {
     receivePurchase,
 } from './actions';
 import { checkout as getCheckout } from './selectors';
-import { track } from 'services';
+import { track } from '../../services';
+
+import Router from 'next/router';
 
 function toDollarsAndCents(input) {
     return input.toFormat('0.00');
@@ -76,7 +77,7 @@ export function* checkoutStart(action) {
     if (results) {
         yield put(receivePurchase(results.data));
         yield put(checkoutFinishedLoading());
-        yield put(push('/checkout/contact'));
+        yield put(Router.push('/checkout-contact', '/checkout/contact'));
     }
 }
 
@@ -111,7 +112,7 @@ export function* checkoutContact(action) {
 
     if (results) {
         yield put(receivePurchase(results.data));
-        yield put(push(results.data.destination));
+        yield put(Router.push(results.data.destination));
     }
 }
 
@@ -128,10 +129,12 @@ export function* checkoutFinancingComplete() {
             checkout.purchase.id,
             checkout.userToken
         );
-    } catch (e) {}
+    } catch (e) {
+        results = false;
+    }
 
     if (results) {
-        yield put(push('/checkout/complete'));
+        yield put(Router.push('checkout-complete', '/checkout/complete'));
     }
 }
 

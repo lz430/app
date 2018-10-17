@@ -44,17 +44,19 @@ export function checkoutFinishedLoading() {
     };
 }
 
-export function checkoutStart(pricing) {
+export function checkoutStart(pricing, router) {
     return {
         type: ActionTypes.CHECKOUT_START,
         pricing,
+        router: router,
     };
 }
 
-export function checkoutContact(fields) {
+export function checkoutContact(fields, router) {
     return {
         type: ActionTypes.CHECKOUT_CONTACT,
         fields,
+        router: router,
     };
 }
 

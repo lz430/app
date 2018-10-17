@@ -8,12 +8,15 @@ import {
     cancelled,
 } from 'redux-saga/effects';
 
-import ApiClient from 'store/api';
-import { cancelRequest } from 'store/httpclient';
+import ApiClient from '../../store/api';
+import { cancelRequest } from '../../store/httpclient';
 
 import { REQUEST_BATCH_DEAL_QUOTES, REQUEST_DEAL_QUOTE } from './consts';
 import { receiveDealQuote, requestDealQuoteIsLoading } from './actions';
-import { getUserLocation, getUserPurchaseStrategy } from 'apps/user/selectors';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../apps/user/selectors';
 import { dealQuoteKey } from './helpers';
 
 /*******************************************************************

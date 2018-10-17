@@ -4,14 +4,14 @@ import { put, takeEvery, call, select } from 'redux-saga/effects';
 
 import { INIT } from './consts';
 
-import ApiClient from 'store/api';
+import ApiClient from '../../store/api';
 
 import { receiveCompareData } from './actions';
-import { batchRequestDealQuotes } from 'apps/pricing/actions';
+import { batchRequestDealQuotes } from '../../apps/pricing/actions';
 import { getComparedDeals } from './selectors';
-import { initPage } from 'apps/page/sagas';
-import { pageLoadingFinished, pageLoadingStart } from 'apps/page/actions';
-import { track } from 'services';
+import { initPage } from '../../apps/page/sagas';
+import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
+import { track } from '../../services';
 
 /*******************************************************************
  * Init

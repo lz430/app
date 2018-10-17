@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Line from 'components/pricing/Line';
+import Line from '../../../components/pricing/Line';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import { dealType } from 'types';
-import { pricingType } from '../../../types';
-import { Link } from 'react-router-dom';
+import { pricingType, dealType } from '../../../types';
+import Link from 'next/link';
 import Loading from '../../../icons/miscicons/Loading';
 
 export default class AddToCart extends React.PureComponent {
@@ -70,7 +69,8 @@ export default class AddToCart extends React.PureComponent {
                                 fontWeight: 'bold',
                             }}
                         >
-                            We're sorry, this vehicle is no longer available.{' '}
+                            We&apos;re sorry, this vehicle is no longer
+                            available.{' '}
                             <span
                                 style={{
                                     fontWeight: 'normal',
@@ -99,8 +99,8 @@ export default class AddToCart extends React.PureComponent {
                                 fontWeight: 'bold',
                             }}
                         >
-                            We're sorry, this vehicle is not available in your
-                            area{' '}
+                            We&apos;re sorry, this vehicle is not available in
+                            your area{' '}
                             <span
                                 style={{
                                     fontWeight: 'normal',

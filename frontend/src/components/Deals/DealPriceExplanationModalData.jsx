@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dealType, dealPricingType } from 'types';
+import { dealType, dealPricingType } from '../../types';
 
 import Line from '../pricing/Line';
 import CashPriceExplanation from './CashPriceExplanation';
 import FinancePriceExplanation from './FinancePriceExplanation';
 import LeasePriceExplanation from './LeasePriceExplanation';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class DealPriceExplanationModalData extends React.PureComponent {
     static propTypes = {
@@ -87,12 +87,13 @@ class DealPriceExplanationModalData extends React.PureComponent {
 
                         <div className="deal__buttons">
                             <Link
-                                className="btn btn-primary btn-block"
                                 to={
                                     '/deals/' + this.props.dealPricing.deal().id
                                 }
                             >
-                                View Details
+                                <a className="btn btn-primary btn-block">
+                                    View Details
+                                </a>
                             </Link>
                         </div>
                     </div>

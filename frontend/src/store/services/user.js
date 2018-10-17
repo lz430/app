@@ -1,4 +1,4 @@
-import httpclient from 'store/httpclient';
+import httpclient from '../httpclient';
 
 /**
  * User specific API calls.
@@ -36,6 +36,15 @@ class UserService {
      */
     postNotifyWhenInRange(email) {
         return httpclient.post('/api/hubspot/not-in-area', { email });
+    }
+
+    /**
+     *
+     * @param email
+     * @returns {*}
+     */
+    setEmail(email) {
+        return httpclient.post('/api/set-email', { email });
     }
 }
 

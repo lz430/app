@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { batchRequestDealQuotes } from 'apps/pricing/actions';
 import { getComparedDeals } from '../selectors';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 class ToolbarPrice extends React.PureComponent {
     static propTypes = {
@@ -22,7 +22,9 @@ class ToolbarPrice extends React.PureComponent {
             <div className="compare-page__toolbar">
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link to="/filter">Search Results</Link>
+                        <Link href="/deal-list" as="/filter">
+                            <a>Search Results</a>
+                        </Link>
                     </BreadcrumbItem>
                     <BreadcrumbItem active>Compare Deals</BreadcrumbItem>
                 </Breadcrumb>

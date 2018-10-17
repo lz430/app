@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { find } from 'ramda';
 
-import { toggleSearchSort } from 'pages/deal-list/actions';
+import { toggleSearchSort } from '../../../pages/deal-list/actions';
 import {
     Dropdown,
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
 } from 'reactstrap';
-import classNames from 'classnames';
 
 class ToolbarSort extends React.Component {
     static propTypes = {

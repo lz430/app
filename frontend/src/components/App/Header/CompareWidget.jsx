@@ -8,8 +8,8 @@ import {
     DropdownItem,
 } from 'reactstrap';
 import DealImage from '../../Deals/DealImage';
-import CloseSolid from 'icons/zondicons/CloseSolid';
-import { Link } from 'react-router-dom';
+import CloseSolid from '../../../icons/zondicons/CloseSolid';
+import Link from 'next/link';
 
 class CompareWidget extends React.PureComponent {
     static propTypes = {
@@ -28,14 +28,12 @@ class CompareWidget extends React.PureComponent {
         });
     }
 
-    redirectToCompare() {
-        return (
-            '/compare?' +
-            this.props.compareList.map(
-                dealAndSelectedFilters =>
-                    `deals[]=${dealAndSelectedFilters.deal.id}`
-            )
-        );
+    dealIds() {
+        let ids = [];
+        this.props.compareList.map(dealAndSelectedFilters => {
+            ids.push(dealAndSelectedFilters.deal.id);
+        });
+        return ids;
     }
 
     compareReady() {
@@ -103,8 +101,13 @@ class CompareWidget extends React.PureComponent {
                     })}
                     {this.compareReady() && (
                         <DropdownItem className="dropdown-footer-cta">
-                            <Link to={this.redirectToCompare()}>
-                                Compare Deals
+                            <Link
+                                href={{
+                                    pathname: '/compare',
+                                    query: { deals: this.dealIds() },
+                                }}
+                            >
+                                <a>Compare Deals</a>
                             </Link>
                         </DropdownItem>
                     )}

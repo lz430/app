@@ -1,9 +1,9 @@
 import React from 'react';
-import config from 'config';
+import config from '../../config';
 import { Container, Row, Col } from 'reactstrap';
-import Phone from 'icons/zondicons/Phone';
+import Phone from '../../icons/zondicons/Phone';
 import ChatWidget from './ChatWidget';
-import Keyboard from 'icons/zondicons/Keyboard';
+import Keyboard from '../../icons/zondicons/Keyboard';
 
 export default class Footer extends React.PureComponent {
     render() {

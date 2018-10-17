@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { compose } from 'redux';
 
 import { Container, Row, Col } from 'reactstrap';
 
@@ -8,18 +9,18 @@ import { init } from './actions';
 import getFinancing from './selectors';
 
 import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
-import { checkout } from 'apps/checkout/selectors';
-import { checkoutFinancingComplete } from 'apps/checkout/actions';
-import InvalidCheckoutPage from 'components/checkout/InvalidCheckoutPage';
-import PageContent from 'components/App/PageContent';
-import { getIsPageLoading } from 'apps/page/selectors';
-import Loading from 'icons/miscicons/Loading';
+import { checkout } from '../../apps/checkout/selectors';
+import { checkoutFinancingComplete } from '../../apps/checkout/actions';
+import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
+import PageContent from '../../components/App/PageContent';
+import { getIsPageLoading } from '../../apps/page/selectors';
+import Loading from '../../icons/miscicons/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
-import { compose } from 'redux';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
-
+import { nextRouterType } from '../../types';
+import { withRouter } from 'next/router';
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         init: PropTypes.func.isRequired,
@@ -27,6 +28,7 @@ class CheckoutFinancingContainer extends Component {
         financing: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
         checkoutFinancingComplete: PropTypes.func.isRequired,
+        router: nextRouterType,
     };
 
     state = {
@@ -100,6 +102,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
 });
 
 export default compose(
+    withRouter,
     connect(
         mapStateToProps,
         mapDispatchToProps
