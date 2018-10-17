@@ -45,7 +45,7 @@ class MyApp extends App {
 
     render() {
         const { Component, pageProps, store } = this.props;
-
+        console.log(this.props);
         //
         // Client
         if (store.__persistor) {
