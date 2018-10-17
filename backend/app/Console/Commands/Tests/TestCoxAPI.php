@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Tests;
 
 use DeliverMyRide\RIS\RISClient;
 use Illuminate\Console\Command;

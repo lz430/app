@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\LoadDealsFromVauto::class,
-        Commands\TestCoxAPI::class,
+        Commands\Tests\TestCoxAPI::class,
+        Commands\Tests\TestHubSpotForm::class,
         Commands\VersionFillMissingPhotos::class,
         Commands\VersionGenerateQuotes::class,
         Commands\ImportVautoMapData::class,
