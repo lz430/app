@@ -128,14 +128,15 @@ class Header extends React.PureComponent {
                         src="/static/images/dmr-logo.svg"
                     />
                 </NavbarBrand>
-                {/* <div className="mr-auto" /> */}
-                <SearchWidget
-                    onRequestSearch={this.props.onRequestSearch}
-                    autocompleteResults={this.props.autocompleteResults}
-                    router={this.props.router}
-                    searchQuery={this.props.searchQuery}
-                />
+                <div className="mr-auto" />
+
                 <div className="navbar-text">
+                    <SearchWidget
+                        onRequestSearch={this.props.onRequestSearch}
+                        autocompleteResults={this.props.autocompleteResults}
+                        router={this.props.router}
+                        searchQuery={this.props.searchQuery}
+                    />
                     {this.renderContactUsWidget()}
                     <CompareWidget
                         currentPageIsInCheckout={
