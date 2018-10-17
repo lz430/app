@@ -69,6 +69,16 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addField([
+            'name'  => 'notification_emails',
+            'label' => 'Notification Emails',
+            'type'  => 'table',
+            'columns' => [
+                'emails' => 'Emails'
+            ],
+            'tab'   => 'General',
+        ]);
+
+        $this->crud->addField([
             'name'  => 'acquisition_fee',
             'label' => 'Acquisition Fee',
             'type' => 'number',

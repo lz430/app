@@ -121,7 +121,7 @@ class Deal extends Model
 
     private const CATEGORY_MAP = [
         'vehicle_size' => [
-            'title' => 'Vehicle Size',
+            'title' => 'Size',
         ],
         'fuel_type' => [
             'title' => 'Fuel Type',
