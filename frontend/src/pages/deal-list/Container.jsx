@@ -11,7 +11,6 @@ import {
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
 import { getIsPageLoading } from '../../apps/page/selectors';
-import PageContent from '../../components/App/PageContent';
 
 import ResultsList from './components/ResultsList';
 import ToolbarSelectedFilters from './components/ToolbarSelectedFilters';

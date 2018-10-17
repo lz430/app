@@ -22,7 +22,6 @@ import CashDetails from '../../components/checkout/CashDetails';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
-import PageContent from '../../components/App/PageContent';
 import withTracker from '../../components/withTracker';
 import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
 import { withRouter } from 'next/router';
@@ -47,7 +46,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
         const deal = pricing.deal();
 
         return (
-            <PageContent>
+            <React.Fragment>
                 <HeaderToolbar />
                 <Container className="checkout-confirm">
                     <Row className="checkout-confirm__header">
@@ -152,7 +151,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
                         </Col>
                     </Row>
                 </Container>
-            </PageContent>
+            </React.Fragment>
         );
     }
 }

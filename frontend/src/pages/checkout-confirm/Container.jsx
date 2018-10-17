@@ -28,7 +28,6 @@ import LeaseDetails from '../../components/checkout/LeaseDetails';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
-import PageContent from '../../components/App/PageContent';
 import ContactForm from './components/ContactForm';
 
 import withTracker from '../../components/withTracker';
@@ -67,7 +66,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
         const deal = pricing.deal();
 
         return (
-            <PageContent>
+            <React.Fragment>
                 <HeaderToolbar />
                 <Container className="checkout-confirm">
                     <Row>
@@ -155,7 +154,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                         </Col>
                     </Row>
                 </Container>
-            </PageContent>
+            </React.Fragment>
         );
     }
 }
