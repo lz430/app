@@ -30,6 +30,7 @@ import {
     toggleSearchFilter,
     clearModelYear,
     requestSearch,
+    toggleSearchSort,
 } from './actions';
 
 import {
@@ -42,6 +43,7 @@ import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
+import dealPage from './selectors';
 
 class Container extends React.Component {
     static propTypes = {
@@ -66,8 +68,10 @@ class Container extends React.Component {
         onCloseMakeSelectorModal: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
+        onToggleSearchSort: PropTypes.func.isRequired,
         router: nextRouterType,
         initialQuery: PropTypes.object,
+        selectedMake: PropTypes.string,
     };
 
     componentDidMount() {
@@ -144,7 +148,23 @@ class Container extends React.Component {
                 </LargeAndUp>
                 {this.renderDeals()}
                 <MediumAndDown>
-                    <ToolbarMobileBottom />
+                    <ToolbarMobileBottom
+                        searchQuery={this.props.searchQuery}
+                        selectedFiltersByCategory={
+                            this.props.selectedFiltersByCategory
+                        }
+                        selectedMake={this.props.selectedMake}
+                        purchaseStrategy={this.props.purchaseStrategy}
+                        filters={this.props.filters}
+                        loadingSearchResults={this.props.loadingSearchResults}
+                        onToggleSearchFilter={this.onToggleSearchFilter.bind(
+                            this
+                        )}
+                        onClearModelYear={this.props.onClearModelYear}
+                        onRequestSearch={this.onRequestSearch.bind(this)}
+                        onToggleSearchSort={this.props.onToggleSearchSort}
+                        onSetPurchaseStrategy={this.props.onSetPurchaseStrategy}
+                    />
                 </MediumAndDown>
             </StickyContainer>
         );
@@ -201,6 +221,7 @@ const mapStateToProps = state => {
         selectedFiltersByCategory: getSelectedFiltersByCategory(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
         makes: getAllMakes(state),
+        selectedMake: dealPage(state).selectedMake,
         fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
         filters: state.pages.dealList.filters,
@@ -233,6 +254,9 @@ const mapDispatchToProps = dispatch => {
         },
         onRequestSearch: () => {
             return dispatch(requestSearch());
+        },
+        onToggleSearchSort: sort => {
+            return dispatch(toggleSearchSort(sort));
         },
     };
 };

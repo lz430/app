@@ -27,6 +27,9 @@ class SecondaryFilters extends React.PureComponent {
      Pickup
      */
     render() {
+        if (!this.props.filters) {
+            return false;
+        }
         return (
             <div className="filter-group filter-group__secondary">
                 <FilterFeature

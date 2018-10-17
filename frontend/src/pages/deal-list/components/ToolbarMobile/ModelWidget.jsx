@@ -15,6 +15,12 @@ class ModelWidget extends React.PureComponent {
     }
 
     render() {
+        if (
+            !this.props.selectedFiltersByCategory ||
+            !this.props.selectedFiltersByCategory['model']
+        ) {
+            return false;
+        }
         return (
             <div className="tray-widget">
                 <div className="tray-widget-content">
