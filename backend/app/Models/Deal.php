@@ -65,6 +65,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $vehicle_color
  * @property string $status
  * @property \Datetime $sold_at
+ * @property \Datetime photos_updated_at
  * @property \Highlight|null $highlight
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal forSale()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereBody($value)
@@ -239,7 +240,7 @@ class Deal extends Model
     /**
      * @var array
      */
-    protected $dates = ['inventory_date', 'sold_at'];
+    protected $dates = ['inventory_date', 'photos_updated_at', 'sold_at'];
 
     /**
      * @var array

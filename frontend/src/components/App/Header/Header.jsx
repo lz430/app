@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-//import ReactRouterPropTypes from 'react-router-prop-types';
-
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 
@@ -35,12 +33,6 @@ class Header extends React.PureComponent {
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
         router: nextRouterType,
-
-        /*
-        history: ReactRouterPropTypes.history.isRequired,
-        location: ReactRouterPropTypes.location.isRequired,
-        match: ReactRouterPropTypes.match.isRequired,
-        */
     };
 
     state = {
