@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class Group extends React.PureComponent {
     static propTypes = {
         showIf: PropTypes.bool.isRequired,
-        children: PropTypes.node.isRequired,
+        children: PropTypes.any,
     };
     static defaultProps = {
         showIf: true,

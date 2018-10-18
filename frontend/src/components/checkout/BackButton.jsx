@@ -1,12 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
-import {
-    getCurrentPage,
-    getCurrentPageIsInCheckout,
-} from '../../apps/page/selectors';
-import { checkout } from '../../apps/checkout/selectors';
 import { checkoutType } from '../../types';
 
 class BackButton extends React.PureComponent {
@@ -61,13 +55,4 @@ class BackButton extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        currentPage: getCurrentPage(state),
-        isCurrentPageInCheckout: getCurrentPageIsInCheckout(state),
-        checkout: checkout(state),
-        searchQuery: state.pages.dealList.searchQuery,
-    };
-}
-
-export default connect(mapStateToProps)(BackButton);
+export default BackButton;
