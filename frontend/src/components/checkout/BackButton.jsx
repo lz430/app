@@ -6,7 +6,6 @@ import { checkoutType } from '../../types';
 class BackButton extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
-        isCurrentPageInCheckout: PropTypes.bool,
         checkout: checkoutType,
     };
 
@@ -32,10 +31,7 @@ class BackButton extends React.PureComponent {
     render() {
         //
         // Don't show if in checkout and no checkout.
-        if (
-            this.props.isCurrentPageInCheckout &&
-            !this.props.checkout.deal.id
-        ) {
+        if (!this.props.checkout.deal.id) {
             return false;
         }
 

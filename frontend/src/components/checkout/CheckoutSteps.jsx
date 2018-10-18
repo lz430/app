@@ -76,9 +76,6 @@ class CheckoutSteps extends React.PureComponent {
                     <div className="steps-bar__page-title">
                         <BackButton
                             currentPage={this.props.currentPage}
-                            isCurrentPageInCheckout={
-                                this.props.isCurrentPageInCheckout
-                            }
                             checkout={this.props.checkout}
                         />
                     </div>
