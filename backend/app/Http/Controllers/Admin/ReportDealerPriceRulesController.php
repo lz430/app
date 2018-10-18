@@ -34,9 +34,7 @@ class ReportDealerPriceRulesController extends Controller
                     $data['Model'] = $p->conditions->model;
                     $csv->insertOne($data);
                 }
-                //$csv->insertOne($data);
             }
-
         }
 
         $csv->output('dealer-price-rules.csv');
