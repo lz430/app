@@ -99,5 +99,5 @@ export const nextRouterType = shape({
 });
 
 export const checkoutType = shape({
-    deal: shape(dealType),
+    deal: object,
 });
