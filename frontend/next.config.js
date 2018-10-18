@@ -21,7 +21,6 @@ module.exports = withSass({
         ];
 
         const originalEntry = config.entry;
-
         config.entry = async () => {
             const entries = await originalEntry();
 
@@ -31,6 +30,7 @@ module.exports = withSass({
             ) {
                 entries['main.js'].unshift('./src/polyfills.js');
             }
+            console.log(entries);
 
             return entries;
         };

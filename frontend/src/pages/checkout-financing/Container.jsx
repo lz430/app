@@ -12,17 +12,18 @@ import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import { checkout } from '../../apps/checkout/selectors';
 import { checkoutFinancingComplete } from '../../apps/checkout/actions';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
-import { getIsPageLoading } from '../../apps/page/selectors';
+import { getCurrentPage, getIsPageLoading } from '../../apps/page/selectors';
 import Loading from '../../icons/miscicons/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import withTracker from '../../components/withTracker';
-import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
+import CheckoutSteps from '../../components/checkout/CheckoutSteps';
 import { nextRouterType } from '../../types';
 import { withRouter } from 'next/router';
 import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
+        currentPage: PropTypes.string,
         init: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
         financing: PropTypes.object.isRequired,
@@ -72,7 +73,10 @@ class CheckoutFinancingContainer extends Component {
 
         return (
             <React.Fragment>
-                <HeaderToolbar />
+                <CheckoutSteps
+                    currentPage={this.props.currentPage}
+                    checkout={this.props.checkout}
+                />{' '}
                 <Container className="checkout-financing mb-4">
                     <Row className="checkout-financing__header mt-4">
                         <Col>
@@ -97,6 +101,7 @@ class CheckoutFinancingContainer extends Component {
 const mapStateToProps = (state, props) => {
     return {
         checkout: checkout(state, props),
+        currentPage: getCurrentPage(state),
         isLoading: getIsPageLoading(state),
         financing: getFinancing(state),
     };
