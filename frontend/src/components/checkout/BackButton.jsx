@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { checkoutType } from '../../types';
+import { checkoutType, nextRouterType } from '../../types';
+import Router from 'next/dist/lib/router';
 
 class BackButton extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
         checkout: checkoutType,
+        router: nextRouterType,
     };
 
     /**
@@ -24,7 +26,10 @@ class BackButton extends React.PureComponent {
      */
     handleBackButton() {
         if (this.props.currentPage === 'checkout-confirm') {
-            window.location = `/deals/${this.props.checkout.deal.id}`;
+            this.props.router.push(
+                `/deal-detail?id=${this.props.checkout.deal.id}`,
+                `/deals/${this.props.checkout.deal.id}`
+            );
         }
     }
 

@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import Checkmark from '../../icons/zondicons/Checkmark';
 
 import BackButton from './BackButton';
-import { checkoutType } from '../../types';
+import { checkoutType, nextRouterType } from '../../types';
 
 class CheckoutSteps extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
         checkout: checkoutType,
+        router: nextRouterType,
     };
 
     steps() {
@@ -77,6 +78,7 @@ class CheckoutSteps extends React.PureComponent {
                         <BackButton
                             currentPage={this.props.currentPage}
                             checkout={this.props.checkout}
+                            router={this.props.router}
                         />
                     </div>
                     <div className="steps">

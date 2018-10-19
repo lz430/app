@@ -27,6 +27,7 @@ import CheckoutSteps from '../../components/checkout/CheckoutSteps';
 import { withRouter } from 'next/router';
 import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 import { getCurrentPage } from '../../apps/page/selectors';
+import { nextRouterType } from '../../types';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
@@ -34,6 +35,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
         currentPage: PropTypes.string,
         checkout: PropTypes.object.isRequired,
         pricing: PropTypes.object,
+        router: nextRouterType,
     };
 
     state = {
@@ -62,6 +64,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
                 <CheckoutSteps
                     currentPage={this.props.currentPage}
                     checkout={this.props.checkout}
+                    router={this.props.router}
                 />
                 <Container className="checkout-confirm">
                     <Row className="checkout-confirm__header">

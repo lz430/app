@@ -134,7 +134,7 @@ export function* checkoutFinancingComplete() {
     }
 
     if (results) {
-        yield put(Router.push('checkout-complete', '/checkout/complete'));
+        Router.push('checkout-complete', '/checkout/complete');
     }
 }
 

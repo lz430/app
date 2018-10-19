@@ -78,6 +78,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                 <CheckoutSteps
                     currentPage={this.props.currentPage}
                     checkout={this.props.checkout}
+                    router={this.props.router}
                 />
                 <Container className="checkout-confirm">
                     <Row>

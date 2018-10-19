@@ -76,6 +76,7 @@ class CheckoutFinancingContainer extends Component {
                 <CheckoutSteps
                     currentPage={this.props.currentPage}
                     checkout={this.props.checkout}
+                    router={this.props.router}
                 />{' '}
                 <Container className="checkout-financing mb-4">
                     <Row className="checkout-financing__header mt-4">
