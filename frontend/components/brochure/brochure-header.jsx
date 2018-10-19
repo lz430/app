@@ -1,5 +1,4 @@
 import React from 'react';
-import config from '../../core/config';
 import {
     Collapse,
     Navbar,
@@ -8,10 +7,6 @@ import {
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
 } from 'reactstrap';
 
 import Link from 'next/link';
