@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 
 import { Container, Row, Col } from 'reactstrap';
+import { withRouter } from 'next/router';
 
 import { init } from './actions';
 import getFinancing from './selectors';
 
-import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
+import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import { checkout } from '../../apps/checkout/selectors';
 import { checkoutFinancingComplete } from '../../apps/checkout/actions';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
@@ -18,9 +19,9 @@ import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import withTracker from '../../components/withTracker';
 import CheckoutSteps from '../../components/checkout/CheckoutSteps';
-import { nextRouterType } from '../../../core/types';
-import { withRouter } from 'next/router';
+import { nextRouterType } from '../../core/types';
 import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
+
 class CheckoutFinancingContainer extends Component {
     static propTypes = {
         currentPage: PropTypes.string,

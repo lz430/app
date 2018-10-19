@@ -1,12 +1,12 @@
 import React from 'react';
-
-import GlobalSelectPurchaseStrategy from 'apps/user/components/GlobalSelectPurchaseStrategy';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { batchRequestDealQuotes } from 'apps/pricing/actions';
-import { getComparedDeals } from '../selectors';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import Link from 'next/link';
+
+import GlobalSelectPurchaseStrategy from '../../../apps/user/components/GlobalSelectPurchaseStrategy';
+import { batchRequestDealQuotes } from '../../../apps/pricing/actions';
+import { getComparedDeals } from '../selectors';
 
 class ToolbarPrice extends React.PureComponent {
     static propTypes = {
