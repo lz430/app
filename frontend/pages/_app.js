@@ -1,15 +1,15 @@
 import App, { Container } from 'next/app';
 import React from 'react';
 import { Provider } from 'react-redux';
-import DeliverMyRide from '../src/components/App/App';
-import configureStore from '../src/store';
+import DeliverMyRide from '../components/App/App';
+import configureStore from '../core/store';
 import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import * as Sentry from '@sentry/browser';
-import config from '../src/config';
+import config from '../core/config';
 
 import { PersistGate } from 'redux-persist/integration/react';
-import OptinMonster from '../src/components/OptinMonster';
+import OptinMonster from '../components/OptinMonster';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 

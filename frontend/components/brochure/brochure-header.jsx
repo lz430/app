@@ -1,5 +1,5 @@
 import React from 'react';
-import config from '../../src/config';
+import config from '../../core/config';
 import {
     Collapse,
     Navbar,
