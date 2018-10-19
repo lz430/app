@@ -27,6 +27,7 @@ class MyApp extends App {
      * @type {string[]}
      */
     desktopOnlyFooter = ['/deal-list'];
+    brochureSite = true;
 
     constructor(...args) {
         super(...args);
