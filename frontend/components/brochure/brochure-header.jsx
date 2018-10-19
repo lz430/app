@@ -1,70 +1,80 @@
 import React from 'react';
 import config from '../../src/config';
-import { Container } from 'reactstrap';
+import {
+    Collapse,
+    Navbar,
+    NavbarToggler,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink,
+    UncontrolledDropdown,
+    DropdownToggle,
+    DropdownMenu,
+    DropdownItem,
+} from 'reactstrap';
+
+import Link from 'next/link';
 
 export default class Header extends React.PureComponent {
+    state = {
+        isOpen: false,
+    };
+
+    toggle() {
+        this.setState({
+            isOpen: !this.state.isOpen,
+        });
+    }
+
     render() {
         return (
-            <Container fluid className="brochure-header container">
-                <nav className="navbar navbar-expand-md">
-                    <a href="/" className="navbar-brand">
-                        <img
-                            alt="Deliver My Ride"
-                            src="/static/images/dmr-logo.svg"
-                        />
-                    </a>
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon" />
-                    </button>
+            <Navbar expand="md">
+                <NavbarBrand href="/">
+                    <img
+                        alt="Deliver My Ride"
+                        src="/static/images/dmr-logo.svg"
+                    />
+                </NavbarBrand>
+                <NavbarToggler onClick={this.toggle} />
 
-                    <div
-                        className="collapse navbar-collapse"
-                        id="navbarSupportedContent"
-                    >
-                        <ul className="navbar-nav container justify-content-end">
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href={
-                                        config.MARKETING_URL + '/how-it-works/'
-                                    }
-                                >
-                                    How It Works
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href={config.MARKETING_URL + '/about/'}
-                                >
-                                    About
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a
-                                    className="nav-link"
-                                    href={config.MARKETING_URL + '/contact/'}
-                                >
-                                    Contact
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="btn btn-primary" href="#">
+                <div className="mr-auto" />
+
+                <Collapse isOpen={this.state.isOpen} navbar>
+                    <Nav className="ml-auto" navbar>
+                        <NavItem>
+                            <Link
+                                href="/how-it-works"
+                                as="/brochure/how-it-works"
+                                passHref
+                            >
+                                <NavLink>Contact</NavLink>
+                            </Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link href="/about" as="/brochure/about" passHref>
+                                <NavLink>About</NavLink>
+                            </Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link
+                                href="/contact"
+                                as="/brochure/contact"
+                                passHref
+                            >
+                                <NavLink>Contact</NavLink>
+                            </Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link href="/deal-list" as="/filter" passHref>
+                                <NavLink className="btn btn-primary">
                                     Get Started
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
-            </Container>
+                                </NavLink>
+                            </Link>
+                        </NavItem>
+                    </Nav>
+                </Collapse>
+            </Navbar>
         );
     }
 }

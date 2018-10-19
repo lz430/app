@@ -52,12 +52,6 @@ class Header extends React.PureComponent {
         });
     }
 
-    toggleSearchModal() {
-        this.setState({
-            SearchModalOpen: !this.state.SearchModalOpen,
-        });
-    }
-
     handleSetNewLocation(search) {
         this.props.onSearchForLocation(search);
         this.toggleUserLocationModal();

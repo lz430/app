@@ -10,11 +10,15 @@ app.prepare()
     .then(() => {
         const server = express();
 
+        //
+        // Static Root Assets
         server.get('/favicon.ico', (req, res) => {
             const path = join(__dirname, 'static', 'favicon.ico');
             app.serveStatic(req, res, path);
         });
 
+        //
+        // Application Routes
         server.get('/', (req, res) => {
             const actualPage = '/index';
             app.render(req, res, actualPage, req.query);
@@ -56,29 +60,27 @@ app.prepare()
             app.render(req, res, actualPage, queryParams);
         });
 
-        // Brochure site
-        server.get('/index', (req, res) => {
+        //
+        // Brochure Site
+        // Note: Temp prefix with /brochure... will rename all the routes when we go live.
+        server.get('/brochure', (req, res) => {
             const actualPage = '/home';
-            const queryParams = { ...req.query, brochureSite: 'brochure' };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, actualPage, req.query);
         });
 
-        server.get('/how-it-works', (req, res) => {
+        server.get('/brochure/how-it-works', (req, res) => {
             const actualPage = '/how-it-works';
-            const queryParams = { ...req.query, brochureSite: 'brochure' };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, actualPage, req.query);
         });
 
-        server.get('/faq', (req, res) => {
+        server.get('/brochure/faq', (req, res) => {
             const actualPage = '/faq';
-            const queryParams = { ...req.query, brochureSite: 'brochure' };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, actualPage, req.query);
         });
 
-        server.get('/contact', (req, res) => {
+        server.get('/brochure/contact', (req, res) => {
             const actualPage = '/contact';
-            const queryParams = { ...req.query, brochureSite: 'brochure' };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, actualPage, req.query);
         });
 
         server.get('*', (req, res) => {

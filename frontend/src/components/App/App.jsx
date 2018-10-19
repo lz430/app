@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
 
 import Header from './Header/Header';
+import BrochureHeader from '../../../components/brochure/brochure-header.jsx';
+
 import LiveChat from 'react-livechat';
 import config from '../../config';
 
@@ -14,10 +16,12 @@ class App extends React.Component {
     static propTypes = {
         children: PropTypes.node.isRequired,
         desktopOnlyFooter: PropTypes.bool.isRequired,
+        isBrochureSite: PropTypes.bool.isRequired,
     };
 
     static defaultProps = {
         desktopOnlyFooter: false,
+        isBrochureSite: false,
     };
 
     state = {
@@ -53,6 +57,19 @@ class App extends React.Component {
         }
     }
 
+    renderHeader() {
+        console.log(this.props.isBrochureSite);
+        if (this.props.isBrochureSite) {
+            return <BrochureHeader />;
+        }
+
+        return <Header />;
+    }
+
+    /**
+     *
+     * @returns {*}
+     */
     renderFooter() {
         if (this.props.desktopOnlyFooter) {
             return (
@@ -75,7 +92,7 @@ class App extends React.Component {
                         onOpenChat: this.onOpenChat.bind(this),
                     }}
                 >
-                    <Header />
+                    {this.renderHeader()}
 
                     <div className="app-content-wrapper">
                         <div className="app-content">{this.props.children}</div>

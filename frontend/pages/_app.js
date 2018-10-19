@@ -27,7 +27,11 @@ class MyApp extends App {
      * @type {string[]}
      */
     desktopOnlyFooter = ['/deal-list'];
-    brochureSite = true;
+
+    /**
+     * @type {string[]}
+     */
+    brochureSiteRoutes = ['/home'];
 
     constructor(...args) {
         super(...args);
@@ -53,7 +57,6 @@ class MyApp extends App {
     render() {
         const { Component, pageProps, store } = this.props;
         const pathname = this.props.router.pathname;
-
         //
         // Client
         if (store.__persistor) {
@@ -62,6 +65,9 @@ class MyApp extends App {
                     <Provider store={store}>
                         <DeliverMyRide
                             desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                                pathname
+                            )}
+                            isBrochureSite={this.brochureSiteRoutes.includes(
                                 pathname
                             )}
                         >
@@ -85,6 +91,9 @@ class MyApp extends App {
                 <Provider store={store}>
                     <DeliverMyRide
                         desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                            pathname
+                        )}
+                        isBrochureSite={this.brochureSiteRoutes.includes(
                             pathname
                         )}
                     >

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { checkoutType, nextRouterType } from '../../types';
-import Router from 'next/dist/lib/router';
 
 class BackButton extends React.PureComponent {
     static propTypes = {
