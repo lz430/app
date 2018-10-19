@@ -3,15 +3,16 @@ import { connect } from 'react-redux';
 import { Container, Row, Col } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
+import { withRouter } from 'next/router';
 
 import strings from '../../util/strings';
+import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
+
 import DealImage from '../../components/Deals/DealImage';
 import { pricingFromCheckoutFactory } from '../../pricing/pricing/factory';
-import mapAndBindActionCreators from 'util/mapAndBindActionCreators';
 import Header from '../../components/pricing/Header';
 import Group from '../../components/pricing/Group';
 import { checkout } from '../../apps/checkout/selectors';
-import { init } from './actions';
 import DealStockNumber from '../../components/Deals/DealStockNumber';
 
 import FinanceSummary from '../../components/checkout/FinanceSummary';
@@ -25,10 +26,11 @@ import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import withTracker from '../../components/withTracker';
 import CheckoutSteps from '../../components/checkout/CheckoutSteps';
-import { withRouter } from 'next/router';
 import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
 import { getCurrentPage } from '../../apps/page/selectors';
 import { nextRouterType } from '../../core/types';
+
+import { init } from './actions';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
