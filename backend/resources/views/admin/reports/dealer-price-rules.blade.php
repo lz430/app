@@ -4,14 +4,13 @@
     <section class="content-header">
         <h1>
             Report :: Dealer Price Rules
-            <a href="/admin/reports/dealer-price-rules/export" class="btn btn-md btn-default pull-right">
-                <i class="fa fa-download"></i> Export CSV</a>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{ backpack_url() }}">{{ config('backpack.base.project_name') }}</a></li>
             <li class="active">{{ trans('backpack::base.dashboard') }}</li>
         </ol>
-
+        <a href="/admin/reports/dealer-price-rules/export" class="btn btn-md btn-default pull-right">
+            <i class="fa fa-download"></i> Export CSV</a>
     </section>
 @endsection
 
@@ -35,10 +34,10 @@
                                 </div>
                                 <div class="box-body">
                                     @if(array_filter($value->rules) && count($value->rules))
-
                                         <table class="table table-condensed">
                                             @empty(!$value->rules)
                                                 <tr>
+                                                    <th style="width: 15%;">Value</th>
                                                     <th style="width: 15%;">Modifier</th>
                                                     <th style="width: 15%;">Conditions: VIN</th>
                                                     <th style="width: 15%;">Conditions: Year</th>
@@ -49,6 +48,7 @@
                                             <tbody>
                                             @foreach($value->rules as $k)
                                                 <tr>
+                                                    <td style="width: 15%;">{{isset($k->value) ? $k->value : "--"}}</td>
                                                     <td style="width: 15%;">{{isset($k->modifier) ? $k->modifier : "--"}}</td>
                                                     <td style="width: 15%;">{{!empty($k->conditions->vin) ? $k->conditions->vin : "--"}}</td>
                                                     <td style="width: 15%;">{{isset($k->conditions->year) ? $k->conditions->year : "--"}}</td>

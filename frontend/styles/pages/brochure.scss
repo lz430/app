@@ -1,0 +1,12 @@
+// Styles brochure site
+.brochure-header {
+    .navbar {
+        border-bottom: 0 none;
+
+        .btn-primary {
+            background: $color-facebook-blue;
+            border: 0 none;
+            margin-left: auto;
+        }
+    }
+} //end brochure-header
