@@ -32,10 +32,9 @@ class ReportDealerPriceRulesController extends Controller
                     $data['VIN'] = $p->conditions->vin;
                     $data['Make'] = $p->conditions->make;
                     $data['Model'] = $p->conditions->model;
+                    $csv->insertOne($data);
                 }
-                $csv->insertOne($data);
             }
-
         }
 
         $csv->output('dealer-price-rules.csv');

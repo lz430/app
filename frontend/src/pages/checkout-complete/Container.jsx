@@ -23,13 +23,15 @@ import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import withTracker from '../../components/withTracker';
-import HeaderToolbar from '../../components/App/Header/HeaderToolbar';
+import CheckoutSteps from '../../components/checkout/CheckoutSteps';
 import { withRouter } from 'next/router';
 import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
+import { getCurrentPage } from '../../apps/page/selectors';
 
 class CheckoutCompleteContainer extends React.PureComponent {
     static propTypes = {
         init: PropTypes.func.isRequired,
+        currentPage: PropTypes.string,
         checkout: PropTypes.object.isRequired,
         pricing: PropTypes.object,
     };
@@ -57,7 +59,10 @@ class CheckoutCompleteContainer extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <HeaderToolbar />
+                <CheckoutSteps
+                    currentPage={this.props.currentPage}
+                    checkout={this.props.checkout}
+                />
                 <Container className="checkout-confirm">
                     <Row className="checkout-confirm__header">
                         <Col>
@@ -169,6 +174,7 @@ class CheckoutCompleteContainer extends React.PureComponent {
 const mapStateToProps = (state, props) => {
     return {
         pricing: pricingFromCheckoutFactory(state, props),
+        currentPage: getCurrentPage(state),
         checkout: checkout(state, props),
     };
 };

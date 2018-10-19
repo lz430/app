@@ -46,7 +46,7 @@ class DealDetailContainer extends React.PureComponent {
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
-        pricing: PropTypes.object,
+        pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         selectDiscountActions: PropTypes.shape({
             selectDmrDiscount: PropTypes.func.isRequired,
             selectEmployeeDiscount: PropTypes.func.isRequired,

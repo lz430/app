@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import Checkmark from '../../../icons/zondicons/Checkmark';
+import Checkmark from '../../icons/zondicons/Checkmark';
 
-import { getCurrentPage } from '../../../apps/page/selectors';
-import BackButton from '../BackButton';
+import BackButton from './BackButton';
+import { checkoutType } from '../../types';
 
-class HeaderToolbar extends React.PureComponent {
+class CheckoutSteps extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
+        checkout: checkoutType,
     };
 
     steps() {
@@ -74,7 +74,10 @@ class HeaderToolbar extends React.PureComponent {
             <div className="steps-bar">
                 <div className="inner">
                     <div className="steps-bar__page-title">
-                        <BackButton />
+                        <BackButton
+                            currentPage={this.props.currentPage}
+                            checkout={this.props.checkout}
+                        />
                     </div>
                     <div className="steps">
                         {Object.keys(this.steps()).map(key => (
@@ -104,10 +107,4 @@ class HeaderToolbar extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        currentPage: getCurrentPage(state),
-    };
-}
-
-export default connect(mapStateToProps)(HeaderToolbar);
+export default CheckoutSteps;

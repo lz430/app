@@ -77,7 +77,7 @@ export function* checkoutStart(action) {
     if (results) {
         yield put(receivePurchase(results.data));
         yield put(checkoutFinishedLoading());
-        yield put(Router.push('/checkout-contact', '/checkout/contact'));
+        Router.push('/checkout-contact', '/checkout/contact');
     }
 }
 
