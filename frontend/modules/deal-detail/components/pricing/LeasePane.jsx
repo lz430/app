@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType } from '../../../../core/types';
 
-import Compose from '../../../../icons/zondicons/Compose';
-import Loading from '../../../../icons/miscicons/Loading';
+import Compose from '../../../../icons/zondicons/compose.svg';
+import Loading from '../../../../components/Loading';
 import Line from '../../../../components/pricing/Line';
 import Label from '../../../../components/pricing/Label';
 import Value from '../../../../components/pricing/Value';

@@ -10,7 +10,7 @@ import Group from '../../../../components/pricing/Group';
 import Header from '../../../../components/pricing/Header';
 import Separator from '../../../../components/pricing/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
-import Loading from '../../../../icons/miscicons/Loading';
+import Loading from '../../../../components/Loading';
 import { pricingType } from '../../../../core/types';
 
 export default class CashPane extends React.PureComponent {

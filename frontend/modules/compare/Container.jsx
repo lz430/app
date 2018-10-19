@@ -13,7 +13,7 @@ import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
 import { getEquipmentCategories } from './selectors';
 import { getIsPageLoading } from '../../apps/page/selectors';
 
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 

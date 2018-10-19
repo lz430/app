@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dealType } from '../../core/types';
-import Loading from '../../icons/miscicons/Loading';
 
 import DealPriceExplanationModal from './DealPriceExplanationModal';
 import { dealPricingFactory } from '../../pricing/DealPricing';
 
-import InformationOutline from '../../icons/zondicons/InformationOutline';
+import InformationOutline from '../../icons/zondicons/information-outline.svg';
+import Loading from '../../components/Loading';
 
 class DealPrice extends React.Component {
     static propTypes = {

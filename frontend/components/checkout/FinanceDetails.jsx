@@ -1,5 +1,5 @@
 import React from 'react';
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 import { pricingType } from '../../core/types';
 import Group from '../pricing/Group';
 import Header from '../pricing/Header';

@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { pricingType, dealType } from '../../../core/types';
+
+import Link from 'next/link';
 
 import Line from '../../../components/pricing/Line';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
-import { pricingType, dealType } from '../../../core/types';
-import Link from 'next/link';
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {

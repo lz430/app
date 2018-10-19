@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReCAPTCHA from 'react-google-recaptcha';
 import config from '../../../core/config';
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 
 class ContactForm extends React.PureComponent {
     static propTypes = {

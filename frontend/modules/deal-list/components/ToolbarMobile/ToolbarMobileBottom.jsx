@@ -2,15 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Tuning from '../../../../icons/zondicons/Tuning';
-import CurrencyDollar from '../../../../icons/zondicons/CurrencyDollar';
-import CheveronUp from '../../../../icons/zondicons/CheveronUp';
+import Tuning from '../../../../icons/zondicons/tuning.svg';
+import CurrencyDollar from '../../../../icons/zondicons/currency-dollar.svg';
+import CheveronUp from '../../../../icons/zondicons/cheveron-up.svg';
+import TravelCar from '../../../../icons/zondicons/travel-car.svg';
 
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
 import ModelWidget from './ModelWidget';
 
-import TravelCar from '../../../../icons/zondicons/TravelCar';
 import FilterPanel from '../FilterPanel';
 
 /**

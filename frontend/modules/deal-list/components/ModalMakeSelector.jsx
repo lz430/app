@@ -5,7 +5,7 @@ import * as R from 'ramda';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 
 import { filterItemType } from '../../../core/types';
 

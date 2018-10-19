@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import StyleIcon from '../../../../components/Deals/StyleIcon';
-import Loading from '../../../../icons/miscicons/Loading';
+import Loading from '../../../../components/Loading';
 
 class FilterStyleList extends React.PureComponent {
     static propTypes = {

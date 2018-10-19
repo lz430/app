@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Line from '../../../../components/pricing/Line';
 import Label from '../../../../components/pricing/Label';
 
-import InformationOutline from '../../../../icons/zondicons/InformationOutline';
+import InformationOutline from '../../../../icons/zondicons/information-outline.svg';
 
 class RebatesRole extends React.Component {
     static propTypes = {

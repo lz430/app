@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 
 export default class Value extends React.PureComponent {
     static propTypes = {

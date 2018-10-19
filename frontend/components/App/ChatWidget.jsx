@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ChatBubbleDots from '../../icons/zondicons/ChatBubbleDots';
+import ChatBubbleDots from '../../icons/zondicons/chat-bubble-dots.svg';
 import classNames from 'classnames';
 
 import { ChatContext } from '../../core/contexts';

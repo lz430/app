@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CheveronDown from '../../../icons/zondicons/CheveronDown';
-import CheveronUp from '../../../icons/zondicons/CheveronUp';
+import CheveronDown from '../../../icons/zondicons/cheveron-down.svg';
+import CheveronUp from '../../../icons/zondicons/cheveron-up.svg';
 
 class AccordionTable extends React.PureComponent {
     static propTypes = {

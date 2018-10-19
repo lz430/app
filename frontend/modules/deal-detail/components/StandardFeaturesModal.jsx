@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { dealType } from '../../../core/types';
 
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 
 class StandardFeaturesModal extends React.Component {
     static propTypes = {

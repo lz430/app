@@ -4,7 +4,7 @@ import { contains } from 'ramda';
 
 import { filterItemType } from '../../../../core/types';
 
-import Checkmark from '../../../../icons/zondicons/Checkmark';
+import Checkmark from '../../../../icons/zondicons/checkmark.svg';
 
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {

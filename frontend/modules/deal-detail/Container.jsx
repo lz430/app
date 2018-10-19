@@ -10,7 +10,7 @@ import { track } from '../../core/services';
 
 import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 import { toggleCompare } from '../../apps/common/actions';
 import { getIsPageLoading } from '../../apps/page/selectors';
 import { setPurchaseStrategy } from '../../apps/user/actions';

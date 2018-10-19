@@ -7,7 +7,7 @@ import NoDealsInRange from './NoDealsInRange';
 import NoDealsOutOfRange from './NoDealsOutOfRange';
 import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 import { getUserLocation } from '../../../apps/user/selectors';
 import { getSearchPage } from '../selectors';
 

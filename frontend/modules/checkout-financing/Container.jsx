@@ -14,7 +14,7 @@ import { checkout } from '../../apps/checkout/selectors';
 import { checkoutFinancingComplete } from '../../apps/checkout/actions';
 import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
 import { getCurrentPage, getIsPageLoading } from '../../apps/page/selectors';
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import withTracker from '../../components/withTracker';

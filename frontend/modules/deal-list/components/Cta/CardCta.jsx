@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
-import Phone from '../../../../icons/zondicons/Phone';
+import Phone from '../../../../icons/zondicons/phone.svg';
 
 class CardCta extends React.PureComponent {
     render() {

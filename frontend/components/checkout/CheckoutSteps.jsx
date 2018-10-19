@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Checkmark from '../../icons/zondicons/Checkmark';
+import Checkmark from '../../icons/zondicons/checkmark.svg';
 
 import BackButton from './BackButton';
 import { checkoutType, nextRouterType } from '../../core/types';

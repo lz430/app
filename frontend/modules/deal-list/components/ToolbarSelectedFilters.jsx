@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { omit, reject, contains } from 'ramda';
 import { connect } from 'react-redux';
 
-import Close from '../../../icons/zondicons/Close';
-import Filter from '../../../icons/zondicons/Filter';
+import Close from '../../../icons/zondicons/close.svg';
+import Filter from '../../../icons/zondicons/filter.svg';
 import ToolbarSort from './ToolbarSort';
 
 import {

@@ -5,8 +5,8 @@ import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../Deals/StyleIcon';
-import Search from '../../../icons/zondicons/Search';
-import Close from '../../../icons/zondicons/Close';
+import Search from '../../../icons/zondicons/search.svg';
+import Close from '../../../icons/zondicons/close.svg';
 import { nextRouterType } from '../../../core/types';
 
 class SearchWidget extends React.PureComponent {

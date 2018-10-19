@@ -1,4 +1,13 @@
-import * as R from 'ramda';
+import {
+    contains,
+    reject,
+    equals,
+    append,
+    zip,
+    reverse,
+    tail,
+    reduce,
+} from 'ramda';
 
 /**
  *
@@ -7,9 +16,9 @@ import * as R from 'ramda';
  * @returns {*}
  */
 export const toggleItem = (items, item) => {
-    return R.contains(item, items)
-        ? R.reject(R.equals(item), items)
-        : R.append(item, items);
+    return contains(item, items)
+        ? reject(equals(item), items)
+        : append(item, items);
 };
 
 /**
@@ -52,17 +61,14 @@ export const getClosestNumberInRange = (needle, haystack) => {
     }
 
     // Exact needle.
-    if (R.contains(needle, haystack)) {
+    if (contains(needle, haystack)) {
         return needle;
     }
 
-    const zipped = R.zip(
-        R.reverse(R.tail(R.reverse(haystack))),
-        R.tail(haystack)
-    );
+    const zipped = zip(reverse(tail(reverse(haystack))), tail(haystack));
 
     // Find closest.
-    return R.reduce(
+    return reduce(
         (closest, [low, high]) => {
             if (closest > low && closest < high) {
                 const diffLow = closest - low;

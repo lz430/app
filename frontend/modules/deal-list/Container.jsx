@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
 import PropTypes from 'prop-types';
 import { dealType, filterItemType, nextRouterType } from '../../core/types';
-import Loading from '../../icons/miscicons/Loading';
+import Loading from '../../components/Loading';
 
 import {
     getUserLocation,

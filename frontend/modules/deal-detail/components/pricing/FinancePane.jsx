@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../../../icons/miscicons/Loading';
+import Loading from '../../../../components/Loading';
 
 import Line from '../../../../components/pricing/Line';
 import Label from '../../../../components/pricing/Label';

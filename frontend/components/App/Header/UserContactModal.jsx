@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Modal, ModalHeader, ModalBody, Row, Container, Col } from 'reactstrap';
-import Phone from '../../../icons/zondicons/Phone';
 import ChatWidget from '../ChatWidget';
-import ChatBubbleDots from '../../../icons/zondicons/ChatBubbleDots';
+import ChatBubbleDots from '../../../icons/zondicons/chat-bubble-dots.svg';
+import Phone from '../../../icons/zondicons/phone.svg';
 
 class UserContactModal extends React.PureComponent {
     static propTypes = {

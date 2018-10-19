@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as R from 'ramda';
 
 import { dealType } from '../../../core/types';
-import Loading from '../../../icons/miscicons/Loading';
+import Loading from '../../../components/Loading';
 
 import Deal from '../../../components/Deals/Deal';
 
