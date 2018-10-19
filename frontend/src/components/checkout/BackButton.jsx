@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
-import {
-    getCurrentPage,
-    getCurrentPageIsInCheckout,
-} from '../../apps/page/selectors';
-import { checkout } from '../../apps/checkout/selectors';
 import { checkoutType } from '../../types';
 
 class BackButton extends React.PureComponent {
     static propTypes = {
         currentPage: PropTypes.string,
-        isCurrentPageInCheckout: PropTypes.bool,
         checkout: checkoutType,
     };
 
@@ -38,10 +31,7 @@ class BackButton extends React.PureComponent {
     render() {
         //
         // Don't show if in checkout and no checkout.
-        if (
-            this.props.isCurrentPageInCheckout &&
-            !this.props.checkout.deal.id
-        ) {
+        if (!this.props.checkout.deal.id) {
             return false;
         }
 
@@ -61,13 +51,4 @@ class BackButton extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        currentPage: getCurrentPage(state),
-        isCurrentPageInCheckout: getCurrentPageIsInCheckout(state),
-        checkout: checkout(state),
-        searchQuery: state.pages.dealList.searchQuery,
-    };
-}
-
-export default connect(mapStateToProps)(BackButton);
+export default BackButton;
