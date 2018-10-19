@@ -56,6 +56,31 @@ app.prepare()
             app.render(req, res, actualPage, queryParams);
         });
 
+        // Brochure site
+        server.get('/index', (req, res) => {
+            const actualPage = '/home';
+            const queryParams = { ...req.query, brochureSite: 'brochure' };
+            app.render(req, res, actualPage, queryParams);
+        });
+
+        server.get('/how-it-works', (req, res) => {
+            const actualPage = '/how-it-works';
+            const queryParams = { ...req.query, brochureSite: 'brochure' };
+            app.render(req, res, actualPage, queryParams);
+        });
+
+        server.get('/faq', (req, res) => {
+            const actualPage = '/faq';
+            const queryParams = { ...req.query, brochureSite: 'brochure' };
+            app.render(req, res, actualPage, queryParams);
+        });
+
+        server.get('/contact', (req, res) => {
+            const actualPage = '/contact';
+            const queryParams = { ...req.query, brochureSite: 'brochure' };
+            app.render(req, res, actualPage, queryParams);
+        });
+
         server.get('*', (req, res) => {
             return handle(req, res);
         });
