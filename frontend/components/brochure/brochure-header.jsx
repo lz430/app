@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import config from '../../src/config';
-import { Container, Row, Col } from 'reactstrap';
+import { Container } from 'reactstrap';
 
 export default class Header extends React.PureComponent {
     render() {
