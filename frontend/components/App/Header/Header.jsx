@@ -14,8 +14,8 @@ import { requestLocation } from '../../../apps/user/actions';
 import { getCurrentPageIsInCheckout } from '../../../apps/page/selectors';
 import { toggleCompare } from '../../../apps/common/actions';
 
-import Location from '../../../icons/zondicons/Location.svg';
-import Help from '../../../icons/zondicons/Question.svg';
+import Location from '../../../icons/zondicons/location.svg';
+import Help from '../../../icons/zondicons/question.svg';
 
 import SearchWidget from './SearchWidget';
 import { headerRequestAutocomplete } from '../../../apps/page/actions';
