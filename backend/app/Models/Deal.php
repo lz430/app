@@ -14,6 +14,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use DeliverMyRide\Fuel\Map as ColorMaps;
+
+
 
 /**
  * App\Models\Deal
@@ -367,6 +370,28 @@ class Deal extends Model
         }
 
         return $photo;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function simpleExteriorColor() : ?string
+    {
+        if (!$this->color) {
+            return null;
+        }
+
+        if (isset(ColorMaps::COLOR_MAP[$this->color])) {
+            return ColorMaps::COLOR_MAP[$this->color];
+        }
+
+        foreach(ColorMaps::COLOR_MAP as $key => $value) {
+            if (str_contains($key, $this->color)) {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**

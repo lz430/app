@@ -88,6 +88,11 @@ class VersionToFuel
         }
     }
 
+    /**
+     *
+     * @param $color
+     * @return string
+     */
     public function translateColorName($color): string
     {
         foreach (Map::COLOR_MAP as $needle => $value) {

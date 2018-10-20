@@ -11,7 +11,11 @@ use Carbon\Carbon;
 class DealPhotosMunger
 {
     private $debug;
+
+    /* @var Deal */
     private $deal;
+
+    /* @var array */
     private $row;
 
     /**
