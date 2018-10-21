@@ -61,13 +61,16 @@ class VersionFillMissingPhotos extends Command
             if ($assets && count($assets)) {
                 $this->info(" --- Default: " . count($assets));
                 foreach ($assets as $asset) {
-                    $version->photos()->create([
-                        'url' => $asset->url,
-                        'type' => 'default',
-                        'shot_code' => $asset->shotCode->code,
-                        'color' => null,
-                        'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
-                    ]);
+                    $version->photos()->updateOrCreate(
+                        [
+                            'url' => $asset->url
+                        ],
+                        [
+                            'type' => 'default',
+                            'shot_code' => $asset->shotCode->code,
+                            'color' => null,
+                            'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                        ]);
                 }
             }
 
