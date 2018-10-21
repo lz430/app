@@ -19,6 +19,7 @@ class AddAdditionalVersionPhotoFields extends Migration
             $table->string('color_simple')->nullable()->after('color');
             $table->string('color_rgb')->nullable()->after('color_simple');
             $table->string('color')->nullable()->change();
+            $table->unique('url');
         });
     }
 

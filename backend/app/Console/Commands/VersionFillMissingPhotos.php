@@ -82,27 +82,29 @@ class VersionFillMissingPhotos extends Command
 
 
             if ($colors && count($colors)) {
-                foreach($colors as $color) {
+                foreach ($colors as $color) {
                     $assets = $this->manager->assets($version, $color);
                     if ($assets && count($assets)) {
-                        $this->info(" --- ".$color.": " . count($assets));
+                        $this->info(" --- " . $color . ": " . count($assets));
                         foreach ($assets as $asset) {
-                            $version->photos()->create([
-                                'url' => $asset->url,
-                                'type' => 'color',
-                                'shot_code' => $asset->shotCode->code,
-                                'color' => $asset->shotCode->color->oem_name,
-                                'color_simple' => $asset->shotCode->color->simple_name,
-                                'color_rgb' => $asset->shotCode->color->rgb1,
-                                'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
-                            ]);
+                            $version->photos()->updateOrCreate(
+                                [
+                                    'url' => $asset->url
+                                ],
+                                [
+                                    'type' => 'color',
+                                    'shot_code' => $asset->shotCode->code,
+                                    'color' => $asset->shotCode->color->oem_name,
+                                    'color_simple' => $asset->shotCode->color->simple_name,
+                                    'color_rgb' => $asset->shotCode->color->rgb1,
+                                    'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                                ]);
                         }
                     }
 
                 }
 
             }
-
 
 
             return $version;
