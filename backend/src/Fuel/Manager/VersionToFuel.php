@@ -186,20 +186,23 @@ class VersionToFuel
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function assets(Version $version, $color = 'default'): array
+    public function assets(Version $version, $color = null): array
     {
         $this->version = $version;
 
+        //
+        // Type: default
         $product_id = '1';
         $product_format_id = [['18', '1']];
 
-        if ($color != 'default') {
+        //
+        // Type: colorized
+        if ($color) {
             $product_id = '2';
             $product_format_id = [['5'], ['7'], ['10']];
         }
 
         $vehicle = $this->matchFuelVehicleToVersion();
-
 
         if (!$vehicle) {
             return [];
@@ -207,9 +210,9 @@ class VersionToFuel
 
         $assets = [];
 
-        if ($color == 'default') {
-            $color = '';
-        } else {
+        $color = '';
+
+        if ($color) {
             $color = $this->translateColorName($color);
         }
 

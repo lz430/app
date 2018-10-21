@@ -123,7 +123,7 @@ class Version extends Model
     public function thumbnail(): ?VersionPhoto {
         return  $this->photos()
             ->where('shot_code', '=', '116')
-            ->where('color', '=', 'default')
+            ->where('type', '=', 'default')
             ->first();
     }
 

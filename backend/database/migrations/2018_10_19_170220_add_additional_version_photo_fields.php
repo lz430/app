@@ -15,8 +15,10 @@ class AddAdditionalVersionPhotoFields extends Migration
     {
         Schema::table('versions_photos', function (Blueprint $table) {
             $table->string('type')->nullable()->after('url');
+            $table->string('description')->nullable()->after('type');
             $table->string('color_simple')->nullable()->after('color');
             $table->string('color_rgb')->nullable()->after('color_simple');
+            $table->string('color')->nullable()->change();
         });
     }
 
@@ -29,8 +31,11 @@ class AddAdditionalVersionPhotoFields extends Migration
     {
         Schema::table('versions_photos', function (Blueprint $table) {
             $table->dropColumn('type');
+            $table->dropColumn('description');
             $table->dropColumn('color_simple');
             $table->dropColumn('color_rgb');
+            $table->string('color')->change();
+
         });
     }
 }

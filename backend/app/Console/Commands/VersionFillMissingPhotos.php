@@ -15,7 +15,7 @@ class VersionFillMissingPhotos extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:version:fillmissingphotos';
+    protected $signature = 'dmr:version:updatephotos';
 
     /**
      * The console command description.
@@ -24,20 +24,16 @@ class VersionFillMissingPhotos extends Command
      */
     protected $description = 'Fill Missing Photos';
 
-    /* @var FuelClient */
-    private $client;
+    /* @var VersionToFuel */
+    private $manager;
 
     /**
-     * Create a new command instance.
-
-     * @param FuelClient $client
-     * @return void
+     * @param VersionToFuel $manager
      */
-    public function __construct(FuelClient $client)
+    public function __construct(VersionToFuel $manager)
     {
         parent::__construct();
-
-        $this->client = $client;
+        $this->manager = $manager;
     }
 
     /**
@@ -46,25 +42,24 @@ class VersionFillMissingPhotos extends Command
     public function handle()
     {
         $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'desc')->get();
-        $client = $this->client;
-        $versions->map(function ($item) use ($client) {
-            $manager = new VersionToFuel($item, $client);
-            //$vehicle = $manager->matchFuelVehicleToVersion();
-            $assets = $manager->assets();
-            if ($assets && count($assets)) {
-                $this->info($item->id);
-                $item->photos()->delete();
+        $versions->map(function ($version) {
+            /* @var \App\Models\JATO\Version $version */
 
+            $assets = $this->manager->assets($version);
+            if ($assets && count($assets)) {
+                $this->info($version->title());
+                $version->photos()->delete();
                 foreach ($assets as $asset) {
-                    $item->photos()->create([
+                    $version->photos()->create([
                         'url' => $asset->url,
+                        'type' => 'default',
                         'shot_code' => $asset->shotCode->code,
-                        'color' => 'default',
+                        'color' => null,
+                        'description' => trim($asset->shotCode->description),
                     ]);
                 }
             }
-
-            return $item;
+            return $version;
         });
 
     }

@@ -14,7 +14,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property string $url
- * @property string type
+ * @property string $type
+ * @property string $description
  * @property string $shot_code
  * @property string $color
  * @property string $color_simple
