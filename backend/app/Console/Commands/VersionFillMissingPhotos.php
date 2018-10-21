@@ -41,24 +41,70 @@ class VersionFillMissingPhotos extends Command
      */
     public function handle()
     {
-        $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'desc')->get();
+        $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'asc')->get();
         $versions->map(function ($version) {
             /* @var \App\Models\JATO\Version $version */
+            //
+            // Default
+            $version->photos()->delete();
 
-            $assets = $this->manager->assets($version);
+            $vehicle = $this->manager->matchFuelVehicleToVersion($version);
+            if (!$vehicle) {
+                return $version;
+            }
+
+            $this->info($version->title());
+
+            //
+            // Default Assets
+            $assets = $this->manager->assets($version, null, $vehicle->id);
             if ($assets && count($assets)) {
-                $this->info($version->title());
-                $version->photos()->delete();
+                $this->info(" --- Default: " . count($assets));
                 foreach ($assets as $asset) {
                     $version->photos()->create([
                         'url' => $asset->url,
                         'type' => 'default',
                         'shot_code' => $asset->shotCode->code,
                         'color' => null,
-                        'description' => trim($asset->shotCode->description),
+                        'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
                     ]);
                 }
             }
+
+            //
+            // Colorized Assets
+            $colors = $version
+                ->deals()
+                ->get()
+                ->pluck('color')
+                ->unique()
+                ->all();
+
+
+            if ($colors && count($colors)) {
+                foreach($colors as $color) {
+                    $assets = $this->manager->assets($version, $color);
+                    if ($assets && count($assets)) {
+                        $this->info(" --- ".$color.": " . count($assets));
+                        foreach ($assets as $asset) {
+                            $version->photos()->create([
+                                'url' => $asset->url,
+                                'type' => 'color',
+                                'shot_code' => $asset->shotCode->code,
+                                'color' => $asset->shotCode->color->oem_name,
+                                'color_simple' => $asset->shotCode->color->simple_name,
+                                'color_rgb' => $asset->shotCode->color->rgb1,
+                                'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                            ]);
+                        }
+                    }
+
+                }
+
+            }
+
+
+
             return $version;
         });
 

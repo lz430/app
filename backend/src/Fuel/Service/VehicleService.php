@@ -87,8 +87,10 @@ class VehicleService extends BaseService
         }
 
         if ($color) {
-            $query['color'] = $color;
+            $query['color'] = strtolower($color);
         }
+
+
         return $this->client->get("vehicle/{$vehicleId}", $query);
     }
 

@@ -183,13 +183,12 @@ class VersionToFuel
     /**
      * @param Version $version
      * @param string $color
+     * @param string $vehicleId
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function assets(Version $version, $color = null): array
+    public function assets(Version $version, $color = null, $vehicleId = null): array
     {
-        $this->version = $version;
-
         //
         // Type: default
         $product_id = '1';
@@ -202,22 +201,28 @@ class VersionToFuel
             $product_format_id = [['5'], ['7'], ['10']];
         }
 
-        $vehicle = $this->matchFuelVehicleToVersion();
 
-        if (!$vehicle) {
+        if (!$vehicleId) {
+            $vehicle = $this->matchFuelVehicleToVersion($version);
+            if ($vehicle) {
+                $vehicleId = $vehicle->id;
+            }
+        }
+
+        if (!$vehicleId) {
             return [];
         }
 
         $assets = [];
 
-        $color = '';
-
         if ($color) {
             $color = $this->translateColorName($color);
+        } else {
+            $color = '';
         }
 
         try {
-            $media = $this->client->vehicle->vehicleMedia($vehicle->id, $product_id, '', $color);
+            $media = $this->client->vehicle->vehicleMedia($vehicleId, $product_id, '', $color);
         } catch (ClientException $exception) {
             if ($exception->getCode() == '404') {
                 // TODO: Log these

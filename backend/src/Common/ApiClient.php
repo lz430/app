@@ -127,7 +127,6 @@ class ApiClient {
     public function get($endpoint, $query = [], bool $async = FALSE)
     {
         $requestMethod = ($async ? 'requestAsync': 'request');
-
         $response = $this->http_client->{$requestMethod}('GET',
             "$this->baseUrl/$endpoint", [
                 'query' => $query,
@@ -137,9 +136,9 @@ class ApiClient {
 
         if ($async) {
             return $this->handleAsyncResponse($response);
-        } else {
-            return $this->handleResponse($response);
         }
+
+        return $this->handleResponse($response);
     }
 
     /**
