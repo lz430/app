@@ -55,6 +55,7 @@ class VersionPhoto extends Model
         unset($data['id']);
         unset($data['created_at']);
         unset($data['updated_at']);
+        unset($data['version_id']);
         return $data;
     }
 }

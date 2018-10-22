@@ -357,10 +357,16 @@ class Deal extends Model
 
                         })->all();
                     }
+
                     break;
 
                 case 'stock_simple':
-                    $simpleColorPhotos = $this->version->photos()->where('type', '=', 'color')->where('color_simple', '=', $this->simpleExteriorColor())->orderBy('shot_code')->get();
+                    $simpleColorPhotos = $this->version->photos()
+                        ->where('type', '=', 'color')
+                        ->where('color_simple', '=', $this->simpleExteriorColor())
+                        ->orderBy('color')->orderBy('shot_code')
+                        ->limit(3)->get();
+
                     if (count($simpleColorPhotos)) {
                         $photos = $simpleColorPhotos;
 

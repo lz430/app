@@ -4,8 +4,6 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use App\Models\JATO\Make;
-
-
 use DeliverMyRide\JATO\Map;
 
 class ESResponseTransformer extends TransformerAbstract
