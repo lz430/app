@@ -45,4 +45,16 @@ class VersionPhoto extends Model
     {
         return $this->belongsTo(Version::class);
     }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['id']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        return $data;
+    }
 }

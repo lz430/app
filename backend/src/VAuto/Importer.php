@@ -471,9 +471,7 @@ class Importer
             $vauto_features = null;
         }
 
-        $modifiedDate = $row['Photos Last Modified Date'];
-        $modifiedDate = Carbon::parse($modifiedDate);
-
+        /* @var Deal $deal */
         $deal = Deal::updateOrCreate([
             'vin' => $row['VIN'],
         ], [
