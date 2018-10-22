@@ -2,7 +2,7 @@ import '../styles/app.scss';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DealList from '../src/pages/deal-list/Container';
+import DealList from '../modules/deal-list/Container';
 import Head from 'next/head';
 
 export default class Page extends React.Component {
