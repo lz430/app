@@ -638,7 +638,8 @@ class Deal extends Model
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int)$this->seating_capacity;
 
-        $filterColor = null;
+        // name is confusing. This is the simple (filterable) value
+        // in the sidebar.
         $record['vehicle_color'] = $this->simpleExteriorColor();
 
         //

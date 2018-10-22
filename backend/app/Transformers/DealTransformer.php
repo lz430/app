@@ -29,18 +29,11 @@ class DealTransformer extends TransformerAbstract
     public function transform(Deal $deal)
     {
 
-        //compares feature id of color attribute to map and gets hex value back for use for swatch
-        $data = null;
-        foreach(Map::COLOR_MAP as $needle => $value) {
-            if($deal->color == $needle) {
-                $data = $value;
-            }
-        }
-        $featureColor = Feature::where('title', $data)->first();
-        $exteriorColor = null;
-        foreach(Map::HEX_MAP as $color => $value){
-            if(isset($featureColor) && $featureColor->title == $color){
-                $exteriorColor = $value;
+        $simpleColor = $deal->simpleExteriorColor();
+        $simpleColorSwatch = null;
+        if ($simpleColor) {
+            if (isset(Map::HEX_MAP[$simpleColor])) {
+                $simpleColorSwatch = Map::HEX_MAP[$simpleColor];
             }
         }
 
@@ -64,7 +57,7 @@ class DealTransformer extends TransformerAbstract
             'fuel_econ_city' => $deal->fuel_econ_city,
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'photos' => $photos,
-            'thumbnail' => $deal->featuredPhoto(),
+            'thumbnail' => $deal->featuredPhoto('thumbnail', $photos),
             'version' => $deal->version,
             'features' => $deal->jatoFeatures,
             'doc_fee' => (float) $deal->dealer->doc_fee,
@@ -77,7 +70,7 @@ class DealTransformer extends TransformerAbstract
             'dealer' => $deal->dealer,
             'dmr_features' => ($deal->features ? $deal->features : []),
             'pricing' => $prices,
-            'exterior_color_swatch' => $exteriorColor,
+            'exterior_color_swatch' => $simpleColorSwatch,
             'status' => $deal->status
         ];
     }

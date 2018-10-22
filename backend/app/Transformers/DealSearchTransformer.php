@@ -10,7 +10,6 @@ use DB;
 class DealSearchTransformer extends TransformerAbstract
 {
 
-
     public function transform(array $document)
     {
         $deal = (object)$document['_source'];
@@ -19,8 +18,8 @@ class DealSearchTransformer extends TransformerAbstract
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
         //compares feature id of color attribute to map and gets hex value back for use for swatch
-        $simpleColor = isset(Map::COLOR_MAP[$deal->color]) ? Map::COLOR_MAP[$deal->color] : $deal->color;
-        $exteriorColor = isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
+        $simpleColor = isset($deal->vehicle_color) ? $deal->vehicle_color : null;
+        $simpleColorSwatch =  isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
 
         return [
             'id' => $deal->id,
@@ -52,7 +51,8 @@ class DealSearchTransformer extends TransformerAbstract
             'dealer' => $dealer,
             'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
             'color' => $deal->color,
-            'exterior_color_swatch' => $exteriorColor,
+            'color_simple' => $simpleColor,
+            'exterior_color_swatch' => $simpleColorSwatch,
             'pricing' => $deal->pricing,
         ];
     }
