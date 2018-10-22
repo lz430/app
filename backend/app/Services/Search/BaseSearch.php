@@ -362,7 +362,7 @@ abstract class BaseSearch
         foreach (self::FEATURE_TERMS as $key => $field) {
             $this->query['aggs'][$key] = [
                 "terms" => [
-                    "size" => 50000,
+                    "size" => 5000,
                     "field" => $field,
                     "order" => [
                         "_key" => ($key === 'year' ? 'desc' : 'asc'),
@@ -388,7 +388,7 @@ abstract class BaseSearch
                     'aggs' => [
                         'value' => [
                             "terms" => [
-                                "size" => 50000,
+                                "size" => 5000,
                                 "field" => "make.keyword",
                                 "order" => [
                                     "_key" => "asc",
@@ -401,7 +401,7 @@ abstract class BaseSearch
                     'aggs' => [
                         'value' => [
                             "terms" => [
-                                "size" => 50000,
+                                "size" => 5000,
                                 "field" => "style.keyword"
                             ],
                         ]

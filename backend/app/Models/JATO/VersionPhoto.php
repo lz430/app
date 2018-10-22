@@ -14,8 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @property int $id
  * @property string $url
+ * @property string $type
+ * @property string $description
  * @property string $shot_code
  * @property string $color
+ * @property string $color_simple
+ * @property string $color_rgb
  * @property Version $version
  * @property int|null $version_id
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -40,5 +44,18 @@ class VersionPhoto extends Model
     public function version(): BelongsTo
     {
         return $this->belongsTo(Version::class);
+    }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['id']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        unset($data['version_id']);
+        return $data;
     }
 }

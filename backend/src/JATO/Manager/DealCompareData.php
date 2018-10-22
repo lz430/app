@@ -63,7 +63,7 @@ class DealCompareData
     private function buildStandardEquipmentText()
     {
         try {
-            return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '50000')->results;
+            return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '5000')->results;
         } catch (ClientException $e) {
             return [];
         }

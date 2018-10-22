@@ -123,7 +123,7 @@ class Version extends Model
     public function thumbnail(): ?VersionPhoto {
         return  $this->photos()
             ->where('shot_code', '=', '116')
-            ->where('color', '=', 'default')
+            ->where('type', '=', 'default')
             ->first();
     }
 
@@ -132,5 +132,28 @@ class Version extends Model
             return Map::BODY_STYLE_MAP[$this->body_style];
         }
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['model']);
+        unset($data['quotes']);
+        unset($data['updated_at']);
+        unset($data['created_at']);
+        unset($data['segment']);
+        unset($data['transmission_type']);
+        unset($data['model_id']);
+        unset($data['msrp']);
+        unset($data['invoice']);
+        unset($data['is_current']);
+        unset($data['jato_model_id']);
+        unset($data['jato_uid']);
+        unset($data['jato_vehicle_id']);
+        unset($data['delivery_price']);
+        return $data;
     }
 }

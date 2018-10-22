@@ -101,4 +101,17 @@ class JatoFeature extends Model
     {
         return $query->whereNotNull('group');
     }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['pivot']);
+        unset($data['created_at']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        return $data;
+    }
 }

@@ -13,18 +13,11 @@ export const dealType = shape({
     model: string.isRequired,
     photos: arrayOf(
         shape({
-            id: number.isRequired,
             url: string.isRequired,
-            created_at: string,
-            updated_at: string,
         })
     ),
-
     thumbnail: shape({
-        id: number.isRequired,
         url: string.isRequired,
-        created_at: string,
-        updated_at: string,
     }),
 });
 

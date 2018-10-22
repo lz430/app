@@ -28,9 +28,9 @@ export default class DealImage extends React.PureComponent {
         if (
             this.props.size === 'thumbnail' &&
             this.props.deal.thumbnail &&
-            this.props.deal.thumbnail.url
+            this.props.deal.thumbnail.thumbnail
         ) {
-            return this.props.deal.thumbnail.url;
+            return this.props.deal.thumbnail.thumbnail;
         }
 
         if (this.props.deal.photos[0]) {

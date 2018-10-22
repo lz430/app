@@ -15,7 +15,7 @@ class VersionFillMissingPhotos extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:version:fillmissingphotos';
+    protected $signature = 'dmr:version:updatephotos';
 
     /**
      * The console command description.
@@ -24,20 +24,16 @@ class VersionFillMissingPhotos extends Command
      */
     protected $description = 'Fill Missing Photos';
 
-    /* @var FuelClient */
-    private $client;
+    /* @var VersionToFuel */
+    private $manager;
 
     /**
-     * Create a new command instance.
-
-     * @param FuelClient $client
-     * @return void
+     * @param VersionToFuel $manager
      */
-    public function __construct(FuelClient $client)
+    public function __construct(VersionToFuel $manager)
     {
         parent::__construct();
-
-        $this->client = $client;
+        $this->manager = $manager;
     }
 
     /**
@@ -45,26 +41,84 @@ class VersionFillMissingPhotos extends Command
      */
     public function handle()
     {
-        $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'desc')->get();
-        $client = $this->client;
-        $versions->map(function ($item) use ($client) {
-            $manager = new VersionToFuel($item, $client);
-            //$vehicle = $manager->matchFuelVehicleToVersion();
-            $assets = $manager->assets();
-            if ($assets && count($assets)) {
-                $this->info($item->id);
-                $item->photos()->delete();
+        $versions = Version::doesntHave('photos')->has('deals')->orderBy('year', 'asc')->get();
+        $versions->map(function ($version) {
+            /* @var \App\Models\JATO\Version $version */
+            //
+            // Default
+            $version->photos()->delete();
 
+            $vehicle = $this->manager->matchFuelVehicleToVersion($version);
+            if (!$vehicle) {
+                return $version;
+            }
+
+            $this->info($version->title());
+
+            //
+            // Default Assets
+            $assets = $this->manager->assets($version, null, $vehicle->id);
+            if ($assets && count($assets)) {
+                $this->info(" --- Default: " . count($assets));
                 foreach ($assets as $asset) {
-                    $item->photos()->create([
-                        'url' => $asset->url,
-                        'shot_code' => $asset->shotCode->code,
-                        'color' => 'default',
-                    ]);
+                    $version->photos()->updateOrCreate(
+                        [
+                            'url' => $asset->url
+                        ],
+                        [
+                            'type' => 'default',
+                            'shot_code' => $asset->shotCode->code,
+                            'color' => null,
+                            'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                        ]);
                 }
             }
 
-            return $item;
+            //
+            // Colorized Assets
+            $colors = $version
+                ->deals()
+                ->get()
+                ->pluck('color')
+                ->unique()
+                ->all();
+
+
+            if ($colors && count($colors)) {
+                foreach ($colors as $color) {
+                    if (!$color) {
+                        continue;
+                    }
+                    $assets = $this->manager->assets($version, $color);
+                    if ($assets && count($assets)) {
+                        $this->info(" --- " . $color . ": " . count($assets));
+                        foreach ($assets as $asset) {
+
+                            if (!isset($asset->shotCode->color->oem_name)) {
+                                continue;
+                            }
+
+                            $version->photos()->updateOrCreate(
+                                [
+                                    'url' => $asset->url
+                                ],
+                                [
+                                    'type' => 'color',
+                                    'shot_code' => $asset->shotCode->code,
+                                    'color' => $asset->shotCode->color->oem_name,
+                                    'color_simple' => $asset->shotCode->color->simple_name,
+                                    'color_rgb' => $asset->shotCode->color->rgb1,
+                                    'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                                ]);
+                        }
+                    }
+
+                }
+
+            }
+
+
+            return $version;
         });
 
     }

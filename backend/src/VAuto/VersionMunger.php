@@ -273,25 +273,32 @@ class VersionMunger
     /**
      * Clear all photos attached to the version and get some basic defaults we can use.
      * All versions need photos for the intro page.
+     *
      * @param Version $version
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function photos(Version $version)
     {
-        $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($version,'default');
+        $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($version);
         $version->photos()->where('color', 'default')->delete();
 
         foreach ($assets as $asset) {
-            $version->photos()->create([
-                'url' => $asset->url,
-                'shot_code' => $asset->shotCode->code,
-                'color' => 'default',
-            ]);
+            $version->photos()->updateOrCreate(
+                [
+                    'url' => $asset->url
+                ],
+                [
+                    'type' => 'default',
+                    'shot_code' => $asset->shotCode->code,
+                    'color' => null,
+                    'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                ]);
         }
     }
 
     /**
      * @param Version $version
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function quotes(Version $version)
     {

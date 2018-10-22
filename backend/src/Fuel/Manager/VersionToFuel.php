@@ -88,6 +88,11 @@ class VersionToFuel
         }
     }
 
+    /**
+     *
+     * @param $color
+     * @return string
+     */
     public function translateColorName($color): string
     {
         foreach (Map::COLOR_MAP as $needle => $value) {
@@ -178,38 +183,46 @@ class VersionToFuel
     /**
      * @param Version $version
      * @param string $color
+     * @param string $vehicleId
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function assets(Version $version, $color = 'default'): array
+    public function assets(Version $version, $color = null, $vehicleId = null): array
     {
-        $this->version = $version;
-
+        //
+        // Type: default
         $product_id = '1';
         $product_format_id = [['18', '1']];
 
-        if ($color != 'default') {
+        //
+        // Type: colorized
+        if ($color) {
             $product_id = '2';
             $product_format_id = [['5'], ['7'], ['10']];
         }
 
-        $vehicle = $this->matchFuelVehicleToVersion();
 
+        if (!$vehicleId) {
+            $vehicle = $this->matchFuelVehicleToVersion($version);
+            if ($vehicle) {
+                $vehicleId = $vehicle->id;
+            }
+        }
 
-        if (!$vehicle) {
+        if (!$vehicleId) {
             return [];
         }
 
         $assets = [];
 
-        if ($color == 'default') {
-            $color = '';
-        } else {
+        if ($color) {
             $color = $this->translateColorName($color);
+        } else {
+            $color = '';
         }
 
         try {
-            $media = $this->client->vehicle->vehicleMedia($vehicle->id, $product_id, '', $color);
+            $media = $this->client->vehicle->vehicleMedia($vehicleId, $product_id, '', $color);
         } catch (ClientException $exception) {
             if ($exception->getCode() == '404') {
                 // TODO: Log these
