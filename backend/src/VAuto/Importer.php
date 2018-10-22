@@ -473,7 +473,6 @@ class Importer
 
         $modifiedDate = $row['Photos Last Modified Date'];
         $modifiedDate = Carbon::parse($modifiedDate);
-
         $deal = Deal::updateOrCreate([
             'vin' => $row['VIN'],
         ], [
@@ -497,7 +496,7 @@ class Importer
             'color' => $row['Colour'],
             'interior_color' => $row['Interior Color'],
             'price' => isset($pricing->price) ? $pricing->price : null,
-            'msrp' => isset($pricing->msrp) ? $pricing->msrp : null,
+            'msrp' => (isset($pricing->msrp) && (strlen($pricing->msrp) <= 6)) ? $pricing->msrp : ((strlen($pricing->msrp) > 6) ? substr($pricing->msrp, 0, 6) : null),
             'vauto_features' => $vauto_features,
             'inventory_date' => Carbon::createFromFormat('m/d/Y', $row['Inventory Date']),
             'certified' => $row['Certified'] === 'Yes',
