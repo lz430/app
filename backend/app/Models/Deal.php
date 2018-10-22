@@ -441,7 +441,7 @@ class Deal extends Model
         }
 
         foreach (ColorMaps::COLOR_MAP as $key => $value) {
-            if (str_contains($key, $this->color)) {
+            if (str_contains($this->color, $key)) {
                 return $value;
             }
         }
