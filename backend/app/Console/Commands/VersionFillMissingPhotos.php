@@ -86,10 +86,18 @@ class VersionFillMissingPhotos extends Command
 
             if ($colors && count($colors)) {
                 foreach ($colors as $color) {
+                    if (!$color) {
+                        continue;
+                    }
                     $assets = $this->manager->assets($version, $color);
                     if ($assets && count($assets)) {
                         $this->info(" --- " . $color . ": " . count($assets));
                         foreach ($assets as $asset) {
+
+                            if (!isset($asset->shotCode->color->oem_name)) {
+                                continue;
+                            }
+
                             $version->photos()->updateOrCreate(
                                 [
                                     'url' => $asset->url
