@@ -81,6 +81,7 @@ class Map
         'Blue' => '#0000FF',
         'Green' => '#009933',
         'Tan' => '#FFFFCC',
+        'Beige' => '#FFFFCC',
         'Burgandy' => '#990000',
         'Orange' => '#FF6600',
         'Brown' => '#663300',
