@@ -329,7 +329,6 @@ class Deal extends Model
 
             switch ($group) {
                 case 'real':
-
                     $dealPhotos = $this->photos()->get();
                     if (count($dealPhotos) > 1) {
                         $dealPhotos->shift();
@@ -378,17 +377,16 @@ class Deal extends Model
 
                         })->all();
                     }
-
                     break;
 
                 case 'stock_default':
-                    $versionPhotos = $this->version->photos()->where('color', '=', 'default')->orderBy('shot_code')->get();
+                    $versionPhotos = $this->version->photos()->where('type', '=', 'default')->orderBy('shot_code')->get();
                     if (count($versionPhotos)) {
                         $photos = $versionPhotos;
 
                         // Select featured photo
                         $photos = collect($photos)->map(function($photo) {
-                            if (isset($photo->shot_code) && $photo->shot_code === 'KAD') {
+                            if (isset($photo->shot_code) && $photo->shot_code === '116') {
                                 $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
                             }
                             return $photo;

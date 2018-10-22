@@ -49,7 +49,6 @@ class DealStockPhotos extends Command
             $this->info("NO DEAL!");
             return;
         }
-
         $assets = $this->manager->assets($deal->version, $deal->color);
 
         dd($assets);

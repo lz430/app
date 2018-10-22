@@ -107,9 +107,11 @@
                 @slot('title')
                     Thumbnail
                 @endslot
-                <div class="text-center">
-                    <img src="{{$deal->featuredPhoto()->thumbnail}}" alt="">
-                </div>
+                    @if ($deal->featuredPhoto())
+                        <div class="text-center">
+                            <img src="{{$deal->featuredPhoto()->thumbnail}}" alt="">
+                        </div>
+                    @endif
             @endcomponent
         </div>
     </div>
