@@ -100,6 +100,20 @@
     <h3>
         Media
     </h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            @component('components.box')
+                @slot('title')
+                    Thumbnail
+                @endslot
+                <div class="text-center">
+                    <img src="{{$deal->featuredPhoto()->thumbnail}}" alt="">
+                </div>
+            @endcomponent
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default">

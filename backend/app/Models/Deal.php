@@ -334,9 +334,8 @@ class Deal extends Model
                     if (count($dealPhotos) > 1) {
                         $dealPhotos->shift();
                         $photos = $dealPhotos;
-                        $photos[0]->thumbnail = generate_asset_url($photos[0], 'thumbnail');
+                        $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
                     }
-
                     break;
                 case 'stock_accurate':
                     $accurateColorPhotos = $this->version->photos()
