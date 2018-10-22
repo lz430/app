@@ -1,6 +1,6 @@
 import '../styles/app.scss';
 import React from 'react';
-import CheckoutConfirmContainer from '../src/pages/checkout-confirm/Container';
+import CheckoutConfirmContainer from '../modules/checkout-confirm/Container';
 import Head from 'next/head';
 
 export default class Page extends React.Component {
