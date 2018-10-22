@@ -1,10 +1,12 @@
 <?php
 if(isset($entry)) {
     $contacts = $entry->contacts()->get();
+    $dealer_id = $entry->id;
 }
 ?>
 
 <div class="preview col-xs-12">
+    @if(isset($dealer_id))
     <div class="margin-bottom">
         <a href="/admin/dealercontact/{{\Request::segment(3)}}/create" class="btn btn-primary ladda-button" data-style="zoom-in"><span class="ladda-label"><i class="fa fa-plus"></i> Add contact</span></a>
     </div>
@@ -36,4 +38,7 @@ if(isset($entry)) {
             @endif
         </div>
     </div>
+    @else
+        <p><b>Save dealer first before the ability to add contacts.</b></p>
+    @endif
 </div>
