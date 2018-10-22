@@ -1,6 +1,6 @@
 import '../styles/app.scss';
 import React from 'react';
-import CompareContainer from '../src/pages/compare/Container';
+import CompareContainer from '../modules/compare/Container';
 import Head from 'next/head';
 
 export default class Page extends React.Component {
