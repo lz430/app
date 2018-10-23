@@ -1,12 +1,48 @@
 // Styles brochure site
 .brochure-header {
+    background: $color-background-secondary;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+
     .navbar {
         border-bottom: 0 none;
+        box-shadow: none;
+        max-width: $break-extra-large;
+        margin: 0 auto;
 
-        .btn-primary {
-            background: $color-facebook-blue;
-            border: 0 none;
-            margin-left: auto;
+        @media screen and (max-width: $break-medium) {
+            align-content: space-between;
+        }
+        .navbar-brand {
+            img {
+                height: 70px;
+            }
+        }
+
+        @media screen and (max-width: $break-medium) {
+            .navbar-toggler {
+                background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(0, 0, 0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
+                background-repeat: no-repeat;
+            }
+        }
+        .navbar-nav {
+            .nav-item {
+                padding: 0 10px;
+
+                a {
+                    color: $color-black;
+                    font-size: 1rem;
+                    font-weight: 700;
+                }
+
+                .btn-primary {
+                    background: $color-facebook-blue;
+                    border: 0 none;
+                    color: $color-text-white;
+                    margin-left: auto;
+                }
+            }
         }
     }
 } //end brochure-header
