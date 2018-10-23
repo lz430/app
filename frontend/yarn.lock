@@ -6729,13 +6729,6 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-livechat@^1.0.25:
-  version "1.0.28"
-  resolved "https://registry.yarnpkg.com/react-livechat/-/react-livechat-1.0.28.tgz#d306d883b08067dfa3315476a4f0ec6a3d1d25b5"
-  integrity sha512-NNFK4QBU5/8qqYPIvpdbTRVKexXfHvNc1wb1XaArRH1w4CKJbSnYsYbCvC8NJCHcPOuprm+H1up/YvlClQDKoQ==
-  dependencies:
-    prop-types "^15.6.1"
-
 react-popper@^0.10.4:
   version "0.10.4"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-0.10.4.tgz#af2a415ea22291edd504678d7afda8a6ee3295aa"
