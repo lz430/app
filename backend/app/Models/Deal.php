@@ -293,6 +293,85 @@ class Deal extends Model
         return $this->belongsToMany(Feature::class);
     }
 
+
+    private function getRealPhotos() {
+        $photos = $this->photos()->get();
+        if (count($photos) <= 1) {
+            return [];
+        }
+
+        $photos->shift();
+        $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
+
+        return $photos;
+    }
+
+    /**
+     * @param bool $accurate
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getColorStockPhotos($accurate = true) {
+        if ($accurate) {
+            $photos = $this->version->photos()
+                ->where('type', '=', 'color')
+                ->where('color', '=', $this->color)
+                ->orderBy('shot_code')
+                ->get();
+        }
+        else {
+            $photos = $this->version->photos()
+                ->where('type', '=', 'color')
+                ->where('color_simple', '=', $this->simpleExteriorColor())
+                ->orderBy('color')->orderBy('shot_code')
+                ->limit(3)->get();
+        }
+
+        if (!count($photos)) {
+            return $photos;
+        }
+
+        $last = $photos->pop();
+        $last->thumbnail = generate_asset_url($last->url, 'thumbnail');
+        $photos->push($last);
+
+        $genericPhotos = $this->getGenericStockPhotos(false);
+        $photos = $photos->merge($genericPhotos);
+
+        return $photos;
+    }
+
+    /**
+     * @param bool $thumbnail
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getGenericStockPhotos($thumbnail = true) {
+        $photos = $this->version->photos()
+            ->where('type', '=', 'default')
+            ->orderBy('shot_code')
+            ->get();
+
+        if (!count($photos)) {
+            return $photos;
+        }
+
+        if ($thumbnail) {
+            $thumbnailFound = false;
+            foreach($photos as &$photo) {
+                if (isset($photo->shot_code) && $photo->shot_code === '116') {
+                    $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
+                    $thumbnailFound = true;
+                }
+            }
+
+            if (!$thumbnailFound) {
+                $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
+            }
+        }
+
+        return $photos;
+
+    }
+
     /**
      * In some situations we don't have photos for the specific vehicle,
      * so we use stock photos in some situations, which are stored on the version.
@@ -329,70 +408,18 @@ class Deal extends Model
 
             switch ($group) {
                 case 'real':
-                    $dealPhotos = $this->photos()->get();
-                    if (count($dealPhotos) > 1) {
-                        $dealPhotos->shift();
-                        $photos = $dealPhotos;
-                        $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
-                    }
+                    $photos = $this->getRealPhotos();
                     break;
                 case 'stock_accurate':
-                    $accurateColorPhotos = $this->version->photos()
-                        ->where('type', '=', 'color')
-                        ->where('color', '=', $this->color)
-                        ->orderBy('shot_code')
-                        ->get();
-
-                    if (count($accurateColorPhotos)) {
-                        $photos = $accurateColorPhotos;
-
-                        // Select featured photo
-                        $photos = collect($photos)->map(function($photo) {
-                            if (isset($photo->shot_code) && $photo->shot_code === 'KAD') {
-                                $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
-                            }
-                            return $photo;
-
-                        })->all();
-                    }
-
+                    $photos = $this->getColorStockPhotos(true);
                     break;
 
                 case 'stock_simple':
-                    $simpleColorPhotos = $this->version->photos()
-                        ->where('type', '=', 'color')
-                        ->where('color_simple', '=', $this->simpleExteriorColor())
-                        ->orderBy('color')->orderBy('shot_code')
-                        ->limit(3)->get();
-
-                    if (count($simpleColorPhotos)) {
-                        $photos = $simpleColorPhotos;
-
-                        // Select featured photo
-                        $photos = collect($photos)->map(function($photo) {
-                            if (isset($photo->shot_code) && $photo->shot_code === 'KAD') {
-                                $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
-                            }
-                            return $photo;
-
-                        })->all();
-                    }
+                    $photos = $this->getColorStockPhotos(false);
                     break;
 
                 case 'stock_default':
-                    $versionPhotos = $this->version->photos()->where('type', '=', 'default')->orderBy('shot_code')->get();
-                    if (count($versionPhotos)) {
-                        $photos = $versionPhotos;
-
-                        // Select featured photo
-                        $photos = collect($photos)->map(function($photo) {
-                            if (isset($photo->shot_code) && $photo->shot_code === '116') {
-                                $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
-                            }
-                            return $photo;
-
-                        })->all();
-                    }
+                    $photos = $this->getGenericStockPhotos();
 
                     break;
 

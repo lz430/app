@@ -85,6 +85,17 @@ export default class MyDocument extends Document {
                     <Main />
                     <NextScript />
 
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' ||
+                        (config['REACT_APP_ENVIRONMENT'] === 'staging' && (
+                            <script
+                                type="text/javascript"
+                                id="hs-script-loader"
+                                async
+                                defer
+                                src="//js.hs-scripts.com/3388780.js"
+                            />
+                        ))}
+
                     {config['REACT_APP_ENVIRONMENT'] === 'staging' && (
                         <script
                             dangerouslySetInnerHTML={{
