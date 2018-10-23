@@ -13,12 +13,21 @@ import Link from 'next/link';
 
 export default class Header extends React.PureComponent {
     state = {
-        isOpen: false,
+        collapsed: false,
     };
 
-    toggle() {
+    constructor(props) {
+        super(props);
+
+        this.toggleNavbar = this.toggleNavbar.bind(this);
+        this.state = {
+            collapsed: true,
+        };
+    }
+
+    toggleNavbar() {
         this.setState({
-            isOpen: !this.state.isOpen,
+            collapsed: !this.state.collapsed,
         });
     }
 
@@ -32,11 +41,9 @@ export default class Header extends React.PureComponent {
                             src="/static/images/dmr-logo.svg"
                         />
                     </NavbarBrand>
-                    <NavbarToggler onClick={this.toggle} className="" />
+                    <NavbarToggler onClick={this.toggleNavbar} className="" />
 
-                    <div className="mr-auto" />
-
-                    <Collapse isOpen={this.state.isOpen} navbar>
+                    <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <Link

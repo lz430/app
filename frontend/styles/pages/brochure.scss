@@ -13,6 +13,7 @@
 
         @media screen and (max-width: $break-medium) {
             align-content: space-between;
+            padding: 0;
         }
         .navbar-brand {
             img {
@@ -24,6 +25,11 @@
             .navbar-toggler {
                 background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(0, 0, 0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
                 background-repeat: no-repeat;
+                padding-right: 0;
+
+                &:focus {
+                    outline: none;
+                }
             }
         }
         .navbar-nav {
@@ -37,10 +43,29 @@
                 }
 
                 .btn-primary {
-                    background: $color-facebook-blue;
+                    background: $color-text-blue;
                     border: 0 none;
                     color: $color-text-white;
                     margin-left: auto;
+                }
+            }
+        }
+        .navbar-collapse {
+            .navbar-nav {
+                display: flex;
+                text-align: right;
+
+                .nav-item {
+                    background: $color-background-primary;
+                    border-bottom: 1px solid #ccc;
+
+                    &:first-of-type {
+                        border-top: 1px solid #ccc;
+                    }
+                    &:last-of-type,
+                    &:nth-child(3) {
+                        border-bottom: 0 none;
+                    }
                 }
             }
         }
