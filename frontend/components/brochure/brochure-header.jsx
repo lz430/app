@@ -16,7 +16,7 @@ export default class Header extends React.PureComponent {
         collapsed: true,
     };
 
-    toggleNavbar = e => {
+    toggleNavbar = () => {
         this.setState({ collapsed: !this.state.collapsed });
     };
 
