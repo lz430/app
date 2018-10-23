@@ -47,6 +47,10 @@ abstract class BaseSearch
                     "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
                 ]
             ]]],
+            [
+                "exists" => [
+                    "field" => "thumbnail"]
+            ],
             ['range' => [
                 'pricing.default' => [
                     'lte' => '200000',
@@ -217,7 +221,7 @@ abstract class BaseSearch
             [
                 'range' => [
                     'payments.detroit.' . $strategy . '.payment' => [
-                      'gte' => 1,
+                        'gte' => 1,
                     ],
                 ],
             ]
