@@ -13,23 +13,12 @@ import Link from 'next/link';
 
 export default class Header extends React.PureComponent {
     state = {
-        collapsed: false,
+        collapsed: true,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.toggleNavbar = this.toggleNavbar.bind(this);
-        this.state = {
-            collapsed: true,
-        };
-    }
-
-    toggleNavbar() {
-        this.setState({
-            collapsed: !this.state.collapsed,
-        });
-    }
+    toggleNavbar = e => {
+        this.setState({ collapsed: !this.state.collapsed });
+    };
 
     render() {
         return (
