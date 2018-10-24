@@ -109,11 +109,48 @@ class VersionToVehicle
             //
             // Lexus
             'ES' => [
+                '350' => [
+                    '350' => 'ES 350',
+                    'ES 350' => 'ES 350',
+                ],
+                '300h' => [
+                    'ES 300h' => 'ES 300h',
+                ],
+                '300h Luxury' => [
+                    '300h Luxury' => 'ES 300h',
+                ],
+                '350 Luxury' => [
+                    '350 Luxury' => 'ES 350',
+                ],
                 'F SPORT' => [
                     'ES 350 F SPORT' => 'ES 350',
                 ]
             ],
+            'RC' => [
+                'F' => [
+                    'F' => 'RC F',
+                ],
+                '300' => [
+                    '300 AWD' => 'RC 300',
+                ],
+                '350' => [
+                    '350 AWD' => 'RC 350',
+                ],
+            ],
             'RX' => [
+                '350' => [
+                    '350 AWD' => 'RX 350',
+                    '350L AWD' => 'RX 350l',
+                ],
+                'LUXURY' => [
+                    '350L LUXURY AWD' => 'RX 350l',
+                ],
+                '450h' => [
+                    '450h AWD' => 'RX 450h',
+                ],
+                '450hL LUXURY' => [
+                    '450hL LUXURY AWD' => 'RX 450hL',
+                ],
                 '350 F SPORT' => [
                     '350 F SPORT AWD' => 'RX 350',
                 ]
@@ -121,11 +158,57 @@ class VersionToVehicle
             'NX' => [
                 '300' => [
                     '300 AWD' => 'NX 300',
+                    '300 RWD' => 'NX 300',
+                ],
+                '300h' => [
+                    '300h AWD' => 'NX 300h',
+                ],
+                '300 F SPORT' => [
+                    '300 F SPORT AWD' => 'NX 300',
                 ]
+            ],
+            'IS' => [
+                '300' => [
+                    '300 AWD' => "IS 300",
+                ],
+                '350' => [
+                    '350 AWD' => "IS 350",
+                ],
             ],
             'GX' => [
                 'Base' => [
                     '460' => "GX 460",
+                ],
+                'LUXURY' => [
+                    '460 LUXURY' => "GX 460",
+                ],
+            ],
+            'GS' => [
+                'F' => [
+                    'F' => 'GS F',
+                ],
+                '350' => [
+                    '350 F SPORT AWD' => 'GS 350',
+                ]
+            ],
+            'LC' => [
+                '500' => [
+                    '500' => "LC 500",
+                ],
+            ],
+            'LS' => [
+                'Base' => [
+                    '500 AWD' =>'LS 500',
+                    '500 F SPORT AWD' =>'LS 500',
+                ],
+                '500h' => [
+                    '500h AWD' => "LS 500h",
+                ],
+            ],
+            'LX' => [
+                '570' => [
+                    '570 THREE-ROW' => "LX 570",
+                    '570 TWO-ROW' => "LX 570",
                 ],
             ],
         ],
@@ -585,10 +668,17 @@ class VersionToVehicle
             }
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
-
+        $preModelVehicles = $vehicles;
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
+
+        if (!count($vehicles)) {
+            foreach ($preModelVehicles as $vehicle) {
+                print_r($vehicle->filters);
+            }
+            dd($params);
+        }
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
