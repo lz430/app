@@ -14,11 +14,12 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\LoadDealsFromVauto::class,
+        Commands\ImportVautoMapData::class,
         Commands\Tests\TestCoxAPI::class,
         Commands\Tests\TestHubSpotForm::class,
-        Commands\VersionFillMissingPhotos::class,
-        Commands\VersionGenerateQuotes::class,
-        Commands\ImportVautoMapData::class,
+        Commands\Version\VersionFillMissingPhotos::class,
+        Commands\Version\VersionGenerateQuotes::class,
+        Commands\Version\VersionRefresh::class,
         Commands\Deal\DealFeatureDebugger::class,
         Commands\Deal\DealProgramDebugger::class,
         Commands\Deal\DealLeaseRatesDebugger::class,
