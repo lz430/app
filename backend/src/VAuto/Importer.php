@@ -9,7 +9,6 @@ use App\Models\Deal;
 use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\RIS\RISClient;
-use DeliverMyRide\VAuto\Deal\DealMunger;
 
 use Carbon\Carbon;
 use Exception;
@@ -20,7 +19,6 @@ use Illuminate\Database\QueryException;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\DB;
 
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 
 use League\Csv\Reader;
@@ -86,7 +84,6 @@ class Importer
 
     private $jatoClient;
     private $fuelClient;
-    private $risClient;
 
     private $error;
     private $filesystem;
@@ -94,14 +91,10 @@ class Importer
     private $debug;
 
     public function __construct(Filesystem $filesystem,
-                                JatoClient $jatoClient,
-                                FuelClient $fuelClient,
-                                RISClient $risClient)
+                                JatoClient $jatoClient)
     {
         $this->filesystem = $filesystem;
         $this->jatoClient = $jatoClient;
-        $this->fuelClient = $fuelClient;
-        $this->risClient = $risClient;
 
 
         $this->debug = [
@@ -217,7 +210,7 @@ class Importer
     private function processRecord(array $row)
     {
         try {
-            list($version, $versionDebugData) = (new VersionMunger($row, $this->jatoClient))->build();
+            list($version, $versionDebugData) = (new VersionMunger($this->jatoClient))->build($row);
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             //

@@ -192,13 +192,13 @@ class VersionToFuel
         //
         // Type: default
         $product_id = '1';
-        $product_format_id = [['18', '1']];
+        $product_format_id = [['1', '1']];
 
         //
         // Type: colorized
         if ($color) {
             $product_id = '2';
-            $product_format_id = [['5'], ['7'], ['10']];
+            $product_format_id = [['2'], ['3'], ['4']];
         }
 
 
