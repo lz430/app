@@ -54,17 +54,18 @@
             .navbar-nav {
                 display: flex;
                 text-align: right;
+                @media screen and (max-width: $break-medium) {
+                    .nav-item {
+                        background: $color-background-primary;
+                        border-bottom: 1px solid #ccc;
 
-                .nav-item {
-                    background: $color-background-primary;
-                    border-bottom: 1px solid #ccc;
-
-                    &:first-of-type {
-                        border-top: 1px solid #ccc;
-                    }
-                    &:last-of-type,
-                    &:nth-child(3) {
-                        border-bottom: 0 none;
+                        &:first-of-type {
+                            border-top: 1px solid #ccc;
+                        }
+                        &:last-of-type,
+                        &:nth-child(3) {
+                            border-bottom: 0 none;
+                        }
                     }
                 }
             }
