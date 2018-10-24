@@ -2,8 +2,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'reactstrap';
 
-import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-
 import Link from 'next/link';
 
 export default class Header extends React.PureComponent {
@@ -23,7 +21,7 @@ export default class Header extends React.PureComponent {
                             />
                         </div>
                         <div className="col">
-                            <FontAwesomeIcon icon={faCoffee} />
+                            <FontAwesomeIcon icon="facoffee" />
                         </div>
                     </div>
                 </div>
