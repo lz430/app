@@ -668,17 +668,9 @@ class VersionToVehicle
             }
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
-        $preModelVehicles = $vehicles;
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
-
-        if (!count($vehicles)) {
-            foreach ($preModelVehicles as $vehicle) {
-                print_r($vehicle->filters);
-            }
-            dd($params);
-        }
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
