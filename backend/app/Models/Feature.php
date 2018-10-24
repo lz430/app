@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 use Backpack\CRUD\CrudTrait;
 
-
 /**
  * TODO: Rename jato_schema_ids to map_jato_features
  *

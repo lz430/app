@@ -57,6 +57,7 @@ class VersionToVehicle
         ],
 
         'BY_MODEL_AND_TRIM' => [
+            // BMW
             '2 Series' => [
                 '230i' => '230',
                 'M240i' => 'M240',
@@ -103,6 +104,29 @@ class VersionToVehicle
                 'S' => [
                     'Cayman S' => '718 Cayman'
                 ]
+            ],
+
+            //
+            // Lexus
+            'ES' => [
+                'F SPORT' => [
+                    'ES 350 F SPORT' => 'ES 350',
+                ]
+            ],
+            'RX' => [
+                '350 F SPORT' => [
+                    '350 F SPORT AWD' => 'RX 350',
+                ]
+            ],
+            'NX' => [
+                '300' => [
+                    '300 AWD' => 'NX 300',
+                ]
+            ],
+            'GX' => [
+                'Base' => [
+                    '460' => "GX 460",
+                ],
             ],
         ],
     ];
@@ -321,7 +345,6 @@ class VersionToVehicle
 
     private function translateModel(): string
     {
-
         //
         // TODO: Refactor this
         if (in_array($this->version->model->make->name, self::MAKES_USE_TRIM_FOR_MODEL)) {
@@ -434,7 +457,6 @@ class VersionToVehicle
             'cab' => $this->version->cab ? $this->translateCab() : null,
             'transmission' => $this->translateTransmission(),
             'displacement' => $this->translateDisplacement(),
-
         ];
 
         $codes = explode("-", str_replace(['/'], '-', $this->version->manufacturer_code));
@@ -568,10 +590,8 @@ class VersionToVehicle
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
-
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-
 
         /*
         foreach($vehicles as $vehicle) {
@@ -579,7 +599,6 @@ class VersionToVehicle
         }
         dd($params);
         */
-
 
         // Optional
         // Two vehicles means we've found a lease and a non lease option.
