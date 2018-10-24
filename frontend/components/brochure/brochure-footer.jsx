@@ -1,5 +1,8 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'reactstrap';
+
+import { faCoffee } from '@fortawesome/free-solid-svg-icons';
 
 import Link from 'next/link';
 
@@ -19,7 +22,9 @@ export default class Header extends React.PureComponent {
                                 src="/static/images/dmr-logo.svg"
                             />
                         </div>
-                        <div className="col" />
+                        <div className="col">
+                            <FontAwesomeIcon icon={faCoffee} />
+                        </div>
                     </div>
                 </div>
             </footer>
