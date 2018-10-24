@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\Fuel\Manager\VersionToFuel;
 use App\Models\JATO\Version;
 

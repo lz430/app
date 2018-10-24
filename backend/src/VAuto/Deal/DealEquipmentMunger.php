@@ -556,14 +556,23 @@ class DealEquipmentMunger
         $this->categorizeDiscoveredFeatures($features);
     }
 
-
-
     private function buildFeaturesForColors()
     {
         $features = [];
         if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
             $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
-            $feature = Feature::where('title', $color)->first();
+
+            $feature = Feature::firstOrCreate(
+                [
+                    'title', $color
+                ],
+                [
+                    'is_active' => 1,
+                    'slug' => str_slug($color, '-'),
+
+                ]
+            );
+
             $features[] = (object)[
                 'feature' => $feature,
                 'equipment' => (object)[

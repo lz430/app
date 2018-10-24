@@ -27,15 +27,12 @@ class VersionMunger
     private $debug = [];
 
     /**
-     * @param array $row
      * @param JatoClient $jatoClient
      *
      */
-    public function __construct(array $row,
-                                JatoClient $jatoClient)
+    public function __construct(JatoClient $jatoClient)
     {
         $this->jatoClient = $jatoClient;
-        $this->row = $row;
     }
 
     /**
@@ -354,11 +351,14 @@ class VersionMunger
     }
 
     /**
+     * @param array $row
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function build(): array
+    public function build(array $row): array
     {
+        $this->row = $row;
+
         //
         // Match Jato Version
         $this->decodeVin();
