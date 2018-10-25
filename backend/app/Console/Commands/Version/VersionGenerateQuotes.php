@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Version;
 
 use App\Models\Deal;
 use App\Models\JATO\VersionQuote;
@@ -18,7 +18,7 @@ class VersionGenerateQuotes extends Command
      *
      * @var string
      */
-    protected $signature = 'dmr:version:quote {deal?} {--all}';
+    protected $signature = 'dmr:version:quote {filter?  : option filter. deal:5 or make:Ford}';
 
     /**
      * The console command description.
@@ -84,29 +84,55 @@ class VersionGenerateQuotes extends Command
         return $versionsWithOutdated->merge($versionsWithNone);
     }
 
+    private function getVersionsByMakeName($name) {
+        $query = Version::query();
+        $query = $query->whereHas('model', function ($query) use ($name) {
+            $query->whereHas('make', function ($query) use ($name) {
+                $query->where('name', '=', $name);
+            });
+        });
+
+        return $query->get();
+    }
+
+    private function getVersions($filter) {
+        if (!$filter) {
+            return $this->getOutdatedVersions();
+        }
+
+        if ($filter === 'all') {
+            return $this->getAllVersions();
+        }
+
+        $filter = explode(":", $filter);
+        if (count($filter) === 2 && in_array($filter[0], ['deal', 'make'])) {
+            switch ($filter[0]) {
+                case 'deal':
+                    return $this->getSingleVersion($filter[1]);
+                    break;
+                case 'make':
+                    return $this->getVersionsByMakeName($filter[1]);
+                    break;
+            }
+        }
+
+        return collect([]);
+    }
+
     /**
      * Execute the console command.
      */
     public function handle()
     {
         $client = $this->client;
-        $dealId = $this->argument('deal');
-        $all = $this->option('all');
-
-        if ($dealId) {
-            $versions = $this->getSingleVersion($dealId);
-        } elseif ($all) {
-            $versions = $this->getAllVersions();
-        } else {
-            $versions = $this->getOutdatedVersions();
-        }
-
-        $versions->map(function ($version) use ($dealId, $client) {
+        $filter = $this->argument('filter');
+        $versions = $this->getVersions($filter);
+        $versions->map(function ($version) use ($filter, $client) {
             /* @var \App\Models\JATO\Version $version */
 
             $quoteData = (new VersionToVehicle($client))->get($version);
             $this->info($version->title());
-            if ($dealId) {
+            if ($filter) {
                 foreach ($quoteData as $strategy => $info) {
                     $this->info($strategy);
                     $rows = [];

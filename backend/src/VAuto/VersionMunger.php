@@ -27,15 +27,12 @@ class VersionMunger
     private $debug = [];
 
     /**
-     * @param array $row
      * @param JatoClient $jatoClient
      *
      */
-    public function __construct(array $row,
-                                JatoClient $jatoClient)
+    public function __construct(JatoClient $jatoClient)
     {
         $this->jatoClient = $jatoClient;
-        $this->row = $row;
     }
 
     /**
@@ -156,15 +153,16 @@ class VersionMunger
     }
 
     /**
+     * @param string $name
      * @return Manufacturer
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function manufacturer(): Manufacturer
+    private function manufacturer(string $name): Manufacturer
     {
-        $manufacturer = Manufacturer::where('name', $this->decodedVin->manufacturer)->first();
+        $manufacturer = Manufacturer::where('name', $name)->first();
 
         if (!$manufacturer) {
-            $data = $this->jatoClient->manufacturer->get($this->decodedVin->manufacturer);
+            $data = $this->jatoClient->manufacturer->get($name);
 
             $manufacturer = Manufacturer::updateOrCreate([
                 'url_name' => $data->urlManufacturerName,
@@ -179,16 +177,17 @@ class VersionMunger
     }
 
     /**
+     * @param string $name
      * @param Manufacturer $manufacturer
      * @return Make
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function make(Manufacturer $manufacturer): Make
+    private function make(string $name, Manufacturer $manufacturer): Make
     {
-        $make = Make::where('name', $this->decodedVin->make)->first();
+        $make = Make::where('name', $name)->first();
 
         if (!$make) {
-            $data = $this->jatoClient->make->get($this->decodedVin->make);
+            $data = $this->jatoClient->make->get($name);
 
             $make = $manufacturer->makes()->updateOrCreate([
                 'url_name' => $data->urlMakeName,
@@ -204,16 +203,25 @@ class VersionMunger
     }
 
     /**
+     * @param string $name
+     * @param string $urlModelName
      * @param Make $make
      * @return VehicleModel
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function model(Make $make): VehicleModel
+    private function model(string $name, string $urlModelName, $make): VehicleModel
     {
-        $model = VehicleModel::where('name', $this->decodedVin->model)->first();
+        //
+        // Turns out models aren't unique.
+        // Both Lincoln and Lexus have a "LS" Model. Classy.
+        $model = VehicleModel::where('name', $name)
+            ->whereHas('make', function ($query) use ($make) {
+                $query->where('id', '=', $make->id);
+            })
+            ->first();
 
         if (!$model) {
-            $data = $this->jatoClient->model->get($this->jatoVersion->urlModelName);
+            $data = $this->jatoClient->model->get($urlModelName);
 
             $model = $make->models()->updateOrCreate([
                 'url_name' => $data->urlModelName,
@@ -228,21 +236,41 @@ class VersionMunger
     }
 
     /**
+     * @param $vehicleId
+     * @return null|\stdClass
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    private function getJatoVersion($vehicleId) {
+        $data = null;
+        try {
+            $data = $this->jatoClient->version->get($vehicleId);
+        } catch (ClientException $e) {
+
+            print($e->getMessage());
+        }
+        return $data;
+    }
+
+    private function getManufacturerByMake($make) {
+        $data = $this->jatoClient->make->get($make);
+        return $data->manufacturerName;
+    }
+
+    /**
      * @return Version
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function create(): ?Version
     {
-        try {
-            $data = $this->jatoClient->version->get($this->jatoVersion->vehicle_ID);
-            print $this->jatoVersion->vehicle_ID . "\n";
-        } catch (ClientException $e) {
+        $data = $this->getJatoVersion($this->jatoVersion->vehicle_ID);
+
+        if (!$data) {
             return null;
         }
 
-        $manufacturer = $this->manufacturer();
-        $make = $this->make($manufacturer);
-        $model = $this->model($make);
+        $manufacturer = $this->manufacturer($this->decodedVin->manufacturer);
+        $make = $this->make($this->decodedVin->make, $manufacturer);
+        $model = $this->model($this->decodedVin->model, $this->jatoVersion->urlModelName, $make);
 
         /* @var Version $version */
         $version = $model->versions()->create([
@@ -314,11 +342,11 @@ class VersionMunger
                 ], [
                     'hashcode' => $data->hashcode,
                     'make_hashcode' => $data->makeHashcode,
-                    'rate' => (float) $data->rate,
-                    'term' => (int) $data->term,
-                    'rebate' => (int) $data->rebate,
-                    'residual' => (int) $data->residual,
-                    'miles' => (int) $data->miles,
+                    'rate' => (float)$data->rate,
+                    'term' => (int)$data->term,
+                    'rebate' => (int)$data->rebate,
+                    'residual' => (int)$data->residual,
+                    'miles' => (int)$data->miles,
                     'rate_type' => $data->rateType,
                     'data' => $data->data,
                 ]);
@@ -327,10 +355,29 @@ class VersionMunger
     }
 
     /**
-     * This happens when the jato vehicle id changed, meaning the spec for the actual vehicle is different
-     * for whatever reason
+     * @param Version $version
+     * @return bool
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function refreshMakeModel(Version $version)
+    {
+        $data = $this->getJatoVersion($version->jato_vehicle_id);
+        if (!$data) {
+            return false;
+        }
+        $manufacturerName = $this->getManufacturerByMake($data->makeName);
+
+        $manufacturer = $this->manufacturer($manufacturerName);
+        $make = $this->make($data->makeName, $manufacturer);
+        $model = $this->model($data->modelName, $data->modelName, $make);
+        $version->model()->associate($model);
+        $version->save();
+    }
+
+    /**
      * @param Version $version
      * @param \stdClass $jatoVersion
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function refresh(Version $version, \stdClass $jatoVersion)
     {
@@ -346,7 +393,7 @@ class VersionMunger
         // Ensure existing deals attached to this version are forced to refresh.
         /* @var Deal $attachedDeal */
         foreach ($version->fresh()->deals as $attachedDeal) {
-            if($attachedDeal->status == 'available') {
+            if ($attachedDeal->status == 'available') {
                 $attachedDeal->features()->sync([]);
                 $attachedDeal->jatoFeatures()->sync([]);
             }
@@ -354,11 +401,14 @@ class VersionMunger
     }
 
     /**
+     * @param array $row
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function build(): array
+    public function build(array $row): array
     {
+        $this->row = $row;
+
         //
         // Match Jato Version
         $this->decodeVin();

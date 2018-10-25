@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Version;
 
-use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\Fuel\Manager\VersionToFuel;
 use App\Models\JATO\Version;
 
