@@ -82,7 +82,7 @@ class Map
             'conquest bonus'
         ],
         'loyal' => [
-            'returning Lessee',
+            'returning lessee',
         ],
         'responder' => [
             'first responder',
