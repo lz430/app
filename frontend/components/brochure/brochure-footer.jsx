@@ -1,8 +1,5 @@
 import React from 'react';
-import { NavLink } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import Link from 'next/link';
 
 export default class Header extends React.PureComponent {
     state = {
