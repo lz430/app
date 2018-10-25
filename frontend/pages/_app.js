@@ -12,8 +12,12 @@ import { PersistGate } from 'redux-persist/integration/react';
 import OptinMonster from '../components/OptinMonster';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGhost } from '@fortawesome/free-solid-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { fas } from '@fortawesome/pro-solid-svg-icons';
+import { far } from '@fortawesome/pro-regular-svg-icons';
+import { fal } from '@fortawesome/pro-light-svg-icons';
+
+library.add(fab, fas, far, fal);
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 

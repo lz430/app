@@ -1,6 +1,6 @@
 import React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NavLink } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import Link from 'next/link';
 
@@ -21,7 +21,11 @@ export default class Header extends React.PureComponent {
                             />
                         </div>
                         <div className="col">
-                            <FontAwesomeIcon icon="facoffee" />
+                            <FontAwesomeIcon icon={['fab', 'apple']} />
+                            <FontAwesomeIcon icon={['fab', 'microsoft']} />
+                            <FontAwesomeIcon icon={['fab', 'google']} />
+                            <FontAwesomeIcon icon={['fal', 'utensils']} />
+                            <FontAwesomeIcon icon={['fas', 'car']} />
                         </div>
                     </div>
                 </div>
