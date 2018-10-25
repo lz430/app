@@ -4,6 +4,8 @@
     height: 80px;
     display: flex;
     justify-content: center;
+    position: fixed;
+    width: 100%;
 
     .navbar {
         border-bottom: 0 none;
@@ -11,7 +13,7 @@
         max-width: $break-extra-large;
         margin: 0 auto;
 
-        @media screen and (max-width: $break-medium) {
+        @media screen and (max-width: $break-large) {
             align-content: space-between;
             padding: 0;
         }
@@ -21,7 +23,7 @@
             }
         }
 
-        @media screen and (max-width: $break-medium) {
+        @media screen and (max-width: $break-large) {
             .navbar-toggler {
                 background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(0, 0, 0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
                 background-repeat: no-repeat;
@@ -54,7 +56,7 @@
             .navbar-nav {
                 display: flex;
                 text-align: right;
-                @media screen and (max-width: $break-medium) {
+                @media screen and (max-width: $break-large) {
                     .nav-item {
                         background: $color-background-primary;
                         border-bottom: 1px solid #ccc;
@@ -72,3 +74,128 @@
         }
     }
 } //end brochure-header
+
+.brochure-footer {
+    background: #213a59;
+    color: $color-text-white;
+    padding-top: 30px;
+
+    .container-fluid {
+        max-width: $break-extra-large;
+    }
+    .row {
+        justify-content: space-between;
+
+        &:first-of-type {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        &:last-of-type {
+            padding-bottom: 25px;
+        }
+        @media only screen and (max-width: $break-medium) {
+            padding: 0 15px;
+        }
+        @media only screen and (max-width: $break-small) {
+            div[class^='col'] {
+                flex: 0 0 100%;
+                max-width: 100%;
+                padding: 0;
+            }
+            &:last-of-type {
+                ul {
+                    li:last-of-type {
+                        margin-top: 15px;
+                        text-align: center;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    img {
+        max-width: 25%;
+        margin-bottom: 10px;
+
+        @media screen and (max-width: $break-medium) {
+            max-width: 50%;
+        }
+    }
+    ul {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 0.8rem;
+
+        @media screen and (max-width: $break-small) {
+            flex-wrap: wrap;
+        }
+
+        &.footer-nav {
+            width: 75%;
+            @media screen and (min-width: $break-medium) {
+                max-width: 50%;
+            }
+            @media screen and (max-width: $break-small) {
+                width: 100%;
+            }
+        }
+    }
+    a {
+        color: $color-text-white;
+        font-size: 0.8rem;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    @media screen and (min-width: $break-medium) {
+        .col-9 {
+            max-width: 50%;
+        }
+    }
+    .contact {
+        display: flex;
+        flex-direction: column;
+
+        @media screen and (max-width: $break-small) {
+            margin-top: 15px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 25px;
+
+            @media screen and (max-width: $break-small) {
+                margin-bottom: 5px;
+            }
+        }
+        a {
+            display: block;
+            margin-bottom: 10px;
+        }
+    }
+    .social {
+        display: flex;
+        justify-content: space-between;
+
+        @media screen and (min-width: $break-large) {
+            padding-right: 0;
+        }
+        @media screen and (min-width: $break-medium) {
+            max-width: 10%;
+        }
+        @media screen and (max-width: $break-small) {
+            justify-content: space-around;
+            margin-top: 20px;
+
+            & > svg {
+                height: 1.3rem;
+                width: 1.3rem;
+            }
+        }
+    }
+} //end brochure-footer

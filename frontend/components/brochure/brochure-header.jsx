@@ -23,7 +23,7 @@ export default class Header extends React.PureComponent {
     render() {
         return (
             <header className="brochure-header">
-                <Navbar expand="md">
+                <Navbar expand="lg">
                     <NavbarBrand href="/">
                         <img
                             alt="Deliver My Ride"
