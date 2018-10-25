@@ -60,6 +60,12 @@ app.prepare()
             app.render(req, res, actualPage, queryParams);
         });
 
+        server.get('/trade-in', (req, res) => {
+            const actualPage = '/trade-in';
+            const queryParams = { ...req.query };
+            app.render(req, res, actualPage, queryParams);
+        });
+
         //
         // Brochure Site
         // Note: Temp prefix with /brochure... will rename all the routes when we go live.
