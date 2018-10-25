@@ -54,6 +54,7 @@ class VersionToVehicle
 
             // Jeep
             'All-New Wrangler Unlimited' => 'Wrangler Unlimited',
+            'All-New Wrangler' => 'Wrangler',
         ],
 
         'BY_MODEL_AND_TRIM' => [
@@ -714,7 +715,6 @@ class VersionToVehicle
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DISPLACEMENT', [$params['displacement']]);
         }
-
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
         });
