@@ -245,6 +245,7 @@ class VersionMunger
         try {
             $data = $this->jatoClient->version->get($vehicleId);
         } catch (ClientException $e) {
+
             print($e->getMessage());
         }
         return $data;
@@ -262,6 +263,11 @@ class VersionMunger
     private function create(): ?Version
     {
         $data = $this->getJatoVersion($this->jatoVersion->vehicle_ID);
+
+        if (!$data) {
+            return null;
+        }
+
         $manufacturer = $this->manufacturer($this->decodedVin->manufacturer);
         $make = $this->make($this->decodedVin->make, $manufacturer);
         $model = $this->model($this->decodedVin->model, $this->jatoVersion->urlModelName, $make);
