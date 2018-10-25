@@ -224,6 +224,11 @@ class VersionToVehicle
      *  <Make> -> <Model> -> <Trim> -> <Name>
      */
     private const TRIM_MAP = [
+        'Jeep' => [
+            'Grand Cherokee' => [
+                'Altitude' => '2BZ'
+            ]
+        ],
         'Acura' => [
             'MDX' => [
                 'Base' => '3.5L',
@@ -292,6 +297,7 @@ class VersionToVehicle
         'BY_VERSION_NAME' => [
             'SEL 4WD' => '4WD',
             'Trailhawk 4x4' => '4WD',
+            'Altitude 4WD' => '4WD',
         ],
     ];
 
@@ -668,6 +674,9 @@ class VersionToVehicle
             }
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
+
+
+
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
@@ -681,6 +690,8 @@ class VersionToVehicle
         }
         dd($params);
         */
+
+
 
         // Optional
         // Two vehicles means we've found a lease and a non lease option.

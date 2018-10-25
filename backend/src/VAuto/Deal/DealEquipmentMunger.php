@@ -564,12 +564,11 @@ class DealEquipmentMunger
 
             $feature = Feature::firstOrCreate(
                 [
-                    'title', $color
+                    'title' => $color
                 ],
                 [
                     'is_active' => 1,
                     'slug' => str_slug($color, '-'),
-
                 ]
             );
 
