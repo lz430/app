@@ -54,9 +54,11 @@ class VersionToVehicle
 
             // Jeep
             'All-New Wrangler Unlimited' => 'Wrangler Unlimited',
+            'All-New Wrangler' => 'Wrangler',
         ],
 
         'BY_MODEL_AND_TRIM' => [
+            // BMW
             '2 Series' => [
                 '230i' => '230',
                 'M240i' => 'M240',
@@ -104,6 +106,112 @@ class VersionToVehicle
                     'Cayman S' => '718 Cayman'
                 ]
             ],
+
+            //
+            // Lexus
+            'ES' => [
+                '350' => [
+                    '350' => 'ES 350',
+                    'ES 350' => 'ES 350',
+                ],
+                '300h' => [
+                    'ES 300h' => 'ES 300h',
+                ],
+                '300h Luxury' => [
+                    '300h Luxury' => 'ES 300h',
+                ],
+                '350 Luxury' => [
+                    '350 Luxury' => 'ES 350',
+                ],
+                'F SPORT' => [
+                    'ES 350 F SPORT' => 'ES 350',
+                ]
+            ],
+            'RC' => [
+                'F' => [
+                    'F' => 'RC F',
+                ],
+                '300' => [
+                    '300 AWD' => 'RC 300',
+                ],
+                '350' => [
+                    '350 AWD' => 'RC 350',
+                ],
+            ],
+            'RX' => [
+                '350' => [
+                    '350 AWD' => 'RX 350',
+                    '350L AWD' => 'RX 350l',
+                ],
+                'LUXURY' => [
+                    '350L LUXURY AWD' => 'RX 350l',
+                ],
+                '450h' => [
+                    '450h AWD' => 'RX 450h',
+                ],
+                '450hL LUXURY' => [
+                    '450hL LUXURY AWD' => 'RX 450hL',
+                ],
+                '350 F SPORT' => [
+                    '350 F SPORT AWD' => 'RX 350',
+                ]
+            ],
+            'NX' => [
+                '300' => [
+                    '300 AWD' => 'NX 300',
+                    '300 RWD' => 'NX 300',
+                ],
+                '300h' => [
+                    '300h AWD' => 'NX 300h',
+                ],
+                '300 F SPORT' => [
+                    '300 F SPORT AWD' => 'NX 300',
+                ]
+            ],
+            'IS' => [
+                '300' => [
+                    '300 AWD' => "IS 300",
+                ],
+                '350' => [
+                    '350 AWD' => "IS 350",
+                ],
+            ],
+            'GX' => [
+                'Base' => [
+                    '460' => "GX 460",
+                ],
+                'LUXURY' => [
+                    '460 LUXURY' => "GX 460",
+                ],
+            ],
+            'GS' => [
+                'F' => [
+                    'F' => 'GS F',
+                ],
+                '350' => [
+                    '350 F SPORT AWD' => 'GS 350',
+                ]
+            ],
+            'LC' => [
+                '500' => [
+                    '500' => "LC 500",
+                ],
+            ],
+            'LS' => [
+                'Base' => [
+                    '500 AWD' => 'LS 500',
+                    '500 F SPORT AWD' => 'LS 500',
+                ],
+                '500h' => [
+                    '500h AWD' => "LS 500h",
+                ],
+            ],
+            'LX' => [
+                '570' => [
+                    '570 THREE-ROW' => "LX 570",
+                    '570 TWO-ROW' => "LX 570",
+                ],
+            ],
         ],
     ];
 
@@ -117,6 +225,12 @@ class VersionToVehicle
      *  <Make> -> <Model> -> <Trim> -> <Name>
      */
     private const TRIM_MAP = [
+        'Jeep' => [
+            'Grand Cherokee' => [
+                'Altitude' => '2BZ',
+                'High Altitude' => '2BS'
+            ]
+        ],
         'Acura' => [
             'MDX' => [
                 'Base' => '3.5L',
@@ -185,6 +299,10 @@ class VersionToVehicle
         'BY_VERSION_NAME' => [
             'SEL 4WD' => '4WD',
             'Trailhawk 4x4' => '4WD',
+            'Altitude 4WD' => '4WD',
+            'High Altitude 4WD' => '4WD',
+            'Limited 4x4' => '4WD',
+            'Latitude 4x4' => '4WD',
         ],
     ];
 
@@ -321,7 +439,6 @@ class VersionToVehicle
 
     private function translateModel(): string
     {
-
         //
         // TODO: Refactor this
         if (in_array($this->version->model->make->name, self::MAKES_USE_TRIM_FOR_MODEL)) {
@@ -434,7 +551,6 @@ class VersionToVehicle
             'cab' => $this->version->cab ? $this->translateCab() : null,
             'transmission' => $this->translateTransmission(),
             'displacement' => $this->translateDisplacement(),
-
         ];
 
         $codes = explode("-", str_replace(['/'], '-', $this->version->manufacturer_code));
@@ -564,14 +680,20 @@ class VersionToVehicle
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
+
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
 
+        /*
+        foreach($vehicles as $vehicle) {
+            print_r($vehicle);
+        }
+        dd($params);
+        */
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-
 
         /*
         foreach($vehicles as $vehicle) {
@@ -593,7 +715,6 @@ class VersionToVehicle
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DISPLACEMENT', [$params['displacement']]);
         }
-
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
         });
@@ -711,6 +832,109 @@ class VersionToVehicle
         }
     }
 
+    /**
+     * @param \stdClass $data
+     * @param \stdClass $vehicle
+     * @return \stdClass
+     */
+    private function buildCashRates(\stdClass $data, \stdClass $vehicle): \stdClass
+    {
+        $data->rate = 0;
+        $data->term = 0;
+
+        if (isset($vehicle->scenarios['Cash - Bank APR'])) {
+            $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+        } else {
+            $data->rebate = 0;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param \stdClass $data
+     * @param \stdClass $vehicle
+     * @return \stdClass
+     */
+    private function buildFinancingRates(\stdClass $data, \stdClass $vehicle): \stdClass
+    {
+        $data->rate = 5;
+        $data->term = 60;
+
+        if (isset($vehicle->scenarios['Cash - Bank APR'])) {
+            $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+        } else {
+            $data->rebate = 0;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param \stdClass $data
+     * @param \stdClass $vehicle
+     * @return \stdClass
+     */
+    private function buildLeaseRates(\stdClass $data, \stdClass $vehicle): \stdClass
+    {
+
+        $scenario = null;
+
+        if (isset($vehicle->scenarios['Manufacturer - Lease Special']) && isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
+            $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
+        } elseif (isset($vehicle->scenarios['Affiliate - Lease Special']) && isset($vehicle->scenarios['Affiliate - Lease Special']->programs[0])) {
+            $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
+        }
+
+        $data->rate = 0;
+        $data->term = 0;
+        $data->rebate = 0;
+        $data->residual = null;
+        $data->miles = null;
+        $data->rateType = null;
+
+        if (!$scenario) {
+            return $data;
+        }
+
+        if (!count($scenario->programs)) {
+            return $data;
+        }
+
+        $program = end($scenario->programs);
+
+        if (isset($program->consumerCash)) {
+            $data->rebate = $program->consumerCash->totalConsumerCash;
+        } else {
+            $data->rebate = 0;
+        }
+
+        $terms = collect($program->tiers[0]->leaseTerms)
+            ->reject(function($term) {
+                return !isset($term->adjRate) || !$term->adjRate || !is_numeric($term->adjRate);
+            })->all();
+
+        if (!count($terms)) {
+            return $data;
+        }
+
+        $data->rateType = $program->rateType;
+        $data->term = get_closet_number(array_keys($terms), 36);
+        $data->rate =$terms[$data->term]->adjRate;
+
+        if (isset($terms[$data->term]->ccrCash)) {
+            $data->rebate += $terms[$data->term]->ccrCash->totalCCR;
+        }
+
+        $data->miles = get_closet_number(array_keys($program->residuals), 10000);
+
+        if (isset($program->residuals[$data->miles]->termValues[$data->term])) {
+            $data->residual = $program->residuals[$data->miles]->termValues[$data->term]->percentage;
+        }
+
+        return $data;
+    }
+
     private function selectRates()
     {
         foreach ($this->selected as $strategy => $vehicle) {
@@ -727,82 +951,13 @@ class VersionToVehicle
 
             switch ($strategy) {
                 case 'cash':
-                    $data->rate = 0;
-                    $data->term = 0;
-                    if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-                        $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
-                    } else {
-                        $data->rebate = 0;
-                    }
+                    $data = $this->buildCashRates($data, $vehicle);
                     break;
-
-                //
-                // TODO: include special financing rates?
                 case 'finance':
-                    $data->rate = 4;
-                    $data->term = 60;
-
-                    if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-                        $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
-                    } else {
-                        $data->rebate = 0;
-                    }
+                    $data = $this->buildFinancingRates($data, $vehicle);
                     break;
                 case 'lease':
-                    $scenario = null;
-
-                    if (isset($vehicle->scenarios['Manufacturer - Lease Special']) && isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
-                        $scenario = $vehicle->scenarios['Manufacturer - Lease Special'];
-                    } elseif (isset($vehicle->scenarios['Affiliate - Lease Special']) && isset($vehicle->scenarios['Affiliate - Lease Special']->programs[0])) {
-                        $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
-                    }
-
-
-                    if ($scenario) {
-                        if (count($scenario->programs)) {
-                            $program = end($scenario->programs);
-
-                            if (isset($program->consumerCash)) {
-                                $data->rebate = $program->consumerCash->totalConsumerCash;
-                            } else {
-                                $data->rebate = 0;
-                            }
-
-                            $data->rateType = $program->rateType;
-                            $data->term = get_closet_number(array_keys($program->tiers[0]->leaseTerms), 36);
-                            $data->rate = $program->tiers[0]->leaseTerms[$data->term]->adjRate;
-
-                            if (isset($program->tiers[0]->leaseTerms[$data->term]->ccrCash)) {
-                                $data->rebate += $program->tiers[0]->leaseTerms[$data->term]->ccrCash->totalCCR;
-                            }
-
-                            $data->miles = get_closet_number(array_keys($program->residuals), 10000);
-
-                            if (isset($program->residuals[$data->miles]->termValues[$data->term])) {
-                                $data->residual = $program->residuals[$data->miles]->termValues[$data->term]->percentage;
-                            } else {
-                                $data->rate = 0;
-                                $data->term = 0;
-                                $data->rebate = 0;
-                                $data->residual = null;
-                                $data->miles = null;
-                                $data->rateType = null;
-                            }
-                        } else {
-                            $data->rate = 0;
-                            $data->term = 0;
-                            $data->rebate = 0;
-                            $data->residual = null;
-                            $data->miles = null;
-                            $data->rateType = null;
-                        }
-
-
-                    } else {
-                        $data->rate = 0;
-                        $data->term = 0;
-                        $data->rebate = 0;
-                    }
+                    $data = $this->buildLeaseRates($data, $vehicle);
                     break;
             }
             $data->data = $vehicle;

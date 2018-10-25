@@ -1,6 +1,7 @@
 import Pricing from './Pricing';
 import { fromDollarsAndCents, zero } from '../money';
 import * as R from 'ramda';
+import { getClosestNumberInRange } from '../util';
 
 const defaultTerm = 36;
 const defaultAnnualMileage = 10000;
@@ -179,8 +180,7 @@ export default class LeasePricing extends Pricing {
             return defaultTerm;
         }
 
-        // Return the first lease term available.
-        return termsAvailable[0];
+        return getClosestNumberInRange(36, termsAvailable);
     };
 
     calculateDefaultAnnualMileage = () => {

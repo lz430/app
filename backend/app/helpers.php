@@ -28,6 +28,8 @@ if (!function_exists('generate_asset_url')) {
             'auto' => 'compress,format'
         ];
 
+        $params['w'] = 800;
+
         if ($size == 'thumbnail') {
             $params['w'] = 300;
             $params['h'] = 300;
