@@ -16,8 +16,9 @@ class KbbIframe extends Component {
     }
 
     handleFrameTasks = e => {
-        console.log(e);
-        this.setState({ results: JSON.parse(e.data) });
+        if (typeof e.data === 'string') {
+            this.setState({ results: JSON.parse(e.data) });
+        }
     };
 
     render() {
