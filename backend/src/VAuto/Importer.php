@@ -408,7 +408,6 @@ class Importer
                 'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
             ]
         ];
-        dd($data);
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
 
