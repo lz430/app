@@ -34,7 +34,7 @@ export default class Header extends React.PureComponent {
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <Link
-                                    href="/how-it-works"
+                                    href="/brochure/how-it-works"
                                     as="/brochure/how-it-works"
                                     passHref
                                 >
@@ -43,7 +43,7 @@ export default class Header extends React.PureComponent {
                             </NavItem>
                             <NavItem>
                                 <Link
-                                    href="/about"
+                                    href="/brochure/about"
                                     as="/brochure/about"
                                     passHref
                                 >
@@ -52,7 +52,7 @@ export default class Header extends React.PureComponent {
                             </NavItem>
                             <NavItem>
                                 <Link
-                                    href="/contact"
+                                    href="/brochure/contact"
                                     as="/brochure/contact"
                                     passHref
                                 >

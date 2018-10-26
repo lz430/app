@@ -39,7 +39,12 @@ class MyApp extends App {
     /**
      * @type {string[]}
      */
-    brochureSiteRoutes = ['/home'];
+    brochureSiteRoutes = [
+        '/home',
+        '/brochure/contact',
+        '/brochure/about',
+        '/brochure/how-it-works',
+    ];
 
     constructor(...args) {
         super(...args);
