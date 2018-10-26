@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
+use App\Models\Category;
 use App\Models\Feature;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
@@ -560,9 +561,9 @@ class DealEquipmentMunger
     {
         $features = [];
         if(isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
+            $category = Category::where('slug', '=', 'vehicle_color')->first();
             $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
-
-            $feature = Feature::firstOrCreate(
+            $feature = $category->features()->firstOrCreate(
                 [
                     'title' => $color
                 ],
