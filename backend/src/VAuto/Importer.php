@@ -399,7 +399,8 @@ class Importer
                 'Deals Updated' => $this->debug['dealsUpdated'],
                 'Deal Photos Refreshed' => $this->debug['dealPhotosRefreshed'],
                 'Deal Stock Photos Found' => $this->debug['dealStockPhotos'],
-                'Skipped' => $this->debug['skipped'],
+                'Deals Skipped' => $this->debug['skipped'],
+                'Deals Set to Sold' => $queryUpdateSold->count(),
                 'Versions Created' => $this->debug['versionsCreated'],
                 'Versions Updated' => $this->debug['versionsUpdated'],
                 'Version Photos Updated' => $this->debug['versionPhotosUpdated'],
@@ -408,6 +409,7 @@ class Importer
                 'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
             ]
         ];
+        dd($data);
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
 
