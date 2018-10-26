@@ -312,7 +312,7 @@ class VersionMunger
         $version->photos()->where('type', 'default')->delete();
 
         if(count($assets) > 0) {
-            $this->debug['versionPhotos'];
+            $this->debug['versionPhotos'] = 1;
         }
 
         foreach ($assets as $asset) {
