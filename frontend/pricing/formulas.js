@@ -11,7 +11,7 @@ const formulas = {
      * @return float|int
      */
     calculateFinancedMonthlyPayments: (price, downPayment, term) => {
-        const interestRate = 4;
+        const interestRate = 5;
         const annualInterestRate = interestRate / 1200;
         return Math.round(
             (price - downPayment) *
