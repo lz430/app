@@ -99,11 +99,16 @@ class Importer
 
         $this->debug = [
             'start' => microtime(true),
-            'created' => 0,
-            'updated' => 0,
+            'dealsCreated' => 0,
+            'dealsUpdated' => 0,
             'skipped' => 0,
             'erroredVins' => 0,
             'erroredMisc' => 0,
+            'versionsCreated' => 0,
+            'versionsUpdated' => 0,
+            'versionPhotosUpdated' => 0,
+            'dealPhotosRefreshed' => 0,
+            'dealStockPhotos' => 0,
         ];
     }
 
@@ -213,6 +218,10 @@ class Importer
             list($version, $versionDebugData) = (new VersionMunger($this->jatoClient))->build($row);
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
+            if(isset($versionDebugData['versionPhotos'])) {
+                $this->debug['versionPhotosUpdated']++;
+            }
+
             //
             // Fail if we don't have a version
             if (!$version) {
@@ -224,12 +233,18 @@ class Importer
                 return;
             }
 
+            if ($version->wasRecentlyCreated) {
+                $this->debug['versionsCreated']++;
+            } else {
+                $this->debug['versionsUpdated']++;
+            }
+
             $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
 
             if ($deal->wasRecentlyCreated) {
-                $this->debug['created']++;
+                $this->debug['dealsCreated']++;
             } else {
-                $this->debug['updated']++;
+                $this->debug['dealsUpdated']++;
             }
 
             $this->info("    -- Version Options: {$versionDebugData['possible_versions']}");
@@ -264,6 +279,14 @@ class Importer
                 $this->info("    -- Photos: Refreshed?: {$debug['deal_photos_refreshed']}");
                 $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
                 $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
+
+                if($debug['deal_photos_refreshed'] == "Yes") {
+                    $this->debug['dealPhotosRefreshed']++;
+                }
+
+                if($debug['stock_photos'] > 0) {
+                    $this->debug['dealStockPhotos']++;
+                }
 
             });
 
@@ -340,8 +363,8 @@ class Importer
         
         $this->info("RESULTS ::::");
 
-        $this->info(" -- Created Deals: " . $this->debug['created']);
-        $this->info(" -- Updated Deals: " . $this->debug['updated']);
+        $this->info(" -- Created Deals: " . $this->debug['dealsCreated']);
+        $this->info(" -- Updated Deals: " . $this->debug['dealsUpdated']);
         $this->info(" -- Skipped Deals: " . $this->debug['skipped']);
 
         $queryToDelete = Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases');
@@ -372,9 +395,15 @@ class Importer
             'fields' => [
                 'Import File Created' => date("F d Y g:ia", filemtime($source['path'])),
                 'Environment' => config('app.env'),
-                'Created' => $this->debug['created'],
-                'Updated' => $this->debug['updated'],
-                'Skipped' => $this->debug['skipped'],
+                'Deals Created' => $this->debug['dealsCreated'],
+                'Deals Updated' => $this->debug['dealsUpdated'],
+                'Deal Photos Refreshed' => $this->debug['dealPhotosRefreshed'],
+                'Deal Stock Photos Found' => $this->debug['dealStockPhotos'],
+                'Deals Skipped' => $this->debug['skipped'],
+                'Deals Set to Sold' => $queryUpdateSold->count(),
+                'Versions Created' => $this->debug['versionsCreated'],
+                'Versions Updated' => $this->debug['versionsUpdated'],
+                'Version Photos Updated' => $this->debug['versionPhotosUpdated'],
                 'Deal Errors No VINS' => $this->debug['erroredVins'],
                 'Misc Errors' => $this->debug['erroredMisc'],
                 'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
