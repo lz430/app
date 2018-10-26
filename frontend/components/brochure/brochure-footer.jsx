@@ -1,5 +1,8 @@
 import React from 'react';
+import { NavItem, NavLink } from 'reactstrap';
+import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import LogoFooter from '../../static/images/dmr-logo-footer.svg';
 
 export default class Header extends React.PureComponent {
     state = {
@@ -12,46 +15,102 @@ export default class Header extends React.PureComponent {
                 <div className="container-fluid">
                     <div className="row border-bottom">
                         <div className="col-8 ">
-                            <img
-                                alt="Deliver My Ride"
-                                src="/static/images/dmr-logo-footer.svg"
-                            />
+                            <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
-                                <li>
-                                    <a href="/how-it-works">How It Works</a>
-                                </li>
-                                <li>
-                                    <a href="/about">About</a>
-                                </li>
-                                <li>
-                                    <a href="/faq">FAQ</a>
-                                </li>
-                                <li>
-                                    <a href="/accupricing">AccuPricing</a>
-                                </li>
-                                <li>
-                                    <a href="/blog">Blog</a>
-                                </li>
+                                <NavItem>
+                                    <Link
+                                        href="/how-it-works"
+                                        as="/brochure/how-it-works"
+                                        passHref
+                                    >
+                                        <NavLink>How It Works</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="/about"
+                                        as="/brochure/about"
+                                        passHref
+                                    >
+                                        <NavLink>About</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="/faq"
+                                        as="/brochure/faq"
+                                        passHref
+                                    >
+                                        <NavLink>FAQ</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="/accupricing"
+                                        as="/brochure/accupricing"
+                                        passHref
+                                    >
+                                        <NavLink>AccuPricing</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="/blog"
+                                        as="/brochure/blog"
+                                        passHref
+                                    >
+                                        <NavLink>Blog</NavLink>
+                                    </Link>
+                                </NavItem>
                             </ul>
                         </div>
                         <div className="col-3 contact">
                             <h3>Contact</h3>
-                            <a href="mailto:email@delivermyride.com">
-                                email@delivermyride.com
-                            </a>
-                            <a href="tel:855-675-7301">855-675-7301</a>
-                            <a href="#">Live Chat</a>
+                            <ul>
+                                <NavItem>
+                                    <Link
+                                        href="mailto:support@delivermyride.com"
+                                        passHref
+                                    >
+                                        <NavLink>
+                                            support@delivermyride.com
+                                        </NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link href="tel:855-675-7301" passHref>
+                                        <NavLink>855-675-7301</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link href="#hs-chat-open" passHref>
+                                        <NavLink>Live Chat</NavLink>
+                                    </Link>
+                                </NavItem>
+                            </ul>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-9">
                             <ul>
-                                <li>
-                                    <a href="#">Terms of Use</a>
-                                </li>
-                                <li>
-                                    <a href="#">Privacy Policy</a>
-                                </li>
+                                <NavItem>
+                                    <Link
+                                        href="/terms"
+                                        as="/brochure/terms"
+                                        passHref
+                                    >
+                                        <NavLink>Terms of Use</NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="/privacy"
+                                        as="/brochure/privacy"
+                                        passHref
+                                    >
+                                        <NavLink>Privacy Policy</NavLink>
+                                    </Link>
+                                </NavItem>
                                 <li>
                                     &copy; 2018 Deliver My Ride. All Rights
                                     Reserved.
@@ -59,9 +118,47 @@ export default class Header extends React.PureComponent {
                             </ul>
                         </div>
                         <div className="col-3 social">
-                            <FontAwesomeIcon icon={['fab', 'facebook']} />
-                            <FontAwesomeIcon icon={['fab', 'twitter']} />
-                            <FontAwesomeIcon icon={['fab', 'instagram']} />
+                            <ul>
+                                <NavItem>
+                                    <Link
+                                        href="https://www.facebook.com/DeliverMyRide/"
+                                        passHref
+                                        target="blank"
+                                    >
+                                        <NavLink>
+                                            <FontAwesomeIcon
+                                                icon={['fab', 'facebook']}
+                                            />
+                                        </NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="https://twitter.com/Delivermyride1"
+                                        passHref
+                                        target="blank"
+                                    >
+                                        <NavLink>
+                                            <FontAwesomeIcon
+                                                icon={['fab', 'twitter']}
+                                            />
+                                        </NavLink>
+                                    </Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link
+                                        href="https://www.instagram.com/delivermyride/"
+                                        passHref
+                                        target="_blank"
+                                    >
+                                        <NavLink>
+                                            <FontAwesomeIcon
+                                                icon={['fab', 'instagram']}
+                                            />
+                                        </NavLink>
+                                    </Link>
+                                </NavItem>
+                            </ul>
                         </div>
                     </div>
                 </div>

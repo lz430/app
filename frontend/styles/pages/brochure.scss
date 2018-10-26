@@ -13,17 +13,23 @@
         max-width: $break-extra-large;
         margin: 0 auto;
 
-        @media screen and (max-width: $break-large) {
+        @include media-breakpoint-down(lg) {
             align-content: space-between;
             padding: 0;
         }
         .navbar-brand {
-            img {
+            #DMRLogo {
                 height: 70px;
+                .st0 {
+                    fill: #231f20;
+                }
+                .st1 {
+                    fill: #51a39d;
+                }
             }
         }
 
-        @media screen and (max-width: $break-large) {
+        @include media-breakpoint-down(lg) {
             .navbar-toggler {
                 background-image: url("data:image/svg+xml;charset=utf8,<svg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'><path stroke='rgba(0, 0, 0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/></svg>");
                 background-repeat: no-repeat;
@@ -56,7 +62,10 @@
             .navbar-nav {
                 display: flex;
                 text-align: right;
-                @media screen and (max-width: $break-large) {
+                @include media-breakpoint-down(md) {
+                    background: $color-background-primary;
+                    padding-bottom: 1rem;
+
                     .nav-item {
                         background: $color-background-primary;
                         border-bottom: 1px solid #ccc;
@@ -93,18 +102,18 @@
         &:last-of-type {
             padding-bottom: 25px;
         }
-        @media only screen and (max-width: $break-medium) {
-            padding: 0 15px;
+        @include media-breakpoint-down(md) {
+            padding: 0;
         }
-        @media only screen and (max-width: $break-small) {
-            div[class^='col'] {
-                flex: 0 0 100%;
-                max-width: 100%;
-                padding: 0;
-            }
+        @include media-breakpoint-down(sm) {
+            margin: 0;
+            max-width: 100%;
+
             &:last-of-type {
                 ul {
-                    li:last-of-type {
+                    justify-content: flex-start;
+
+                    li {
                         margin-top: 15px;
                         text-align: center;
                         width: 100%;
@@ -118,8 +127,8 @@
         max-width: 25%;
         margin-bottom: 10px;
 
-        @media screen and (max-width: $break-medium) {
-            max-width: 50%;
+        @include media-breakpoint-down(md) {
+            max-width: 100%;
         }
     }
     ul {
@@ -130,46 +139,88 @@
         padding: 0;
         font-size: 0.8rem;
 
-        @media screen and (max-width: $break-small) {
+        @include media-breakpoint-down(sm) {
             flex-wrap: wrap;
         }
 
         &.footer-nav {
             width: 75%;
-            @media screen and (min-width: $break-medium) {
-                max-width: 50%;
+            @include media-breakpoint-up(md) {
+                // max-width: 50%;
             }
-            @media screen and (max-width: $break-small) {
+            @include media-breakpoint-down(sm) {
                 width: 100%;
+                margin-top: 25px;
+
+                li {
+                    padding: 5px 0;
+                    width: 100%;
+                }
+            }
+            @include media-breakpoint-up(sm) {
+                li {
+                    padding: 0 5px;
+                }
             }
         }
     }
     a {
         color: $color-text-white;
         font-size: 0.8rem;
+        padding: 0;
 
         &:hover {
             text-decoration: none;
         }
     }
-    @media screen and (min-width: $break-medium) {
+    @include media-breakpoint-up(md) {
         .col-9 {
             max-width: 50%;
+        }
+    }
+    @include media-breakpoint-down(md) {
+        .col-9 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+    @include media-breakpoint-down(sm) {
+        .col-8 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    @include media-breakpoint-down(xs) {
+        .col-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0;
         }
     }
     .contact {
         display: flex;
         flex-direction: column;
 
-        @media screen and (max-width: $break-small) {
-            margin-top: 15px;
+        ul {
+            display: flex;
+            flex-direction: column;
+        }
+        @include media-breakpoint-down(sm) {
+            margin-top: 62px;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        @include media-breakpoint-down(xs) {
+            margin-top: 25px;
+            padding: 0;
         }
 
         h3 {
             font-size: 1rem;
             margin-bottom: 25px;
 
-            @media screen and (max-width: $break-small) {
+            @include media-breakpoint-down(sm) {
                 margin-bottom: 5px;
             }
         }
@@ -182,19 +233,39 @@
         display: flex;
         justify-content: space-between;
 
-        @media screen and (min-width: $break-large) {
+        @include media-breakpoint-up(lg) {
             padding-right: 0;
         }
-        @media screen and (min-width: $break-medium) {
+        @include media-breakpoint-up(md) {
             max-width: 10%;
         }
-        @media screen and (max-width: $break-small) {
-            justify-content: space-around;
+        @include media-breakpoint-down(md) {
+            max-width: 15%;
             margin-top: 20px;
+            flex: 0 0 15%;
+            width: 15%;
+        }
+        @include media-breakpoint-down(sm) {
+            justify-content: space-around;
+            margin-top: 30px;
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
 
-            & > svg {
-                height: 1.3rem;
-                width: 1.3rem;
+        ul {
+            @include media-breakpoint-up(sm) {
+                width: 100%;
+            }
+            @include media-breakpoint-down(sm) {
+                flex-wrap: nowrap;
+                width: 100%;
+                svg {
+                    height: 1.3rem;
+                    width: 1.3rem;
+                }
+            }
+            a {
+                font-size: 1rem;
             }
         }
     }
