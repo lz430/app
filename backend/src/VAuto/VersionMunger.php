@@ -307,8 +307,13 @@ class VersionMunger
      */
     private function photos(Version $version)
     {
+        $this->debug['versionPhotos'] = 0;
         $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($version);
-        $version->photos()->where('color', 'default')->delete();
+        $version->photos()->where('type', 'default')->delete();
+
+        if(count($assets) > 0) {
+            $this->debug['versionPhotos'];
+        }
 
         foreach ($assets as $asset) {
             $version->photos()->updateOrCreate(
