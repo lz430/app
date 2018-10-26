@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 
 import Link from 'next/link';
+import LogoHeader from '../../static/images/dmr-logo.svg';
 
 export default class Header extends React.PureComponent {
     state = {
@@ -23,12 +24,9 @@ export default class Header extends React.PureComponent {
     render() {
         return (
             <header className="brochure-header">
-                <Navbar expand="md">
+                <Navbar expand="lg">
                     <NavbarBrand href="/">
-                        <img
-                            alt="Deliver My Ride"
-                            src="/static/images/dmr-logo.svg"
-                        />
+                        <LogoHeader alt="Deliver My Ride" />
                     </NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavbar} className="" />
 

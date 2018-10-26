@@ -7,6 +7,7 @@ import BrochureHeader from '../brochure/brochure-header.jsx';
 
 import { LargeAndUp } from '../Responsive';
 import Footer from './Footer';
+import BrochureFooter from '../brochure/brochure-footer.jsx';
 
 class App extends React.Component {
     static propTypes = {
@@ -33,6 +34,9 @@ class App extends React.Component {
      * @returns {*}
      */
     renderFooter() {
+        if (this.props.isBrochureSite) {
+            return <BrochureFooter />;
+        }
         if (this.props.desktopOnlyFooter) {
             return (
                 <LargeAndUp>
