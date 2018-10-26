@@ -38,6 +38,12 @@ class CategoryCrudController extends CrudController
             'type'  => 'text',
         ]);
 
+        $this->crud->addField([
+            'name'  => 'slug',
+            'label' => 'Slug',
+            'type'  => 'text',
+        ]);
+
         //
         // LIST
         $this->crud->addColumn([
