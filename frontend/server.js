@@ -20,73 +20,61 @@ app.prepare()
         //
         // Application Routes
         server.get('/', (req, res) => {
-            const actualPage = '/index';
-            app.render(req, res, actualPage, req.query);
+            app.render(req, res, '/index', req.query);
         });
 
         server.get('/filter', (req, res) => {
-            const actualPage = '/deal-list';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/deal-list', queryParams);
         });
 
         server.get('/deals/:id', (req, res) => {
-            const actualPage = '/deal-detail';
             const queryParams = { id: req.params.id };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/deal-detail', queryParams);
         });
 
         server.get('/checkout/contact', (req, res) => {
-            const actualPage = '/checkout-contact';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/checkout-contact', queryParams);
         });
 
         server.get('/checkout/financing', (req, res) => {
-            const actualPage = '/checkout-financing';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/checkout-financing', queryParams);
         });
 
         server.get('/checkout/complete', (req, res) => {
-            const actualPage = '/checkout-complete';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/checkout-complete', queryParams);
         });
 
         server.get('/compare', (req, res) => {
-            const actualPage = '/compare';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/compare', queryParams);
         });
 
         server.get('/trade-in', (req, res) => {
-            const actualPage = '/trade-in';
             const queryParams = { ...req.query };
-            app.render(req, res, actualPage, queryParams);
+            app.render(req, res, '/trade-in', queryParams);
         });
 
         //
         // Brochure Site
         // Note: Temp prefix with /brochure... will rename all the routes when we go live.
         server.get('/brochure', (req, res) => {
-            const actualPage = '/home';
-            app.render(req, res, actualPage, req.query);
+            app.render(req, res, '/home', req.query);
         });
 
         server.get('/brochure/how-it-works', (req, res) => {
-            const actualPage = '/how-it-works';
-            app.render(req, res, actualPage, req.query);
+            app.render(req, res, '/how-it-works', req.query);
         });
 
         server.get('/brochure/faq', (req, res) => {
-            const actualPage = '/faq';
-            app.render(req, res, actualPage, req.query);
+            app.render(req, res, '/faq', req.query);
         });
 
         server.get('/brochure/contact', (req, res) => {
-            const actualPage = '/contact';
-            app.render(req, res, actualPage, req.query);
+            app.render(req, res, '/contact', req.query);
         });
 
         server.get('*', (req, res) => {

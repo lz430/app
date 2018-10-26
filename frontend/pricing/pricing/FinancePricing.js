@@ -52,7 +52,7 @@ export default class FinancePricing extends Pricing {
          * n = Term (Period or no.of year or months for loan repayment.)
          */
 
-        const annualInterestRate = 4;
+        const annualInterestRate = 5;
 
         const P = this.yourPrice().subtract(this.downPayment());
         const r = annualInterestRate / 1200;
