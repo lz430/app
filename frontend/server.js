@@ -73,6 +73,10 @@ app.prepare()
             app.render(req, res, '/brochure/faq', req.query);
         });
 
+        server.get('/brochure/about', (req, res) => {
+            app.render(req, res, '/brochure/about', req.query);
+        });
+
         server.get('/brochure/contact', (req, res) => {
             app.render(req, res, '/brochure/contact', req.query);
         });

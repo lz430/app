@@ -58,7 +58,7 @@ class App extends React.Component {
                 <div
                     className="app-content-wrapper"
                     style={{
-                        marginTop: this.props.isBrochureSite ? '86px' : '67px',
+                        marginTop: this.props.isBrochureSite ? '81px' : '67px',
                     }}
                 >
                     <div className="app-content">{this.props.children}</div>

@@ -10,6 +10,8 @@ import {
     Label,
     Input,
 } from 'reactstrap';
+
+import { faArrowRight } from '@fortawesome/pro-light-svg-icons/faArrowRight';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class extends React.Component {
@@ -28,6 +30,7 @@ export default class extends React.Component {
                     <Col xl={4}>
                         <div>
                             <img
+                                alt="Deliver My Ride Location"
                                 className="img-fluid"
                                 src="/static/images/about-riker.jpg"
                             />
@@ -110,16 +113,14 @@ export default class extends React.Component {
                                     type="textarea"
                                     name="text"
                                     id="exampleText"
-                                    style={{ height: '100px' }}
+                                    style={{ height: '150px' }}
                                 />
                             </FormGroup>
 
                             <div className="text-right">
                                 <Button color="primary" size="lg">
                                     Submit{' '}
-                                    <FontAwesomeIcon
-                                        icon={['fal', 'arrow-right']}
-                                    />
+                                    <FontAwesomeIcon icon={faArrowRight} />
                                 </Button>
                             </div>
                         </Form>

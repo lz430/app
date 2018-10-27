@@ -89,7 +89,6 @@
     background: #213a59;
     color: $color-text-white;
     padding-top: 30px;
-    margin-top: 30px;
 
     .row {
         justify-content: space-between;
@@ -269,3 +268,17 @@
         }
     }
 } //end brochure-footer
+
+.page-hero {
+    min-height: 420px;
+    background-position: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        font-weight: bold;
+        color: $color-text-white;
+        text-align: center;
+    }
+}
