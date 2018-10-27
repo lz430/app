@@ -14,6 +14,10 @@ export default class MyDocument extends Document {
                     />
                     <meta name="theme-color" content="#41b1ac" />
                     <link rel="shortcut icon" href="/favicon.ico" />
+                    <link
+                        href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
+                        rel="stylesheet"
+                    />
 
                     {config['REACT_APP_ENVIRONMENT'] === 'production' ||
                         (config['REACT_APP_ENVIRONMENT'] === 'staging' && (

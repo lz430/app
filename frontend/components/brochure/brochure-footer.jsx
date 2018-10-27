@@ -12,14 +12,14 @@ export default class Header extends React.PureComponent {
     render() {
         return (
             <footer className="brochure-footer">
-                <div className="container-fluid">
+                <div className="container">
                     <div className="row border-bottom">
                         <div className="col-8 ">
                             <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
                                 <NavItem>
                                     <Link
-                                        href="/how-it-works"
+                                        href="/brochure/how-it-works"
                                         as="/brochure/how-it-works"
                                         passHref
                                     >
@@ -28,7 +28,7 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/about"
+                                        href="/brochure/about"
                                         as="/brochure/about"
                                         passHref
                                     >
@@ -37,7 +37,7 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/faq"
+                                        href="/brochure/faq"
                                         as="/brochure/faq"
                                         passHref
                                     >
@@ -45,22 +45,9 @@ export default class Header extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link
-                                        href="/accupricing"
-                                        as="/brochure/accupricing"
-                                        passHref
-                                    >
-                                        <NavLink>AccuPricing</NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link
-                                        href="/blog"
-                                        as="/brochure/blog"
-                                        passHref
-                                    >
-                                        <NavLink>Blog</NavLink>
-                                    </Link>
+                                    <NavLink href="https://blog.delivermyride.com">
+                                        Blog
+                                    </NavLink>
                                 </NavItem>
                             </ul>
                         </div>

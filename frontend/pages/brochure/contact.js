@@ -27,6 +27,12 @@ export default class extends React.Component {
                 <Row>
                     <Col xl={4}>
                         <div>
+                            <img
+                                className="img-fluid"
+                                src="/static/images/about-riker.jpg"
+                            />
+                        </div>
+                        <div>
                             35 W Huron Street
                             <br />
                             Suite 1000
