@@ -95,8 +95,8 @@ export default class Header extends React.PureComponent {
                             <ul>
                                 <NavItem>
                                     <Link
-                                        href="/terms"
-                                        as="/brochure/terms"
+                                        href="/brochure/terms-of-service"
+                                        as="/brochure/terms-of-service"
                                         passHref
                                     >
                                         <NavLink>Terms of Use</NavLink>
@@ -104,8 +104,8 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/privacy"
-                                        as="/brochure/privacy"
+                                        href="/brochure/privacy-policy"
+                                        as="/brochure/privacy-policy"
                                         passHref
                                     >
                                         <NavLink>Privacy Policy</NavLink>

@@ -44,6 +44,9 @@ class MyApp extends App {
         '/brochure/contact',
         '/brochure/about',
         '/brochure/how-it-works',
+        '/brochure/faq',
+        '/brochure/terms-of-service',
+        '/brochure/privacy-policy',
     ];
 
     constructor(...args) {

@@ -73,8 +73,12 @@ app.prepare()
             app.render(req, res, '/brochure/faq', req.query);
         });
 
-        server.get('/brochure/contact', (req, res) => {
-            app.render(req, res, '/brochure/contact', req.query);
+        server.get('/brochure/privacy-policy', (req, res) => {
+            app.render(req, res, '/brochure/privacy-policy', req.query);
+        });
+
+        server.get('/brochure/terms-of-service', (req, res) => {
+            app.render(req, res, '/brochure/terms-of-service', req.query);
         });
 
         server.get('*', (req, res) => {
