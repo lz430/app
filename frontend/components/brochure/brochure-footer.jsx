@@ -11,11 +11,7 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default class Header extends React.PureComponent {
-    state = {
-        collapsed: false,
-    };
-
+export default class Footer extends React.PureComponent {
     render() {
         return (
             <footer className="brochure-footer">
