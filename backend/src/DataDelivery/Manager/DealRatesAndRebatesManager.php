@@ -373,21 +373,23 @@ class DealRatesAndRebatesManager
             })
             ->first();
 
+
         $miles = null;
-        if (isset($scenario->programs)) {
-            $miles = $scenario->programs[0]->mileages;
-        } else if (isset($scenario->mileages)) {
-            $miles = $scenario->mileages;
-        }
+        if($scenario->DealScenarioType != "Manufacturer - Standard APR") {
+            if (isset($scenario->programs)) {
+                $miles = $scenario->programs[0]->mileages;
+            } else if (isset($scenario->mileages)) {
+                $miles = $scenario->mileages;
+            }
 
-        if ($miles) {
-            $miles = collect($miles)
-                ->reject(function ($mile) {
-                    return $mile->Miles < 7500;
-                })
-                ->all();
+            if ($miles) {
+                $miles = collect($miles)
+                    ->reject(function ($mile) {
+                        return $mile->Miles < 7500;
+                    })
+                    ->all();
+            }
         }
-
         $this->miles = $miles;
     }
 
@@ -552,7 +554,7 @@ class DealRatesAndRebatesManager
             if ($this->isLease) {
                 $this->bestLeaseProgram();
             } else {
-                $this->scenario = 'Cash - Bank APR';
+                $this->scenario = 'Manufacturer - Standard APR';
             }
         }
 
