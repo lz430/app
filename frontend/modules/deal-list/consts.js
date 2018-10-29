@@ -17,3 +17,4 @@ export const SELECT_MODEL_YEAR = `${namespace}_SELECT_MODEL_YEAR`;
 export const RECEIVE_DEALS = `${namespace}_RECEIVE_DEALS`;
 export const MAKE_SELECTOR_MODAL_OPEN = `${namespace}_MAKE_SELECTOR_MODAL_OPEN`;
 export const MAKE_SELECTOR_MODAL_CLOSE = `${namespace}_MAKE_SELECTOR_MODAL_CLOSE`;
+export const SET_SELECTED_MAKE = `${namespace}_SET_SELECTED_MAKE`;

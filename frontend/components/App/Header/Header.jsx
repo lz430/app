@@ -18,9 +18,13 @@ import Location from '../../../icons/zondicons/location.svg';
 import Help from '../../../icons/zondicons/question.svg';
 
 import SearchWidget from './SearchWidget';
-import { headerRequestAutocomplete } from '../../../apps/page/actions';
+import {
+    headerClearAutocompleteResults,
+    headerRequestAutocomplete,
+} from '../../../apps/page/actions';
 import { getSearchQuery } from '../../../modules/deal-list/selectors';
 import { nextRouterType } from '../../../core/types';
+import { setSelectedMake } from '../../../modules/deal-list/actions';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -30,6 +34,8 @@ class Header extends React.PureComponent {
         onSearchForLocation: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
+        onClearSearchResults: PropTypes.func.isRequired,
+        onSetSelectedMake: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
         router: nextRouterType,
@@ -126,7 +132,9 @@ class Header extends React.PureComponent {
 
                 <div className="navbar-text">
                     <SearchWidget
+                        onClearSearchResults={this.props.onClearSearchResults}
                         onRequestSearch={this.props.onRequestSearch}
+                        onSetSelectedMake={this.props.onSetSelectedMake}
                         autocompleteResults={this.props.autocompleteResults}
                         router={this.props.router}
                         searchQuery={this.props.searchQuery}
@@ -165,6 +173,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        onSetSelectedMake: make => {
+            return dispatch(setSelectedMake(make));
+        },
         onSearchForLocation: search => {
             return dispatch(requestLocation(search));
         },
@@ -173,6 +184,9 @@ const mapDispatchToProps = dispatch => {
         },
         onRequestSearch: query => {
             return dispatch(headerRequestAutocomplete(query));
+        },
+        onClearSearchResults: () => {
+            return dispatch(headerClearAutocompleteResults());
         },
     };
 };

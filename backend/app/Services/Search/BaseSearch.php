@@ -65,9 +65,6 @@ abstract class BaseSearch
                 'dealer.is_active' => 1,
             ]],
             ['term' => [
-                'is_active' => true,
-            ]],
-            ['term' => [
                 'status' => 'available',
             ]],
         ],
@@ -416,7 +413,6 @@ abstract class BaseSearch
         ];
         return $this;
     }
-
 
     public function get()
     {

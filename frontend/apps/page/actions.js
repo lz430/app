@@ -32,3 +32,9 @@ export function headerReceiveAutocomplete(data) {
         data: data,
     };
 }
+
+export function headerClearAutocompleteResults() {
+    return {
+        type: ActionTypes.CLEAR_AUTOCOMPLETE,
+    };
+}

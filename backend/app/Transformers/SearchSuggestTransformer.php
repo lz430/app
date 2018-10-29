@@ -56,8 +56,11 @@ class SearchSuggestTransformer extends TransformerAbstract
                 'label' => $item['key'],
                 'count' => $item['doc_count'],
                 'icon' => (isset($item['thumbnail']['buckets'][0]['key']) ? $item['thumbnail']['buckets'][0]['key'] : null),
+
                 'query' => [
                     'entity' => 'deal',
+                    // Hacky fix for frontend issues.
+                    'make' => $item['make']['make']['buckets'][0]['key'],
                     'filters' => [
                         'model:' . $item['model']['model']['buckets'][0]['key'],
                         'make:' . $item['make']['make']['buckets'][0]['key'],
