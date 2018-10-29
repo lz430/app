@@ -19,11 +19,10 @@ export default class MyDocument extends Document {
                         rel="stylesheet"
                     />
 
-                    {config['REACT_APP_ENVIRONMENT'] === 'production' ||
-                        (config['REACT_APP_ENVIRONMENT'] === 'staging' && (
-                            <script
-                                dangerouslySetInnerHTML={{
-                                    __html: `
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                        <script
+                            dangerouslySetInnerHTML={{
+                                __html: `
                           !function(f, b, e, v, n, t, s) {
                             if (f.fbq) return;
                             n = f.fbq = function() {
@@ -45,20 +44,20 @@ export default class MyDocument extends Document {
                           fbq('init', '1524314924299567');
                           fbq('track', 'PageView');
                         `,
-                                }}
+                            }}
+                        />
+                    )}
+
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                        <noscript>
+                            <img
+                                height="1"
+                                width="1"
+                                style={{ display: 'none' }}
+                                src="https://www.facebook.com/tr?id=1524314924299567&ev=PageView&noscript=1"
                             />
-                        ))}
-                    {config['REACT_APP_ENVIRONMENT'] === 'production' ||
-                        (config['REACT_APP_ENVIRONMENT'] === 'staging' && (
-                            <noscript>
-                                <img
-                                    height="1"
-                                    width="1"
-                                    style={{ display: 'none' }}
-                                    src="https://www.facebook.com/tr?id=1524314924299567&ev=PageView&noscript=1"
-                                />
-                            </noscript>
-                        ))}
+                        </noscript>
+                    )}
 
                     {config['REACT_APP_ENVIRONMENT'] === 'production' && (
                         <script
