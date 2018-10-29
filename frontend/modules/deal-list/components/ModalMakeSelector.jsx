@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import * as R from 'ramda';
+
+import { ifElse, prop, has, contains, propEq } from 'ramda';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -24,14 +25,14 @@ class ModalMakeSelector extends React.PureComponent {
     };
 
     logoMissing() {
-        return R.has('icon') && R.propEq('icon', '');
+        return has('icon') && propEq('icon', '');
     }
 
     getLogoFor(make) {
-        return R.ifElse(
+        return ifElse(
             this.logoMissing(make),
             () => this.props.fallbackLogoImage,
-            R.prop('icon')
+            prop('icon')
         ).bind(this)(make);
     }
 
@@ -39,7 +40,7 @@ class ModalMakeSelector extends React.PureComponent {
         const selected =
             this.props.selectedFiltersByCategory &&
             this.props.selectedFiltersByCategory.make &&
-            R.contains(make.value, this.props.selectedFiltersByCategory.make);
+            contains(make.value, this.props.selectedFiltersByCategory.make);
 
         return (
             <div
