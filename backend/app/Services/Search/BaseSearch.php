@@ -47,6 +47,10 @@ abstract class BaseSearch
                     "source" => "doc['pricing.msrp'].value >= doc['pricing.default'].value",
                 ]
             ]]],
+            [
+                "exists" => [
+                    "field" => "thumbnail"]
+            ],
             ['range' => [
                 'pricing.default' => [
                     'lte' => '200000',
@@ -59,9 +63,6 @@ abstract class BaseSearch
             ]],
             ['term' => [
                 'dealer.is_active' => 1,
-            ]],
-            ['term' => [
-                'is_active' => true,
             ]],
             ['term' => [
                 'status' => 'available',
@@ -217,7 +218,7 @@ abstract class BaseSearch
             [
                 'range' => [
                     'payments.detroit.' . $strategy . '.payment' => [
-                      'gte' => 1,
+                        'gte' => 1,
                     ],
                 ],
             ]
@@ -362,7 +363,7 @@ abstract class BaseSearch
         foreach (self::FEATURE_TERMS as $key => $field) {
             $this->query['aggs'][$key] = [
                 "terms" => [
-                    "size" => 50000,
+                    "size" => 5000,
                     "field" => $field,
                     "order" => [
                         "_key" => ($key === 'year' ? 'desc' : 'asc'),
@@ -388,7 +389,7 @@ abstract class BaseSearch
                     'aggs' => [
                         'value' => [
                             "terms" => [
-                                "size" => 50000,
+                                "size" => 5000,
                                 "field" => "make.keyword",
                                 "order" => [
                                     "_key" => "asc",
@@ -401,7 +402,7 @@ abstract class BaseSearch
                     'aggs' => [
                         'value' => [
                             "terms" => [
-                                "size" => 50000,
+                                "size" => 5000,
                                 "field" => "style.keyword"
                             ],
                         ]
@@ -412,7 +413,6 @@ abstract class BaseSearch
         ];
         return $this;
     }
-
 
     public function get()
     {

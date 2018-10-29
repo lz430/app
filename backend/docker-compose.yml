@@ -36,13 +36,17 @@ services:
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
-      - local_es_data:/usr/share/elasticsearch/data
+      - local_es_data:/usr/share/elasticsearch/data:delegated
       - ./compose/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
     - "9200:9200"
     - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx756m -Xms756m"
+      ES_JAVA_OPTS: "-Xmx1024m -Xms1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
 
   kibana:
     build:

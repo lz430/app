@@ -1,0 +1,64 @@
+.filterbar {
+    background: #fff;
+    align-items: center;
+    border-bottom: 1px solid $color-section-bottom-border;
+    display: none;
+    height: $filterbar-height;
+    min-height: 44px;
+    max-height: 44px;
+    padding: 3px 23px;
+
+    @include media-breakpoint-up(md) {
+        display: flex;
+    }
+
+    .selected-filters {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        .filterbar__filter-icon {
+            fill: $color-sidebar-background-primary;
+            height: 20px;
+            margin-right: 5px;
+            width: 20px;
+
+            @include media-breakpoint-down(md) {
+                display: none;
+            }
+        }
+
+        .filterbar__filters {
+            align-items: center;
+            display: flex;
+            margin-right: 5px;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .filterbar__filter {
+            font-size: 0.85rem;
+            background: $color-background-primary;
+            margin: 5px;
+            padding: 3px 8px;
+            white-space: nowrap;
+        }
+
+        .filterbar__filter-x {
+            fill: $text-color;
+            stroke: darken($text-color, 10%);
+            stroke-width: 2;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .filterbar__clear {
+            @include button;
+            border: 1px solid $color-error;
+            color: $color-error;
+            cursor: pointer;
+            font-size: small;
+            margin-left: 5px;
+            white-space: nowrap;
+        }
+    }
+}

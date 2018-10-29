@@ -28,10 +28,6 @@
         </ul>
     @endcomponent
 
-    <h1>
-        Deal
-    </h1>
-
     <div class="row">
         <div class="col-md-4">
             @component('components.box')
@@ -67,15 +63,11 @@
         <div class="col-md-4">
             @component('components.box')
                 @slot('title')
-                    Source Prices
+                    Colors
                 @endslot
-                <ul class="list-group no-padding no-margin">
-                    @foreach ($deal->source_price as $key => $price)
-                        <li class="list-group-item">
-                            {{$key}} : {{$price}}
-                        </li>
-                    @endforeach
-                </ul>
+                <strong>Exterior Color: </strong> {{$deal->color}}<br/>
+                <strong>Exterior Color Simplified: </strong> {{$deal->simpleExteriorColor()}}<br/>
+                <strong>Interior Color: </strong> {{$deal->interior_color}}<br/>
             @endcomponent
         </div>
         <div class="col-md-4">
@@ -86,7 +78,19 @@
                 <ul class="list-group no-padding no-margin">
                     @foreach ($deal->prices() as $key => $price)
                         <li class="list-group-item">
-                            {{$key}} : {{$price}}
+                            {{$key}}: ${{number_format($price, 2)}}
+                        </li>
+                    @endforeach
+                </ul>
+            @endcomponent
+            @component('components.box')
+                @slot('title')
+                    Source Prices
+                @endslot
+                <ul class="list-group no-padding no-margin">
+                    @foreach ($deal->source_price as $key => $price)
+                        <li class="list-group-item">
+                            {{$key}}: ${{number_format($price, 2)}}
                         </li>
                     @endforeach
                 </ul>
@@ -96,6 +100,22 @@
     <h3>
         Media
     </h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            @component('components.box')
+                @slot('title')
+                    Thumbnail
+                @endslot
+                    @if ($deal->featuredPhoto())
+                        <div class="text-center">
+                            <img src="{{$deal->featuredPhoto()->thumbnail}}" alt="">
+                        </div>
+                    @endif
+            @endcomponent
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default">
@@ -184,13 +204,13 @@
                         @slot('title')
                             {{$category}}
                         @endslot
-                            <div class="row">
-                                @foreach($equipments as $key => $equipment)
-                                    <div class="col-md-3">
-                                        @include('admin.shared.jatoequipment', ['equipment' => $equipment, 'prefix' => 'se'.$key])
-                                    </div>
-                                @endforeach
-                            </div>
+                        <div class="row">
+                            @foreach($equipments as $key => $equipment)
+                                <div class="col-md-3">
+                                    @include('admin.shared.jatoequipment', ['equipment' => $equipment, 'prefix' => 'se'.$key])
+                                </div>
+                            @endforeach
+                        </div>
                     @endcomponent
                 @endforeach
             @endcomponent

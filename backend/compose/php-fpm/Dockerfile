@@ -10,7 +10,6 @@ RUN apt-get update \
 		wget \
 		curl \
 		unzip \
-		git \
 		mysql-client \
 		zlib1g-dev \
 		libicu-dev \

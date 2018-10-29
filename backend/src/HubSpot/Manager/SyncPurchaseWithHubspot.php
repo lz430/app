@@ -5,7 +5,6 @@ namespace DeliverMyRide\HubSpot\Manager;
 use App\Models\Order\Purchase;
 use DeliverMyRide\HubSpot\HubspotClient;
 
-
 /**
  *
  */
@@ -28,21 +27,21 @@ class SyncPurchaseWithHubspot
             return false;
         }
 
-        $this->client->forms()->submit('3388780', '9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f', [
+        $data = $this->client->forms()->submit('3388780', '9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f',
             [
                 'firstname' => $purchase->buyer->first_name,
                 'lastname' => $purchase->buyer->last_name,
                 'email' => $purchase->buyer->email,
                 'phone' => $purchase->buyer->phone_number,
             ]
-        ]);
+        );
 
         return true;
     }
 
     /**
      * @param Purchase $purchase
-     * @return bool
+     * @return array|false
      * @throws \SevenShores\Hubspot\Exceptions\HubspotException
      */
     public function createContactAndDeal(Purchase $purchase)
@@ -114,7 +113,7 @@ class SyncPurchaseWithHubspot
             ],
             'properties' => $this->client->mungePayloadData([
                 'pipeline' => 'default',
-                'dealname' => $purchase->deal->title(),
+                'dealname' => $purchase->buyer->last_name . ', ' . $purchase->buyer->first_name . ' - ' . $purchase->deal->title(),
                 'dealstage' => 'b8ace084-d202-47df-bca7-3973eb53120a',
                 'amount' => '500',
 
@@ -123,8 +122,8 @@ class SyncPurchaseWithHubspot
                 'vehicle_id' => $purchase->deal_id,
             ], 'name'),
         ];
-        $deal = $client->deals()->create($dealPayload);
+        $client->deals()->create($dealPayload);
 
-        return true;
+        return $contact;
     }
 }

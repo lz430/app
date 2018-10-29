@@ -3,6 +3,7 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
+use Carbon\Carbon;
 
 /**
  *
@@ -10,36 +11,48 @@ use App\Models\Deal;
 class DealPhotosMunger
 {
     private $debug;
+
+    /* @var Deal */
     private $deal;
+
+    /* @var array */
     private $row;
-    private $fuelClient;
 
     /**
      * @param Deal $deal
      * @param array $row
+     * @param bool $force
+     * @return array
      */
-    public function __construct(Deal $deal, array $row)
+    public function import(Deal $deal, array $row, bool $force = FALSE)
     {
-        $this->deal = $deal;
-        $this->row = $row;
-
         $this->debug = [
             'deal_photos' => 0,
             'stock_photos' => 0,
             'deal_photos_skipped' => 'Yes',
+            'deal_photos_refreshed' => 'No',
         ];
-    }
 
-    /**
-     * @param bool $force
-     * @return array
-     */
-    public function import(bool $force = FALSE)
-    {
+        $this->deal = $deal;
+        $this->row = $row;
+
+        $modifiedDate = $row['Photos Last Modified Date'];
+        $modifiedDate = Carbon::parse($modifiedDate);
+        $shouldRefreshPhotos = false;
+        if (!$deal->wasRecentlyCreated && (!$deal->photos_updated_at || $deal->photos_updated_at < $modifiedDate)) {
+            $shouldRefreshPhotos = true;
+            $this->debug['deal_photos_refreshed'] = 'Yes';
+        }
+
         // When No photos.
-        if (!$this->deal->photos()->count() || $force) {
+        if (!$this->deal->photos()->count() || $shouldRefreshPhotos || $force) {
             $this->debug['deal_photos_skipped'] = 'No';
             $this->saveDealPhotos();
+
+            // Not great to introduce another save here but we need to compare the photo modified
+            // value to the previous value
+            $deal->photos_updated_at = $modifiedDate;
+            $deal->save();
         }
 
         //
@@ -87,7 +100,7 @@ class DealPhotosMunger
         }
 
         // Only save stock photos if we don't have any already.
-        if ($deal->version->photos()->where('color', '=', $deal->color)->count()) {
+        if ($deal->version->photos()->where('type', '=', 'color')->where('color_simple', '=', $deal->simpleExteriorColor())->count()) {
             return;
         }
 
@@ -95,11 +108,18 @@ class DealPhotosMunger
 
         $assets = resolve('DeliverMyRide\Fuel\Manager\VersionToFuel')->assets($deal->version, $deal->color);
         foreach ($assets as $asset) {
-            $deal->version->photos()->create([
-                'url' => $asset->url,
-                'shot_code' => $asset->shotCode->code,
-                'color' => $deal->color,
-            ]);
+            $deal->version->photos()->updateOrCreate(
+                [
+                    'url' => $asset->url
+                ],
+                [
+                    'type' => 'color',
+                    'shot_code' => $asset->shotCode->code,
+                    'color' => $asset->shotCode->color->oem_name,
+                    'color_simple' => $asset->shotCode->color->simple_name,
+                    'color_rgb' => $asset->shotCode->color->rgb1,
+                    'description' => isset($asset->shotCode->description) ? trim($asset->shotCode->description) : null,
+                ]);
             $count++;
         }
 

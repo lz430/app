@@ -50,11 +50,11 @@ jobs:
       ##################################################################
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "frontend/package.json" }}
+            - node-v1-{{ checksum "frontend/yarn.lock" }}
             - node-v1-
       - run: cd frontend && yarn install
       - save_cache:
-          key: node-v1-{{ checksum "frontend/package.json" }}
+          key: node-v1-{{ checksum "frontend/yarn.lock" }}
           paths:
             - frontend/node_modules
 
@@ -76,7 +76,10 @@ jobs:
       #- run:
       #    name: Run PHPunit tests
       #    command:  vendor/bin/phpunit
+      - run:
+          name: Run JavaScript linting
+          command: cd frontend && yarn lint
 
       - run:
-          name: Run Javascript tests
+          name: Run JavaScript tests
           command: cd frontend && yarn test

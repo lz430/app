@@ -28,4 +28,16 @@ class DealPhoto extends Model
     {
         return $this->belongsTo(Deal::class);
     }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['id']);
+        unset($data['created_at']);
+        unset($data['updated_at']);
+        return $data;
+    }
 }

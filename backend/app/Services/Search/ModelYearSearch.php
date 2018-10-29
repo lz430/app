@@ -47,7 +47,7 @@ class ModelYearSearch extends BaseSearch
                 'aggs' => [
                     'model' => [
                         'terms' => [
-                            'size' => 50000,
+                            'size' => 5000,
                             'field' => 'category.title.keyword',
                         ],
 

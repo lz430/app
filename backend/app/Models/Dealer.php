@@ -74,6 +74,7 @@ class Dealer extends Model
      */
     protected $casts = [
         'price_rules' => 'object',
+        'notification_emails' => 'object',
     ];
 
 
@@ -101,6 +102,8 @@ class Dealer extends Model
         'contact_name',
         'contact_title',
         'price_rules',
+        'money_factor',
+        'notification_emails',
     ];
 
     /**
@@ -118,5 +121,31 @@ class Dealer extends Model
     public function contacts(): HasMany
     {
         return $this->hasMany(DealerContact::class, 'dealer_id', 'dealer_id');
+    }
+
+    /**
+     * @return array
+     */
+    public function toIndexData() : array
+    {
+        $data = $this->toArray();
+        unset($data['price_rules']);
+        unset($data['max_delivery_miles']);
+        unset($data['longitude']);
+        unset($data['latitude']);
+        unset($data['address']);
+        unset($data['city']);
+        unset($data['contact_email']);
+        unset($data['contact_name']);
+        unset($data['contact_title']);
+        unset($data['contact_title']);
+        unset($data['created_at']);
+        unset($data['phone']);
+        unset($data['route_one_id']);
+        unset($data['state']);
+        unset($data['updated_at']);
+        unset($data['zip']);
+
+        return $data;
     }
 }

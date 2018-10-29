@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services\Health\Checks;
+use App\Models\Deal;
 use App\Services\Health\HealthCheck;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
@@ -18,19 +19,20 @@ class JatoCheck extends HealthCheck
         );
     }
 
-    /** @test **/
     public function run() {
-        $vin = '1FM5K7B83JGA96934';
-        $client = $this->getClient();
-        $response = [];
-        try {
-            $response = $client->vin->decode($vin);
-            if($response){
-                return 'OKAY!';
+        $deal = Deal::where('status', '=', 'available')->inRandomOrder()->first();
+        if ($deal) {
+            $client = $this->getClient();
+            try {
+                $response = $client->vin->decode($deal->vin);
+                if($response){
+                    return 'OKAY!';
+                }
+            } catch (ClientException $e) {
+                print_r($e->getMessage());
             }
-        } catch (ClientException $e) {
-            print_r($e->getMessage());
         }
+
         return 'FAIL';
 
     }

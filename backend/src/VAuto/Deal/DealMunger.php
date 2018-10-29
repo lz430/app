@@ -9,41 +9,44 @@ use DeliverMyRide\JATO\JatoClient;
 
 class DealMunger
 {
-
-    private $deal;
-    private $row;
-
     private $jatoClient;
 
+    /* @var \DeliverMyRide\VAuto\Deal\DealPhotosMunger */
+    private $photoManager;
+
+    /* @var \DeliverMyRide\VAuto\Deal\DealEquipmentMunger */
+    private $equipmentManager;
+
+    /* @var \DeliverMyRide\VAuto\Deal\DealFeaturesMunger */
+    private $featuresManager;
+
     /**
-     * @param Deal $deal
      * @param JatoClient $jatoClient
-     * @param array $row
      */
-    public function __construct(Deal $deal,
-                                JatoClient $jatoClient,
-                                array $row)
+    public function __construct(JatoClient $jatoClient)
     {
-        $this->deal = $deal;
-        $this->row = $row;
         $this->jatoClient = $jatoClient;
+        $this->photoManager = new DealPhotosMunger();
+        $this->equipmentManager = new DealEquipmentMunger($this->jatoClient);
+        $this->featuresManager = new DealFeaturesMunger($this->jatoClient);
     }
 
     /**
+     * @param Deal $deal
+     * @param array $data
      * @param bool $force
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import(bool $force = FALSE)
+    public function import(Deal $deal, array $data, bool $force = FALSE)
     {
         $debug = [];
 
-        $equipment_debug = (new DealEquipmentMunger($this->deal, $this->jatoClient))->import($force);
-        $features_debug = (new DealFeaturesMunger($this->deal, $this->jatoClient))->import($force);
-        $photos_debug = (new DealPhotosMunger($this->deal, $this->row))->import($force);
+        $equipment_debug = $this->equipmentManager->import($deal, $force);
+        $features_debug = $this->featuresManager->import($deal, $force);
+        $photos_debug = $this->photoManager->import($deal, $data, $force);
 
         return array_merge($debug, $equipment_debug, $photos_debug, $features_debug);
-
     }
 
 

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\JATO\Version;
 use App\DealIndexConfigurator;
-use App\Models\JATO\Make;
 use App\Models\Order\Purchase;
 use Backpack\CRUD\CrudTrait;
 use Carbon\Carbon;
@@ -14,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use DeliverMyRide\Fuel\Map as ColorMaps;
+
 
 /**
  * App\Models\Deal
@@ -65,6 +66,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $vehicle_color
  * @property string $status
  * @property \Datetime $sold_at
+ * @property \Datetime photos_updated_at
  * @property \Highlight|null $highlight
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal forSale()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereBody($value)
@@ -120,7 +122,7 @@ class Deal extends Model
 
     private const CATEGORY_MAP = [
         'vehicle_size' => [
-            'title' => 'Vehicle Size',
+            'title' => 'Size',
         ],
         'fuel_type' => [
             'title' => 'Fuel Type',
@@ -163,12 +165,38 @@ class Deal extends Model
         ],
     ];
 
+    private const INDEX_MAKE_MAP = [
+        'Infiniti' => 'INFINITI',
+    ];
 
     /**
      * @var array
      */
     protected $mapping = [
         'properties' => [
+            'search' => [
+                'type' => 'object',
+                'properties' => [
+                    'make' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                    'model' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                    'style' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                ],
+            ],
             'created_at' => [
                 'type' => 'date',
             ],
@@ -239,7 +267,7 @@ class Deal extends Model
     /**
      * @var array
      */
-    protected $dates = ['inventory_date', 'sold_at'];
+    protected $dates = ['inventory_date', 'photos_updated_at', 'sold_at'];
 
     /**
      * @var array
@@ -291,6 +319,87 @@ class Deal extends Model
         return $this->belongsToMany(Feature::class);
     }
 
+
+    private function getRealPhotos()
+    {
+        $photos = $this->photos()->get();
+        if (count($photos) <= 1) {
+            return [];
+        }
+
+        $photos->shift();
+        $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
+
+        return $photos;
+    }
+
+    /**
+     * @param bool $accurate
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getColorStockPhotos($accurate = true)
+    {
+        if ($accurate) {
+            $photos = $this->version->photos()
+                ->where('type', '=', 'color')
+                ->where('color', '=', $this->color)
+                ->orderBy('shot_code')
+                ->get();
+        } else {
+            $photos = $this->version->photos()
+                ->where('type', '=', 'color')
+                ->where('color_simple', '=', $this->simpleExteriorColor())
+                ->orderBy('color')->orderBy('shot_code')
+                ->limit(3)->get();
+        }
+
+        if (!count($photos)) {
+            return $photos;
+        }
+
+        $last = $photos->pop();
+        $last->thumbnail = generate_asset_url($last->url, 'thumbnail');
+        $photos->push($last);
+
+        $genericPhotos = $this->getGenericStockPhotos(false);
+        $photos = $photos->merge($genericPhotos);
+
+        return $photos;
+    }
+
+    /**
+     * @param bool $thumbnail
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getGenericStockPhotos($thumbnail = true)
+    {
+        $photos = $this->version->photos()
+            ->where('type', '=', 'default')
+            ->orderBy('shot_code')
+            ->get();
+
+        if (!count($photos)) {
+            return $photos;
+        }
+
+        if ($thumbnail) {
+            $thumbnailFound = false;
+            foreach ($photos as &$photo) {
+                if (isset($photo->shot_code) && $photo->shot_code === '116') {
+                    $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
+                    $thumbnailFound = true;
+                }
+            }
+
+            if (!$thumbnailFound) {
+                $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
+            }
+        }
+
+        return $photos;
+
+    }
+
     /**
      * In some situations we don't have photos for the specific vehicle,
      * so we use stock photos in some situations, which are stored on the version.
@@ -302,26 +411,46 @@ class Deal extends Model
         $photos = [];
 
         //
-        // Try real photos
-        $dealPhotos = $this->photos()->get();
-        if (count($dealPhotos) > 1) {
-            $dealPhotos->shift();
-            $photos = $dealPhotos;
-        }
+        //
+        $groups = [
+            'real',
+            'stock_accurate',
+            'stock_simple',
+            'stock_default',
+        ];
 
-        if (!count($photos) && $this->version) {
-            //
-            // Try stock photos in the exact color
-            $colorPhotos = $this->version->photos()->where('color', '=', $this->color)->orderBy('shot_code')->get();
-            if (count($colorPhotos)) {
-                $photos = $colorPhotos;
+        foreach ($groups as $group) {
+            if (count($photos)) {
+                continue;
             }
 
-            //
-            // Try stock photos in the wrong color
-            $versionPhotos = $this->version->photos()->where('color', '=', 'default')->orderBy('shot_code')->get();
-            if (count($versionPhotos)) {
-                $photos = $versionPhotos;
+            // Real photos are deleted if the vehicle has been sold.
+            if ($group === 'real' && $this->status !== 'available') {
+                continue;
+            }
+
+            // We need versions for all non-real photo group options.
+            if ($group !== 'real' && !$this->version) {
+                continue;
+            }
+
+            switch ($group) {
+                case 'real':
+                    $photos = $this->getRealPhotos();
+                    break;
+                case 'stock_accurate':
+                    $photos = $this->getColorStockPhotos(true);
+                    break;
+
+                case 'stock_simple':
+                    $photos = $this->getColorStockPhotos(false);
+                    break;
+
+                case 'stock_default':
+                    $photos = $this->getGenericStockPhotos();
+
+                    break;
+
             }
         }
 
@@ -334,38 +463,42 @@ class Deal extends Model
 
     /**
      * @param string $size
+     * @param array $photos
      * @return mixed|null
      */
-    public function featuredPhoto($size = 'thumbnail')
+    public function featuredPhoto($size = 'thumbnail', $photos = [])
     {
-        $photos = $this->marketingPhotos($size);
+        if (!is_array($photos) || !count($photos)) {
+            $photos = $this->marketingPhotos($size);
+        }
 
-        $collection = collect($photos);
-
-        $photo = null;
-
-        // Color specific outside shot.
-        $photo = $collection->first(function ($photo) {
-            return isset($photo->shot_code) && $photo->shot_code === 'KAD';
+        //
+        // Only the featured photo has a thumbnail.
+        return collect($photos)->first(function ($photo) {
+            return isset($photo->thumbnail);
         });
+    }
 
-        // Default shot.
-        if (!$photo) {
-            $photo = $collection->first(function ($photo) {
-                return isset($photo->shot_code) && $photo->shot_code === '116';
-            });
+    /**
+     * @return null|string
+     */
+    public function simpleExteriorColor(): ?string
+    {
+        if (!$this->color) {
+            return null;
         }
 
-        // We probably have real photos. use the first one
-        if (!$photo && isset($photos[0])) {
-            $photo = $photos[0];
+        if (isset(ColorMaps::COLOR_MAP[$this->color])) {
+            return ColorMaps::COLOR_MAP[$this->color];
         }
 
-        if ($photo) {
-            $photo->url = generate_asset_url($photo->url, $size);
+        foreach (ColorMaps::COLOR_MAP as $key => $value) {
+            if (str_contains($this->color, $key)) {
+                return $value;
+            }
         }
 
-        return $photo;
+        return null;
     }
 
     /**
@@ -434,7 +567,7 @@ class Deal extends Model
                         //
                         // Conditions
                         if (isset($rule->conditions)) {
-                            if (isset($rule->conditions->vin) &&  $rule->conditions->vin && $rule->conditions->vin != $this->vin) {
+                            if (isset($rule->conditions->vin) && $rule->conditions->vin && $rule->conditions->vin != $this->vin) {
                                 continue;
                             }
 
@@ -523,6 +656,38 @@ class Deal extends Model
         return $shouldIndex;
     }
 
+
+    private function translateIndexMake()
+    {
+        $make = $this->version->model->make->name;
+
+        if (isset(self::INDEX_MAKE_MAP[$make])) {
+            $make = self::INDEX_MAKE_MAP[$make];
+        }
+
+        return $make;
+    }
+
+    private function translateSearchableData()
+    {
+        $data = [
+            'make' => array_unique([
+                $this->version->model->make->name,
+                $this->translateIndexMake(),
+            ]),
+            'model' => [
+                $this->version->model->name,
+                $this->version->model->make->name . ' ' . $this->version->model->name,
+            ],
+            'style' => array_merge(
+                [$this->version->style()],
+                $this->version->styleSynonyms()
+            )
+        ];
+
+        return $data;
+    }
+
     /**
      * Get the indexable data array for the model.
      *
@@ -539,12 +704,7 @@ class Deal extends Model
         $record['updated_at'] = $this->updated_at->format('c');
         $record['inventory_date'] = $this->inventory_date->format('c');
         $record['sold_at'] = $this->sold_at ? $this->sold_at->format('c') : null;
-        $record['is_active'] = true;
-
-        // Deal should not be active if it has been purchased
-        if ($this->status == 'sold') {
-            $record['is_active'] = false;
-        }
+        $record['status'] = $this->status;
 
         //
         // Vehicle identification information
@@ -555,22 +715,18 @@ class Deal extends Model
         //
         // Vehicle type
         $record['year'] = $this->year;
-        $record['make'] = ($this->version->model->make->name == 'Infiniti') ? 'INFINITI' : $this->version->model->make->name;
+        $record['make'] = $this->translateIndexMake();
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int)$this->seating_capacity;
-        $record['status'] = $this->status;
 
-        $filterColor = null;
-        if (isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color])) {
-            $filterColor = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->color];
-            $dealFeatureColor = Feature::where('title', $filterColor)->first();
-            if ($dealFeatureColor) {
-                $record['vehicle_color'] = $dealFeatureColor->title;
-            }
-        }
+        // name is confusing. This is the simple (filterable) value
+        // in the sidebar.
+        $record['vehicle_color'] = $this->simpleExteriorColor();
+
+        $record['search'] = $this->translateSearchableData();
 
         //
         // Required vehicle attributes
@@ -579,19 +735,23 @@ class Deal extends Model
         $record['doors'] = $this->door_count;
         $record['color'] = $this->color;
         $record['interior_color'] = $this->interior_color;
-
         $record['fuel_econ_city'] = $this->fuel_econ_city;
         $record['fuel_econ_hwy'] = $this->fuel_econ_hwy;
 
         //
         // Photos
         $record['photos'] = [];
-        foreach ($this->marketingPhotos('full') as $photo) {
-            $record['photos'][] = $photo->toArray();
+        $photos = $this->marketingPhotos();
+        foreach ($photos as $photo) {
+            $record['photos'][] = $photo->toIndexData();
         }
 
-        $thumbnail = $this->featuredPhoto();
-        $record['thumbnail'] = ($thumbnail ? $thumbnail->toArray() : null);
+        $record['thumbnail'] = null;
+        $thumbnail = $this->featuredPhoto('thumbnail', $photos);
+        if ($thumbnail) {
+            $record['thumbnail'] = $thumbnail->toIndexData();
+        }
+
         $record['category'] = (object)[
             'id' => $this->version->model->id,
             'title' => implode(" ", [
@@ -620,51 +780,23 @@ class Deal extends Model
             $record[$feature->category->slug][] = $feature->title;
         }
 
-
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
+        $record['fees'] = [
+            'acquisition' => (float)$this->dealer->acquisition_fee,
+            'cvr' => (float)$this->dealer->cvr_fee,
+            'doc' => (float)$this->dealer->doc_fee,
+            'registration' => (float)$this->dealer->registration_fee,
+        ];
 
         $version = $this->version;
+        $record['version'] = null;
         if ($version) {
-            $version = $version->toArray();
-            unset($version['model']);
-            unset($version['quotes']);
-            unset($version['updated_at']);
-            unset($version['created_at']);
-            unset($version['segment']);
-            unset($version['transmission_type']);
-            unset($version['model_id']);
-            unset($version['msrp']);
-            unset($version['invoice']);
-            unset($version['is_current']);
-            unset($version['jato_model_id']);
-            unset($version['jato_uid']);
-            unset($version['jato_vehicle_id']);
-            unset($version['delivery_price']);
-            $record['version'] = $version;
-        } else {
-            $record['version'] = null;
+            $record['version'] = $version->toIndexData();
         }
 
-        $dealer = $this->dealer->toArray();
-        unset($dealer['price_rules']);
-        unset($dealer['max_delivery_miles']);
-        unset($dealer['longitude']);
-        unset($dealer['latitude']);
-        unset($dealer['address']);
-        unset($dealer['city']);
-        unset($dealer['contact_email']);
-        unset($dealer['contact_name']);
-        unset($dealer['contact_title']);
-        unset($dealer['contact_title']);
-        unset($dealer['created_at']);
-        unset($dealer['phone']);
-        unset($dealer['route_one_id']);
-        unset($dealer['state']);
-        unset($dealer['updated_at']);
-        unset($dealer['zip']);
-        $record['dealer'] = $dealer;
+        $record['dealer'] = $this->dealer->toIndexData();
 
         //
         // Catchall
@@ -686,12 +818,7 @@ class Deal extends Model
         // Jato features
         $record['jato_features'] = [];
         foreach ($this->jatoFeatures as $feature) {
-            $data = $feature->toArray();
-            unset($data['pivot']);
-            unset($data['created_at']);
-            unset($data['created_at']);
-            unset($data['updated_at']);
-            $record['jato_features'][] = $data;
+            $record['jato_features'][] = $feature->toIndexData();
         }
 
         return $record;
