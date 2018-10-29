@@ -414,7 +414,6 @@ abstract class BaseSearch
         return $this;
     }
 
-
     public function get()
     {
         return Deal::searchRaw($this->query);

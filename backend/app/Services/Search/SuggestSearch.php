@@ -27,7 +27,7 @@ class SuggestSearch extends BaseSearch
                 "models" => [
                     "filter" => [
                         'match' => [
-                            "search.make" => $query,
+                            "search.model" => $query,
                         ],
                     ],
                     "aggs" => [
