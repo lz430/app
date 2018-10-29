@@ -375,7 +375,7 @@ class DealRatesAndRebatesManager
 
 
         $miles = null;
-        if($scenario->DealScenarioType != "Manufacturer - Standard APR") {
+        if($this->isLease) {
             if (isset($scenario->programs)) {
                 $miles = $scenario->programs[0]->mileages;
             } else if (isset($scenario->mileages)) {
