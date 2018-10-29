@@ -15,7 +15,7 @@ body {
         display: flex;
         flex: 1;
         flex-direction: column;
-        margin-top: 80px;
+        margin-top: 67px;
         @include media-breakpoint-down(xs) {
             padding-top: 0;
         }

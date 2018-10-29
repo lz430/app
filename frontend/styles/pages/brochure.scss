@@ -6,6 +6,7 @@
     justify-content: center;
     position: fixed;
     width: 100%;
+    z-index: 100;
 
     .navbar {
         border-bottom: 0 none;
@@ -89,9 +90,6 @@
     color: $color-text-white;
     padding-top: 30px;
 
-    .container-fluid {
-        max-width: $break-extra-large;
-    }
     .row {
         justify-content: space-between;
 
@@ -270,3 +268,17 @@
         }
     }
 } //end brochure-footer
+
+.page-hero {
+    min-height: 420px;
+    background-position: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    h1 {
+        font-weight: bold;
+        color: $color-text-white;
+        text-align: center;
+    }
+}

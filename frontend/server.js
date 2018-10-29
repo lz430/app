@@ -66,15 +66,27 @@ app.prepare()
         });
 
         server.get('/brochure/how-it-works', (req, res) => {
-            app.render(req, res, '/how-it-works', req.query);
+            app.render(req, res, '/brochure/how-it-works', req.query);
         });
 
         server.get('/brochure/faq', (req, res) => {
-            app.render(req, res, '/faq', req.query);
+            app.render(req, res, '/brochure/faq', req.query);
+        });
+
+        server.get('/brochure/about', (req, res) => {
+            app.render(req, res, '/brochure/about', req.query);
         });
 
         server.get('/brochure/contact', (req, res) => {
-            app.render(req, res, '/contact', req.query);
+            app.render(req, res, '/brochure/contact', req.query);
+        });
+
+        server.get('/brochure/privacy-policy', (req, res) => {
+            app.render(req, res, '/brochure/privacy-policy', req.query);
+        });
+
+        server.get('/brochure/terms-of-service', (req, res) => {
+            app.render(req, res, '/brochure/terms-of-service', req.query);
         });
 
         server.get('*', (req, res) => {
