@@ -18,7 +18,10 @@ import Location from '../../../icons/zondicons/location.svg';
 import Help from '../../../icons/zondicons/question.svg';
 
 import SearchWidget from './SearchWidget';
-import { headerRequestAutocomplete } from '../../../apps/page/actions';
+import {
+    headerClearAutocompleteResults,
+    headerRequestAutocomplete,
+} from '../../../apps/page/actions';
 import { getSearchQuery } from '../../../modules/deal-list/selectors';
 import { nextRouterType } from '../../../core/types';
 
@@ -30,6 +33,7 @@ class Header extends React.PureComponent {
         onSearchForLocation: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
+        onClearSearchResults: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
         router: nextRouterType,
@@ -126,6 +130,7 @@ class Header extends React.PureComponent {
 
                 <div className="navbar-text">
                     <SearchWidget
+                        onClearSearchResults={this.props.onClearSearchResults}
                         onRequestSearch={this.props.onRequestSearch}
                         autocompleteResults={this.props.autocompleteResults}
                         router={this.props.router}
@@ -173,6 +178,9 @@ const mapDispatchToProps = dispatch => {
         },
         onRequestSearch: query => {
             return dispatch(headerRequestAutocomplete(query));
+        },
+        onClearSearchResults: () => {
+            return dispatch(headerClearAutocompleteResults());
         },
     };
 };
