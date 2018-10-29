@@ -19,6 +19,11 @@ class DealSearchTransformer extends TransformerAbstract
 
         //compares feature id of color attribute to map and gets hex value back for use for swatch
         $simpleColor = isset($deal->vehicle_color) ? $deal->vehicle_color : null;
+
+        if (is_array($simpleColor)) {
+            $simpleColor = end($simpleColor);
+        }
+
         $simpleColorSwatch =  $simpleColor && isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
 
         return [
