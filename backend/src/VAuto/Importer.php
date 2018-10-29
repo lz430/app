@@ -219,7 +219,7 @@ class Importer
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             if(isset($versionDebugData['versionPhotos'])) {
-                $this->debug['versionPhotosUpdated']++;
+                $this->debug['versionPhotosUpdated'] = $versionDebugData['versionPhotos'];
             }
 
             //
@@ -232,11 +232,11 @@ class Importer
                 $this->info("    -- Error: Could not find match for vin");
                 return;
             }
-
-            if ($version->wasRecentlyCreated) {
-                $this->debug['versionsCreated']++;
-            } else {
-                $this->debug['versionsUpdated']++;
+            if(isset($versionDebugData['versionsCreated'])) {
+                $this->debug['versionsCreated'] = $versionDebugData['versionsCreated'];
+            }
+            if(isset($versionDebugData['versionsUpdated'])) {
+                $this->debug['versionsUpdated'] = $versionDebugData['versionsUpdated'];
             }
 
             $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
