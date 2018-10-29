@@ -1,25 +1,28 @@
 import React from 'react';
 import { NavItem, NavLink } from 'reactstrap';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import LogoFooter from '../../static/images/dmr-logo-footer.svg';
 
-export default class Header extends React.PureComponent {
-    state = {
-        collapsed: false,
-    };
+import {
+    faFacebook,
+    faTwitter,
+    faInstagram,
+} from '@fortawesome/free-brands-svg-icons';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+export default class Footer extends React.PureComponent {
     render() {
         return (
             <footer className="brochure-footer">
-                <div className="container-fluid">
+                <div className="container">
                     <div className="row border-bottom">
                         <div className="col-8 ">
                             <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
                                 <NavItem>
                                     <Link
-                                        href="/how-it-works"
+                                        href="/brochure/how-it-works"
                                         as="/brochure/how-it-works"
                                         passHref
                                     >
@@ -28,7 +31,7 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/about"
+                                        href="/brochure/about"
                                         as="/brochure/about"
                                         passHref
                                     >
@@ -37,7 +40,7 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/faq"
+                                        href="/brochure/faq"
                                         as="/brochure/faq"
                                         passHref
                                     >
@@ -45,22 +48,9 @@ export default class Header extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link
-                                        href="/accupricing"
-                                        as="/brochure/accupricing"
-                                        passHref
-                                    >
-                                        <NavLink>AccuPricing</NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link
-                                        href="/blog"
-                                        as="/brochure/blog"
-                                        passHref
-                                    >
-                                        <NavLink>Blog</NavLink>
-                                    </Link>
+                                    <NavLink href="https://blog.delivermyride.com">
+                                        Blog
+                                    </NavLink>
                                 </NavItem>
                             </ul>
                         </div>
@@ -95,8 +85,8 @@ export default class Header extends React.PureComponent {
                             <ul>
                                 <NavItem>
                                     <Link
-                                        href="/terms"
-                                        as="/brochure/terms"
+                                        href="/brochure/terms-of-service"
+                                        as="/brochure/terms-of-service"
                                         passHref
                                     >
                                         <NavLink>Terms of Use</NavLink>
@@ -104,8 +94,8 @@ export default class Header extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/privacy"
-                                        as="/brochure/privacy"
+                                        href="/brochure/privacy-policy"
+                                        as="/brochure/privacy-policy"
                                         passHref
                                     >
                                         <NavLink>Privacy Policy</NavLink>
@@ -120,43 +110,31 @@ export default class Header extends React.PureComponent {
                         <div className="col-3 social">
                             <ul>
                                 <NavItem>
-                                    <Link
+                                    <a
                                         href="https://www.facebook.com/DeliverMyRide/"
-                                        passHref
-                                        target="blank"
-                                    >
-                                        <NavLink>
-                                            <FontAwesomeIcon
-                                                icon={['fab', 'facebook']}
-                                            />
-                                        </NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link
-                                        href="https://twitter.com/Delivermyride1"
-                                        passHref
-                                        target="blank"
-                                    >
-                                        <NavLink>
-                                            <FontAwesomeIcon
-                                                icon={['fab', 'twitter']}
-                                            />
-                                        </NavLink>
-                                    </Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link
-                                        href="https://www.instagram.com/delivermyride/"
-                                        passHref
+                                        rel="noopener noreferrer"
                                         target="_blank"
                                     >
-                                        <NavLink>
-                                            <FontAwesomeIcon
-                                                icon={['fab', 'instagram']}
-                                            />
-                                        </NavLink>
-                                    </Link>
+                                        <FontAwesomeIcon icon={faFacebook} />
+                                    </a>
+                                </NavItem>
+                                <NavItem>
+                                    <a
+                                        href="https://twitter.com/Delivermyride1"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        <FontAwesomeIcon icon={faTwitter} />
+                                    </a>
+                                </NavItem>
+                                <NavItem>
+                                    <a
+                                        href="https://www.instagram.com/delivermyride/"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        <FontAwesomeIcon icon={faInstagram} />
+                                    </a>
                                 </NavItem>
                             </ul>
                         </div>

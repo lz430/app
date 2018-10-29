@@ -724,7 +724,7 @@ class VersionToVehicle
     {
         foreach ($this->vehicles as $vehicle) {
             foreach ($vehicle->cashDealScenarios as $scenario) {
-                if ($scenario->dealScenarioTypeName == 'Cash - Bank APR') {
+                if ($scenario->dealScenarioTypeName == 'Manufacturer - Standard APR') {
                     $this->selected['cash'] = $vehicle;
                     $this->selected['finance'] = $vehicle;
                     break;
@@ -842,8 +842,8 @@ class VersionToVehicle
         $data->rate = 0;
         $data->term = 0;
 
-        if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-            $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+        if (isset($vehicle->scenarios['Manufacturer - Standard APR'])) {
+            $data->rebate = $vehicle->scenarios['Manufacturer - Standard APR']->consumerCash->totalConsumerCash;
         } else {
             $data->rebate = 0;
         }
@@ -861,8 +861,8 @@ class VersionToVehicle
         $data->rate = 5;
         $data->term = 60;
 
-        if (isset($vehicle->scenarios['Cash - Bank APR'])) {
-            $data->rebate = $vehicle->scenarios['Cash - Bank APR']->consumerCash->totalConsumerCash;
+        if (isset($vehicle->scenarios['Manufacturer - Standard APR'])) {
+            $data->rebate = $vehicle->scenarios['Manufacturer - Standard APR']->consumerCash->totalConsumerCash;
         } else {
             $data->rebate = 0;
         }

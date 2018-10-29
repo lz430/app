@@ -5,14 +5,18 @@ import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../Deals/StyleIcon';
-import Search from '../../../icons/zondicons/search.svg';
-import Close from '../../../icons/zondicons/close.svg';
 import { nextRouterType } from '../../../core/types';
+
+import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
         currentPageIsInCheckout: PropTypes.bool,
         onRequestSearch: PropTypes.func.isRequired,
+        onClearSearchResults: PropTypes.func.isRequired,
+        onSetSelectedMake: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         router: nextRouterType,
         searchQuery: PropTypes.object,
@@ -20,29 +24,12 @@ class SearchWidget extends React.PureComponent {
 
     state = {
         query: '',
+        resultsAreLoading: false,
         selectedItem: null,
         SearchMobile: false,
         SearchMessage: true,
     };
 
-    toggleSearchMobile() {
-        this.setState({
-            SearchMobile: !this.state.SearchMobile,
-        });
-    }
-    toggleClass() {
-        const currentState = this.state.active;
-        this.setState({ active: !currentState });
-    }
-    renderSearchMessage() {
-        if (this.state.SearchMessage === true) {
-            return (
-                <div className="ghost h-100">
-                    <h3>Start typing to see results </h3>
-                </div>
-            );
-        }
-    }
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClick, false);
     }
@@ -51,12 +38,43 @@ class SearchWidget extends React.PureComponent {
         document.removeEventListener('mousedown', this.handleClick, false);
     }
 
+    /**
+     * @param prevProps
+     */
+    componentDidUpdate(prevProps) {
+        if (
+            this.state.resultsAreLoading &&
+            this.props.autocompleteResults !== prevProps.autocompleteResults
+        ) {
+            this.setState({ resultsAreLoading: false });
+        }
+    }
+
+    toggleSearchMobile() {
+        this.setState({
+            SearchMobile: !this.state.SearchMobile,
+        });
+    }
+
+    renderSearchMessage() {
+        if (this.state.SearchMessage !== true) {
+            return false;
+        }
+
+        return (
+            <div className="ghost h-100">
+                <h3>Start typing to see results </h3>
+            </div>
+        );
+    }
+
     handleClick = e => {
         if (this.node.contains(e.target)) {
             return;
         }
 
         this.setState({ query: '' });
+        this.props.onClearSearchResults();
     };
 
     onSelectItem(item) {
@@ -69,17 +87,23 @@ class SearchWidget extends React.PureComponent {
             newSearchQuery.filters = item.query.filters;
         }
 
+        if (item.query.make) {
+            this.props.onSetSelectedMake(item.query.make);
+        }
+
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        this.props.router.push('/filter?' + urlQuery);
         this.setState({ query: '' });
         this.setState({ SearchMessage: false });
+        this.props.onClearSearchResults();
+        this.props.router.push('/filter?' + urlQuery);
         this.toggleSearchMobile();
     }
 
     handleSearchRequest(query) {
         this.setState({ query: query });
 
-        if (query) {
+        if (query && query.length > 2) {
+            this.setState({ resultsAreLoading: true });
             this.props.onRequestSearch(query);
         }
     }
@@ -165,6 +189,20 @@ class SearchWidget extends React.PureComponent {
         return false;
     }
 
+    renderSearchIcon() {
+        if (this.state.resultsAreLoading) {
+            return (
+                <FontAwesomeIcon
+                    className="loading-icon"
+                    icon={faSpinner}
+                    spin={true}
+                />
+            );
+        }
+
+        return <FontAwesomeIcon icon={faSearch} className="search-icon" />;
+    }
+
     render() {
         if (this.props.currentPageIsInCheckout) {
             return false;
@@ -180,18 +218,17 @@ class SearchWidget extends React.PureComponent {
                                 this.handleSearchRequest(e.target.value);
                             }}
                             value={this.state.query}
-                            placeholder="Search..."
+                            placeholder="Search by Brand or Model"
                             required
                         />
-                        <Search height="20px" width="20px" />
+                        {this.renderSearchIcon()}
                     </div>
                     {this.state.query && this.renderSearchResults()}
                 </MediumAndUp>
                 <SmallAndDown>
                     <div className="search__mobile">
-                        <Search
-                            height="20px"
-                            width="20px"
+                        <FontAwesomeIcon
+                            icon={faSearch}
                             className={classNames({
                                 active: !this.state.SearchMobile,
                                 hidden: this.state.SearchMobile,
@@ -201,9 +238,8 @@ class SearchWidget extends React.PureComponent {
                                 this.setState({ SearchMessage: true });
                             }}
                         />
-                        <Close
-                            height="20px"
-                            width="20px"
+                        <FontAwesomeIcon
+                            icon={faTimes}
                             className={classNames({
                                 active: this.state.SearchMobile,
                                 hidden: !this.state.SearchMobile,
@@ -213,11 +249,9 @@ class SearchWidget extends React.PureComponent {
                             }}
                         />
                     </div>
-                </SmallAndDown>
-                <SmallAndDown>
                     {this.state.SearchMobile && (
                         <div className="search__container-fluid">
-                            <div className="row">
+                            <div className="search__input">
                                 <input
                                     type="text"
                                     onChange={e => {
@@ -226,9 +260,10 @@ class SearchWidget extends React.PureComponent {
                                         );
                                     }}
                                     value={this.state.query}
-                                    placeholder="Search..."
+                                    placeholder="Search by Brand or Model"
                                     required
                                 />
+                                {this.renderSearchIcon()}
                             </div>
                             {this.renderSearchMessage()}
                             {this.state.query && this.renderSearchResults()}

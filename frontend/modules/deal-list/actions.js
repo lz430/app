@@ -89,6 +89,18 @@ export function setSearchFilters(filters) {
     };
 }
 
+/**
+ * hacky.
+ * @param make
+ * @returns {{type: string, data: *}}
+ */
+export function setSelectedMake(make) {
+    return {
+        type: ActionTypes.SET_SELECTED_MAKE,
+        data: make,
+    };
+}
+
 export function receiveDeals(data) {
     return {
         type: ActionTypes.RECEIVE_DEALS,

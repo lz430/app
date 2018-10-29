@@ -12,14 +12,8 @@ class SuggestSearch extends BaseSearch
             "aggs" => [
                 "makes" => [
                     "filter" => [
-                        'bool' => [
-                            'must' => [
-                                [
-                                    "wildcard" => [
-                                        "make" => "*" . $query . "*"
-                                    ]
-                                ]
-                            ]
+                        'match' => [
+                            "search.make" => $query,
                         ],
                     ],
                     "aggs" => [
@@ -31,21 +25,15 @@ class SuggestSearch extends BaseSearch
                     ]
                 ],
                 "models" => [
-                    "nested" => [
-                        "path" => "category"
+                    "filter" => [
+                        'match' => [
+                            "search.model" => $query,
+                        ],
                     ],
                     "aggs" => [
                         "model" => [
-                            "filter" => [
-                                'bool' => [
-                                    'must' => [
-                                        [
-                                            "wildcard" => [
-                                                "category.title" => "*" . $query . "*"
-                                            ]
-                                        ]
-                                    ]
-                                ],
+                            "nested" => [
+                                "path" => "category"
                             ],
                             "aggs" => [
                                 "data" => [
@@ -88,14 +76,8 @@ class SuggestSearch extends BaseSearch
                 ],
                 "styles" => [
                     "filter" => [
-                        'bool' => [
-                            'must' => [
-                                [
-                                    "wildcard" => [
-                                        "style" => "*" . $query . "*"
-                                    ]
-                                ]
-                            ]
+                        'match' => [
+                            "search.style" => $query,
                         ],
                     ],
                     "aggs" => [

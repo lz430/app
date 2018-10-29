@@ -127,6 +127,17 @@ class Version extends Model
             ->first();
     }
 
+    public function styleSynonyms() {
+        $style = $this->style();
+
+        if (isset(Map::BODY_STYLE_SYNONYMS[$style])) {
+            return Map::BODY_STYLE_SYNONYMS[$style];
+        }
+        return [];
+
+    }
+
+
     public function style() {
         if (isset(Map::BODY_STYLE_MAP[$this->body_style])) {
             return Map::BODY_STYLE_MAP[$this->body_style];

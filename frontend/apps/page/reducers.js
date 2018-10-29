@@ -37,6 +37,11 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 headerAutocompleteResults: action.data,
             };
+        case ActionTypes.CLEAR_AUTOCOMPLETE:
+            return {
+                ...state,
+                headerAutocompleteResults: {},
+            };
         default:
             return state;
     }

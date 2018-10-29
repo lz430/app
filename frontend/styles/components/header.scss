@@ -299,8 +299,7 @@
         top: 52px;
         left: 0;
         width: 100%;
-
-        .row {
+        .search__input {
             justify-content: flex-start;
             margin: 0;
 
@@ -308,6 +307,13 @@
                 border: 0 none;
                 padding: 10px 0 10px 10px;
                 width: 100%;
+            }
+            svg {
+                top: 13px;
+                right: 10px;
+            }
+            .search-icon {
+                display: none;
             }
         }
         .ghost {

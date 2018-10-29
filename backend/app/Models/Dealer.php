@@ -145,6 +145,7 @@ class Dealer extends Model
         unset($data['state']);
         unset($data['updated_at']);
         unset($data['zip']);
+
         return $data;
     }
 }

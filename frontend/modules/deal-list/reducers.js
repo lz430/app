@@ -169,6 +169,12 @@ const reducer = function(state = initialState, action = {}) {
                 },
             };
 
+        case ActionTypes.SET_SELECTED_MAKE:
+            return {
+                ...state,
+                selectedMake: action.data,
+            };
+
         case ActionTypes.SEARCH_CHANGE_SORT:
             return {
                 ...state,
