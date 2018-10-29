@@ -26,6 +26,19 @@ class Map
         'Cutaway' => 'Van',
     ];
 
+    public const BODY_STYLE_SYNONYMS = [
+        'Sport Utility Vehicle' => [
+            'SUV',
+            'Crossover'
+        ],
+        'Pickup' => [
+            'Truck',
+        ],
+        'Van' => [
+            'Minivan',
+        ],
+    ];
+
     public const BODY_STYLES = [
         'Coupe' => [
             'label' => 'Coupe',

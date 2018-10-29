@@ -165,12 +165,38 @@ class Deal extends Model
         ],
     ];
 
+    private const INDEX_MAKE_MAP = [
+        'Infiniti' => 'INFINITI',
+    ];
 
     /**
      * @var array
      */
     protected $mapping = [
         'properties' => [
+            'search' => [
+                'type' => 'object',
+                'properties' => [
+                    'make' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                    'model' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                    'style' => [
+                        "type" => "text",
+                        "term_vector" => "yes",
+                        "analyzer" => "ngram_analyzer",
+                        "search_analyzer" => "ngram_analyzer"
+                    ],
+                ],
+            ],
             'created_at' => [
                 'type' => 'date',
             ],
@@ -294,7 +320,8 @@ class Deal extends Model
     }
 
 
-    private function getRealPhotos() {
+    private function getRealPhotos()
+    {
         $photos = $this->photos()->get();
         if (count($photos) <= 1) {
             return [];
@@ -310,15 +337,15 @@ class Deal extends Model
      * @param bool $accurate
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function getColorStockPhotos($accurate = true) {
+    private function getColorStockPhotos($accurate = true)
+    {
         if ($accurate) {
             $photos = $this->version->photos()
                 ->where('type', '=', 'color')
                 ->where('color', '=', $this->color)
                 ->orderBy('shot_code')
                 ->get();
-        }
-        else {
+        } else {
             $photos = $this->version->photos()
                 ->where('type', '=', 'color')
                 ->where('color_simple', '=', $this->simpleExteriorColor())
@@ -344,7 +371,8 @@ class Deal extends Model
      * @param bool $thumbnail
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getGenericStockPhotos($thumbnail = true) {
+    public function getGenericStockPhotos($thumbnail = true)
+    {
         $photos = $this->version->photos()
             ->where('type', '=', 'default')
             ->orderBy('shot_code')
@@ -356,7 +384,7 @@ class Deal extends Model
 
         if ($thumbnail) {
             $thumbnailFound = false;
-            foreach($photos as &$photo) {
+            foreach ($photos as &$photo) {
                 if (isset($photo->shot_code) && $photo->shot_code === '116') {
                     $photo->thumbnail = generate_asset_url($photo->url, 'thumbnail');
                     $thumbnailFound = true;
@@ -446,7 +474,7 @@ class Deal extends Model
 
         //
         // Only the featured photo has a thumbnail.
-        return collect($photos)->first(function($photo) {
+        return collect($photos)->first(function ($photo) {
             return isset($photo->thumbnail);
         });
     }
@@ -628,6 +656,38 @@ class Deal extends Model
         return $shouldIndex;
     }
 
+
+    private function translateIndexMake()
+    {
+        $make = $this->version->model->make->name;
+
+        if (isset(self::INDEX_MAKE_MAP[$make])) {
+            $make = self::INDEX_MAKE_MAP[$make];
+        }
+
+        return $make;
+    }
+
+    private function translateSearchableData()
+    {
+        $data = [
+            'make' => array_unique([
+                $this->version->model->make->name,
+                $this->translateIndexMake(),
+            ]),
+            'model' => [
+                $this->version->model->name,
+                $this->version->model->make->name . ' ' . $this->version->model->name,
+            ],
+            'style' => array_merge(
+                [$this->version->style()],
+                $this->version->styleSynonyms()
+            )
+        ];
+
+        return $data;
+    }
+
     /**
      * Get the indexable data array for the model.
      *
@@ -645,12 +705,6 @@ class Deal extends Model
         $record['inventory_date'] = $this->inventory_date->format('c');
         $record['sold_at'] = $this->sold_at ? $this->sold_at->format('c') : null;
         $record['status'] = $this->status;
-        $record['is_active'] = true;
-
-        // Deal should not be active if it has been purchased
-        if ($this->status == 'sold') {
-            $record['is_active'] = false;
-        }
 
         //
         // Vehicle identification information
@@ -661,7 +715,7 @@ class Deal extends Model
         //
         // Vehicle type
         $record['year'] = $this->year;
-        $record['make'] = ($this->version->model->make->name == 'Infiniti') ? 'INFINITI' : $this->version->model->make->name;
+        $record['make'] = $this->translateIndexMake();
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->series;
@@ -671,6 +725,8 @@ class Deal extends Model
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
         $record['vehicle_color'] = $this->simpleExteriorColor();
+
+        $record['search'] = $this->translateSearchableData();
 
         //
         // Required vehicle attributes
@@ -727,6 +783,12 @@ class Deal extends Model
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
+        $record['fees'] = [
+            'acquisition' => (float)$this->dealer->acquisition_fee,
+            'cvr' => (float)$this->dealer->cvr_fee,
+            'doc' => (float)$this->dealer->doc_fee,
+            'registration' => (float)$this->dealer->registration_fee,
+        ];
 
         $version = $this->version;
         $record['version'] = null;

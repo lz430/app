@@ -23,7 +23,6 @@ class DealSearchTransformer extends TransformerAbstract
 
         return [
             'id' => $deal->id,
-            'is_active' => $deal->is_active,
             'status' => $deal->status,
             'is_in_range' => (isset($fields['in_range'][0]) ? $fields['in_range'][0] : false),
             'title' => $deal->title,
@@ -43,10 +42,7 @@ class DealSearchTransformer extends TransformerAbstract
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
             'features' => (isset($deal->jato_features) ? $deal->jato_features : []),
-            'doc_fee' => (float)$dealer->doc_fee,
-            'cvr_fee' => (float)$dealer->cvr_fee,
-            'registration_fee' => (float)$dealer->registration_fee,
-            'acquisition_fee' => (float)$dealer->acquisition_fee,
+
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,
             'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
@@ -54,6 +50,14 @@ class DealSearchTransformer extends TransformerAbstract
             'color_simple' => $simpleColor,
             'exterior_color_swatch' => $simpleColorSwatch,
             'pricing' => $deal->pricing,
+            'fees' => (isset($deal->fees) ?  $deal->fees : null),
+
+
+            // TODO: refactor frontend to use the fees values instead.
+            'doc_fee' => (float)$dealer->doc_fee,
+            'cvr_fee' => (float)$dealer->cvr_fee,
+            'registration_fee' => (float)$dealer->registration_fee,
+            'acquisition_fee' => (float)$dealer->acquisition_fee,
         ];
     }
 }
