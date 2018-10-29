@@ -6,7 +6,7 @@
     justify-content: center;
     position: fixed;
     width: 100%;
-    z-index: 100;
+    z-index: 1;
 
     .navbar {
         border-bottom: 0 none;
@@ -90,6 +90,9 @@
     color: $color-text-white;
     padding-top: 30px;
 
+    .container-fluid {
+        max-width: $break-extra-large;
+    }
     .row {
         justify-content: space-between;
 
@@ -144,7 +147,7 @@
         &.footer-nav {
             width: 75%;
             @include media-breakpoint-up(md) {
-                // max-width: 50%;
+                margin-top: 5px;
             }
             @include media-breakpoint-down(sm) {
                 width: 100%;
@@ -269,16 +272,27 @@
     }
 } //end brochure-footer
 
-.page-hero {
-    min-height: 420px;
-    background-position: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+// Brochure home
+.jumbotron {
+    position: relative;
 
-    h1 {
-        font-weight: bold;
-        color: $color-text-white;
-        text-align: center;
+    img {
+        max-width: 100%;
+    }
+    .search {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+
+        .__container {
+            background: $color-background-secondary;
+            max-width: 35%;
+            padding: 15px;
+
+            h3 {
+                font-size: 0.8rem;
+                font-weight: bold;
+            }
+        }
     }
 }
