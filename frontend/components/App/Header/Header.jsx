@@ -24,6 +24,7 @@ import {
 } from '../../../apps/page/actions';
 import { getSearchQuery } from '../../../modules/deal-list/selectors';
 import { nextRouterType } from '../../../core/types';
+import { setSelectedMake } from '../../../modules/deal-list/actions';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -34,6 +35,7 @@ class Header extends React.PureComponent {
         onToggleCompare: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
+        onSetSelectedMake: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
         router: nextRouterType,
@@ -132,6 +134,7 @@ class Header extends React.PureComponent {
                     <SearchWidget
                         onClearSearchResults={this.props.onClearSearchResults}
                         onRequestSearch={this.props.onRequestSearch}
+                        onSetSelectedMake={this.props.onSetSelectedMake}
                         autocompleteResults={this.props.autocompleteResults}
                         router={this.props.router}
                         searchQuery={this.props.searchQuery}
@@ -170,6 +173,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        onSetSelectedMake: make => {
+            return dispatch(setSelectedMake(make));
+        },
         onSearchForLocation: search => {
             return dispatch(requestLocation(search));
         },
