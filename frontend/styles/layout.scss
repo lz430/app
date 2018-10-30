@@ -16,6 +16,7 @@ body {
         flex: 1;
         flex-direction: column;
         margin-top: 67px;
+        min-height: min-content;
         @include media-breakpoint-down(xs) {
             padding-top: 0;
         }
