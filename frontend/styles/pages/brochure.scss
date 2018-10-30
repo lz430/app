@@ -295,4 +295,42 @@
             }
         }
     }
+} //end jumbotron
+
+.callout {
+    &__categories {
+        .row {
+            align-content: center;
+            justify-content: center;
+
+            @include media-breakpoint-down(sm) {
+                flex-wrap: wrap;
+            }
+
+            .__category {
+                max-width: 25%;
+                width: 25%;
+
+                h3 {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                img {
+                    max-width: 90%;
+                    margin: 0 auto;
+                }
+                a {
+                    color: $color-text-blue;
+                    text-align: center;
+                }
+            }
+            &:last-of-type {
+                a {
+                    background: $color-text-blue;
+                    border: 0 none;
+                }
+            }
+        }
+    }
 }

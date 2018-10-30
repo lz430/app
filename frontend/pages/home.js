@@ -62,11 +62,10 @@ export default class extends React.Component {
                                 src="https://via.placeholder.com/400x150"
                                 alt="image"
                             />
-                            <NavItem>
-                                <Link href="/#" as="/#" passHref>
-                                    <NavLink>See All</NavLink>
-                                </Link>
-                            </NavItem>
+
+                            <Link href="/#" as="/#" passHref>
+                                <NavLink>See All</NavLink>
+                            </Link>
                         </div>
                         <div className="__category">
                             <h3>Category__name</h3>
@@ -74,11 +73,10 @@ export default class extends React.Component {
                                 src="https://via.placeholder.com/400x150"
                                 alt="image"
                             />
-                            <NavItem>
-                                <Link href="/#" as="/#" passHref>
-                                    <NavLink>See All</NavLink>
-                                </Link>
-                            </NavItem>
+
+                            <Link href="/#" as="/#" passHref>
+                                <NavLink>See All</NavLink>
+                            </Link>
                         </div>
                         <div className="__category">
                             <h3>Category__name</h3>
@@ -86,11 +84,10 @@ export default class extends React.Component {
                                 src="https://via.placeholder.com/400x150"
                                 alt="image"
                             />
-                            <NavItem>
-                                <Link href="/#" as="/#" passHref>
-                                    <NavLink>See All</NavLink>
-                                </Link>
-                            </NavItem>
+
+                            <Link href="/#" as="/#" passHref>
+                                <NavLink>See All</NavLink>
+                            </Link>
                         </div>
                         <div className="__category">
                             <h3>Category__name</h3>
@@ -98,11 +95,10 @@ export default class extends React.Component {
                                 src="https://via.placeholder.com/400x150"
                                 alt="image"
                             />
-                            <NavItem>
-                                <Link href="/#" as="/#" passHref>
-                                    <NavLink>See All</NavLink>
-                                </Link>
-                            </NavItem>
+
+                            <Link href="/#" as="/#" passHref>
+                                <NavLink>See All</NavLink>
+                            </Link>
                         </div>
                     </div>
                     <div className="row">
