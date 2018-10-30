@@ -4,8 +4,6 @@ import ApiClient from '../../store/api';
 
 import { receiveContactForm } from './actions';
 
-import { track } from '../../core/services';
-
 /*******************************************************************
  * Submit Contact Form
  ********************************************************************/
