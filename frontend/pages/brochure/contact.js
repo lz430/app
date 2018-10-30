@@ -49,7 +49,10 @@ class Contact extends React.Component {
                         </div>
                     </Col>
                     <Col xl={8}>
-                        <ContactForm onSubmit={this.props.onSubmit} />
+                        <ContactForm
+                            onSubmit={this.props.onSubmit}
+                            results={this.props.results}
+                        />
                     </Col>
                 </Row>
             </Container>
@@ -65,8 +68,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSubmit: values => {
-            return dispatch(submitContactForm(values));
+        onSubmit: (values, actions) => {
+            return dispatch(submitContactForm(values, actions));
         },
     };
 };

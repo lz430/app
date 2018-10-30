@@ -4,13 +4,14 @@ import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikField
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
 
-import { Row, Col, Button, FormGroup, Label, Input, Alert } from 'reactstrap';
+import { Row, Col, Button, FormGroup, Label, Alert } from 'reactstrap';
 
-import { faArrowRight } from '@fortawesome/pro-light-svg-icons/faArrowRight';
+import { faArrowRight, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const validationSchema = object().shape({
-    name: string().required(),
+    firstname: string().required(),
+    lastname: string().required(),
     email: string().required(),
     phone: string().required(),
     city: string().required(),
@@ -25,20 +26,20 @@ class ContactForm extends React.Component {
     };
 
     state = {
-        results: null,
+        values: null,
     };
 
-    handleOnSubmit(values) {
-        console.log(values);
-        this.setState({ results: values });
-        return true;
+    handleOnSubmit(values, actions) {
+        this.setState({ values: values });
+        this.props.onSubmit(values, actions);
     }
 
     render() {
-        if (this.state.results) {
+        if (this.props.results) {
             return (
-                <Alert t>
-                    Thanks {this.state.results.name}, we'll be in touch shortly.
+                <Alert>
+                    Thanks {this.state.values.firstname}, we&#39;ll be in touch
+                    shortly.
                 </Alert>
             );
         }
@@ -46,7 +47,8 @@ class ContactForm extends React.Component {
         return (
             <Formik
                 initialValues={{
-                    name: '',
+                    firstname: '',
+                    lastname: '',
                     email: '',
                     phone: '',
                     city: '',
@@ -54,86 +56,127 @@ class ContactForm extends React.Component {
                     message: '',
                 }}
                 validationSchema={validationSchema}
-                onSubmit={values => this.handleOnSubmit(values)}
+                onSubmit={(values, actions) =>
+                    this.handleOnSubmit(values, actions)
+                }
             >
-                {props => (
-                    <Form>
-                        <FormGroup>
-                            <Label for="exampleEmail">Your Name</Label>
-                            <FormikFieldWithBootstrapInput
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="Jane Smith"
-                            />
-                        </FormGroup>
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="exampleEmail">Email</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        placeholder="jane@example.com"
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="exampleEmail">Phone</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="tel"
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="(231) 225 5555"
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
+                {props => {
+                    let button;
 
-                        <Row>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="exampleEmail">City</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="text"
-                                        name="city"
-                                        id="city"
-                                        placeholder="Brighton"
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup>
-                                    <Label for="exampleEmail">State</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="text"
-                                        name="state"
-                                        id="state"
-                                        placeholder="MI"
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-
-                        <FormGroup>
-                            <Label for="exampleText">Message</Label>
-                            <FormikFieldWithBootstrapInput
-                                type="textarea"
-                                name="message"
-                                id="message"
-                                style={{ height: '150px' }}
-                            />
-                        </FormGroup>
-
-                        <div className="text-right">
+                    if (props.isSubmitting) {
+                        button = (
+                            <Button
+                                type="submit"
+                                color="primary"
+                                size="lg"
+                                disabled={true}
+                            >
+                                Loading{' '}
+                                <FontAwesomeIcon icon={faSpinner} spin={true} />
+                            </Button>
+                        );
+                    } else {
+                        button = (
                             <Button type="submit" color="primary" size="lg">
                                 Submit <FontAwesomeIcon icon={faArrowRight} />
                             </Button>
-                        </div>
-                    </Form>
-                )}
+                        );
+                    }
+
+                    return (
+                        <Form>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">
+                                            First Name
+                                        </Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="text"
+                                            name="firstname"
+                                            id="firstname"
+                                            placeholder="Jane"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">
+                                            Last Name
+                                        </Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="text"
+                                            name="lastname"
+                                            id="lastname"
+                                            placeholder="Smith"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">Email</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            placeholder="jane@example.com"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">Phone</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="tel"
+                                            name="phone"
+                                            id="phone"
+                                            placeholder="(231) 225 5555"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
+                            <Row>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">City</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="text"
+                                            name="city"
+                                            id="city"
+                                            placeholder="Brighton"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                                <Col>
+                                    <FormGroup>
+                                        <Label for="exampleEmail">State</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="text"
+                                            name="state"
+                                            id="state"
+                                            placeholder="MI"
+                                        />
+                                    </FormGroup>
+                                </Col>
+                            </Row>
+
+                            <FormGroup>
+                                <Label for="exampleText">Message</Label>
+                                <FormikFieldWithBootstrapInput
+                                    type="textarea"
+                                    name="message"
+                                    id="message"
+                                    style={{ height: '150px' }}
+                                />
+                            </FormGroup>
+
+                            <div className="text-right">{button}</div>
+                        </Form>
+                    );
+                }}
             </Formik>
         );
     }

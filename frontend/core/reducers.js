@@ -26,7 +26,7 @@ const pagesReducer = combineReducers({
 const pagesPersistConfig = {
     ...basePersistConfig,
     key: 'pages',
-    blacklist: ['dealList', 'dealDetails', 'compare'],
+    blacklist: ['dealList', 'dealDetails', 'compare', 'contact'],
 };
 
 export default combineReducers({

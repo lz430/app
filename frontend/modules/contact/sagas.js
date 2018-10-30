@@ -1,13 +1,30 @@
-import { takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from 'redux-saga/effects';
 import { SUBMIT_CONTACT_FORM } from './consts';
+import ApiClient from '../../store/api';
+
+import { receiveContactForm } from './actions';
 
 import { track } from '../../core/services';
 
 /*******************************************************************
  * Submit Contact Form
  ********************************************************************/
-function* submitContactForm() {
-    yield console.log('Submit contact form');
+function* submitContactForm(action) {
+    const values = action.values;
+    const actions = action.actions;
+
+    let results = null;
+    try {
+        results = yield call(ApiClient.brochure.contact, values);
+    } catch (e) {
+        yield put(receiveContactForm(e.response.data));
+    }
+
+    if (results) {
+        yield put(receiveContactForm(results.data));
+    }
+
+    yield call(actions.setSubmitting, false);
 }
 
 /*******************************************************************
