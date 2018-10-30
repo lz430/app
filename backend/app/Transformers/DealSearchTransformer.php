@@ -4,8 +4,6 @@ namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
 use DeliverMyRide\Fuel\Map;
-use App\Models\Feature;
-use DB;
 
 class DealSearchTransformer extends TransformerAbstract
 {
