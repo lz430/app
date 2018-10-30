@@ -1,23 +1,25 @@
 import '../../styles/app.scss';
 import React from 'react';
-import {
-    Container,
-    Row,
-    Col,
-    Button,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-} from 'reactstrap';
+import PropTypes from 'prop-types';
 
-import { faArrowRight } from '@fortawesome/pro-light-svg-icons/faArrowRight';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Container, Row, Col } from 'reactstrap';
 
-export default class extends React.Component {
+import { compose } from 'redux';
+import { withRouter } from 'next/router';
+import { connect } from 'react-redux';
+import withTracker from '../../components/withTracker';
+import { submitContactForm } from '../../modules/contact/actions';
+import ContactForm from '../../modules/contact/components/ContactForm';
+
+class Contact extends React.Component {
+    static propTypes = {
+        results: PropTypes.object,
+        onSubmit: PropTypes.func.isRequired,
+    };
+
     render() {
         return (
-            <Container>
+            <Container className="mb-5">
                 <Row>
                     <Col>
                         <h1>
@@ -47,86 +49,33 @@ export default class extends React.Component {
                         </div>
                     </Col>
                     <Col xl={8}>
-                        <Form>
-                            <FormGroup>
-                                <Label for="exampleEmail">Your Name</Label>
-                                <Input
-                                    type="email"
-                                    name="email"
-                                    id="exampleEmail"
-                                    placeholder="with a placeholder"
-                                />
-                            </FormGroup>
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="exampleEmail">Email</Label>
-                                        <Input
-                                            type="email"
-                                            name="email"
-                                            id="exampleEmail"
-                                            placeholder="with a placeholder"
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="exampleEmail">Phone</Label>
-                                        <Input
-                                            type="email"
-                                            name="email"
-                                            id="exampleEmail"
-                                            placeholder="with a placeholder"
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="exampleEmail">City</Label>
-                                        <Input
-                                            type="email"
-                                            name="email"
-                                            id="exampleEmail"
-                                            placeholder="with a placeholder"
-                                        />
-                                    </FormGroup>
-                                </Col>
-                                <Col>
-                                    <FormGroup>
-                                        <Label for="exampleEmail">State</Label>
-                                        <Input
-                                            type="email"
-                                            name="email"
-                                            id="exampleEmail"
-                                            placeholder="with a placeholder"
-                                        />
-                                    </FormGroup>
-                                </Col>
-                            </Row>
-
-                            <FormGroup>
-                                <Label for="exampleText">Message</Label>
-                                <Input
-                                    type="textarea"
-                                    name="text"
-                                    id="exampleText"
-                                    style={{ height: '150px' }}
-                                />
-                            </FormGroup>
-
-                            <div className="text-right">
-                                <Button color="primary" size="lg">
-                                    Submit{' '}
-                                    <FontAwesomeIcon icon={faArrowRight} />
-                                </Button>
-                            </div>
-                        </Form>
+                        <ContactForm onSubmit={this.props.onSubmit} />
                     </Col>
                 </Row>
             </Container>
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        results: state.pages.contact.results,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSubmit: values => {
+            return dispatch(submitContactForm(values));
+        },
+    };
+};
+
+export default compose(
+    withRouter,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    ),
+    withTracker
+)(Contact);
