@@ -203,46 +203,48 @@ export default class extends React.Component {
                     </div>
                 </div>
 
-                <div class="container callout__testimonials">
-                    <h4>What our customers are saying</h4>
-                    <div class="row">
-                        <div class="col-4">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Obcaecati quas omnis, iusto
-                                vero accusamus nam veniam reiciendis quaerat
-                                quod ipsum praesentium, unde molestiae!
-                                Obcaecati, error temporibus ipsam ipsum
-                                voluptas. Est?15
-                            </p>
-                            <div class="author">
-                                <span>Monica P</span>
+                <div class="fluid-container callout__testimonials">
+                    <div class="container">
+                        <h4>What our customers are saying</h4>
+                        <div class="row">
+                            <div class="col-4">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Obcaecati quas omnis,
+                                    iusto vero accusamus nam veniam reiciendis
+                                    quaerat quod ipsum praesentium, unde
+                                    molestiae! Obcaecati, error temporibus ipsam
+                                    ipsum voluptas. Est?15
+                                </p>
+                                <div class="author">
+                                    <span>Monica P</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Officiis ab aperiam suscipit
-                                enim, voluptatibus officia eaque iusto
-                                perspiciatis, excepturi necessitatibus aliquam
-                                quia impedit cumque quo blanditiis magni illo
-                                accusamus et!15
-                            </p>
-                            <div class="author">
-                                <span>Jason B, Traverse City MI</span>
+                            <div class="col-4">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Officiis ab aperiam
+                                    suscipit enim, voluptatibus officia eaque
+                                    iusto perspiciatis, excepturi necessitatibus
+                                    aliquam quia impedit cumque quo blanditiis
+                                    magni illo accusamus et!15
+                                </p>
+                                <div class="author">
+                                    <span>Jason B, Traverse City MI</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit. Quod quae soluta maiores
-                                recusandae, voluptatem ad officiis molestiae
-                                sunt cum blanditiis harum quasi laborum aliquam
-                                magnam architecto itaque ullam. Sit,
-                                distinctio!15
-                            </p>
-                            <div class="author">
-                                <span>Lori P, Birmingham MI</span>
+                            <div class="col-4">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit. Quod quae soluta maiores
+                                    recusandae, voluptatem ad officiis molestiae
+                                    sunt cum blanditiis harum quasi laborum
+                                    aliquam magnam architecto itaque ullam. Sit,
+                                    distinctio!15
+                                </p>
+                                <div class="author">
+                                    <span>Lori P, Birmingham MI</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -250,8 +252,9 @@ export default class extends React.Component {
 
                 <div class="container callout__media">
                     <div class="row">
-                        <div class="col">h5</div>
-                        <div class="col">Featured In:</div>
+                        <div class="col">
+                            <h5>Featured In: </h5>
+                        </div>
                         <div class="col">
                             <img
                                 src="https://via.placeholder.com/200x50"

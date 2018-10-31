@@ -299,6 +299,9 @@
 
 .callout {
     &__categories {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
         .row {
             align-content: center;
             justify-content: center;
@@ -332,5 +335,66 @@
                 }
             }
         }
+    }
+
+    &__brands {
+        background: #ececec;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 20px 0;
+
+        .row {
+            justify-content: center;
+
+            a {
+                display: block;
+                padding: 0;
+                margin: 0 10px;
+                img {
+                }
+            }
+        }
+    }
+
+    &__shop {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        .btn {
+            max-width: 150px;
+        }
+    }
+
+    &__info {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+
+    &__testimonials {
+        background: #ececec;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 40px 0;
+
+        h4 {
+            color: #213a59;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .author {
+            color: #213a59;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    }
+
+    &__media {
+        padding: 40px 0;
     }
 }
