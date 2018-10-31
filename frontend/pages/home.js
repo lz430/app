@@ -1,8 +1,5 @@
 import '../styles/app.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
 import { Jumbotron, NavLink } from 'reactstrap';
 // import SearchWidget from '../components/App/Header/SearchWidget';
 import Link from 'next/link';
