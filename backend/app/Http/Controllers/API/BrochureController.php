@@ -24,10 +24,10 @@ class BrochureController extends BaseAPIController
                 'city' => 'required|string',
                 'state' => 'required|string',
                 'message' => 'required|string',
-                //'g-recaptcha-response' => 'required|recaptcha',
+                'g_recaptcha_response' => 'required|recaptcha',
             ],
             [
-                'g-recaptcha-response' => 'The recaptcha is required.',
+                'g_recaptcha_response' => 'This token is invalid, please try again',
             ]
         );
 

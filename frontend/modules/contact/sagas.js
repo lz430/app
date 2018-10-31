@@ -11,18 +11,26 @@ function* submitContactForm(action) {
     const values = action.values;
     const actions = action.actions;
 
-    let results = null;
     try {
-        results = yield call(ApiClient.brochure.contact, values);
+        let results = yield call(ApiClient.brochure.contact, values);
+        yield put(receiveContactForm(results));
     } catch (e) {
-        yield put(receiveContactForm(e.response.data));
-    }
+        if (e.response.data.errors) {
+            let errors = {};
 
-    if (results) {
-        yield put(receiveContactForm(results.data));
+            Object.entries(e.response.data.errors).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    errors[key] = value.pop();
+                } else {
+                    errors[key] = value;
+                }
+            });
+            yield call(actions.setErrors, errors);
+        } else {
+            yield call(actions.setErrors, { form: 'Error submitting form' });
+        }
+        yield call(actions.setSubmitting, false);
     }
-
-    yield call(actions.setSubmitting, false);
 }
 
 /*******************************************************************

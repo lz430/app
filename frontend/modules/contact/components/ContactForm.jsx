@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
+import FormikFieldWithreCaptcha from '../../../components/Forms/FormikFieldWithreCaptcha';
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
 
@@ -17,7 +18,19 @@ const validationSchema = object().shape({
     city: string().required(),
     state: string().required(),
     message: string().required(),
+    g_recaptcha_response: string().required(),
 });
+
+const initialFormValues = {
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    city: '',
+    state: '',
+    message: '',
+    g_recaptcha_response: '',
+};
 
 class ContactForm extends React.Component {
     static propTypes = {
@@ -27,6 +40,7 @@ class ContactForm extends React.Component {
 
     state = {
         values: null,
+        recaptchaToken: false,
     };
 
     handleOnSubmit(values, actions) {
@@ -35,9 +49,9 @@ class ContactForm extends React.Component {
     }
 
     render() {
-        if (this.props.results) {
+        if (this.props.results && this.state.values) {
             return (
-                <Alert>
+                <Alert color="success">
                     Thanks {this.state.values.firstname}, we&#39;ll be in touch
                     shortly.
                 </Alert>
@@ -46,15 +60,7 @@ class ContactForm extends React.Component {
 
         return (
             <Formik
-                initialValues={{
-                    firstname: '',
-                    lastname: '',
-                    email: '',
-                    phone: '',
-                    city: '',
-                    state: '',
-                    message: '',
-                }}
+                initialValues={initialFormValues}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) =>
                     this.handleOnSubmit(values, actions)
@@ -172,6 +178,12 @@ class ContactForm extends React.Component {
                                     style={{ height: '150px' }}
                                 />
                             </FormGroup>
+
+                            <Row>
+                                <Col>
+                                    <FormikFieldWithreCaptcha name="g_recaptcha_response" />
+                                </Col>
+                            </Row>
 
                             <div className="text-right">{button}</div>
                         </Form>
