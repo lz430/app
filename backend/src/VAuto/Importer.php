@@ -6,9 +6,7 @@ use App\Models\Dealer;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 
-use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\RIS\RISClient;
 
 use Carbon\Carbon;
 use Exception;
@@ -83,7 +81,6 @@ class Importer
     private const PROCESS_BATCH_SIZE = 100;
 
     private $jatoClient;
-    private $fuelClient;
 
     private $error;
     private $filesystem;
@@ -219,7 +216,7 @@ class Importer
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             if(isset($versionDebugData['versionPhotos'])) {
-                $this->debug['versionPhotosUpdated']++;
+                $this->debug['versionPhotosUpdated'] = $versionDebugData['versionPhotos'];
             }
 
             //
@@ -232,11 +229,11 @@ class Importer
                 $this->info("    -- Error: Could not find match for vin");
                 return;
             }
-
-            if ($version->wasRecentlyCreated) {
-                $this->debug['versionsCreated']++;
-            } else {
-                $this->debug['versionsUpdated']++;
+            if(isset($versionDebugData['versionsCreated'])) {
+                $this->debug['versionsCreated'] = $versionDebugData['versionsCreated'];
+            }
+            if(isset($versionDebugData['versionsUpdated'])) {
+                $this->debug['versionsUpdated'] = $versionDebugData['versionsUpdated'];
             }
 
             $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);

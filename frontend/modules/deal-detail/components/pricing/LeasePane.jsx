@@ -211,6 +211,7 @@ export default class LeasePane extends React.PureComponent {
                             <DollarsAndCents
                                 value={pricing.totalAmountAtDriveOff()}
                             />
+                            *
                         </Value>
                     </Line>
                 </Group>

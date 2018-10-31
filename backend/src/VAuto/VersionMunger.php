@@ -312,7 +312,7 @@ class VersionMunger
         $version->photos()->where('type', 'default')->delete();
 
         if(count($assets) > 0) {
-            $this->debug['versionPhotos'] = 1;
+            $this->debug['versionPhotos']++;
         }
 
         foreach ($assets as $asset) {
@@ -427,12 +427,14 @@ class VersionMunger
         }
 
         $this->jatoVersion = $jatoVersion;
-
+        $this->debug['versionsCreated'] = 0;
+        $this->debug['versionsUpdated'] = 0;
         //
         // Decide if we need to create
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (!$version) {
             $version = $this->create();
+            $this->debug['versionsCreated']++;
             if ($version) {
                 $this->photos($version);
                 $this->quotes($version);
@@ -447,6 +449,7 @@ class VersionMunger
         // If the vehicle id has changed we need to update the vehicle id.
         if ($version->jato_vehicle_id != $jatoVersion->vehicle_ID) {
             $this->refresh($version, $jatoVersion);
+            $this->debug['versionsUpdated']++;
         }
 
         if (!$version->photos()->count()) {

@@ -27,7 +27,7 @@ class SyncPurchaseWithHubspot
             return false;
         }
 
-        $data = $this->client->forms()->submit('3388780', '9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f',
+        $this->client->forms()->submit('3388780', '9cac9eed-3b2c-4d2f-9bc6-38b0c7b04c2f',
             [
                 'firstname' => $purchase->buyer->first_name,
                 'lastname' => $purchase->buyer->last_name,
