@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'next/router';
+import classNames from 'classnames';
 
 import { LargeAndUp } from '../Responsive';
 
@@ -56,13 +57,17 @@ class App extends React.Component {
             <div className="app">
                 {this.renderHeader()}
                 <div
-                    className="app-content-wrapper"
-                    style={{
-                        marginTop: this.props.isBrochureSite ? '81px' : '67px',
-                        backgroundColor: this.props.isBrochureSite
-                            ? '#ffffff'
-                            : '#f2f2f2',
-                    }}
+                    className={classNames(
+                        'app-content-wrapper',
+                        {
+                            'app-content-wrapper__brochure': this.props
+                                .isBrochureSite,
+                        },
+                        {
+                            'app-content-wrapper__app': !this.props
+                                .isBrochureSite,
+                        }
+                    )}
                 >
                     <div className="app-content">{this.props.children}</div>
                     {this.renderFooter()}

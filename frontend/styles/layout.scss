@@ -15,8 +15,18 @@ body {
         display: flex;
         flex: 1;
         flex-direction: column;
-        margin-top: 67px;
+
         min-height: min-content;
+
+        &__app {
+            margin-top: 67px;
+            background-color: #f2f2f2;
+        }
+
+        &__brochure {
+            margin-top: 81px;
+            background-color: #ffffff;
+        }
         @include media-breakpoint-down(xs) {
             padding-top: 0;
         }
