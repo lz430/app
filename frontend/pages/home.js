@@ -3,17 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import {
-    Carousel,
-    CarouselItem,
-    CarouselControl,
-    CarouselIndicators,
-    CarouselCaption,
-    Jumbotron,
-    Button,
-} from 'reactstrap';
+import { Jumbotron, NavLink } from 'reactstrap';
 // import SearchWidget from '../components/App/Header/SearchWidget';
-import { NavItem, NavLink } from 'reactstrap';
 import Link from 'next/link';
 
 export default class extends React.Component {
@@ -203,11 +194,11 @@ export default class extends React.Component {
                     </div>
                 </div>
 
-                <div class="fluid-container callout__testimonials">
-                    <div class="container">
+                <div className="fluid-container callout__testimonials">
+                    <div className="container">
                         <h4>What our customers are saying</h4>
-                        <div class="row">
-                            <div class="col-4">
+                        <div className="row">
+                            <div className="col-4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Obcaecati quas omnis,
@@ -216,11 +207,11 @@ export default class extends React.Component {
                                     molestiae! Obcaecati, error temporibus ipsam
                                     ipsum voluptas. Est?15
                                 </p>
-                                <div class="author">
+                                <div className="author">
                                     <span>Monica P</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div className="col-4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Officiis ab aperiam
@@ -229,11 +220,11 @@ export default class extends React.Component {
                                     aliquam quia impedit cumque quo blanditiis
                                     magni illo accusamus et!15
                                 </p>
-                                <div class="author">
+                                <div className="author">
                                     <span>Jason B, Traverse City MI</span>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div className="col-4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Quod quae soluta maiores
@@ -242,7 +233,7 @@ export default class extends React.Component {
                                     aliquam magnam architecto itaque ullam. Sit,
                                     distinctio!15
                                 </p>
-                                <div class="author">
+                                <div className="author">
                                     <span>Lori P, Birmingham MI</span>
                                 </div>
                             </div>
@@ -250,30 +241,30 @@ export default class extends React.Component {
                     </div>
                 </div>
 
-                <div class="container callout__media">
-                    <div class="row">
-                        <div class="col">
+                <div className="container callout__media">
+                    <div className="row">
+                        <div className="col">
                             <h5>Featured In: </h5>
                         </div>
-                        <div class="col">
+                        <div className="col">
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
                         </div>
-                        <div class="col">
+                        <div className="col">
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
                         </div>
-                        <div class="col">
+                        <div className="col">
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
                         </div>
-                        <div class="col">
+                        <div className="col">
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
