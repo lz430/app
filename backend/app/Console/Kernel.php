@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Commands\OutputMakes::class,
         Commands\LoadDealsFromVauto::class,
         Commands\ImportVautoMapData::class,
         Commands\Tests\TestCoxAPI::class,
