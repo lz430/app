@@ -6,7 +6,7 @@
     justify-content: center;
     position: fixed;
     width: 100%;
-    z-index: 100;
+    z-index: 1;
 
     .navbar {
         border-bottom: 0 none;
@@ -90,6 +90,9 @@
     color: $color-text-white;
     padding-top: 30px;
 
+    .container-fluid {
+        max-width: $break-extra-large;
+    }
     .row {
         justify-content: space-between;
 
@@ -144,7 +147,7 @@
         &.footer-nav {
             width: 75%;
             @include media-breakpoint-up(md) {
-                // max-width: 50%;
+                margin-top: 5px;
             }
             @include media-breakpoint-down(sm) {
                 width: 100%;
@@ -269,16 +272,129 @@
     }
 } //end brochure-footer
 
-.page-hero {
-    min-height: 420px;
-    background-position: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+// Brochure home
+.jumbotron {
+    position: relative;
 
-    h1 {
-        font-weight: bold;
-        color: $color-text-white;
-        text-align: center;
+    img {
+        max-width: 100%;
+    }
+    .search {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+
+        .__container {
+            background: $color-background-secondary;
+            max-width: 35%;
+            padding: 15px;
+
+            h3 {
+                font-size: 0.8rem;
+                font-weight: bold;
+            }
+        }
+    }
+} //end jumbotron
+
+.callout {
+    &__categories {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        .row {
+            align-content: center;
+            justify-content: center;
+
+            @include media-breakpoint-down(sm) {
+                flex-wrap: wrap;
+            }
+
+            .__category {
+                max-width: 25%;
+                width: 25%;
+
+                h3 {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    text-align: center;
+                }
+                img {
+                    max-width: 90%;
+                    margin: 0 auto;
+                }
+                a {
+                    color: $color-text-blue;
+                    text-align: center;
+                }
+            }
+            &:last-of-type {
+                a {
+                    background: $color-text-blue;
+                    border: 0 none;
+                }
+            }
+        }
+    }
+
+    &__brands {
+        background: #ececec;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 20px 0;
+
+        .row {
+            justify-content: center;
+
+            a {
+                display: block;
+                padding: 0;
+                margin: 0 10px;
+                img {
+                }
+            }
+        }
+    }
+
+    &__shop {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        .btn {
+            max-width: 150px;
+        }
+    }
+
+    &__info {
+        margin-top: 40px;
+        margin-bottom: 40px;
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    }
+
+    &__testimonials {
+        background: #ececec;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding: 40px 0;
+
+        h4 {
+            color: #213a59;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .author {
+            color: #213a59;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+    }
+
+    &__media {
+        padding: 40px 0;
     }
 }
