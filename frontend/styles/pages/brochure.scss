@@ -145,9 +145,9 @@
         }
 
         &.footer-nav {
-            width: 75%;
+            width: 50%;
             @include media-breakpoint-up(md) {
-                margin-top: 5px;
+                margin-top: 10px;
             }
             @include media-breakpoint-down(sm) {
                 width: 100%;
@@ -271,6 +271,15 @@
         }
     }
 } //end brochure-footer
+
+// Utilities and helpers
+.app-content-wrapper__brochure {
+    .btn-primary {
+        background: $color-text-blue;
+        border: 0 none;
+        color: $color-text-white;
+    }
+}
 
 // Brochure home
 .jumbotron {
@@ -396,5 +405,127 @@
 
     &__media {
         padding: 40px 0;
+    }
+} //end home page and callouts
+
+// FAQs
+.page-hero {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    @include media-breakpoint-up(md) {
+        min-height: 250px;
+        margin-bottom: 50px;
+    }
+    @include media-breakpoint-down(sm) {
+        min-height: 150px;
+        margin-bottom: 50px;
+        padding-bottom: 15px;
+    }
+    h1 {
+        color: $color-black;
+        // color: $color-text-white;
+        font-size: 3rem;
+    }
+    h4 {
+        color: $color-black;
+        // color: $color-text-white;
+        font-size: 1rem;
+    }
+
+    button {
+        @include media-breakpoint-up(md) {
+            margin-top: 20px;
+        }
+    }
+}
+
+.faq {
+    .col-sm-3 {
+        border-right: 1px solid $color-grey;
+        padding-left: 0;
+        @include media-breakpoint-down(sm) {
+            padding-left: 15px;
+        }
+        .toc {
+            list-style: none;
+            padding: 0;
+
+            li {
+                padding: 12px 0;
+
+                &:first-of-type {
+                    padding-top: 0;
+                }
+            }
+            a {
+                color: $color-black;
+                display: block;
+
+                &.active {
+                    color: $color-text-blue;
+                }
+            }
+        }
+
+        &:last-of-type {
+            border-right: 0 none;
+        }
+    }
+    @include media-breakpoint-up(md) {
+        .col-sm-9 {
+            padding-left: 100px;
+        }
+    }
+
+    &__accordion {
+        .col {
+            border-top: 1px solid $color-grey;
+            border-bottom: 1px solid $color-grey;
+            padding: 15px 0;
+
+            & + .col {
+                border-top: 0 none;
+            }
+            .title {
+                display: flex;
+                justify-content: space-between;
+
+                &:hover {
+                    cursor: pointer;
+                }
+                &.active {
+                    color: $color-text-blue;
+                    // margin-bottom: 10px;
+                }
+            }
+            .content {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    &__contact {
+        background: $color-lightgrey;
+        border-right: 0 none;
+        padding: 5px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+
+        h4 {
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        a {
+            color: $color-text-blue;
+            display: block;
+            font-size: 0.8rem;
+            padding: 5px 0;
+        }
     }
 }
