@@ -93,7 +93,6 @@ class Importer
         $this->filesystem = $filesystem;
         $this->jatoClient = $jatoClient;
 
-
         $this->debug = [
             'start' => microtime(true),
             'dealsCreated' => 0,
