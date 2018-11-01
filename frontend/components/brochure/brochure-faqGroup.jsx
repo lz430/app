@@ -2,24 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Col, Collapse } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 class ListGroupCollapse extends React.Component {
     static propTypes = {
         item: PropTypes.string,
     };
-    constructor(props) {
-        super(props);
-        this.toggle = this.toggle.bind(this);
-        this.state = { collapse: false };
-    }
+    state = {
+        collapse: false,
+        active: false,
+    };
 
-    toggle() {
+    toggle = () =>
         this.setState({
             collapse: !this.state.collapse,
             active: !this.state.active,
         });
-    }
 
     render() {
         const item = this.props.item;
@@ -31,7 +29,14 @@ class ListGroupCollapse extends React.Component {
                         onClick={this.toggle}
                     >
                         {item.title}
-                        <FontAwesomeIcon icon={faChevronDown} />
+                        <FontAwesomeIcon
+                            className={!this.state.active ? '' : 'hidden'}
+                            icon={faChevronDown}
+                        />
+                        <FontAwesomeIcon
+                            className={this.state.active ? '' : 'hidden'}
+                            icon={faChevronUp}
+                        />
                     </div>
                     <Collapse isOpen={this.state.collapse}>
                         <div className="content">{item.content}</div>
