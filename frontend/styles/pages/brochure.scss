@@ -1,6 +1,7 @@
 // Styles brochure site
 .brochure-header {
     background: $color-background-secondary;
+    box-shadow: 0 0px 6px rgba(0, 0, 0, 0.3);
     height: 80px;
     display: flex;
     justify-content: center;
@@ -279,7 +280,47 @@
         border: 0 none;
         color: $color-text-white;
     }
+    .page-hero {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        @include media-breakpoint-up(md) {
+            min-height: 250px;
+            margin-bottom: 50px;
+        }
+        @include media-breakpoint-down(sm) {
+            min-height: 150px;
+            margin-bottom: 50px;
+            padding-bottom: 15px;
+        }
+        h1 {
+            color: $color-black;
+            // color: $color-text-white;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        h4 {
+            color: $color-black;
+            // color: $color-text-white;
+            font-size: 1rem;
+        }
+
+        button {
+            @include media-breakpoint-up(md) {
+                margin-top: 20px;
+            }
+        }
+    } //end page-hero
+
+    div[class^='about__'] {
+        margin: 50px 0;
+    }
 }
+//end utilities and helpers
 
 // Brochure home
 .jumbotron {
@@ -409,41 +450,6 @@
 } //end home page and callouts
 
 // FAQs
-.page-hero {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-
-    @include media-breakpoint-up(md) {
-        min-height: 250px;
-        margin-bottom: 50px;
-    }
-    @include media-breakpoint-down(sm) {
-        min-height: 150px;
-        margin-bottom: 50px;
-        padding-bottom: 15px;
-    }
-    h1 {
-        color: $color-black;
-        // color: $color-text-white;
-        font-size: 3rem;
-    }
-    h4 {
-        color: $color-black;
-        // color: $color-text-white;
-        font-size: 1rem;
-    }
-
-    button {
-        @include media-breakpoint-up(md) {
-            margin-top: 20px;
-        }
-    }
-}
-
 .faq {
     .col-sm-3 {
         border-right: 1px solid $color-grey;
@@ -528,4 +534,114 @@
             padding: 5px 0;
         }
     }
-}
+} //end faq
+
+// About
+.about {
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+    h3 {
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
+    @include media-breakpoint-up(sm) {
+        img {
+            height: 100%;
+        }
+    }
+
+    &__twss {
+        background: $color-background-secondary;
+    }
+
+    &__story {
+        .container {
+            .col-sm-6:first-of-type {
+                background: #e7f1f7;
+                padding: 45px;
+                font-size: 0.8rem;
+            }
+            .col-sm-6:last-of-type {
+                padding-left: 0;
+            }
+
+            h3 {
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    &__values {
+        h4 {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .text-sm {
+            font-size: 0.75rem;
+        }
+    }
+
+    &__cost {
+        .container-fluid {
+            background: #ececec;
+            padding: 30px 15px;
+
+            p {
+                font-size: 0.9rem;
+                margin-bottom: 30px;
+            }
+
+            .btn-primary {
+                width: 15%;
+
+                @include media-breakpoint-down(sm) {
+                    width: auto;
+                }
+            }
+        }
+    }
+
+    &__office {
+        p {
+            font-size: 0.9rem;
+        }
+    }
+
+    &__team {
+        img {
+            height: auto;
+            @include media-breakpoint-down(sm) {
+                max-width: 100%;
+            }
+        }
+        h5 {
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 10px 0 0;
+
+            + span {
+                font-size: 0.8rem;
+            }
+        }
+        .row {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            align-content: space-evenly;
+            @include media-breakpoint-down(sm) {
+                padding: 0 15px;
+            }
+
+            div {
+                @include media-breakpoint-up(sm) {
+                    max-width: 20%;
+                    width: 20%;
+                }
+            }
+        }
+    }
+} //end about

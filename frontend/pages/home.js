@@ -98,7 +98,7 @@ export default class extends React.Component {
                     </div>
                 </div>
 
-                <div className="fluid-container callout__brands">
+                <div className="container-fluid callout__brands">
                     <div className="container">
                         <div className="row">
                             <Link href="/#" as="/#" passHref>
@@ -191,7 +191,7 @@ export default class extends React.Component {
                     </div>
                 </div>
 
-                <div className="fluid-container callout__testimonials">
+                <div className="container-fluid callout__testimonials">
                     <div className="container">
                         <h4>What our customers are saying</h4>
                         <div className="row">
