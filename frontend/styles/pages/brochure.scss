@@ -406,7 +406,7 @@
     &__media {
         padding: 40px 0;
     }
-}
+} //end home page and callouts
 
 // FAQs
 .page-hero {
@@ -491,11 +491,13 @@
             & + .col {
                 border-top: 0 none;
             }
-
             .title {
                 display: flex;
                 justify-content: space-between;
 
+                &:hover {
+                    cursor: pointer;
+                }
                 &.active {
                     color: $color-text-blue;
                     margin-bottom: 10px;
