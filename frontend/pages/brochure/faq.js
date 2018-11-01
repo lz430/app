@@ -9,12 +9,6 @@ import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import { filter } from 'ramda';
 
 export default class extends React.Component {
-    constructor(props) {
-        super(props);
-        this.toggle = this.toggle.bind(this);
-        this.state = { collapse: false };
-    }
-
     state = {
         collapse: false,
         active: false,
@@ -27,7 +21,7 @@ export default class extends React.Component {
         });
     }
 
-    handleClickTOC() {}
+    handleClickTOC(e) {}
 
     getFaqContent() {
         return filter(item => {
@@ -41,6 +35,8 @@ export default class extends React.Component {
                 <PageHero
                     backgroundImage="/static/brochure/About_Us.jpg"
                     title="FAQs"
+                    subtitle="A modern way to buy or lease your next vehicle"
+                    button="Find your new car"
                 />
                 <Container className="faq">
                     <Row>
