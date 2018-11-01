@@ -4,13 +4,17 @@ import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col, Collapse } from 'reactstrap';
 import Link from 'next/link';
 import Faqs from '../../components/brochure/faqs';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import FaqGroup from '../../components/brochure/brochure-faqGroup';
 
 import { filter } from 'ramda';
-console.log(Faqs);
 
 export default class extends React.Component {
+    constructor(props) {
+        super(props);
+        this.toggle = this.toggle.bind(this);
+        this.state = { collapse: false };
+    }
+
     state = {
         collapse: false,
         active: false,
@@ -23,11 +27,9 @@ export default class extends React.Component {
         });
     }
 
-    handleClickIndex() {}
+    handleClickTOC() {}
 
     getFaqContent() {
-        this.toggle = this.toggle.bind(this);
-
         return filter(item => {
             return item.featured;
         }, Faqs);
@@ -44,7 +46,7 @@ export default class extends React.Component {
                     <Row>
                         <Col sm="3">
                             <ul className="toc">
-                                <li onClick={this.handleClickIndex()}>
+                                <li onClick={this.handleClickTOC()}>
                                     <a href="#">Purchase</a>
                                 </li>
                                 <li>
@@ -72,33 +74,9 @@ export default class extends React.Component {
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
-                                {this.getFaqContent().map(item => {
-                                    return (
-                                        <Col key={item.title}>
-                                            {/*<img className="img-fluid" src={item.featuredImage} />*/}
-                                            <div
-                                                className={
-                                                    this.state.active
-                                                        ? 'title active'
-                                                        : 'title'
-                                                }
-                                                onClick={this.toggle}
-                                            >
-                                                {item.title}
-                                                <FontAwesomeIcon
-                                                    icon={faChevronDown}
-                                                />
-                                            </div>
-                                            <Collapse
-                                                isOpen={this.state.collapse}
-                                            >
-                                                <div className="content">
-                                                    {item.content}
-                                                </div>
-                                            </Collapse>
-                                        </Col>
-                                    );
-                                })}
+                                {Object.keys(Faqs).map((key, index) => (
+                                    <FaqGroup key={index} item={Faqs[key]} />
+                                ))}
                             </div>
                         </Col>
                         <Col sm="3">
