@@ -1,8 +1,7 @@
 import '../../styles/app.scss';
 import React from 'react';
 import PageHero from '../../components/brochure/PageHero';
-import { Container, Row, Col, Collapse } from 'reactstrap';
-import Link from 'next/link';
+import { Container, Row, Col } from 'reactstrap';
 import Faqs from '../../components/brochure/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 
@@ -20,8 +19,6 @@ export default class extends React.Component {
             active: !this.state.active,
         });
     }
-
-    handleClickTOC(e) {}
 
     getFaqContent() {
         return filter(item => {
@@ -42,7 +39,7 @@ export default class extends React.Component {
                     <Row>
                         <Col sm="3">
                             <ul className="toc">
-                                <li onClick={this.handleClickTOC()}>
+                                <li>
                                     <a href="#">Purchase</a>
                                 </li>
                                 <li>
@@ -55,7 +52,7 @@ export default class extends React.Component {
                                     <a href="#">Insurance</a>
                                 </li>
                                 <li>
-                                    <a href="#">Trade-In's</a>
+                                    <a href="#">Trade-In&apos;s</a>
                                 </li>
                                 <li>
                                     <a href="#">Pricing, Rebates, Incentives</a>
@@ -77,10 +74,12 @@ export default class extends React.Component {
                         </Col>
                         <Col sm="3">
                             <div className="faq__contact">
-                                <h4>Not finding what you're looking for?</h4>
+                                <h4>
+                                    Not finding what you&apos;re looking for?
+                                </h4>
                                 <a href="tel:855-675-7301">855-675-7301</a>
                                 <a href="mailto:support@delivermyride.com">
-                                    support@delivermyride.com
+                                    support%40delivermyride.com
                                 </a>
                                 <a href="#hs-chat-open">Live Chat</a>
                             </div>

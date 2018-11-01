@@ -5,6 +5,8 @@ export default class PageHero extends React.PureComponent {
     static propTypes = {
         title: PropTypes.string.isRequired,
         backgroundImage: PropTypes.string,
+        subtitle: PropTypes.string,
+        button: PropTypes.string,
     };
 
     render() {

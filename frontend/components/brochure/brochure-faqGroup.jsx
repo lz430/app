@@ -1,9 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Col, Collapse } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 class ListGroupCollapse extends React.Component {
+    static propTypes = {
+        item: PropTypes.string,
+    };
     constructor(props) {
         super(props);
         this.toggle = this.toggle.bind(this);
