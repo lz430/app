@@ -1,21 +1,17 @@
-const { join } = require('path');
-
 const express = require('express');
 const next = require('next');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
+
+const staticRoutes = require('./staticRoutes');
+
 app.prepare()
     .then(() => {
         const server = express();
 
-        //
-        // Static Root Assets
-        server.get('/favicon.ico', (req, res) => {
-            const path = join(__dirname, 'static', 'favicon.ico');
-            app.serveStatic(req, res, path);
-        });
+        staticRoutes({ server, app });
 
         //
         // Application Routes
