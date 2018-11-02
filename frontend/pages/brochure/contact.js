@@ -19,11 +19,12 @@ class Contact extends React.Component {
 
     render() {
         return (
-            <Container className="mb-5">
+            <Container className="contact mb-5">
                 <Row>
                     <Col>
                         <h1>
-                            Have a Question? <br />
+                            <span>Have a Question? </span>
+                            <br />
                             We&#39;re here to help.
                         </h1>
                     </Col>
@@ -37,15 +38,17 @@ class Contact extends React.Component {
                                 src="/static/images/about-riker.jpg"
                             />
                         </div>
-                        <div>
-                            35 W Huron Street
+                        <div className="contact__address">
+                            <span>35 W Huron Street Suite 1000</span>
                             <br />
-                            Suite 1000
-                            <br />
-                            Pontiac, MI 48342
+                            <span>Pontiac, MI 48342</span>
                         </div>
-                        <div>
+                        <div className="contact__links">
                             <a href="tel:855-675-7301">855-675-7301</a>
+                            <a href="mailto:support@delivermyride.com">
+                                support@delivermyride.com
+                            </a>
+                            <a href="#hs-chat-open">Live Chat</a>
                         </div>
                     </Col>
                     <Col xl={8}>
