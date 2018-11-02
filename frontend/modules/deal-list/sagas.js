@@ -204,6 +204,7 @@ function* searchToggleFilter(action) {
  ********************************************************************/
 function* init(action) {
     const { initialQuery, dataOnly } = action.data;
+
     if (!dataOnly) {
         yield* initPage('deal-list');
     }
