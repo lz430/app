@@ -2,6 +2,7 @@ import '../../styles/app.scss';
 import React from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container } from 'reactstrap';
+import Link from 'next/link';
 
 export default class extends React.Component {
     render() {
@@ -11,7 +12,7 @@ export default class extends React.Component {
                     backgroundImage="/static/brochure/About_Us.jpg"
                     title="How It Works"
                 />
-                <div className="step-one  bg-white text-center pb-4 pt-4">
+                <div className="step-one  text-center pb-4 pt-4">
                     <Container>
                         <h3>Select the style and brands to compare</h3>
                     </Container>
@@ -20,7 +21,7 @@ export default class extends React.Component {
                         src="/static/brochure/works/Select-Style.gif"
                     />
                 </div>
-                <div className="step-one text-center pb-4 pt-4">
+                <div className="step-one bg-light text-center pb-4 pt-4">
                     <Container>
                         <h3>View and refine your results</h3>
                     </Container>
@@ -29,7 +30,7 @@ export default class extends React.Component {
                         src="/static/brochure/works/View-Refine.gif"
                     />
                 </div>
-                <div className="step-one bg-white  text-center pb-4 pt-4">
+                <div className="step-one  text-center pb-4 pt-4">
                     <Container>
                         <h3>
                             Prefer to compare? Add multiple vehicles to a
@@ -43,7 +44,7 @@ export default class extends React.Component {
                         src="/static/brochure/works/Compare.gif"
                     />
                 </div>
-                <div className="step-one text-center pb-4 pt-4">
+                <div className="step-one bg-light  text-center pb-4 pt-4">
                     <Container>
                         <h3>
                             See a car you like? Click &#34;View Details&#34;.
@@ -56,7 +57,7 @@ export default class extends React.Component {
                         src="/static/brochure/works/View-Details.gif"
                     />
                 </div>
-                <div className="step-one bg-white text-center pb-4 pt-4">
+                <div className="step-one  text-center pb-4 pt-4">
                     <Container>
                         <h3>
                             When you are ready to buy or lease, click &#34;Buy
@@ -68,7 +69,7 @@ export default class extends React.Component {
                         src="/static/brochure/works/Ready-To-Buy.gif"
                     />
                 </div>
-                <div className="step-one text-center pb-4 pt-4">
+                <div className="step-one bg-light text-center pb-4 pt-4">
                     <Container>
                         <p>
                             We will contact you within an hour of receiving your
@@ -80,8 +81,18 @@ export default class extends React.Component {
                         <h3>Have more questions?</h3>
 
                         <p>
-                            Visit our <a href="/faq">FAQ page</a> or{' '}
-                            <a href="/contact">contact us</a>.
+                            Visit our{' '}
+                            <Link href="/brochure/faq" as="/brochure/faq">
+                                FAQ page
+                            </Link>{' '}
+                            or{' '}
+                            <Link
+                                href="/brochure/contact"
+                                as="/brochure/contact"
+                            >
+                                contact us
+                            </Link>
+                            .
                         </p>
                     </Container>
                 </div>

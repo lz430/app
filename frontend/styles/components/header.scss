@@ -328,11 +328,6 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-
-            h3 {
-                color: $color-grey;
-                text-align: center;
-            }
         }
 
         .search__results {
@@ -412,6 +407,15 @@
             top: 42px;
             left: -10px;
             margin-left: -175px;
+        }
+        h3 {
+            color: $gray-700;
+            text-align: center;
+            font-size: 1.1rem;
+            padding: 0.25rem;
+        }
+        &__mobile {
+            font-size: 1.5rem;
         }
         &__category {
             &__header {

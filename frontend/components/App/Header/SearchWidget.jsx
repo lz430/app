@@ -167,28 +167,50 @@ class SearchWidget extends React.PureComponent {
         );
     }
 
-    renderSearchResults() {
+    renderSearchResults(mobile = false) {
         const results = this.props.autocompleteResults;
         if (results && !Object.keys(results).length) {
             return false;
         }
-        if (
-            results &&
-            (results.model.length ||
-                results.make.length ||
-                results.style.length)
-        ) {
-            return (
-                <div className="search__results">
-                    {Object.keys(results).map(key =>
+
+        if (!results) {
+            return false;
+        }
+
+        const showResults = !!(
+            results.model.length ||
+            results.make.length ||
+            results.style.length
+        );
+        const showNoResults = !!(
+            !results.model.length &&
+            !results.make.length &&
+            !results.style.length
+        );
+
+        return (
+            <div
+                className={classNames('search__results', {
+                    search_results_mobile: mobile,
+                })}
+            >
+                {showNoResults && (
+                    <div className="ghost h-100 p-1">
+                        <h3>No results found, please try different keywords</h3>
+                    </div>
+                )}
+                {showResults &&
+                    Object.keys(results).map(key =>
                         this.renderSearchResultCategory(key, results[key])
                     )}
-                </div>
-            );
-        }
-        return false;
+            </div>
+        );
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     renderSearchIcon() {
         if (this.state.resultsAreLoading) {
             return (
@@ -203,13 +225,46 @@ class SearchWidget extends React.PureComponent {
         return <FontAwesomeIcon icon={faSearch} className="search-icon" />;
     }
 
+    /**
+     *
+     * @returns {*}
+     */
     render() {
         if (this.props.currentPageIsInCheckout) {
             return false;
         }
 
+        let mobileButton;
+
+        if (!this.state.SearchMobile) {
+            mobileButton = (
+                <FontAwesomeIcon
+                    icon={faSearch}
+                    className={classNames({
+                        active: !this.state.SearchMobile,
+                    })}
+                    onClick={() => {
+                        this.toggleSearchMobile();
+                        this.setState({ SearchMessage: true });
+                    }}
+                />
+            );
+        } else {
+            mobileButton = (
+                <FontAwesomeIcon
+                    icon={faTimes}
+                    className={classNames({
+                        active: this.state.SearchMobile,
+                    })}
+                    onClick={() => {
+                        this.toggleSearchMobile();
+                    }}
+                />
+            );
+        }
+
         return (
-            <div className="search " ref={node => (this.node = node)}>
+            <div className="search" ref={node => (this.node = node)}>
                 <MediumAndUp>
                     <div className="search__input">
                         <input
@@ -226,29 +281,7 @@ class SearchWidget extends React.PureComponent {
                     {this.state.query && this.renderSearchResults()}
                 </MediumAndUp>
                 <SmallAndDown>
-                    <div className="search__mobile">
-                        <FontAwesomeIcon
-                            icon={faSearch}
-                            className={classNames({
-                                active: !this.state.SearchMobile,
-                                hidden: this.state.SearchMobile,
-                            })}
-                            onClick={() => {
-                                this.toggleSearchMobile();
-                                this.setState({ SearchMessage: true });
-                            }}
-                        />
-                        <FontAwesomeIcon
-                            icon={faTimes}
-                            className={classNames({
-                                active: this.state.SearchMobile,
-                                hidden: !this.state.SearchMobile,
-                            })}
-                            onClick={() => {
-                                this.toggleSearchMobile();
-                            }}
-                        />
-                    </div>
+                    <div className="search__mobile">{mobileButton}</div>
                     {this.state.SearchMobile && (
                         <div className="search__container-fluid">
                             <div className="search__input">
@@ -266,7 +299,7 @@ class SearchWidget extends React.PureComponent {
                                 {this.renderSearchIcon()}
                             </div>
                             {this.renderSearchMessage()}
-                            {this.state.query && this.renderSearchResults()}
+                            {this.state.query && this.renderSearchResults(true)}
                         </div>
                     )}
                 </SmallAndDown>
