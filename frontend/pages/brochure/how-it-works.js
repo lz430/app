@@ -14,7 +14,9 @@ export default class extends React.Component {
                 />
                 <div className="step-one  text-center pb-4 pt-4">
                     <Container>
-                        <h3>Select the style and brands to compare</h3>
+                        <h4 className="mb-4">
+                            Select the style and brands to compare
+                        </h4>
                     </Container>
                     <img
                         className="how-it"
@@ -23,7 +25,7 @@ export default class extends React.Component {
                 </div>
                 <div className="step-one bg-light text-center pb-4 pt-4">
                     <Container>
-                        <h3>View and refine your results</h3>
+                        <h4 className="mb-4">View and refine your results</h4>
                     </Container>
                     <img
                         className="how-it"
@@ -32,12 +34,12 @@ export default class extends React.Component {
                 </div>
                 <div className="step-one  text-center pb-4 pt-4">
                     <Container>
-                        <h3>
+                        <h4 className="mb-4">
                             Prefer to compare? Add multiple vehicles to a
                             compare garage to compare vehicles side by side,
                             allowing you to make the best choice in minutes
                             instead of hours
-                        </h3>
+                        </h4>
                     </Container>
                     <img
                         className="how-it"
@@ -46,11 +48,11 @@ export default class extends React.Component {
                 </div>
                 <div className="step-one bg-light  text-center pb-4 pt-4">
                     <Container>
-                        <h3>
+                        <h4 className="mb-4">
                             See a car you like? Click &#34;View Details&#34;.
                             Here you can customize your rebates and payments,
                             review standard equipment and view options.
-                        </h3>
+                        </h4>
                     </Container>
                     <img
                         className="how-it"
@@ -59,10 +61,10 @@ export default class extends React.Component {
                 </div>
                 <div className="step-one  text-center pb-4 pt-4">
                     <Container>
-                        <h3>
+                        <h4 className="mb-4">
                             When you are ready to buy or lease, click &#34;Buy
                             Now&#34; to review and finalize.
-                        </h3>
+                        </h4>
                     </Container>
                     <img
                         className="how-it"
@@ -78,7 +80,7 @@ export default class extends React.Component {
                             anytime before final paperwork is signed, even if
                             the car is in your driveway!
                         </p>
-                        <h3>Have more questions?</h3>
+                        <h4 className="mb-4">Have more questions?</h4>
 
                         <p>
                             Visit our{' '}
