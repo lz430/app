@@ -10,7 +10,7 @@
     z-index: 1;
 
     .navbar {
-        border-bottom: 0 none;
+        border-bottom: $border-none;
         box-shadow: none;
         max-width: $break-extra-large;
         margin: 0 auto;
@@ -49,14 +49,28 @@
                 a {
                     color: $color-black;
                     font-size: 1rem;
-                    font-weight: 700;
                 }
 
                 .btn-primary {
                     background: $color-text-blue;
-                    border: 0 none;
+                    border: $border-none;
+                    border-radius: $border-radius;
                     color: $color-text-white;
                     margin-left: auto;
+                    font-size: 1rem;
+
+                    &:not(:disabled):not(.disabled):active,
+                    &:not(:disabled):not(.disabled).active,
+                    &:not(:disabled):not(.disabled):active:focus {
+                        background: $color-text-blue;
+                        border: $border-none;
+                        color: $color-text-white;
+                        box-shadow: none;
+                    }
+
+                    &:focus {
+                        box-shadow: none;
+                    }
                 }
             }
         }
@@ -77,7 +91,7 @@
                         }
                         &:last-of-type,
                         &:nth-child(3) {
-                            border-bottom: 0 none;
+                            border-bottom: $border-none;
                         }
                     }
                 }
@@ -275,10 +289,27 @@
 
 // Utilities and helpers
 .app-content-wrapper__brochure {
+    padding-top: 20px !important;
+
     .btn-primary {
         background: $color-text-blue;
-        border: 0 none;
+        border: $border-none;
+        border-radius: $border-radius;
         color: $color-text-white;
+        font-size: 1rem;
+
+        &:not(:disabled):not(.disabled):active,
+        &:not(:disabled):not(.disabled).active,
+        &:not(:disabled):not(.disabled):active:focus {
+            background: $color-text-blue;
+            border: $border-none;
+            color: $color-text-white;
+            box-shadow: none;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
     }
     .page-hero {
         display: flex;
@@ -381,7 +412,7 @@
             &:last-of-type {
                 a {
                     background: $color-text-blue;
-                    border: 0 none;
+                    border: $border-none;
                 }
             }
         }
@@ -479,7 +510,7 @@
         }
 
         &:last-of-type {
-            border-right: 0 none;
+            border-right: $border-none;
         }
     }
     @include media-breakpoint-up(md) {
@@ -495,7 +526,7 @@
             padding: 15px 0;
 
             & + .col {
-                border-top: 0 none;
+                border-top: $border-none;
             }
             .title {
                 display: flex;
@@ -517,7 +548,7 @@
 
     &__contact {
         background: $color-lightgrey;
-        border-right: 0 none;
+        border-right: $border-none;
         padding: 5px;
         margin-top: 50px;
         margin-bottom: 50px;
@@ -645,3 +676,71 @@
         }
     }
 } //end about
+
+// Contact
+.contact {
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        span {
+            color: $color-text-blue;
+        }
+    }
+
+    & > .row:first-of-type {
+        margin-bottom: 20px;
+    }
+
+    .col-xl-4 {
+        @include media-breakpoint-down(md) {
+            margin-bottom: 20px;
+        }
+        .contact__address {
+            margin-top: 50px;
+        }
+        .contact__links {
+            margin-top: 50px;
+
+            a {
+                color: $color-text-blue;
+                display: block;
+                & + a {
+                    margin: 10px 0;
+                }
+            }
+        }
+    }
+
+    .col-xl-8 {
+        .row {
+            @include media-breakpoint-down(sm) {
+            }
+        }
+        @include media-breakpoint-down(sm) {
+            .col {
+                flex-basis: auto;
+                width: 100%;
+            }
+            .text-right {
+                margin-top: 1rem;
+                text-align: left !important;
+            }
+        }
+    }
+
+    .form-control {
+        background: #f5f6f7;
+        border: $border-none;
+
+        &.is-invalid {
+            border: 1px solid $color-error;
+        }
+    }
+
+    button {
+        font-size: 0.8rem;
+        max-width: 125px;
+        padding: 10px;
+        width: 100%;
+    }
+} //end contact

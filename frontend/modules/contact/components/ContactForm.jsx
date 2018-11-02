@@ -74,7 +74,7 @@ class ContactForm extends React.Component {
                             <Button
                                 type="submit"
                                 color="primary"
-                                size="lg"
+                                size="md"
                                 disabled={true}
                             >
                                 Loading{' '}
@@ -83,8 +83,8 @@ class ContactForm extends React.Component {
                         );
                     } else {
                         button = (
-                            <Button type="submit" color="primary" size="lg">
-                                Submit <FontAwesomeIcon icon={faArrowRight} />
+                            <Button type="submit" color="primary" size="md">
+                                Submit
                             </Button>
                         );
                     }
@@ -94,7 +94,7 @@ class ContactForm extends React.Component {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">
+                                        <Label for="firstname">
                                             First Name
                                         </Label>
                                         <FormikFieldWithBootstrapInput
@@ -107,9 +107,7 @@ class ContactForm extends React.Component {
                                 </Col>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">
-                                            Last Name
-                                        </Label>
+                                        <Label for="lastname">Last Name</Label>
                                         <FormikFieldWithBootstrapInput
                                             type="text"
                                             name="lastname"
@@ -122,7 +120,7 @@ class ContactForm extends React.Component {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">Email</Label>
+                                        <Label for="email">Email</Label>
                                         <FormikFieldWithBootstrapInput
                                             type="email"
                                             name="email"
@@ -133,7 +131,7 @@ class ContactForm extends React.Component {
                                 </Col>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">Phone</Label>
+                                        <Label for="phone">Phone</Label>
                                         <FormikFieldWithBootstrapInput
                                             type="tel"
                                             name="phone"
@@ -147,7 +145,7 @@ class ContactForm extends React.Component {
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">City</Label>
+                                        <Label for="city">City</Label>
                                         <FormikFieldWithBootstrapInput
                                             type="text"
                                             name="city"
@@ -158,7 +156,7 @@ class ContactForm extends React.Component {
                                 </Col>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="exampleEmail">State</Label>
+                                        <Label for="state">State</Label>
                                         <FormikFieldWithBootstrapInput
                                             type="text"
                                             name="state"
@@ -170,7 +168,7 @@ class ContactForm extends React.Component {
                             </Row>
 
                             <FormGroup>
-                                <Label for="exampleText">Message</Label>
+                                <Label for="message">Message</Label>
                                 <FormikFieldWithBootstrapInput
                                     type="textarea"
                                     name="message"
