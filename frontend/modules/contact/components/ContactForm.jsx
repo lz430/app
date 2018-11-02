@@ -7,7 +7,7 @@ import { string, object } from 'yup';
 
 import { Row, Col, Button, FormGroup, Label, Alert } from 'reactstrap';
 
-import { faArrowRight, faSpinner } from '@fortawesome/pro-light-svg-icons';
+import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const validationSchema = object().shape({
