@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, NavLink, Col } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import Link from 'next/link';
 
 import styles from '../../../content/styles';

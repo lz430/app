@@ -1,8 +1,6 @@
 import '../styles/app.scss';
 import React from 'react';
-import { Jumbotron, NavLink } from 'reactstrap';
-// import SearchWidget from '../components/App/Header/SearchWidget';
-import Link from 'next/link';
+import { Jumbotron } from 'reactstrap';
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
 
