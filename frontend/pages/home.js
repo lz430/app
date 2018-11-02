@@ -1,8 +1,8 @@
 import '../styles/app.scss';
 import React from 'react';
-import { Jumbotron, NavLink } from 'reactstrap';
-// import SearchWidget from '../components/App/Header/SearchWidget';
-import Link from 'next/link';
+import { Jumbotron } from 'reactstrap';
+import ShopByBrand from '../modules/home/components/ShopByBrand';
+import ShopByStyle from '../modules/home/components/ShopByStyle';
 
 export default class extends React.Component {
     state = {
@@ -42,125 +42,8 @@ export default class extends React.Component {
                     </div>
                 </Jumbotron>
 
-                <div className="container callout__categories">
-                    <div className="row">
-                        <div className="__category">
-                            <h3>Category__name</h3>
-                            <img
-                                src="https://via.placeholder.com/400x150"
-                                alt="image"
-                            />
-
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>See All</NavLink>
-                            </Link>
-                        </div>
-                        <div className="__category">
-                            <h3>Category__name</h3>
-                            <img
-                                src="https://via.placeholder.com/400x150"
-                                alt="image"
-                            />
-
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>See All</NavLink>
-                            </Link>
-                        </div>
-                        <div className="__category">
-                            <h3>Category__name</h3>
-                            <img
-                                src="https://via.placeholder.com/400x150"
-                                alt="image"
-                            />
-
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>See All</NavLink>
-                            </Link>
-                        </div>
-                        <div className="__category">
-                            <h3>Category__name</h3>
-                            <img
-                                src="https://via.placeholder.com/400x150"
-                                alt="image"
-                            />
-
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>See All</NavLink>
-                            </Link>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <Link href="/#" as="/#" passHref>
-                            <NavLink className="btn btn-primary">
-                                Browse All Cars
-                            </NavLink>
-                        </Link>
-                    </div>
-                </div>
-
-                <div className="container-fluid callout__brands">
-                    <div className="container">
-                        <div className="row">
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="placeholder"
-                                    />
-                                </NavLink>
-                            </Link>
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="placeholder"
-                                    />
-                                </NavLink>
-                            </Link>
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="placeholder"
-                                    />
-                                </NavLink>
-                            </Link>
-                            <Link href="/#" as="/#" passHref>
-                                <NavLink>
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="placeholder"
-                                    />
-                                </NavLink>
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="container callout__shop">
-                    <div className="row">
-                        <div className="col-4">
-                            <h2>Shop</h2>
-                            <p>
-                                Browser new car inventory of 75-100 local
-                                dealers, select features important to you and
-                                compare brands to find a car that fits your
-                                lifestyle.
-                            </p>
-                            <Link href="/filter" as="/filter" passHref>
-                                <NavLink className="btn btn-primary">
-                                    Get Started
-                                </NavLink>
-                            </Link>
-                        </div>
-                        <div className="col-8">
-                            <img
-                                src="https://via.placeholder.com/700x200.png?text=Jeep"
-                                alt="placeholder"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <ShopByStyle />
+                <ShopByBrand />
 
                 <div className="container callout__info">
                     <div className="row">

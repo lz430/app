@@ -2,7 +2,7 @@ import '../../styles/app.scss';
 import React from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col } from 'reactstrap';
-import Faqs from '../../components/brochure/faqs';
+import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 
 import { filter } from 'ramda';
