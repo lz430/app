@@ -13,50 +13,61 @@ import Wagon from '../../icons/body-styles/wagon.svg';
 class StyleIcon extends React.PureComponent {
     static propTypes = {
         style: PropTypes.string.isRequired,
+        size: PropTypes.string.isRequired,
+    };
+
+    static defaultProps = {
+        size: 'small',
     };
 
     renderIcon(icon) {
+        let size = '70px';
+
+        if (this.props.size === 'large') {
+            size = '180px';
+        }
+
         switch (icon) {
             case 'convertible':
                 return (
                     <Convertible
-                        width="70px"
+                        width={size}
                         className="filter-items__item__icon"
                     />
                 );
             case 'coupe':
                 return (
-                    <Coupe width="70px" className="filter-items__item__icon" />
+                    <Coupe width={size} className="filter-items__item__icon" />
                 );
             case 'hatchback':
                 return (
                     <Hatchback
-                        width="70px"
+                        width={size}
                         className="filter-items__item__icon"
                     />
                 );
             case 'minivan':
                 return (
                     <Minivan
-                        width="70px"
+                        width={size}
                         className="filter-items__item__icon"
                     />
                 );
             case 'pickup':
                 return (
-                    <Pickup width="70px" className="filter-items__item__icon" />
+                    <Pickup width={size} className="filter-items__item__icon" />
                 );
             case 'sedan':
                 return (
-                    <Sedan width="70px" className="filter-items__item__icon" />
+                    <Sedan width={size} className="filter-items__item__icon" />
                 );
             case 'suv':
                 return (
-                    <Suv width="70px" className="filter-items__item__icon" />
+                    <Suv width={size} className="filter-items__item__icon" />
                 );
             case 'wagon':
                 return (
-                    <Wagon width="70px" className="filter-items__item__icon" />
+                    <Wagon width={size} className="filter-items__item__icon" />
                 );
             default:
                 return false;

@@ -65,10 +65,8 @@
 @import 'components/deals';
 @import 'components/deal';
 @import 'components/model-year';
-@import 'components/apply-or-purchase';
 @import 'components/cash-finance-lease-calculator';
 @import 'components/zipcode-finder';
-@import 'pages/deal-list/sidebar-filters';
 @import 'components/rebates';
 @import 'components/rebates-description-modal';
 @import 'components/lease';
@@ -78,12 +76,12 @@
 @import 'components/deal-price';
 @import 'components/loading';
 @import 'components/disclaimer';
-@import 'components/confirm-deal';
 @import 'components/button-group';
 
 // Pages
 @import 'pages/deal-list/deal-list';
 @import 'pages/deal-list/sortbar';
+@import 'pages/deal-list/sidebar-filters';
 @import 'pages/deal-list/filterbar';
 
 @import 'pages/deal-detail';
@@ -92,8 +90,6 @@
 @import 'pages/compare/compare-page-table';
 
 @import 'pages/checkout-confirm-page';
-@import 'pages/checkout-financing';
-@import 'pages/checkout-complete';
 
 // Vendor
 @import '~react-image-gallery/styles/scss/image-gallery.scss';
