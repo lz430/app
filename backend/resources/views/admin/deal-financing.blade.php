@@ -42,20 +42,94 @@
                         @slot('title')
                             Rates & Rebates
                         @endslot
-                        <pre>{{ json_encode($data['rates'], JSON_PRETTY_PRINT) }}</pre>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Scenario Type</th>
+                                        <th>Id</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($data['rates']->rebates['everyone']['programs'] as $program)
+                                    <tr>
+                                        <td>{{$program->program->ProgramName}}</td>
+                                        <td>{{$program->scenario->DealScenarioType}}</td>
+                                        <td>{{$program->program->ProgramID}}</td>
+                                        <td>${{$program->value}}</td>
+                                    </tr>
+                                @endforeach
+                                    <tr class="well">
+                                        <td><b>Total</b></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>${{$data['rates']->rebates['everyone']['total']}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                     @endcomponent
+                    @if($type == 'lease')
                     @component('components.box', ['collapsible' => true, 'key' => "{$type}-{$role}-quote"])
                         @slot('title')
                             Quote (Excluding Lease Payments)
                         @endslot
-                        <pre>{{ json_encode($data['quote'], JSON_PRETTY_PRINT) }}</pre>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Term Length</th>
+                                    <th>Rate/Money Factor</th>
+                                    <th>Residuals</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($data['quote']['rates'] as $rate)
+                                <tr>
+                                    <td>{{isset($rate['termLength']) ? $rate['termLength'] : '--'}}</td>
+                                    <td>{{isset($rate['rate']) ? $rate['rate'] . '%' : (isset($rate['moneyFactor']) ? $rate['moneyFactor'] : '--')}}</td>
+                                    @foreach($rate['residuals'] as $residual)
+                                        <td>{{isset($residual['annualMileage']) ? $residual['annualMileage'] . ' miles' : '--'}}</td>
+                                        <td>{{isset($residual['residualPercent']) ? $residual['residualPercent'] . '%' : '--'}}</td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+
+                            </tbody>
+                        </table>
                     @endcomponent
+                    @endif
                     @if (isset($data['payments']))
                         @component('components.box', ['collapsible' => true, 'key' => "{$type}-{$role}-payments"])
                             @slot('title')
                                 Lease Payments
                             @endslot
-                            <pre>{{ json_encode($data['payments'], JSON_PRETTY_PRINT) }}</pre>
+                            <table class="table table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>Term</th>
+                                    <th>Cash Due</th>
+                                    <th>Annual Mileage</th>
+                                    <th>Monthly Payment</th>
+                                    <th>Total Amt. @ Drive Off</th>
+                                    <th>Use Tax</th>
+                                    <th>Pre Tax Amt.</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($data['payments'] as $payment)
+                                    <tr>
+                                        <td>{{$payment['term']}}</td>
+                                        <td>{{isset($payment['cash_due']) ? $payment['cash_due'] : '--'}}</td>
+                                        <td>{{isset($payment['annual_mileage']) ? $payment['annual_mileage'] : '--'}}</td>
+                                        <td>{{isset($payment['monthly_payment']) ? '$' . $payment['monthly_payment'] : '--'}}</td>
+                                        <td>{{isset($payment['total_amount_at_drive_off']) ? '$' . $payment['total_amount_at_drive_off'] : '--'}}</td>
+                                        <td>{{isset($payment['monthly_use_tax']) ? '$' . $payment['monthly_use_tax'] : '--'}}</td>
+                                        <td>{{isset($payment['monthly_pre_tax_payment']) ? '$' . $payment['monthly_pre_tax_payment'] : '--'}}</td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
                         @endcomponent
                     @endif
                 @endcomponent
