@@ -11,6 +11,7 @@ export default class extends React.Component {
     state = {
         collapse: false,
         active: false,
+        category: 'General Questions',
     };
 
     toggle() {
@@ -21,9 +22,34 @@ export default class extends React.Component {
     }
 
     getFaqContent() {
-        return filter(item => {
-            return item.featured;
-        }, Faqs);
+        return Faqs.filter(item => item.category === this.state.category);
+    }
+
+    faqNavigation = name =>
+        this.setState({
+            category: name,
+        });
+
+    renderNav() {
+        const cats = [...new Set(Faqs.map(q => q.category))];
+        const catsR = cats.map((name, i) => {
+            return (
+                <li
+                    key={i}
+                    onClick={() => this.faqNavigation(name)}
+                    className={
+                        this.state.category === name ? 'active' : 'not-active'
+                    }
+                >
+                    {name}
+                </li>
+            );
+        });
+        return (
+            <div>
+                <ul className="toc">{catsR}</ul>
+            </div>
+        );
     }
 
     render() {
@@ -37,38 +63,13 @@ export default class extends React.Component {
                 />
                 <Container className="faq">
                     <Row>
-                        <Col sm="3">
-                            <ul className="toc">
-                                <li>
-                                    <a href="#">Purchase</a>
-                                </li>
-                                <li>
-                                    <a href="#">Inventory</a>
-                                </li>
-                                <li>
-                                    <a href="#">Financing</a>
-                                </li>
-                                <li>
-                                    <a href="#">Insurance</a>
-                                </li>
-                                <li>
-                                    <a href="#">Trade-In&apos;s</a>
-                                </li>
-                                <li>
-                                    <a href="#">Pricing, Rebates, Incentives</a>
-                                </li>
-                                <li>
-                                    <a href="#">Warranty and Services</a>
-                                </li>
-                                <li>
-                                    <a href="#">Delivery</a>
-                                </li>
-                            </ul>
+                        <Col sm="3" className="faq__nav">
+                            {this.renderNav()}
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
-                                {Object.keys(Faqs).map((key, index) => (
-                                    <FaqGroup key={index} item={Faqs[key]} />
+                                {this.getFaqContent().map((item, index) => (
+                                    <FaqGroup key={item.title} item={item} />
                                 ))}
                             </div>
                         </Col>
