@@ -1,10 +1,34 @@
 import '../styles/app.scss';
+import PropTypes from 'prop-types';
 import React from 'react';
-import { Jumbotron } from 'reactstrap';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
+import HomepageHero from '../modules/home/components/HomepageHero';
+import { getSearchQuery } from '../modules/deal-list/selectors';
+import { setSelectedMake } from '../modules/deal-list/actions';
 
-export default class extends React.Component {
+import {
+    headerClearAutocompleteResults,
+    headerRequestAutocomplete,
+} from '../apps/page/actions';
+
+import { withRouter } from 'next/router';
+import withTracker from '../components/withTracker';
+import { nextRouterType } from '../core/types';
+
+class Page extends React.Component {
+    static propTypes = {
+        autocompleteResults: PropTypes.object,
+        searchQuery: PropTypes.object,
+        onRequestSearch: PropTypes.func.isRequired,
+        onSetSelectedMake: PropTypes.func.isRequired,
+        onClearSearchResults: PropTypes.func.isRequired,
+        router: nextRouterType,
+    };
+
     state = {
         activeIndex: 0,
     };
@@ -30,18 +54,14 @@ export default class extends React.Component {
     render() {
         return (
             <div>
-                <Jumbotron>
-                    <img
-                        src="https://via.placeholder.com/1900x400"
-                        alt="placeholder"
-                    />
-                    <div className="search">
-                        <div className="__container">
-                            <h3>Search new cars from local dealers</h3>
-                        </div>
-                    </div>
-                </Jumbotron>
-
+                <HomepageHero
+                    router={this.props.router}
+                    autocompleteResults={this.props.autocompleteResults}
+                    searchQuery={this.props.searchQuery}
+                    onClearSearchResults={this.props.onClearSearchResults}
+                    onSetSelectedMake={this.props.onSetSelectedMake}
+                    onRequestSearch={this.props.onRequestSearch}
+                />
                 <ShopByStyle />
                 <ShopByBrand />
 
@@ -156,3 +176,33 @@ export default class extends React.Component {
         );
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        autocompleteResults: state.page.headerAutocompleteResults,
+        searchQuery: getSearchQuery(state),
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetSelectedMake: make => {
+            return dispatch(setSelectedMake(make));
+        },
+        onRequestSearch: query => {
+            return dispatch(headerRequestAutocomplete(query));
+        },
+        onClearSearchResults: () => {
+            return dispatch(headerClearAutocompleteResults());
+        },
+    };
+};
+
+export default compose(
+    withRouter,
+    withTracker,
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
+)(Page);
