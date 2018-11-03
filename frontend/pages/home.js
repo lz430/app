@@ -4,6 +4,8 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { Row, Col, Container } from 'reactstrap';
+
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
 import HomepageHero from '../modules/home/components/HomepageHero';
@@ -95,9 +97,14 @@ class Page extends React.Component {
                 </div>
 
                 <div className="container-fluid callout__testimonials">
-                    <div className="container">
-                        <h4>What our customers are saying</h4>
-                        <div className="row">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h4>What our customers are saying</h4>
+                            </Col>
+                        </Row>
+
+                        <Row>
                             <div className="col-4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
@@ -137,11 +144,11 @@ class Page extends React.Component {
                                     <span>Lori P, Birmingham MI</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </Row>
+                    </Container>
                 </div>
 
-                <div className="container callout__media">
+                <div className="container ">
                     <div className="row">
                         <div className="col">
                             <h5>Featured In: </h5>
