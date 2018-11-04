@@ -95,7 +95,7 @@ class SearchWidget extends React.PureComponent {
         this.setState({ query: '' });
         this.setState({ SearchMessage: false });
         this.props.onClearSearchResults();
-        this.props.router.push('/filter?' + urlQuery);
+        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 
