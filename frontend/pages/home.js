@@ -4,6 +4,8 @@ import React from 'react';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
+import { Row, Col, Container } from 'reactstrap';
+
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
 import HomepageHero from '../modules/home/components/HomepageHero';
@@ -53,7 +55,7 @@ class Page extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="mb-5">
                 <HomepageHero
                     router={this.props.router}
                     autocompleteResults={this.props.autocompleteResults}
@@ -65,10 +67,11 @@ class Page extends React.Component {
                 <ShopByStyle />
                 <ShopByBrand />
 
-                <div className="container callout__info">
-                    <div className="row">
-                        <div className="col-6">
+                <Container className="callout__info">
+                    <Row>
+                        <Col md="6">
                             <img
+                                className="img-fluid"
                                 src="https://via.placeholder.com/400x250"
                                 alt="placeholder"
                             />
@@ -78,9 +81,10 @@ class Page extends React.Component {
                                 adipisicing elit. Quae corrupti facere autem ut
                                 eligendi dignissimos.
                             </p>
-                        </div>
-                        <div className="col-6">
+                        </Col>
+                        <Col md="6">
                             <img
+                                className="img-fluid"
                                 src="https://via.placeholder.com/400x250"
                                 alt="placeholder"
                             />
@@ -90,15 +94,20 @@ class Page extends React.Component {
                                 adipisicing elit. Facere eius architecto, quo
                                 corporis perspiciatis error.
                             </p>
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
 
                 <div className="container-fluid callout__testimonials">
-                    <div className="container">
-                        <h4>What our customers are saying</h4>
-                        <div className="row">
-                            <div className="col-4">
+                    <Container>
+                        <Row>
+                            <Col>
+                                <h4>What our customers are saying</h4>
+                            </Col>
+                        </Row>
+
+                        <Row>
+                            <Col md="4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Obcaecati quas omnis,
@@ -110,8 +119,8 @@ class Page extends React.Component {
                                 <div className="author">
                                     <span>Monica P</span>
                                 </div>
-                            </div>
-                            <div className="col-4">
+                            </Col>
+                            <Col md="4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Officiis ab aperiam
@@ -123,8 +132,8 @@ class Page extends React.Component {
                                 <div className="author">
                                     <span>Jason B, Traverse City MI</span>
                                 </div>
-                            </div>
-                            <div className="col-4">
+                            </Col>
+                            <Col md="4">
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Quod quae soluta maiores
@@ -136,42 +145,42 @@ class Page extends React.Component {
                                 <div className="author">
                                     <span>Lori P, Birmingham MI</span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </Col>
+                        </Row>
+                    </Container>
                 </div>
 
-                <div className="container callout__media">
-                    <div className="row">
-                        <div className="col">
+                <Container>
+                    <Row>
+                        <Col>
                             <h5>Featured In: </h5>
-                        </div>
-                        <div className="col">
+                        </Col>
+                        <Col>
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
-                        </div>
-                        <div className="col">
+                        </Col>
+                        <Col>
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
-                        </div>
-                        <div className="col">
+                        </Col>
+                        <Col>
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
-                        </div>
-                        <div className="col">
+                        </Col>
+                        <Col>
                             <img
                                 src="https://via.placeholder.com/200x50"
                                 alt="placeholder"
                             />
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }

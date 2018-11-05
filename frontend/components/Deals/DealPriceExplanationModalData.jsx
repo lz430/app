@@ -87,9 +87,17 @@ class DealPriceExplanationModalData extends React.PureComponent {
 
                         <div className="deal__buttons">
                             <Link
-                                to={
-                                    '/deals/' + this.props.dealPricing.deal().id
-                                }
+                                href={{
+                                    pathname: '/deal-detail',
+                                    query: {
+                                        id: this.props.dealPricing.deal().id,
+                                    },
+                                }}
+                                as={{
+                                    pathname:
+                                        '/deals/' +
+                                        this.props.dealPricing.deal().id,
+                                }}
                             >
                                 <a className="btn btn-primary btn-block">
                                     View Details
