@@ -71,15 +71,16 @@
         "redux-saga": "^0.16.2",
         "redux-thunk": "^2.3.0",
         "reselect": "^3.0.1",
+        "sitemap": "^2.1.0",
         "titlecase": "^1.1.2",
         "yup": "^0.26.6"
     },
     "scripts": {
         "lint": "eslint --ext js,jsx .",
         "test": "NODE_ENV=test jest",
-        "dev": "node server.js",
+        "dev": "node server/app.js",
         "build": "next build",
-        "start": "NODE_ENV=production node server.js"
+        "start": "NODE_ENV=production node server/app.js"
     },
     "browserslist": [
         ">0.2%",
