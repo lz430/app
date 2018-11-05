@@ -87,10 +87,7 @@ export default class AddToCart extends React.PureComponent {
             );
         }
 
-        if (
-            this.props.userLocation.state !== 'MI' &&
-            this.props.userLocation.state !== 'OH'
-        ) {
+        if (this.props.userLocation.state !== 'MI') {
             return (
                 <div className="bg-white border border-light p-4">
                     <div className="mb-2">
