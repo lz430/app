@@ -8,7 +8,6 @@ import StyleIcon from '../../Deals/StyleIcon';
 import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {

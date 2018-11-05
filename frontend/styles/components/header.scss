@@ -84,8 +84,10 @@
         font-weight: 300;
     }
     .icon {
-        width: 20px;
-        height: 20px;
+        font-size: 1.25rem;
+        @include media-breakpoint-up(md) {
+            font-size: 1rem;
+        }
         @include media-breakpoint-up(lg) {
             margin-left: 1rem;
         }
@@ -378,6 +380,7 @@
         }
     }
     &__mobile {
+        font-size: 1.25rem;
         @include media-breakpoint-down(md) {
             svg {
                 path {

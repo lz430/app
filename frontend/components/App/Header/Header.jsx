@@ -14,9 +14,6 @@ import { requestLocation } from '../../../apps/user/actions';
 import { getCurrentPageIsInCheckout } from '../../../apps/page/selectors';
 import { toggleCompare } from '../../../apps/common/actions';
 
-import Location from '../../../icons/zondicons/location.svg';
-import Help from '../../../icons/zondicons/question.svg';
-
 import SearchWidget from './SearchWidget';
 import {
     headerClearAutocompleteResults,
@@ -25,6 +22,9 @@ import {
 import { getSearchQuery } from '../../../modules/deal-list/selectors';
 import { nextRouterType } from '../../../core/types';
 import { setSelectedMake } from '../../../modules/deal-list/actions';
+
+import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -87,7 +87,7 @@ class Header extends React.PureComponent {
                     </div>
                 </div>
                 <div className="icon">
-                    <Location />
+                    <FontAwesomeIcon icon={faLocation} />
                 </div>
             </div>
         );
@@ -107,7 +107,7 @@ class Header extends React.PureComponent {
                     >
                         <span>Need Help?</span>
                         <div className="icon text-center">
-                            <Help />
+                            <FontAwesomeIcon icon={faQuestionCircle} />
                         </div>
                     </div>
                 </div>

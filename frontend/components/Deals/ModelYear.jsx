@@ -53,7 +53,7 @@ class ModelYear extends React.Component {
         ) {
             label = 'Payments starting at';
             if (this.props.modelYear.payments.lease.payment === 5000) {
-                value = '--';
+                return false;
             } else {
                 value = moneyFormat(
                     this.props.modelYear.payments.lease.payment

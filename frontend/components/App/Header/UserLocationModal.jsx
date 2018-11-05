@@ -13,7 +13,8 @@ import {
     Input,
 } from 'reactstrap';
 import Bolt from '../../../icons/zondicons/bolt.svg';
-import Location from '../../../icons/zondicons/location.svg';
+import { faLocation } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class UserLocationModal extends React.PureComponent {
     static propTypes = {
@@ -74,7 +75,7 @@ class UserLocationModal extends React.PureComponent {
                     <Form onSubmit={this.onSubmit.bind(this)}>
                         <div className="location-input">
                             <div className="icon">
-                                <Location />
+                                <FontAwesomeIcon icon={faLocation} />
                             </div>
                             <div className="location-content">
                                 <FormGroup>
