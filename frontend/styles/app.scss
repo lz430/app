@@ -94,9 +94,10 @@
 // Vendor
 @import '~react-image-gallery/styles/scss/image-gallery.scss';
 
-// Helpers
-@import 'helpers';
-
 // Brochure site
 @import 'pages/brochure/brochure';
 @import 'pages/brochure/home';
+
+// Helpers
+@import 'helpers';
+@import 'utilities';

@@ -91,13 +91,6 @@
     }
 
     &__pricing {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        margin-top: 1rem;
-        > div {
-            width: 100%;
-        }
         @include media-breakpoint-up(sm) {
             margin-top: 0;
         }
