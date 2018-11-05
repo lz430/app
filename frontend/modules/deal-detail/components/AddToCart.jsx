@@ -94,7 +94,7 @@ export default class AddToCart extends React.PureComponent {
     }
 
     renderPane() {
-        const { purchaseStrategy, pricing, deal } = this.props;
+        const { purchaseStrategy, pricing } = this.props;
 
         if (purchaseStrategy === 'cash') {
             return (
@@ -162,7 +162,7 @@ export default class AddToCart extends React.PureComponent {
     }
 
     render() {
-        const { purchaseStrategy, pricing, deal } = this.props;
+        const { purchaseStrategy, deal } = this.props;
 
         if (deal.status === 'sold') {
             return (
