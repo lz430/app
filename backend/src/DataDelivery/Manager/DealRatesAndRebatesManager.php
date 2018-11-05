@@ -580,6 +580,7 @@ class DealRatesAndRebatesManager
                         $data = [
                             'id' =>  $program->ProgramID,
                             'role' =>  $role,
+                            'title' => $program->ProgramName,
                             'description' => $programDescription,
                             'startDate' =>  $program->ProgramStartDate,
                             'stopDate' =>  $program->ProgramStopDate,
