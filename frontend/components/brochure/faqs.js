@@ -142,7 +142,12 @@ export default [
         content:
             'Our site was designed to eliminate the hassle and haggle of the negotiation process. If you want to get into the weeds and negotiate, our site is probably not your thing. And that’s fine.  Many people feel that they need to do the dealer dance and bicker back and forth with the manager. But there is very little margin in new cars anymore, so you need to decide if driving all over town to possibly save a couple hundred is worth your time.',
     },
-
+    {
+        category: 'Pricing, Rebates, and Incentives',
+        title: 'Can I apply manufacturer’s incentives and rebates?',
+        content:
+            'For sure. And we expose them all to you. Nothing is hidden and we go to great lengths to expose all the rebates so you don’t miss out.',
+    },
     {
         category: 'Pricing, Rebates, and Incentives',
         title: 'Can I apply manufacturer’s incentives and rebates?',

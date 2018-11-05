@@ -6,7 +6,7 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 
 class ListGroupCollapse extends React.Component {
     static propTypes = {
-        item: PropTypes.string,
+        item: PropTypes.object,
     };
     state = {
         collapse: false,
@@ -40,6 +40,7 @@ class ListGroupCollapse extends React.Component {
                     </div>
                     <Collapse isOpen={this.state.collapse}>
                         <div className="content">{item.content}</div>
+                        <em>{item.category}</em>
                     </Collapse>
                 </div>
             </Col>
