@@ -112,7 +112,7 @@ export function* checkoutContact(action) {
 
     if (results) {
         yield put(receivePurchase(results.data));
-        yield put(Router.push(results.data.destination));
+        Router.push(results.data.destination);
     }
 }
 

@@ -77,7 +77,15 @@ class Container extends React.Component {
         this.props.onInit({ initialQuery: this.props.initialQuery });
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
+        if (prevProps.initialQuery !== this.props.initialQuery) {
+            this.props.onInit({
+                initialQuery: this.props.initialQuery,
+                dataOnly: true,
+            });
+            forceCheck();
+        }
+
         if (this.props.router.beforePopState) {
             this.props.router.beforePopState(({ options }) => {
                 const data = options.data;
