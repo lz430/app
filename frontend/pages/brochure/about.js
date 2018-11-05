@@ -222,52 +222,52 @@ export default class extends React.Component {
                 <div className="about__team text-center">
                     <Container>
                         <Row>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/MichaelMcInerney.png" />
                                 <h5>Michael McInerney</h5>
                                 <span>Founder</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/MaryVellucci.png" />
                                 <h5>Mary Velucci</h5>
                                 <span>Administration</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/MarkHillman.png" />
                                 <h5>Mark Hillman</h5>
                                 <span>Business Strategy</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/LauraFournier.png" />
                                 <h5>Laura Fournier</h5>
                                 <span>Finance</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/PeterKarmanos.png" />
                                 <h5>Peter Karmanos</h5>
                                 <span>Chairman</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/RickGutierrez.png" />
                                 <h5>Rick Gutierrez</h5>
                                 <span>UX &amp; Design</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/GinaMarrow.png" />
                                 <h5>Gina Morrow</h5>
                                 <span>Customer Success</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/GrahamSutcliffe.png" />
                                 <h5>Graham Sutcliffe</h5>
                                 <span>Technology</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/SaraWright.png" />
                                 <h5>Sara Wright</h5>
                                 <span>Engagement</span>
                             </div>
-                            <div>
+                            <div className="mb-3">
                                 <img src="/static/brochure/team/PeterSchmitt.png" />
                                 <h5>Peter Schmitt</h5>
                                 <span>Digital Strategy</span>
