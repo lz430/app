@@ -91,7 +91,7 @@
                 @slot('title')
                     @php $scenarioType = null; @endphp
                     @foreach($roles as $role => $data)
-                    @foreach($data['rates']->rebates['everyone']['programs'] as $program)
+                    @foreach($data['rebates']['everyone']['programs'] as $program)
                         @php $scenarioType = $program->scenario->DealScenarioType; @endphp
                     @endforeach
                     @endforeach
@@ -120,7 +120,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($data['rates']->rebates['everyone']['programs'] as $program)
+                                        @foreach($data['rebates']['everyone']['programs'] as $program)
                                             <tr>
                                                 <td>{{$program->program->ProgramName}}</td>
                                                 <td>{{$program->program->ProgramID}}</td>
@@ -130,7 +130,7 @@
                                         <tr class="well">
                                             <td><b>Total</b></td>
                                             <td></td>
-                                            <td>${{$data['rates']->rebates['everyone']['total']}}</td>
+                                            <td>${{$data['rebates']['everyone']['total']}}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -151,7 +151,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($data['conditionals'] as $conditional)
+                                            @foreach($data['selections']['conditionalRoles'] as $conditional)
                                                 <tr>
                                                     <td>{{$conditional['title']}}</td>
                                                     <td>{{$conditional['id']}}</td>
@@ -178,7 +178,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($data['quote']['rates'] as $rate)
+                                            @foreach($data['rates'] as $rate)
                                                 <tr>
                                                     <td>{{isset($rate['termLength']) ? $rate['termLength'] : '--'}}</td>
                                                     <td>{{isset($rate['rate']) ? $rate['rate'] . '%' : (isset($rate['moneyFactor']) ? $rate['moneyFactor'] : '--')}}</td>

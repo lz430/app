@@ -3,67 +3,23 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Deal;
-use App\Http\Controllers\Controller;
-use App\Transformers\DealQuoteTransformer;
-use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
+use App\Services\Quote\DealQuote;
 
-use DeliverMyRide\Carleton\Client;
-use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
+use App\Http\Controllers\Controller;
 
 class DealFinancingController extends Controller
 {
     private const ZIPCODE = '48116';
     private $deal;
-    private $dataDeliveryClient;
-    private $carletonClient;
 
-    /**
-     * @param $paymentType
-     * @param $zip
-     * @param $role
-     * @return \stdClass
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    private function getRatesAndRebates($paymentType, $role) {
-        $manager = new DealRatesAndRebatesManager($this->deal, self::ZIPCODE, $role, $this->dataDeliveryClient);
-        $manager->setFinanceStrategy($paymentType);
-        $manager->setConsumerRole($role);
-        $manager->searchForVehicleAndPrograms();
-        $manager->setScenario();
-        return $manager->getData();
-    }
-
-    private function getConditionals($paymentType, $role) {
-        $manager = new DealRatesAndRebatesManager($this->deal, self::ZIPCODE, $role, $this->dataDeliveryClient);
-        $manager->setFinanceStrategy($paymentType);
-        $manager->setConsumerRole($role);
-        $manager->searchForVehicleAndPrograms();
-        $manager->setScenario();
-        return $manager->getPotentialConditionals();
-    }
-
-    /**
-     * @param $data
-     * @param $role
-     * @return array|mixed
-     */
-    private function getLeasePayments($data, $role) {
-        $manager = new DealLeasePaymentsManager($this->deal, $this->carletonClient);
-        return $manager->get($data['rates'], $data['rebates']['total'], [0], $role);
-    }
-
-    public function show(Deal $deal, DataDeliveryClient $dataDeliveryClient, Client $client)
+    public function show(Deal $deal, DealQuote $dealQuoter)
     {
         $this->deal = $deal;
-        $this->dataDeliveryClient = $dataDeliveryClient;
-        $this->carletonClient = $client;
 
         $data = [
             'deal' => $deal,
             'quotes' => [],
         ];
-
 
         $paymentTypes = [
             'cash', 'finance', 'lease',
@@ -75,21 +31,14 @@ class DealFinancingController extends Controller
 
         foreach($paymentTypes as $type) {
             foreach($roles as $role) {
-                $meta = (object) [
-                    'paymentType' => $type,
-                    'zipcode' => self::ZIPCODE,
-                    'dealId' => $this->deal->id,
-                    'role' => $role,
-                ];
-
-                $element = [];
-                $element['rates'] = $this->getRatesAndRebates($type, $role);
-                $element['quote'] = (new DealQuoteTransformer())->transform($element['rates'], $meta);
-                $element['conditionals'] = $this->getConditionals($type, $role);
-                if ($type === "lease" && isset($element['quote']['rates'][0])) {
-                    $element['payments'] = $this->getLeasePayments($element['quote'], $role);
-                }
-                $data['quotes'][$type][$role] = $element;
+                $quote = $dealQuoter->get(
+                    $deal,
+                    self::ZIPCODE,
+                    $type,
+                    [$role],
+                   true
+                );
+                $data['quotes'][$type][$role] = $quote;
             }
         }
 
