@@ -31,19 +31,6 @@ export default class LeasePane extends React.PureComponent {
     render() {
         const { pricing, onDiscountChange, onRebatesChange } = this.props;
 
-        if (
-            pricing.quoteIsLoaded() &&
-            (!pricing.annualMileageAvailable() ||
-                !pricing.annualMileageAvailable().length)
-        ) {
-            return (
-                <p className="no-lease-rates-error">
-                    Sorry, there are currently no lease rates available for this
-                    vehicle.
-                </p>
-            );
-        }
-
         return (
             <div>
                 <Group>
@@ -211,6 +198,7 @@ export default class LeasePane extends React.PureComponent {
                             <DollarsAndCents
                                 value={pricing.totalAmountAtDriveOff()}
                             />
+                            *
                         </Value>
                     </Line>
                 </Group>

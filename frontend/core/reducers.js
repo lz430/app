@@ -12,19 +12,21 @@ import appCheckoutReducer from '../apps/checkout/reducers';
 import dealDetailsReducer from '../modules/deal-detail/reducer';
 import dealListReducer from '../modules/deal-list/reducers';
 import compareReducer from '../modules/compare/reducers';
-import checkoutFinancing from '../modules/checkout-financing/reducer';
+import checkoutFinancing from '../modules/checkout-financing/reducers';
+import contact from '../modules/contact/reducers';
 
 const pagesReducer = combineReducers({
     dealDetails: dealDetailsReducer,
     dealList: dealListReducer,
     compare: compareReducer,
     checkoutFinancing: checkoutFinancing,
+    contact: contact,
 });
 
 const pagesPersistConfig = {
     ...basePersistConfig,
     key: 'pages',
-    blacklist: ['dealList', 'dealDetails', 'compare'],
+    blacklist: ['dealList', 'dealDetails', 'compare', 'contact'],
 };
 
 export default combineReducers({

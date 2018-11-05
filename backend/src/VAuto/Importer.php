@@ -6,9 +6,7 @@ use App\Models\Dealer;
 use App\Models\JATO\Version;
 use App\Models\Deal;
 
-use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\RIS\RISClient;
 
 use Carbon\Carbon;
 use Exception;
@@ -83,7 +81,6 @@ class Importer
     private const PROCESS_BATCH_SIZE = 100;
 
     private $jatoClient;
-    private $fuelClient;
 
     private $error;
     private $filesystem;
@@ -95,7 +92,6 @@ class Importer
     {
         $this->filesystem = $filesystem;
         $this->jatoClient = $jatoClient;
-
 
         $this->debug = [
             'start' => microtime(true),

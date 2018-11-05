@@ -11,7 +11,7 @@ export const buildSearchQueryUrl = (searchQuery, format = 'string') => {
     delete qsData.location;
     delete qsData.page;
     const defaultQs = 'entity=model&purchaseStrategy=lease&sort=payment';
-    let qs = queryString.stringify(qsData, { arrayFormat: 'bracket' });
+    let qs = queryString.stringify(qsData, { arrayFormat: 'none' });
     if (qs === defaultQs) {
         return false;
     }

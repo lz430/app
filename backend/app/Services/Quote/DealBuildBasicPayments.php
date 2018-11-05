@@ -15,6 +15,17 @@ class DealBuildBasicPayments
 
     private $carletonClient;
 
+    private const FAKE_LEASE = [
+        'term' => 0,
+        'rate' => 0,
+        'rate_type' => 'factor',
+        'rebate' => 0,
+        'residual' => 0,
+        'miles' => 0,
+        'down' => 0,
+        'payment' => 5000,
+    ];
+
     public function __construct(Client $carletonClient)
     {
         $this->carletonClient = $carletonClient;
@@ -71,10 +82,11 @@ class DealBuildBasicPayments
 
     }
 
+
     private function buildLeasePayment($quote, Deal $deal)
     {
         if (!$quote->term) {
-            return null;
+            return (object) self::FAKE_LEASE;
         }
 
         $rates = [
@@ -109,7 +121,8 @@ class DealBuildBasicPayments
             $payload->payment = round($payment[0]['monthly_payment'], 2);
             return $payload;
         }
-        return null;
+
+        return (object) self::FAKE_LEASE;
     }
 
     /**
