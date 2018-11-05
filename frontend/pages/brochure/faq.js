@@ -5,8 +5,6 @@ import { Container, Row, Col } from 'reactstrap';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 
-import { filter } from 'ramda';
-
 export default class extends React.Component {
     state = {
         collapse: false,
@@ -68,7 +66,7 @@ export default class extends React.Component {
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
-                                {this.getFaqContent().map((item, index) => (
+                                {this.getFaqContent().map(item => (
                                     <FaqGroup key={item.title} item={item} />
                                 ))}
                             </div>
