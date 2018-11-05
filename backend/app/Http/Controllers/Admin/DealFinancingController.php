@@ -34,6 +34,15 @@ class DealFinancingController extends Controller
         return $manager->getData();
     }
 
+    private function getConditionals($paymentType, $role) {
+        $manager = new DealRatesAndRebatesManager($this->deal, self::ZIPCODE, $role, $this->dataDeliveryClient);
+        $manager->setFinanceStrategy($paymentType);
+        $manager->setConsumerRole($role);
+        $manager->searchForVehicleAndPrograms();
+        $manager->setScenario();
+        return $manager->getPotentialConditionals();
+    }
+
     /**
      * @param $data
      * @param $role
@@ -76,6 +85,7 @@ class DealFinancingController extends Controller
                 $element = [];
                 $element['rates'] = $this->getRatesAndRebates($type, $role);
                 $element['quote'] = (new DealQuoteTransformer())->transform($element['rates'], $meta);
+                $element['conditionals'] = $this->getConditionals($type, $role);
                 if ($type === "lease" && isset($element['quote']['rates'][0])) {
                     $element['payments'] = $this->getLeasePayments($element['quote'], $role);
                 }
