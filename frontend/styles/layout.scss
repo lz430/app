@@ -19,7 +19,12 @@ body {
         min-height: min-content;
 
         &__app {
-            margin-top: 67px;
+            margin-top: 54px;
+
+            @include media-breakpoint-up(sm) {
+                margin-top: 67px;
+            }
+
             background-color: #f2f2f2;
         }
 

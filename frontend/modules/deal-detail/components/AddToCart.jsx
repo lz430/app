@@ -92,30 +92,20 @@ export default class AddToCart extends React.PureComponent {
             this.props.userLocation.state !== 'OH'
         ) {
             return (
-                <div className="deal-details__pricing">
-                    <div className="info-modal-data">
-                        <div
-                            style={{
-                                fontSize: '1.25em',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            We&apos;re sorry, this vehicle is not available in
-                            your area{' '}
-                            <span
-                                style={{
-                                    fontWeight: 'normal',
-                                    fontSize: '.9em',
-                                }}
-                            >
-                                <br />
-                                Please contact us at{' '}
-                                <a href="tel:855-675-7301">
-                                    (855) 675-7301
-                                </a>{' '}
-                                for more information.
-                            </span>
-                        </div>
+                <div className="bg-white border border-light p-4">
+                    <div className="mb-2">
+                        We&apos;re sorry, this vehicle is not available in your
+                        area.
+                    </div>
+                    <div>
+                        We are currently only delivering vehicles within the
+                        state of Michigan.
+                    </div>
+                    <hr />
+                    <div className="text-sm text-center border border-warning p-2 font-weight-bold">
+                        Please contact us at{' '}
+                        <a href="tel:855-675-7301">(855) 675-7301</a> for more
+                        information.
                     </div>
                 </div>
             );
