@@ -718,7 +718,7 @@ class Deal extends Model
         $record['make'] = $this->translateIndexMake();
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
-        $record['series'] = $this->series;
+        $record['series'] = $this->version->trim_name;
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int)$this->seating_capacity;
 
