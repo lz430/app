@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
 
-import Link from 'next/link';
-
 import Line from '../../../components/pricing/Line';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
@@ -37,7 +35,11 @@ export default class AddToCart extends React.PureComponent {
         this.props.handleBuyNow();
     }
 
-    renderCta() {
+    /**
+     * Render button depending on if we're submitting or not.
+     * @returns {*}
+     */
+    renderCtaButton() {
         if (this.state.submitted) {
             return (
                 <button className="btn btn-success" disabled={true}>
@@ -57,31 +59,122 @@ export default class AddToCart extends React.PureComponent {
         );
     }
 
+    /**
+     * Lease has some custom logic... We don't show the CTA for invalid leases.
+     * @returns {*}
+     */
+    renderCta() {
+        const { purchaseStrategy, pricing } = this.props;
+
+        if (
+            purchaseStrategy === 'lease' &&
+            pricing.quoteIsLoaded() &&
+            (!pricing.annualMileageAvailable() ||
+                !pricing.annualMileageAvailable().length)
+        ) {
+            return false;
+        }
+
+        return (
+            <React.Fragment>
+                <div className="deal__buttons">{this.renderCtaButton()}</div>
+                <Line>
+                    <div
+                        style={{
+                            fontStyle: 'italic',
+                            fontSize: '1em',
+                            marginLeft: '.25em',
+                        }}
+                    >
+                        * includes all taxes and dealer fees
+                    </div>
+                </Line>
+            </React.Fragment>
+        );
+    }
+
+    renderPane() {
+        const { purchaseStrategy, pricing, deal } = this.props;
+
+        if (purchaseStrategy === 'cash') {
+            return (
+                <CashPricingPane
+                    pricing={pricing}
+                    onDiscountChange={this.props.handleDiscountChange}
+                    onRebatesChange={this.props.handleRebatesChange}
+                />
+            );
+        }
+
+        if (purchaseStrategy === 'finance') {
+            return (
+                <FinancePricingPane
+                    pricing={pricing}
+                    onDiscountChange={this.props.handleDiscountChange}
+                    onRebatesChange={this.props.handleRebatesChange}
+                    onDownPaymentChange={
+                        this.props.handleFinanceDownPaymentChange
+                    }
+                    onTermChange={this.props.handleFinanceTermChange}
+                />
+            );
+        }
+
+        //
+        // Lease Error
+        if (
+            purchaseStrategy === 'lease' &&
+            pricing.quoteIsLoaded() &&
+            (!pricing.annualMileageAvailable() ||
+                !pricing.annualMileageAvailable().length)
+        ) {
+            return (
+                <React.Fragment>
+                    <div className="mb-2 mt-2 text-center">
+                        We&apos;re sorry, there are no incentivized lease rates
+                        for this vehicle.
+                        <br />
+                        <br />
+                        However, you may still be able to lease this vehicle.
+                        Please contact us for more information.
+                    </div>
+                    <hr />
+                    <div className="text-sm text-center border border-warning p-2 font-weight-bold">
+                        Please contact us at{' '}
+                        <a href="tel:855-675-7301">(855) 675-7301</a> for more
+                        information.
+                    </div>
+                </React.Fragment>
+            );
+        }
+
+        // Lease
+        if (purchaseStrategy === 'lease') {
+            return (
+                <LeasePricingPane
+                    pricing={pricing}
+                    onDiscountChange={this.props.handleDiscountChange}
+                    onRebatesChange={this.props.handleRebatesChange}
+                    onChange={this.props.handleLeaseChange}
+                />
+            );
+        }
+    }
+
     render() {
         const { purchaseStrategy, pricing, deal } = this.props;
 
         if (deal.status === 'sold') {
             return (
-                <div className="deal-details__pricing">
-                    <div className="info-modal-data">
-                        <div
-                            style={{
-                                fontSize: '1.25em',
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            We&apos;re sorry, this vehicle is no longer
-                            available.{' '}
-                            <span
-                                style={{
-                                    fontWeight: 'normal',
-                                    fontSize: '.9em',
-                                }}
-                            >
-                                <br />
-                                Start a New <Link to="/filter">Search</Link>.
-                            </span>
-                        </div>
+                <div className="bg-white border border-medium p-4">
+                    <div className="mb-2">
+                        We&apos;re sorry, this vehicle is no longer available.
+                    </div>
+                    <hr />
+                    <div className="text-sm text-center border border-warning p-2 font-weight-bold">
+                        Please contact us at{' '}
+                        <a href="tel:855-675-7301">(855) 675-7301</a> for more
+                        information.
                     </div>
                 </div>
             );
@@ -89,7 +182,7 @@ export default class AddToCart extends React.PureComponent {
 
         if (this.props.userLocation.state !== 'MI') {
             return (
-                <div className="bg-white border border-light p-4">
+                <div className="bg-white border border-medium p-4">
                     <div className="mb-2">
                         We&apos;re sorry, this vehicle is not available in your
                         area.
@@ -109,72 +202,13 @@ export default class AddToCart extends React.PureComponent {
         }
 
         return (
-            <div className="deal-details__pricing">
-                <div>
-                    <div className="info-modal-data">
-                        <div className="info-modal-data__price">
-                            <PaymentTypes
-                                {...{ purchaseStrategy }}
-                                onChange={this.props.handlePaymentTypeChange}
-                            />
-                            {this.props.purchaseStrategy === 'cash' && (
-                                <CashPricingPane
-                                    pricing={pricing}
-                                    onDiscountChange={
-                                        this.props.handleDiscountChange
-                                    }
-                                    onRebatesChange={
-                                        this.props.handleRebatesChange
-                                    }
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'finance' && (
-                                <FinancePricingPane
-                                    pricing={pricing}
-                                    onDiscountChange={
-                                        this.props.handleDiscountChange
-                                    }
-                                    onRebatesChange={
-                                        this.props.handleRebatesChange
-                                    }
-                                    onDownPaymentChange={
-                                        this.props
-                                            .handleFinanceDownPaymentChange
-                                    }
-                                    onTermChange={
-                                        this.props.handleFinanceTermChange
-                                    }
-                                />
-                            )}
-                            {this.props.purchaseStrategy === 'lease' && (
-                                <LeasePricingPane
-                                    pricing={pricing}
-                                    onDiscountChange={
-                                        this.props.handleDiscountChange
-                                    }
-                                    onRebatesChange={
-                                        this.props.handleRebatesChange
-                                    }
-                                    onChange={this.props.handleLeaseChange}
-                                />
-                            )}
-                            <div className="deal__buttons">
-                                {this.renderCta()}
-                            </div>
-                            <Line>
-                                <div
-                                    style={{
-                                        fontStyle: 'italic',
-                                        fontSize: '1em',
-                                        marginLeft: '.25em',
-                                    }}
-                                >
-                                    * includes all taxes and dealer fees
-                                </div>
-                            </Line>
-                        </div>
-                    </div>
-                </div>
+            <div className="deal-details__pricing bg-white border border-medium p-4">
+                <PaymentTypes
+                    {...{ purchaseStrategy }}
+                    onChange={this.props.handlePaymentTypeChange}
+                />
+                {this.renderPane()}
+                {this.renderCta()}
             </div>
         );
     }
