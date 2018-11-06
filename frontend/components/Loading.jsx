@@ -1,10 +1,15 @@
 import React from 'react';
 
-import Loading from '../icons/miscicons/loading.svg';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 
 const LoadingIcon = () => (
     <div className="loading" title="5">
-        <Loading />
+        <FontAwesomeIcon
+            className="loading-icon"
+            icon={faSpinner}
+            spin={true}
+        />
     </div>
 );
 

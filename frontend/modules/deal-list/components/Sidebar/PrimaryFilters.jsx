@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ArrowOutlineLeft from '../../../../icons/zondicons/arrow-outline-left.svg';
 
+import { faArrowCircleLeft } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SidebarFilter from './SidebarFilter';
 import FilterStyleList from './FilterStyleList';
 import FilterMakeList from './FilterMakeList';
@@ -45,9 +46,8 @@ class PrimaryFilters extends React.PureComponent {
                                     this.props.onClearModelYear();
                                 }}
                             >
-                                <ArrowOutlineLeft
-                                    height="20px"
-                                    width="20px"
+                                <FontAwesomeIcon
+                                    icon={faArrowCircleLeft}
                                     className="sidebar-filters__clear-icon"
                                 />
                                 Return to original search

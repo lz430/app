@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Modal, ModalHeader, ModalBody, Row, Container, Col } from 'reactstrap';
 import ChatWidget from '../ChatWidget';
-import ChatBubbleDots from '../../../icons/zondicons/chat-bubble-dots.svg';
-import Phone from '../../../icons/zondicons/phone.svg';
+
+import { faPhone } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class UserContactModal extends React.PureComponent {
     static propTypes = {
@@ -39,12 +40,12 @@ class UserContactModal extends React.PureComponent {
                             </Col>
                         </Row>
                         <Row className="mt-3 border-top">
-                            <Col className="p-3 border-right">
+                            <Col className="p-3 border-right text-center">
                                 <a
                                     href="tel:855-675-7301"
                                     className="d-block text-center"
                                 >
-                                    <Phone width="30px" height="30px" />
+                                    <FontAwesomeIcon icon={faPhone} />
                                     <span className="btn btn-primary">
                                         <span className="d-md-inline">
                                             855-675-7301
@@ -52,8 +53,7 @@ class UserContactModal extends React.PureComponent {
                                     </span>
                                 </a>
                             </Col>
-                            <Col className="p-3">
-                                <ChatBubbleDots />
+                            <Col className="p-3 text-center">
                                 <ChatWidget presentation="modal" />
                             </Col>
                         </Row>

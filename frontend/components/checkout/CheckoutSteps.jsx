@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Checkmark from '../../icons/zondicons/checkmark.svg';
+
+import { faCheck } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import BackButton from './BackButton';
 import { checkoutType, nextRouterType } from '../../core/types';
@@ -63,7 +65,11 @@ class CheckoutSteps extends React.PureComponent {
         return (
             <div className={data.active ? 'step  step--active' : 'step'}>
                 <div className="step__icon">
-                    {data.active ? <Checkmark /> : data.step}
+                    {data.active ? (
+                        <FontAwesomeIcon icon={faCheck} />
+                    ) : (
+                        data.step
+                    )}
                 </div>
                 <div className="step__label">{data.label}</div>
             </div>

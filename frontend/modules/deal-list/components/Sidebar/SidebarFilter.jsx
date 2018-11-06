@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import classNames from 'classnames';
-import CheveronUp from '../../../../icons/zondicons/cheveron-up.svg';
-import CheveronDown from '../../../../icons/zondicons/cheveron-down.svg';
+
+import { faChevronUp, faChevronDown } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SidebarFilter extends React.PureComponent {
     static propTypes = {
@@ -21,10 +22,10 @@ class SidebarFilter extends React.PureComponent {
 
     renderIcon() {
         if (this.props.open) {
-            return <CheveronUp className="icon" />;
+            return <FontAwesomeIcon icon={faChevronUp} className="icon" />;
         }
 
-        return <CheveronDown className="icon" />;
+        return <FontAwesomeIcon icon={faChevronDown} className="icon" />;
     }
 
     render() {

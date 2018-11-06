@@ -6,8 +6,10 @@ import { dealType } from '../../core/types';
 import DealPriceExplanationModal from './DealPriceExplanationModal';
 import { dealPricingFactory } from '../../pricing/DealPricing';
 
-import InformationOutline from '../../icons/zondicons/information-outline.svg';
 import Loading from '../../components/Loading';
+
+import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class DealPrice extends React.Component {
     static propTypes = {
@@ -63,13 +65,13 @@ class DealPrice extends React.Component {
                 </div>
                 <div className="price-summary__price__value">
                     {this.props.dealPricing.finalPrice()}{' '}
-                    <InformationOutline
-                        className="pricing-explanation-open"
-                        onClick={() => this.toggleExplanationModal()}
-                        height="15px"
-                        width="15px"
-                        fill="grey"
-                    />
+                    <span className="price-summary__help">
+                        <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            className="pricing-explanation-open"
+                            onClick={() => this.toggleExplanationModal()}
+                        />
+                    </span>
                     {this.renderPriceExplanationModal()}
                 </div>
                 <div className="price-summary__price__disclaimer">

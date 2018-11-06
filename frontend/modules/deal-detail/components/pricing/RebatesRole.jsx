@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import Line from '../../../../components/pricing/Line';
 import Label from '../../../../components/pricing/Label';
 
-import InformationOutline from '../../../../icons/zondicons/information-outline.svg';
+import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class RebatesRole extends React.Component {
     static propTypes = {
@@ -96,16 +97,14 @@ class RebatesRole extends React.Component {
                         {canUserHaveRebatePerAffinity}
                     </Label>
 
-                    <InformationOutline
+                    <FontAwesomeIcon
+                        icon={faInfoCircle}
                         onClick={() => this.toggleProgramDescriptionModal()}
                         className="link infomodal__button"
                         style={{
                             paddingLeft: '6px',
                             marginTop: '-10px',
-                            width: '20px',
-                            height: '20px',
                         }}
-                        fill="grey"
                     />
                     {this.renderProgramExplanationModal()}
                     {this.props.isRoleChecked &&

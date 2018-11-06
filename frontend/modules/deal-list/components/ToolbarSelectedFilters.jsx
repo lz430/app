@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { omit, reject, contains } from 'ramda';
 import { connect } from 'react-redux';
 
-import Close from '../../../icons/zondicons/close.svg';
-import Filter from '../../../icons/zondicons/filter.svg';
 import ToolbarSort from './ToolbarSort';
 
 import {
     clearAllSecondaryFilters,
     toggleSearchFilter,
 } from '../../deal-list/actions';
+
+import { faTimes, faFilter } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { getSelectedFiltersByCategory } from '../selectors';
 
@@ -60,9 +61,8 @@ class ToolbarSelectedFilters extends React.PureComponent {
         return (
             <div key={category + item.value} className="filterbar__filter">
                 {item.label}
-                <Close
-                    height="10px"
-                    width="10px"
+                <FontAwesomeIcon
+                    icon={faTimes}
                     className="filterbar__filter-x"
                     onClick={() =>
                         this.props.onToggleSearchFilter(category, item)
@@ -79,9 +79,8 @@ class ToolbarSelectedFilters extends React.PureComponent {
         }
         return (
             <div className="selected-filters">
-                <Filter
-                    height="20px"
-                    width="20px"
+                <FontAwesomeIcon
+                    icon={faFilter}
                     className="filterbar__filter-icon"
                 />
 

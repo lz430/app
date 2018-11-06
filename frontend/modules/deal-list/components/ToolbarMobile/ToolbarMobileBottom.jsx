@@ -2,10 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-import Tuning from '../../../../icons/zondicons/tuning.svg';
-import CurrencyDollar from '../../../../icons/zondicons/currency-dollar.svg';
-import CheveronUp from '../../../../icons/zondicons/cheveron-up.svg';
-import TravelCar from '../../../../icons/zondicons/travel-car.svg';
+import {
+    faCar,
+    faChevronUp,
+    faMoneyBill,
+    faFilter,
+} from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import SortWidget from './SortWidget';
 import PaymentWidget from './PaymentWidget';
@@ -69,8 +72,8 @@ class ToolbarMobileBottom extends React.Component {
                 })}
                 onClick={() => this.setActiveTab('model')}
             >
-                <TravelCar
-                    height="16px"
+                <FontAwesomeIcon
+                    icon={faCar}
                     className="sortbar__filter-toggle-icon"
                 />{' '}
                 <div>Model</div>
@@ -136,8 +139,8 @@ class ToolbarMobileBottom extends React.Component {
                         })}
                         onClick={() => this.setActiveTab('filter')}
                     >
-                        <Tuning
-                            height="16px"
+                        <FontAwesomeIcon
+                            icon={faFilter}
                             className="sortbar__filter-toggle-icon"
                         />
                         <div>Filter</div>
@@ -148,8 +151,8 @@ class ToolbarMobileBottom extends React.Component {
                         })}
                         onClick={() => this.setActiveTab('sort')}
                     >
-                        <CheveronUp
-                            height="16px"
+                        <FontAwesomeIcon
+                            icon={faChevronUp}
                             className="sortbar__filter-toggle-icon"
                         />
                         <div>Sort</div>
@@ -160,8 +163,8 @@ class ToolbarMobileBottom extends React.Component {
                         })}
                         onClick={() => this.setActiveTab('payment')}
                     >
-                        <CurrencyDollar
-                            height="16px"
+                        <FontAwesomeIcon
+                            icon={faMoneyBill}
                             className="sortbar__filter-toggle-icon"
                         />
                         <div>Payment</div>
