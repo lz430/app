@@ -18,7 +18,6 @@ class SearchWidget extends React.PureComponent {
         onSetSelectedMake: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         router: nextRouterType,
-        searchQuery: PropTypes.object,
     };
 
     state = {
@@ -77,24 +76,19 @@ class SearchWidget extends React.PureComponent {
     };
 
     onSelectItem(item) {
-        let newSearchQuery = { ...this.props.searchQuery };
-        if (item.query.entity) {
-            newSearchQuery.entity = item.query.entity;
-        }
-
-        if (item.query.filters) {
-            newSearchQuery.filters = item.query.filters;
-        }
+        let newSearchQuery = { ...item.query };
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
         }
 
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        this.setState({ query: '' });
-        this.setState({ SearchMessage: false });
+        this.setState({
+            query: '',
+            SearchMessage: false,
+        });
         this.props.onClearSearchResults();
-        this.props.router.push('/filter?' + urlQuery);
+        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 

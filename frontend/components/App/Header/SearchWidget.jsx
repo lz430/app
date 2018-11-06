@@ -5,7 +5,6 @@ import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../Deals/StyleIcon';
-import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,12 +12,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class SearchWidget extends React.PureComponent {
     static propTypes = {
         currentPageIsInCheckout: PropTypes.bool,
+        autocompleteResults: PropTypes.object,
+        purchaseStrategy: PropTypes.string,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
-        autocompleteResults: PropTypes.object,
-        router: nextRouterType,
-        searchQuery: PropTypes.object,
+        push: PropTypes.func.isRequired,
     };
 
     state = {
@@ -71,20 +70,15 @@ class SearchWidget extends React.PureComponent {
         if (this.node.contains(e.target)) {
             return;
         }
-
-        this.setState({ query: '' });
-        this.props.onClearSearchResults();
+        if (this.state.query) {
+            this.setState({ query: '' });
+            this.props.onClearSearchResults();
+        }
     };
 
     onSelectItem(item) {
-        let newSearchQuery = { ...this.props.searchQuery };
-        if (item.query.entity) {
-            newSearchQuery.entity = item.query.entity;
-        }
-
-        if (item.query.filters) {
-            newSearchQuery.filters = item.query.filters;
-        }
+        let newSearchQuery = { ...item.query };
+        newSearchQuery.purchaseStrategy = this.props.purchaseStrategy;
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
@@ -96,8 +90,7 @@ class SearchWidget extends React.PureComponent {
             SearchMessage: false,
         });
         this.props.onClearSearchResults();
-
-        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
+        this.props.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 

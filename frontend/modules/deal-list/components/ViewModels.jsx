@@ -1,11 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Loading from '../../../components/Loading';
 
 import ModelYear from '../../../components/Deals/ModelYear';
-import { selectModelYear } from '../actions';
-import { getUserPurchaseStrategy } from '../../../apps/user/selectors';
 import CardCta from './Cta/CardCta';
 
 class ViewModels extends React.PureComponent {
@@ -62,22 +59,4 @@ class ViewModels extends React.PureComponent {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        modelYears: state.pages.dealList.modelYears,
-        purchaseStrategy: getUserPurchaseStrategy(state),
-    };
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onSelectModelYear: modelYear => {
-            return dispatch(selectModelYear(modelYear));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ViewModels);
+export default ViewModels;

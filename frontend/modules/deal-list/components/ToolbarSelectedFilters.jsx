@@ -1,19 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { omit, reject, contains } from 'ramda';
-import { connect } from 'react-redux';
-
 import ToolbarSort from './ToolbarSort';
-
-import {
-    clearAllSecondaryFilters,
-    toggleSearchFilter,
-} from '../../deal-list/actions';
 
 import { faTimes, faFilter } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-import { getSelectedFiltersByCategory } from '../selectors';
 
 /**
  *
@@ -22,8 +13,10 @@ class ToolbarSelectedFilters extends React.PureComponent {
     static propTypes = {
         onClearAllSecondaryFilters: PropTypes.func.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
+        onToggleSearchSort: PropTypes.func.isRequired,
         selectedFiltersByCategory: PropTypes.object.isRequired,
         filters: PropTypes.object.isRequired,
+        searchQuery: PropTypes.object.isRequired,
     };
 
     selectedFilters() {
@@ -103,31 +96,13 @@ class ToolbarSelectedFilters extends React.PureComponent {
         return (
             <div className="filterbar">
                 {this.renderSelectedFilters()}
-                <ToolbarSort />
+                <ToolbarSort
+                    onToggleSearchSort={this.props.onToggleSearchSort}
+                    searchQuery={this.props.searchQuery}
+                />
             </div>
         );
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        filters: state.pages.dealList.filters,
-        selectedFiltersByCategory: getSelectedFiltersByCategory(state),
-    };
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onToggleSearchFilter: (category, item) => {
-            return dispatch(toggleSearchFilter(category, item));
-        },
-        onClearAllSecondaryFilters: () => {
-            return dispatch(clearAllSecondaryFilters());
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ToolbarSelectedFilters);
+export default ToolbarSelectedFilters;

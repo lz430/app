@@ -9,7 +9,6 @@ import { Row, Col, Container } from 'reactstrap';
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
 import HomepageHero from '../modules/home/components/HomepageHero';
-import { getSearchQuery } from '../modules/deal-list/selectors';
 import { setSelectedMake } from '../modules/deal-list/actions';
 
 import {
@@ -189,7 +188,6 @@ class Page extends React.Component {
 const mapStateToProps = state => {
     return {
         autocompleteResults: state.page.headerAutocompleteResults,
-        searchQuery: getSearchQuery(state),
     };
 };
 
