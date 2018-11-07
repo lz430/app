@@ -114,11 +114,13 @@ export default [
         logo: '/static/images/makes/mercedes-benz.jpg',
         query: ['make:Mercedes-Benz'],
     },
+    /*
     {
         title: 'Mini',
         logo: '/static/images/makes/mini.jpg',
         query: ['make:Mini'],
     },
+    */
     {
         title: 'Mitsubishi',
         logo: '/static/images/makes/mitsubishi.jpg',

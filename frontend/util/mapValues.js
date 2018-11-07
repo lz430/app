@@ -1,3 +1,7 @@
+/**
+ * @param object
+ * @param iteratee
+ */
 export default function mapValues(object, iteratee) {
     let result = {};
 

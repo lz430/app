@@ -5,7 +5,7 @@ import { faCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import BackButton from './BackButton';
-import { checkoutType, nextRouterType } from '../../core/types';
+import { checkoutType, nextRouterType } from '../../../core/types';
 
 class CheckoutSteps extends React.PureComponent {
     static propTypes = {

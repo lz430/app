@@ -2,8 +2,8 @@ import React from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 import PropTypes from 'prop-types';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
+import Line from '../../../../apps/pricing/components/Line';
+import Label from '../../../../apps/pricing/components/Label';
 
 import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

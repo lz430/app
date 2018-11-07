@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import Discount from './Discount';
 import Rebates from './Rebates';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
-import Group from '../../../../components/pricing/Group';
-import Header from '../../../../components/pricing/Header';
-import Separator from '../../../../components/pricing/Separator';
+import Line from '../../../../apps/pricing/components/Line';
+import Label from '../../../../apps/pricing/components/Label';
+import Value from '../../../../apps/pricing/components/Value';
+import Group from '../../../../apps/pricing/components/Group';
+import Header from '../../../../apps/pricing/components/Header';
+import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Loading from '../../../../components/Loading';
 import { pricingType } from '../../../../core/types';

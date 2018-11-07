@@ -1,11 +1,11 @@
 import React from 'react';
-import { pricingType } from '../../core/types';
-import Group from '../pricing/Group';
-import Header from '../pricing/Header';
-import Line from '../pricing/Line';
-import Label from '../pricing/Label';
-import Value from '../pricing/Value';
-import DollarsAndCents from '../money/DollarsAndCents';
+import { pricingType } from '../../../core/types';
+import Group from '../../pricing/components/Group';
+import Header from '../../pricing/components/Header';
+import Line from '../../pricing/components/Line';
+import Label from '../../pricing/components/Label';
+import Value from '../../pricing/components/Value';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
 
 export default class LeaseSummary extends React.PureComponent {
     static propTypes = {

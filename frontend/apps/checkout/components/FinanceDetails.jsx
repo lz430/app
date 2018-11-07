@@ -1,14 +1,14 @@
 import React from 'react';
-import Loading from '../../components/Loading';
-import { pricingType } from '../../core/types';
-import Group from '../pricing/Group';
-import Header from '../pricing/Header';
-import Line from '../pricing/Line';
-import Label from '../pricing/Label';
-import Value from '../pricing/Value';
-import Separator from '../pricing/Separator';
-import DiscountLabel from '../strings/DiscountLabel';
-import DollarsAndCents from '../money/DollarsAndCents';
+import Loading from '../../../components/Loading';
+import { pricingType } from '../../../core/types';
+import Group from '../../pricing/components/Group';
+import Header from '../../pricing/components/Header';
+import Line from '../../pricing/components/Line';
+import Label from '../../pricing/components/Label';
+import Value from '../../pricing/components/Value';
+import Separator from '../../pricing/components/Separator';
+import DiscountLabel from '../../../components/strings/DiscountLabel';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
 
 export default class FinanceDetails extends React.PureComponent {
     static propTypes = {
