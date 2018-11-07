@@ -28,6 +28,8 @@ import { setSelectedMake } from '../../../modules/deal-list/actions';
 import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import config from '../../../core/config';
+
 class Header extends React.PureComponent {
     static propTypes = {
         userLocation: PropTypes.object,
@@ -124,7 +126,7 @@ class Header extends React.PureComponent {
     render() {
         return (
             <Navbar expand="md">
-                <NavbarBrand href="/">
+                <NavbarBrand href={config.MARKETING_URL}>
                     <img
                         alt="Deliver My Ride"
                         src="/static/images/dmr-logo.svg"
