@@ -123,15 +123,6 @@ class ToolbarMobileBottom extends React.Component {
                 className="toolbar-mobile-bottom"
                 ref={node => (this.node = node)}
             >
-                <div
-                    className={classNames('tray', {
-                        show:
-                            this.state.activeTab !== null &&
-                            this.state.activeTab !== 'filter',
-                    })}
-                >
-                    {this.renderTrayContent()}
-                </div>
                 <div className="menu">
                     <div
                         className={classNames('toolbar-item', {
@@ -171,6 +162,15 @@ class ToolbarMobileBottom extends React.Component {
                     </div>
                     {this.props.searchQuery.entity === 'deal' &&
                         this.renderBackButton()}
+                </div>
+                <div
+                    className={classNames('tray', {
+                        show:
+                            this.state.activeTab !== null &&
+                            this.state.activeTab !== 'filter',
+                    })}
+                >
+                    {this.renderTrayContent()}
                 </div>
                 <FilterPanel
                     isMobile={true}
