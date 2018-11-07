@@ -29,6 +29,7 @@ import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import config from '../../../core/config';
+import Logo from '../../../static/images/logo.svg';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -127,10 +128,7 @@ class Header extends React.PureComponent {
         return (
             <Navbar expand="md">
                 <NavbarBrand href={config.MARKETING_URL}>
-                    <img
-                        alt="Deliver My Ride"
-                        src="/static/images/dmr-logo.svg"
-                    />
+                    <Logo />
                 </NavbarBrand>
                 <div className="mr-auto" />
 
