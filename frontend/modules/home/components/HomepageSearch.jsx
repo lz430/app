@@ -10,8 +10,6 @@ import { nextRouterType } from '../../../core/types';
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { track } from '../../../core/services';
-
 class SearchWidget extends React.PureComponent {
     static propTypes = {
         onRequestSearch: PropTypes.func.isRequired,
