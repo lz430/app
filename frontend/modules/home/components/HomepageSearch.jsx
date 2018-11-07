@@ -8,8 +8,9 @@ import StyleIcon from '../../../components/Deals/StyleIcon';
 import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { track } from '../../../core/services';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -75,7 +76,7 @@ class SearchWidget extends React.PureComponent {
         this.props.onClearSearchResults();
     };
 
-    onSelectItem(item) {
+    onSelectItem(category, item) {
         let newSearchQuery = { ...item.query };
 
         if (item.query.make) {
@@ -114,7 +115,7 @@ class SearchWidget extends React.PureComponent {
             <li
                 className="search__results__item"
                 key={item.label}
-                onClick={() => this.onSelectItem(item)}
+                onClick={() => this.onSelectItem(category, item)}
             >
                 <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}

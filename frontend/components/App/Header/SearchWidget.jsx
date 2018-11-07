@@ -8,6 +8,7 @@ import StyleIcon from '../../Deals/StyleIcon';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { track } from '../../../core/services';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
@@ -76,7 +77,7 @@ class SearchWidget extends React.PureComponent {
         }
     };
 
-    onSelectItem(item) {
+    onSelectItem(category, item) {
         let newSearchQuery = { ...item.query };
         newSearchQuery.purchaseStrategy = this.props.purchaseStrategy;
 
@@ -85,6 +86,13 @@ class SearchWidget extends React.PureComponent {
         }
 
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
+
+        track('search:bar:select', {
+            'Search Query': this.state.query,
+            'Search Selected Category': category,
+            'Search Selected Value': item.label,
+        });
+
         this.setState({
             query: '',
             SearchMessage: false,
@@ -116,7 +124,7 @@ class SearchWidget extends React.PureComponent {
             <li
                 className="search__results__item"
                 key={item.label}
-                onClick={() => this.onSelectItem(item)}
+                onClick={() => this.onSelectItem(category, item)}
             >
                 <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}
