@@ -1,9 +1,9 @@
 import React from 'react';
 import { dealPricingType } from '../../core/types';
-import Group from '../pricing/Group';
-import Line from '../pricing/Line';
-import Label from '../pricing/Label';
-import Value from '../pricing/Value';
+import Group from '../../apps/pricing/components/Group';
+import Line from '../../apps/pricing/components/Line';
+import Label from '../../apps/pricing/components/Label';
+import Value from '../../apps/pricing/components/Value';
 
 export default class CashPriceExplanation extends React.Component {
     static propTypes = {

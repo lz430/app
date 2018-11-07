@@ -4,16 +4,19 @@ import { connect } from 'react-redux';
 import { dealType } from '../../core/types';
 
 import DealPriceExplanationModal from './DealPriceExplanationModal';
-import { dealPricingFactory } from '../../pricing/DealPricing';
 
-import InformationOutline from '../../icons/zondicons/information-outline.svg';
 import Loading from '../../components/Loading';
+
+import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { pricingFromStateFactory } from '../../pricing/pricing/factory';
+import Dollars from '../money/Dollars';
 
 class DealPrice extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
-        dealPricing: PropTypes.object,
+        pricing: PropTypes.object,
     };
 
     state = {
@@ -37,45 +40,8 @@ class DealPrice extends React.Component {
                 key={this.props.deal.id}
                 deal={this.props.deal}
                 purchaseStrategy={this.props.purchaseStrategy}
-                dealPricing={this.props.dealPricing}
+                dealPricing={this.props.pricing}
             />
-        );
-    }
-
-    showWhenPricingIsLoaded() {
-        if (this.props.dealPricing.isPricingLoading()) {
-            return <Loading />;
-        }
-
-        if (this.props.dealPricing.cannotPurchase()) {
-            return (
-                <p className="price-summary__error">
-                    Sorry, there are currently no lease rates available for this
-                    vehicle.
-                </p>
-            );
-        }
-
-        return (
-            <div>
-                <div className="price-summary__price__label">
-                    {this.getLabel()}
-                </div>
-                <div className="price-summary__price__value">
-                    {this.props.dealPricing.finalPrice()}{' '}
-                    <InformationOutline
-                        className="pricing-explanation-open"
-                        onClick={() => this.toggleExplanationModal()}
-                        height="15px"
-                        width="15px"
-                        fill="grey"
-                    />
-                    {this.renderPriceExplanationModal()}
-                </div>
-                <div className="price-summary__price__disclaimer">
-                    {this.getDisclaimer()}
-                </div>
-            </div>
         );
     }
 
@@ -90,6 +56,51 @@ class DealPrice extends React.Component {
             default:
                 return 'Price';
         }
+    }
+
+    renderValue() {
+        if (this.props.purchaseStrategy === 'cash') {
+            return <Dollars value={this.props.pricing.sellingPrice()} />;
+        }
+
+        return <Dollars value={this.props.pricing.monthlyPayment()} />;
+    }
+
+    showWhenPricingIsLoaded() {
+        if (this.props.pricing.quoteIsLoading()) {
+            return <Loading />;
+        }
+
+        if (!this.props.pricing.canPurchase()) {
+            return (
+                <p className="price-summary__error">
+                    Sorry, there are currently no lease rates available for this
+                    vehicle.
+                </p>
+            );
+        }
+
+        return (
+            <div>
+                <div className="price-summary__price__label">
+                    {this.getLabel()}
+                </div>
+                <div className="price-summary__price__value">
+                    {this.renderValue()}{' '}
+                    <span className="price-summary__help">
+                        <FontAwesomeIcon
+                            icon={faInfoCircle}
+                            className="pricing-explanation-open"
+                            onClick={() => this.toggleExplanationModal()}
+                        />
+                    </span>
+                    {this.renderPriceExplanationModal()}
+                </div>
+                <div className="price-summary__price__disclaimer">
+                    {this.getDisclaimer()}
+                </div>
+            </div>
+        );
     }
 
     getDisclaimer() {
@@ -110,7 +121,8 @@ class DealPrice extends React.Component {
                 {this.showWhenPricingIsLoaded()}
                 <div className="price-summary__hr" />
                 <div className="price-summary__msrp">
-                    {this.props.dealPricing.msrp()} <span>MSRP</span>
+                    <Dollars value={this.props.pricing.msrp()} />{' '}
+                    <span>MSRP</span>
                 </div>
             </div>
         );
@@ -120,7 +132,7 @@ class DealPrice extends React.Component {
 const mapStateToProps = (state, props) => {
     return {
         purchaseStrategy: state.user.purchasePreferences.strategy,
-        dealPricing: dealPricingFactory(state, props),
+        pricing: pricingFromStateFactory(state, props),
     };
 };
 

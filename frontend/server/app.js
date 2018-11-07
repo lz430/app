@@ -77,6 +77,10 @@ app.prepare()
             app.render(req, res, '/brochure/contact', req.query);
         });
 
+        server.get('/brochure/concierge', (req, res) => {
+            app.render(req, res, '/brochure/concierge', req.query);
+        });
+
         server.get('/brochure/privacy-policy', (req, res) => {
             app.render(req, res, '/brochure/privacy-policy', req.query);
         });

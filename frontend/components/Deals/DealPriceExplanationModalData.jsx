@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dealType, dealPricingType } from '../../core/types';
 
-import Line from '../pricing/Line';
+import Line from '../../apps/pricing/components/Line';
 import CashPriceExplanation from './CashPriceExplanation';
 import FinancePriceExplanation from './FinancePriceExplanation';
 import LeasePriceExplanation from './LeasePriceExplanation';

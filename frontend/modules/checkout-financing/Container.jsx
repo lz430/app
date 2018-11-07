@@ -12,15 +12,15 @@ import getFinancing from './selectors';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import { checkout } from '../../apps/checkout/selectors';
 import { checkoutFinancingComplete } from '../../apps/checkout/actions';
-import InvalidCheckoutPage from '../../components/checkout/InvalidCheckoutPage';
+import InvalidCheckoutPage from '../../apps/checkout/components/InvalidCheckoutPage';
 import { getCurrentPage, getIsPageLoading } from '../../apps/page/selectors';
 import Loading from '../../components/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
 import withTracker from '../../components/withTracker';
-import CheckoutSteps from '../../components/checkout/CheckoutSteps';
+import CheckoutSteps from '../../apps/checkout/components/CheckoutSteps';
 import { nextRouterType } from '../../core/types';
-import CheckoutPageLoading from '../../components/checkout/CheckoutPageLoading';
+import CheckoutPageLoading from '../../apps/checkout/components/CheckoutPageLoading';
 
 class CheckoutFinancingContainer extends Component {
     static propTypes = {

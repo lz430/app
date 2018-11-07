@@ -14,6 +14,8 @@ import { cancelRequest } from '../../store/httpclient';
 import ApiClient from '../../store/api';
 import { REQUEST_AUTOCOMPLETE } from './consts';
 
+import { track } from '../../core/services';
+
 /**
  *
  * @param page
@@ -61,6 +63,18 @@ function* requestSearchAutocomplete(action) {
             source.cancel();
         }
     }
+
+    const hasResults = !!(
+        results.model.length ||
+        results.make.length ||
+        results.style.length
+    );
+
+    track('search:bar:results', {
+        'Search Query': query,
+        'Search Has Results': hasResults,
+    });
+
     yield put(headerReceiveAutocomplete(results));
 }
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import config from '../../core/config';
 import { Container, Row, Col } from 'reactstrap';
-import Phone from '../../icons/zondicons/phone.svg';
 import ChatWidget from './ChatWidget';
-import Keyboard from '../../icons/zondicons/keyboard.svg';
+
+import { faPhone, faEnvelope } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class Footer extends React.PureComponent {
     render() {
@@ -21,10 +22,10 @@ export default class Footer extends React.PureComponent {
                     <Col xs={12} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
                         <a href={config.MARKETING_URL + '/contact/'}>
-                            <Keyboard /> Email Us
+                            <FontAwesomeIcon icon={faEnvelope} /> Email Us
                         </a>
                         <a href="tel:855-675-7301">
-                            <Phone /> (855) 675-7301
+                            <FontAwesomeIcon icon={faPhone} /> (855) 675-7301
                         </a>
                         <ChatWidget presentation="footer" />
                     </Col>

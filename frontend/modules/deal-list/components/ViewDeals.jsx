@@ -1,16 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as R from 'ramda';
+import { contains, map, prop } from 'ramda';
 
 import { dealType } from '../../../core/types';
 import Loading from '../../../components/Loading';
 
 import Deal from '../../../components/Deals/Deal';
 
-import { toggleCompare } from '../../../apps/common/actions';
-import { requestMoreDeals } from '../actions';
-import { getLoadingSearchResults } from '../selectors';
 import Link from 'next/link';
 import classNames from 'classnames';
 import CardCta from './Cta/CardCta';
@@ -26,7 +22,7 @@ class ViewDeals extends React.PureComponent {
     };
 
     compareListContainsDeal(deal) {
-        return R.contains(deal, R.map(R.prop('deal'), this.props.compareList));
+        return contains(deal, map(prop('deal'), this.props.compareList));
     }
 
     compareButtonClass() {
@@ -110,27 +106,4 @@ class ViewDeals extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        compareList: state.common.compareList,
-        meta: state.pages.dealList.meta,
-        shouldShowLoading: getLoadingSearchResults(state),
-        deals: state.pages.dealList.deals,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onRequestMoreDeals: () => {
-            return dispatch(requestMoreDeals());
-        },
-        onToggleCompare: data => {
-            return dispatch(toggleCompare(data));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ViewDeals);
+export default ViewDeals;

@@ -106,7 +106,6 @@ class ContactForm extends React.PureComponent {
                             name="email"
                             autoComplete="email"
                             required
-                            autoFocus
                         />
 
                         {errors.email && (

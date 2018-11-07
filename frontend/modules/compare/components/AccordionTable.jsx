@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CheveronDown from '../../../icons/zondicons/cheveron-down.svg';
-import CheveronUp from '../../../icons/zondicons/cheveron-up.svg';
+import { faChevronUp, faChevronDown } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class AccordionTable extends React.PureComponent {
     static propTypes = {
@@ -37,9 +37,15 @@ class AccordionTable extends React.PureComponent {
                 className="compare-page-table__header"
             >
                 {this.state.isOpen ? (
-                    <CheveronDown className="compare-page-table__header-cheveron" />
+                    <FontAwesomeIcon
+                        icon={faChevronDown}
+                        className="compare-page-table__header-cheveron"
+                    />
                 ) : (
-                    <CheveronUp className="compare-page-table__header-cheveron" />
+                    <FontAwesomeIcon
+                        icon={faChevronUp}
+                        className="compare-page-table__header-cheveron"
+                    />
                 )}
                 {this.props.header}
             </div>

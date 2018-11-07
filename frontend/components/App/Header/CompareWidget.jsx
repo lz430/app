@@ -8,7 +8,10 @@ import {
     DropdownItem,
 } from 'reactstrap';
 import DealImage from '../../Deals/DealImage';
-import CloseSolid from '../../../icons/zondicons/close-solid.svg';
+
+import { faTimes } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import Link from 'next/link';
 
 class CompareWidget extends React.PureComponent {
@@ -54,7 +57,8 @@ class CompareWidget extends React.PureComponent {
                         {`${deal.model} ${deal.series}`}
                     </div>
                 </div>
-                <CloseSolid
+                <FontAwesomeIcon
+                    icon={faTimes}
                     className="compare-deal-remove"
                     onClick={() => this.props.onToggleCompare(deal)}
                 />

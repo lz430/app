@@ -2,19 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType } from '../../../../core/types';
 
-import Compose from '../../../../icons/zondicons/compose.svg';
 import Loading from '../../../../components/Loading';
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
-import Group from '../../../../components/pricing/Group';
-import Header from '../../../../components/pricing/Header';
-import Separator from '../../../../components/pricing/Separator';
+import Line from '../../../../apps/pricing/components/Line';
+import Label from '../../../../apps/pricing/components/Label';
+import Value from '../../../../apps/pricing/components/Value';
+import Group from '../../../../apps/pricing/components/Group';
+import Header from '../../../../apps/pricing/components/Header';
+import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
 import Discount from './Discount';
+
+import { faEdit } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'reactstrap';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -60,15 +63,17 @@ export default class LeasePane extends React.PureComponent {
                 <Group>
                     <Header>
                         Lease Terms
-                        <Compose
-                            style={{
-                                float: 'right',
-                                cursor: 'pointer',
-                                fill: '#41b1ac',
-                            }}
-                            height="1em"
+                        <Button
+                            color="primary"
                             onClick={() => this.toggleTermsSelect()}
-                        />
+                            style={{
+                                marginLeft: 'auto',
+                                fontSize: '0.8rem',
+                                padding: '0.1rem 0.25rem',
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faEdit} /> Edit
+                        </Button>
                     </Header>
                     {pricing.quoteIsLoading() && <Loading />}
                     {pricing.quoteIsLoading() || (

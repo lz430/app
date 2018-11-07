@@ -1,31 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { pricingType } from '../../../core/types';
+import Group from '../../pricing/components/Group';
+import Header from '../../pricing/components/Header';
+import Line from '../../pricing/components/Line';
+import Label from '../../pricing/components/Label';
+import Value from '../../pricing/components/Value';
+import Separator from '../../pricing/components/Separator';
+import DiscountLabel from '../../../components/strings/DiscountLabel';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
 
-import Discount from './Discount';
-import Rebates from './Rebates';
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import Group from '../../../../apps/pricing/components/Group';
-import Header from '../../../../apps/pricing/components/Header';
-import Separator from '../../../../apps/pricing/components/Separator';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
-import Loading from '../../../../components/Loading';
-import { pricingType } from '../../../../core/types';
-
-export default class CashPane extends React.PureComponent {
+export default class CashDetails extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
-        onDiscountChange: PropTypes.func.isRequired,
-        onRebatesChange: PropTypes.func.isRequired,
     };
 
     render() {
-        const { pricing, onDiscountChange, onRebatesChange } = this.props;
+        const { pricing } = this.props;
 
         return (
             <div>
                 <Group>
+                    <Header style={{ fontSize: '1.5em' }}>Cash Details</Header>
                     <Header>Price</Header>
                     <Line>
                         <Label>MSRP</Label>
@@ -33,7 +28,14 @@ export default class CashPane extends React.PureComponent {
                             <DollarsAndCents value={pricing.msrp()} />
                         </Value>
                     </Line>
-                    <Discount pricing={pricing} onChange={onDiscountChange} />
+                    <Line>
+                        <Label>
+                            <DiscountLabel pricing={pricing} />
+                        </Label>
+                        <Value isNegative={true}>
+                            <DollarsAndCents value={pricing.discount()} />
+                        </Value>
+                    </Line>
                     <Line isSectionTotal={true}>
                         <Label>Discounted Price</Label>
                         <Value>
@@ -74,9 +76,21 @@ export default class CashPane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Rebates</Header>
-                    {pricing.quoteIsLoading() && <Loading />}
-                    {pricing.quoteIsLoaded() && (
-                        <Rebates pricing={pricing} onChange={onRebatesChange} />
+                    {pricing.hasRebatesApplied() || (
+                        <Line>
+                            <Label>No rebates available</Label>
+                        </Line>
+                    )}
+                    {pricing.hasRebatesApplied() && (
+                        <Line>
+                            <Label>Applied</Label>
+                            <Value
+                                isNegative={true}
+                                isLoading={pricing.quoteIsLoading()}
+                            >
+                                <DollarsAndCents value={pricing.rebates()} />
+                            </Value>
+                        </Line>
                     )}
                     <Line isImportant={true} isSectionTotal={true}>
                         <Label>Total Selling Price</Label>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardBody } from 'reactstrap';
-import Phone from '../../../../icons/zondicons/phone.svg';
+
+import { faPhone } from '@fortawesome/pro-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class CardCta extends React.PureComponent {
     render() {
@@ -8,7 +10,7 @@ class CardCta extends React.PureComponent {
             <Card className="inventory-summary cta-card">
                 <CardBody>
                     <div className="cta-card__icon">
-                        <Phone />
+                        <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div>
                         Can&#39;t find what you&#39;re looking for? Questions

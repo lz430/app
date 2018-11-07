@@ -9,36 +9,41 @@ import { Navbar, NavbarBrand } from 'reactstrap';
 import UserLocationModal from './UserLocationModal';
 import UserContactModal from './UserContactModal';
 import CompareWidget from './CompareWidget';
-import { getUserLocation } from '../../../apps/user/selectors';
+import {
+    getUserLocation,
+    getUserPurchaseStrategy,
+} from '../../../apps/user/selectors';
 import { requestLocation } from '../../../apps/user/actions';
 import { getCurrentPageIsInCheckout } from '../../../apps/page/selectors';
 import { toggleCompare } from '../../../apps/common/actions';
-
-import Location from '../../../icons/zondicons/location.svg';
-import Help from '../../../icons/zondicons/question.svg';
 
 import SearchWidget from './SearchWidget';
 import {
     headerClearAutocompleteResults,
     headerRequestAutocomplete,
 } from '../../../apps/page/actions';
-import { getSearchQuery } from '../../../modules/deal-list/selectors';
 import { nextRouterType } from '../../../core/types';
 import { setSelectedMake } from '../../../modules/deal-list/actions';
+
+import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import config from '../../../core/config';
+import Logo from '../../../static/images/logo.svg';
 
 class Header extends React.PureComponent {
     static propTypes = {
         userLocation: PropTypes.object,
         currentPageIsInCheckout: PropTypes.bool,
         compareList: PropTypes.array,
+        autocompleteResults: PropTypes.object,
+        purchaseStrategy: PropTypes.string,
+        router: nextRouterType,
         onSearchForLocation: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
-        autocompleteResults: PropTypes.object,
-        searchQuery: PropTypes.object,
-        router: nextRouterType,
     };
 
     state = {
@@ -87,7 +92,7 @@ class Header extends React.PureComponent {
                     </div>
                 </div>
                 <div className="icon">
-                    <Location />
+                    <FontAwesomeIcon icon={faLocation} />
                 </div>
             </div>
         );
@@ -107,7 +112,7 @@ class Header extends React.PureComponent {
                     >
                         <span>Need Help?</span>
                         <div className="icon text-center">
-                            <Help />
+                            <FontAwesomeIcon icon={faQuestionCircle} />
                         </div>
                     </div>
                 </div>
@@ -122,11 +127,8 @@ class Header extends React.PureComponent {
     render() {
         return (
             <Navbar expand="md">
-                <NavbarBrand href="/">
-                    <img
-                        alt="Deliver My Ride"
-                        src="/static/images/dmr-logo.svg"
-                    />
+                <NavbarBrand href={config.MARKETING_URL}>
+                    <Logo />
                 </NavbarBrand>
                 <div className="mr-auto" />
 
@@ -136,8 +138,8 @@ class Header extends React.PureComponent {
                         onRequestSearch={this.props.onRequestSearch}
                         onSetSelectedMake={this.props.onSetSelectedMake}
                         autocompleteResults={this.props.autocompleteResults}
-                        router={this.props.router}
-                        searchQuery={this.props.searchQuery}
+                        push={this.props.router.push}
+                        purchaseStrategy={this.props.purchaseStrategy}
                     />
                     {this.renderContactUsWidget()}
                     <CompareWidget
@@ -167,7 +169,7 @@ const mapStateToProps = state => {
         currentPageIsInCheckout: getCurrentPageIsInCheckout(state),
         compareList: state.common.compareList,
         autocompleteResults: state.page.headerAutocompleteResults,
-        searchQuery: getSearchQuery(state),
+        purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };
 

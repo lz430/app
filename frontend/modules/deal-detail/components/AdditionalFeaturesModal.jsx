@@ -24,7 +24,7 @@ class AdditionalFeaturesModal extends React.Component {
             >
                 <ModalHeader toggle={this.props.toggle}>
                     <div className="modal__titles modal__titles--center">
-                        Additional Options
+                        Included Options
                     </div>
                 </ModalHeader>
                 <ModalBody className="text-sm">

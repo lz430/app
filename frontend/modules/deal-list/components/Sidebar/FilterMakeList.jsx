@@ -19,11 +19,6 @@ class FilterMakeList extends React.PureComponent {
         onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
-    constructor() {
-        super();
-        this.renderItem = this.renderItem.bind(this);
-    }
-
     isItemSelected(item) {
         return (
             this.props.selectedItems &&
@@ -54,7 +49,7 @@ class FilterMakeList extends React.PureComponent {
             <div className="filter-items filter-items__make">
                 <div className="filter-items__make__list">
                     {this.props.items ? (
-                        this.props.items.map(this.renderItem)
+                        this.props.items.map(item => this.renderItem(item))
                     ) : (
                         <Loading />
                     )}

@@ -31,10 +31,11 @@ class ListTopMessaging extends React.PureComponent {
             title: 'Free Delivery',
             content: 'to your home or office',
         },
-        {
+        /*        {
             title: '3-Day Return Policy',
             content: 'on all delivered vehicles',
         },
+        */
         {
             title: 'Transparent Pricing',
             content: 'no hidden taxes or fees',
