@@ -4,6 +4,7 @@ import { fromWholeDollars } from '../money';
 const defaultTerm = 60;
 const defaultDownPaymentPercent = 0.1; // example: .25 here means 25%
 const maxDownPaymentPercent = 0.9; // example: .25 here means 25%
+const annualInterestRate = 5;
 
 /**
  *
@@ -54,8 +55,6 @@ export default class FinancePricing extends Pricing {
      * n = Term (Period or no.of year or months for loan repayment.)
      */
     monthlyPayment = () => {
-        const annualInterestRate = 5;
-
         const P = this.yourPrice().subtract(this.downPayment());
         const r = annualInterestRate / 1200;
         const n = this.term();

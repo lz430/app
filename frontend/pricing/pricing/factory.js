@@ -24,16 +24,6 @@ export const pricingFromDataFactory = data => {
 };
 
 /**
- * Generate a pricing class using data pullled
- * from a deal pricing instance.
- * @param dealPricing
- * @returns {DealPricing}
- */
-export const pricingFromDealPricingFactory = dealPricing => {
-    return pricingFromDataFactory(dealPricing.toData());
-};
-
-/**
  * Generate a pricing class using data pulled
  * from a mixture of user profile / deal detail / deal list data.
  * @param state
@@ -42,7 +32,6 @@ export const pricingFromDealPricingFactory = dealPricing => {
  */
 export const pricingFromStateFactory = (state, props) => {
     const data = dealPricingData(state, props);
-
     return pricingFromDataFactory(data);
 };
 
@@ -54,6 +43,5 @@ export const pricingFromStateFactory = (state, props) => {
  */
 export const pricingFromCheckoutFactory = (state, props) => {
     const data = dealPricingFromCheckoutData(state, props);
-
     return pricingFromDataFactory(data);
 };
