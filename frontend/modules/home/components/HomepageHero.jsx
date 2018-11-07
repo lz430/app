@@ -26,9 +26,7 @@ export default class extends React.Component {
                         router={this.props.router}
                     />
                 </div>
-                <div className="home__hero__message text-center p-2 bg-primary text-white">
-                    <h3>Search new cars from local dealers</h3>
-                </div>
+                <div className="home__hero__message text-center p-2 text-white" />
             </div>
         );
     }
