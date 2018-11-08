@@ -1,9 +1,10 @@
 import '../../styles/app.scss';
-import React from 'react';
+import React, { Component } from 'react';
 import Link from 'next/link';
 import { Container } from 'reactstrap';
+import withTracker from '../../components/withTracker';
 
-export default class extends React.Component {
+class Page extends Component {
     render() {
         return (
             <Container className="policy">
@@ -415,3 +416,5 @@ export default class extends React.Component {
         );
     }
 }
+
+export default withTracker(Page);

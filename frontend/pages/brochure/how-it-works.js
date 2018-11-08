@@ -1,10 +1,11 @@
 import '../../styles/app.scss';
-import React from 'react';
+import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container } from 'reactstrap';
 import Link from 'next/link';
+import withTracker from '../../components/withTracker';
 
-export default class extends React.Component {
+class Page extends Component {
     render() {
         return (
             <div>
@@ -102,3 +103,5 @@ export default class extends React.Component {
         );
     }
 }
+
+export default withTracker(Page);

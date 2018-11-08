@@ -1,11 +1,12 @@
 import '../../styles/app.scss';
-import React from 'react';
+import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col } from 'reactstrap';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
+import withTracker from '../../components/withTracker';
 
-export default class extends React.Component {
+class Page extends Component {
     state = {
         collapse: false,
         active: false,
@@ -89,3 +90,5 @@ export default class extends React.Component {
         );
     }
 }
+
+export default withTracker(Page);

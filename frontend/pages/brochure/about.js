@@ -4,7 +4,9 @@ import PageHero from '../../components/brochure/PageHero';
 import Link from 'next/link';
 import { Container, Row, Col } from 'reactstrap';
 
-export default class extends React.Component {
+import withTracker from '../../components/withTracker';
+
+class Page extends React.Component {
     render() {
         return (
             <div className="about">
@@ -279,3 +281,5 @@ export default class extends React.Component {
         );
     }
 }
+
+export default withTracker(Page);

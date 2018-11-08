@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import TypeFormIframe from '../../modules/concierge/components/TypeFormIframe';
 
+import withTracker from '../../components/withTracker';
+
 class Page extends Component {
     render() {
         return (
@@ -15,4 +17,4 @@ class Page extends Component {
     }
 }
 
-export default Page;
+export default withTracker(Page);
