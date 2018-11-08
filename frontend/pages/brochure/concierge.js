@@ -4,17 +4,24 @@ import { Container } from 'reactstrap';
 import TypeFormIframe from '../../modules/concierge/components/TypeFormIframe';
 
 import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
 class Page extends Component {
     render() {
         return (
-            <Container>
-                <div className="embed-responsive embed-responsive-1by1">
-                    <TypeFormIframe />
-                </div>
-            </Container>
+            <React.Fragment>
+                <Head>
+                    <title>Deliver My Ride | Concierge</title>
+                </Head>
+                <Container>
+                    <div className="embed-responsive embed-responsive-1by1">
+                        <TypeFormIframe />
+                    </div>
+                </Container>
+            </React.Fragment>
         );
     }
 }
 
-export default withTracker(Page);
+export default withRouter(withTracker(Page));

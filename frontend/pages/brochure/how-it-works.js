@@ -4,11 +4,16 @@ import PageHero from '../../components/brochure/PageHero';
 import { Container } from 'reactstrap';
 import Link from 'next/link';
 import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
 class Page extends Component {
     render() {
         return (
-            <div>
+            <React.Fragment>
+                <Head>
+                    <title>Deliver My Ride | How It Works</title>
+                </Head>
                 <PageHero
                     backgroundImage="/static/brochure/About_Us.jpg"
                     title="How It Works"
@@ -99,9 +104,9 @@ class Page extends Component {
                         </p>
                     </Container>
                 </div>
-            </div>
+            </React.Fragment>
         );
     }
 }
 
-export default withTracker(Page);
+export default withRouter(withTracker(Page));

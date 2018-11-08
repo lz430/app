@@ -5,6 +5,8 @@ import { Container, Row, Col } from 'reactstrap';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
 class Page extends Component {
     state = {
@@ -53,7 +55,10 @@ class Page extends Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
+                <Head>
+                    <title>Deliver My Ride | FAQs</title>
+                </Head>
                 <PageHero
                     backgroundImage="/static/brochure/About_Us.jpg"
                     title="FAQs"
@@ -86,9 +91,9 @@ class Page extends Component {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </React.Fragment>
         );
     }
 }
 
-export default withTracker(Page);
+export default withRouter(withTracker(Page));
