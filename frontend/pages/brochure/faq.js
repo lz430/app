@@ -1,11 +1,14 @@
 import '../../styles/app.scss';
-import React from 'react';
+import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col } from 'reactstrap';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
+import withTracker from '../../components/withTracker';
+import { withRouter } from 'next/router';
+import Head from 'next/head';
 
-export default class extends React.Component {
+class Page extends Component {
     state = {
         collapse: false,
         active: false,
@@ -52,7 +55,10 @@ export default class extends React.Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
+                <Head>
+                    <title>Deliver My Ride | FAQs</title>
+                </Head>
                 <PageHero
                     backgroundImage="/static/brochure/About_Us.jpg"
                     title="FAQs"
@@ -85,7 +91,9 @@ export default class extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </React.Fragment>
         );
     }
 }
+
+export default withRouter(withTracker(Page));

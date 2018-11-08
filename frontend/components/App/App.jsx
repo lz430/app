@@ -60,11 +60,11 @@ class App extends React.Component {
                     className={classNames(
                         'app-content-wrapper',
                         {
-                            'app-content-wrapper__brochure': this.props
+                            'app-content-wrapper--brochure': this.props
                                 .isBrochureSite,
                         },
                         {
-                            'app-content-wrapper__app': !this.props
+                            'app-content-wrapper--app': !this.props
                                 .isBrochureSite,
                         }
                     )}
