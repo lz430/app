@@ -4,7 +4,8 @@ import { contains } from 'ramda';
 
 import { filterItemType } from '../../../../core/types';
 
-import Checkmark from '../../../../icons/zondicons/checkmark.svg';
+import { faCheck } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class FilterFeatureList extends React.PureComponent {
     static propTypes = {
@@ -38,9 +39,8 @@ class FilterFeatureList extends React.PureComponent {
                                 String(item.value),
                                 this.props.selectedItems
                             ) ? (
-                                <Checkmark
-                                    width="15px"
-                                    height="15px"
+                                <FontAwesomeIcon
+                                    icon={faCheck}
                                     className="filter-items__item__checkbox filter-items__item--selected"
                                 />
                             ) : (

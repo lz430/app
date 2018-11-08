@@ -30,14 +30,14 @@
 }
 
 .toolbar-mobile-bottom {
-    bottom: 0;
+    top: 50px;
     left: 0;
     right: 0;
     position: fixed;
     background: #fff;
     text-align: center;
-    box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    z-index: 50;
+    box-shadow: $box-shadow-sm;
+    z-index: 20;
     display: flex;
     flex-direction: column;
 }
@@ -46,7 +46,8 @@
     flex: 1;
     &.show {
         display: flex;
-        border-top: 2px solid $primary;
+        border-bottom: 2px solid $primary;
+        box-shadow: 0 -0.125rem 0.25rem rgba(0, 0, 0, 0.075);
     }
 }
 .toolbar-mobile-bottom > .menu {
@@ -55,17 +56,17 @@
     display: flex;
     flex: 1;
     > .toolbar-item {
-        border-top: 2px solid $primary;
+        border-bottom: 2px solid $primary;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
         flex: 1;
         cursor: pointer;
-        padding: 0.25rem;
+        padding: 0.35rem 0.25rem 0.25rem 0.25rem;
         background: #fbfbfb;
         &.active {
-            border-top: 0;
+            border-bottom: 0;
             background: #fff;
             // box-shadow: $box-shadow-sm;
             box-shadow: inset 0 3px 8px -2px rgba(85, 85, 85, 0.5);

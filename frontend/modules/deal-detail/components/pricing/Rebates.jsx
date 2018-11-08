@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { sortBy, prop, map } from 'ramda';
 
-import Line from '../../../../components/pricing/Line';
-import Label from '../../../../components/pricing/Label';
-import Value from '../../../../components/pricing/Value';
+import Line from '../../../../apps/pricing/components/Line';
+import Label from '../../../../apps/pricing/components/Label';
+import Value from '../../../../apps/pricing/components/Value';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import RebatesRole from './RebatesRole';

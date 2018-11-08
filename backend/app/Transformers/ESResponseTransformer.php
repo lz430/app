@@ -165,10 +165,6 @@ class ESResponseTransformer extends TransformerAbstract
 
                     $element['payments'][$strategy] = [
                         'payment' => round($data[$strategy]['payment']['buckets'][0]['payment']['value'], 2),
-                        'down' => round($data[$strategy]['payment']['buckets'][0]['term']['buckets'][0]['key'], 2),
-                        'term' => $data[$strategy]['payment']['buckets'][0]['term']['buckets'][0]['key'],
-                        'rebates' => $data[$strategy]['payment']['buckets'][0]['rebate']['buckets'][0]['key'],
-                        'rate' => $data[$strategy]['payment']['buckets'][0]['rate']['buckets'][0]['key'],
                     ];
 
                 } else {

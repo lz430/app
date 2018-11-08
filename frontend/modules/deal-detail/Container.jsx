@@ -23,7 +23,7 @@ import * as selectDiscountActions from './modules/selectDiscount';
 import * as financeActions from './modules/finance';
 import * as leaseActions from './modules/lease';
 import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
-import { getDeal, getLeaseAnnualMileage, getLeaseTerm } from './selectors';
+import { getDeal } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from '../../pricing/pricing/factory';
 import withTracker from '../../components/withTracker';
@@ -245,13 +245,7 @@ const mapStateToProps = (state, props) => {
             state.pages.dealDetails.selectDiscount.conditionalRoles,
         purchaseStrategy: getUserPurchaseStrategy(state),
         compareList: state.common.compareList,
-        financeDownPayment: state.pages.dealDetails.finance.downPayment,
-        financeTerm: state.pages.dealDetails.finance.term,
-        leaseAnnualMileage: getLeaseAnnualMileage(state),
-        leaseTerm: getLeaseTerm(state),
-        fallbackDealImage: state.common.fallbackDealImage,
         discountType: state.pages.dealDetails.selectDiscount.discountType,
-        window: state.common.window,
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
         pricing: pricingFromStateFactory(state, { ...props, deal }),

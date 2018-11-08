@@ -204,7 +204,7 @@ export default class DealDetail extends React.PureComponent {
                     {deal.vauto_features.length > 1 && (
                         <div>
                             <div className="deal-details__deal-content-subtitle">
-                                Additional Options
+                                Included Options
                             </div>
                             <ul className="deal-details__deal-content-features">
                                 {deal.vauto_features
@@ -219,7 +219,7 @@ export default class DealDetail extends React.PureComponent {
                                     this.toggleAdditionalFeaturesModal()
                                 }
                             >
-                                See all additional options &gt;
+                                See all Included Options &gt;
                             </span>
                         </div>
                     )}

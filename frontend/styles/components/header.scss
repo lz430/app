@@ -13,7 +13,7 @@
 .navbar {
     background-color: #fff;
     border-bottom: 2px solid $primary;
-    padding: 0 0.5rem 0 0.1rem;
+    padding: 0 0.5rem 0 0.5rem;
     box-shadow: $box-shadow-sm;
     position: fixed;
     width: 100%;
@@ -24,12 +24,14 @@
         padding: 0 1.5rem 0 1rem;
     }
     .navbar-brand {
+        padding: 0;
+
         @include media-breakpoint-down(md) {
             align-items: center;
             display: flex;
         }
 
-        img {
+        svg {
             max-width: 140px;
             @include media-breakpoint-up(md) {
                 max-width: 175px;
@@ -84,8 +86,10 @@
         font-weight: 300;
     }
     .icon {
-        width: 20px;
-        height: 20px;
+        font-size: 1.25rem;
+        @include media-breakpoint-up(md) {
+            font-size: 1rem;
+        }
         @include media-breakpoint-up(lg) {
             margin-left: 1rem;
         }
@@ -378,6 +382,7 @@
         }
     }
     &__mobile {
+        font-size: 1.25rem;
         @include media-breakpoint-down(md) {
             svg {
                 path {

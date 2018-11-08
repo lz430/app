@@ -1,5 +1,8 @@
 import { zero, fromWholeDollars } from '../money';
 
+/**
+ *
+ */
 export default class Pricing {
     constructor(data) {
         this.data = data;
@@ -28,9 +31,7 @@ export default class Pricing {
 
     rebates = () => {
         if (this.data.dealQuote && this.data.dealQuote.rebates) {
-            const dinero = fromWholeDollars(this.data.dealQuote.rebates.total);
-
-            return dinero;
+            return fromWholeDollars(this.data.dealQuote.rebates.total);
         }
 
         return zero;

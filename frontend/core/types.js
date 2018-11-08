@@ -30,24 +30,12 @@ export const modelYearType = shape({
     payments: shape({
         cash: shape({
             payment: number.isRequired,
-            down: number.isRequired,
-            term: number.isRequired,
-            rebates: number.isRequired,
-            rate: number.isRequired,
         }),
         finance: shape({
             payment: number.isRequired,
-            down: number.isRequired,
-            term: number.isRequired,
-            rebates: number.isRequired,
-            rate: number.isRequired,
         }),
         lease: shape({
             payment: number.isRequired,
-            down: number.isRequired,
-            term: number.isRequired,
-            rebates: number.isRequired,
-            rate: number.isRequired,
         }),
     }),
 });

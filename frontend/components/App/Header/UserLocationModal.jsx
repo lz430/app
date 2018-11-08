@@ -12,8 +12,9 @@ import {
     Label,
     Input,
 } from 'reactstrap';
-import Bolt from '../../../icons/zondicons/bolt.svg';
-import Location from '../../../icons/zondicons/location.svg';
+
+import { faLocation, faBolt } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class UserLocationModal extends React.PureComponent {
     static propTypes = {
@@ -74,7 +75,7 @@ class UserLocationModal extends React.PureComponent {
                     <Form onSubmit={this.onSubmit.bind(this)}>
                         <div className="location-input">
                             <div className="icon">
-                                <Location />
+                                <FontAwesomeIcon icon={faLocation} />
                             </div>
                             <div className="location-content">
                                 <FormGroup>
@@ -94,14 +95,16 @@ class UserLocationModal extends React.PureComponent {
 
                         {this.state.isInvalidZipcodeError && (
                             <Alert color="danger">
-                                <Bolt /> This zipcode does not appear to be
-                                valid, please enter a valid zipcode.
+                                <FontAwesomeIcon icon={faBolt} /> This zipcode
+                                does not appear to be valid, please enter a
+                                valid zipcode.
                             </Alert>
                         )}
 
                         {!this.props.userLocation.zipcode && (
                             <Alert color="danger">
-                                <Bolt /> Unable to find zipcode.
+                                <FontAwesomeIcon icon={faBolt} /> Unable to find
+                                zipcode.
                             </Alert>
                         )}
                         <Button color="primary"> Update Location</Button>

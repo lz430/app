@@ -25,9 +25,11 @@ export default class Header extends React.PureComponent {
         return (
             <header className="brochure-header">
                 <Navbar expand="lg">
-                    <NavbarBrand href="/brochure">
-                        <LogoHeader alt="Deliver My Ride" />
-                    </NavbarBrand>
+                    <Link href="/home" as="/brochure" passHref>
+                        <NavbarBrand>
+                            <LogoHeader alt="Deliver My Ride" />
+                        </NavbarBrand>
+                    </Link>
                     <NavbarToggler onClick={this.toggleNavbar} className="" />
 
                     <Collapse isOpen={!this.state.collapsed} navbar>

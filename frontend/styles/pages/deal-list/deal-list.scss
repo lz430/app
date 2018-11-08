@@ -5,6 +5,11 @@
     flex-direction: row;
     flex: 1 1 auto;
     position: relative;
+    padding-top: 40px;
+    @include media-breakpoint-up(md) {
+        padding-top: 0;
+    }
+
     &__top-row {
         border-bottom: 1px solid $color-section-bottom-border;
         padding: 0 20px 0 20px;

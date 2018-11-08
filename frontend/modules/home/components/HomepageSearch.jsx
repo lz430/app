@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
+import { SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
@@ -8,7 +8,6 @@ import StyleIcon from '../../../components/Deals/StyleIcon';
 import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
@@ -18,7 +17,6 @@ class SearchWidget extends React.PureComponent {
         onSetSelectedMake: PropTypes.func.isRequired,
         autocompleteResults: PropTypes.object,
         router: nextRouterType,
-        searchQuery: PropTypes.object,
     };
 
     state = {
@@ -76,25 +74,20 @@ class SearchWidget extends React.PureComponent {
         this.props.onClearSearchResults();
     };
 
-    onSelectItem(item) {
-        let newSearchQuery = { ...this.props.searchQuery };
-        if (item.query.entity) {
-            newSearchQuery.entity = item.query.entity;
-        }
-
-        if (item.query.filters) {
-            newSearchQuery.filters = item.query.filters;
-        }
+    onSelectItem(category, item) {
+        let newSearchQuery = { ...item.query };
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
         }
 
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
-        this.setState({ query: '' });
-        this.setState({ SearchMessage: false });
+        this.setState({
+            query: '',
+            SearchMessage: false,
+        });
         this.props.onClearSearchResults();
-        this.props.router.push('/filter?' + urlQuery);
+        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 
@@ -120,7 +113,7 @@ class SearchWidget extends React.PureComponent {
             <li
                 className="search__results__item"
                 key={item.label}
-                onClick={() => this.onSelectItem(item)}
+                onClick={() => this.onSelectItem(category, item)}
             >
                 <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}
@@ -260,44 +253,23 @@ class SearchWidget extends React.PureComponent {
 
         return (
             <div className="home__search" ref={node => (this.node = node)}>
-                <MediumAndUp>
-                    <div className="search__input">
-                        <input
-                            type="text"
-                            onChange={e => {
-                                this.handleSearchRequest(e.target.value);
-                            }}
-                            value={this.state.query}
-                            placeholder="Search by Brand or Model"
-                            required
-                        />
-                        {this.renderSearchIcon()}
-                    </div>
-                    {this.state.query && this.renderSearchResults()}
-                </MediumAndUp>
-                <SmallAndDown>
-                    <div className="search__mobile">{mobileButton}</div>
-                    {this.state.SearchMobile && (
-                        <div className="search__container-fluid">
-                            <div className="search__input">
-                                <input
-                                    type="text"
-                                    onChange={e => {
-                                        this.handleSearchRequest(
-                                            e.target.value
-                                        );
-                                    }}
-                                    value={this.state.query}
-                                    placeholder="Search by Brand or Model"
-                                    required
-                                />
-                                {this.renderSearchIcon()}
-                            </div>
-                            {this.renderSearchMessage()}
-                            {this.state.query && this.renderSearchResults(true)}
-                        </div>
-                    )}
-                </SmallAndDown>
+                <h2>Search new cars from local dealers</h2>
+                <div className="search__input">
+                    <SmallAndDown>
+                        <div className="search__mobile">{mobileButton}</div>
+                    </SmallAndDown>
+                    {this.renderSearchIcon()}
+                    <input
+                        type="text"
+                        onChange={e => {
+                            this.handleSearchRequest(e.target.value);
+                        }}
+                        value={this.state.query}
+                        placeholder="Search by Brand or Model"
+                        required
+                    />
+                </div>
+                {this.state.query && this.renderSearchResults()}
             </div>
         );
     }

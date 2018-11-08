@@ -30,11 +30,15 @@ import {
     clearModelYear,
     requestSearch,
     toggleSearchSort,
+    requestMoreDeals,
+    selectModelYear,
+    clearAllSecondaryFilters,
 } from './actions';
 
 import {
     getAllMakes,
     getLoadingSearchResults,
+    getSearchPage,
     getSearchQuery,
     getSelectedFiltersByCategory,
 } from './selectors';
@@ -43,6 +47,7 @@ import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import dealPage from './selectors';
+import { toggleCompare } from '../../apps/common/actions';
 
 class Container extends React.Component {
     static propTypes = {
@@ -60,6 +65,14 @@ class Container extends React.Component {
         makes: PropTypes.arrayOf(filterItemType),
         fallbackLogoImage: PropTypes.string.isRequired,
         onInit: PropTypes.func.isRequired,
+        router: nextRouterType,
+        initialQuery: PropTypes.object,
+        selectedMake: PropTypes.string,
+        location: PropTypes.object,
+        zipInRange: PropTypes.bool,
+        currentSearchPage: PropTypes.number,
+        compareList: PropTypes.array,
+        meta: PropTypes.object.isRequired,
         onUpdateEntirePageState: PropTypes.func.isRequired,
         onSetPurchaseStrategy: PropTypes.func.isRequired,
         onToggleMakeFilter: PropTypes.func.isRequired,
@@ -68,9 +81,10 @@ class Container extends React.Component {
         onRequestSearch: PropTypes.func.isRequired,
         onClearModelYear: PropTypes.func.isRequired,
         onToggleSearchSort: PropTypes.func.isRequired,
-        router: nextRouterType,
-        initialQuery: PropTypes.object,
-        selectedMake: PropTypes.string,
+        onRequestMoreDeals: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
+        onSelectModelYear: PropTypes.func.isRequired,
+        onClearAllSecondaryFilters: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -113,6 +127,10 @@ class Container extends React.Component {
     }
 
     renderMakeSelectionModal() {
+        if (!this.props.makeSelectorModalIsOpen) {
+            return false;
+        }
+
         return (
             <ModalMakeSelector
                 toggle={this.props.onCloseMakeSelectorModal}
@@ -128,9 +146,33 @@ class Container extends React.Component {
     renderDeals() {
         return (
             <div className="filter-page__deals">
-                <ToolbarSelectedFilters />
+                <ToolbarSelectedFilters
+                    onClearAllSecondaryFilters={
+                        this.props.onClearAllSecondaryFilters
+                    }
+                    onToggleSearchFilter={this.props.onToggleSearchFilter}
+                    onToggleSearchSort={this.props.onToggleSearchSort}
+                    searchQuery={this.props.searchQuery}
+                    selectedFiltersByCategory={
+                        this.props.selectedFiltersByCategory
+                    }
+                    filters={this.props.filters}
+                />
                 <ListTopMessaging />
-                <ResultsList />
+                <ResultsList
+                    deals={this.props.deals}
+                    modelYears={this.props.modelYears}
+                    currentSearchPage={this.props.currentSearchPage}
+                    loadingSearchResults={this.props.loadingSearchResults}
+                    location={this.props.location}
+                    searchQuery={this.props.searchQuery}
+                    meta={this.props.meta}
+                    compareList={this.props.compareList}
+                    purchaseStrategy={this.props.purchaseStrategy}
+                    onRequestMoreDeals={this.props.onRequestMoreDeals}
+                    onToggleCompare={this.props.onToggleCompare}
+                    onSelectModelYear={this.props.onSelectModelYear}
+                />
             </div>
         );
     }
@@ -223,6 +265,10 @@ const mapStateToProps = state => {
         isLoading: getIsPageLoading(state),
         filters: state.pages.dealList.filters,
         loadingSearchResults: getLoadingSearchResults(state),
+        currentSearchPage: getSearchPage(state),
+        location: getUserLocation(state),
+        compareList: state.common.compareList,
+        meta: state.pages.dealList.meta,
     };
 };
 
@@ -254,6 +300,18 @@ const mapDispatchToProps = dispatch => {
         },
         onToggleSearchSort: sort => {
             return dispatch(toggleSearchSort(sort));
+        },
+        onRequestMoreDeals: () => {
+            return dispatch(requestMoreDeals());
+        },
+        onToggleCompare: data => {
+            return dispatch(toggleCompare(data));
+        },
+        onSelectModelYear: modelYear => {
+            return dispatch(selectModelYear(modelYear));
+        },
+        onClearAllSecondaryFilters: () => {
+            return dispatch(clearAllSecondaryFilters());
         },
     };
 };

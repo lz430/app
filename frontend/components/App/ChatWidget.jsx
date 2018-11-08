@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import ChatBubbleDots from '../../icons/zondicons/chat-bubble-dots.svg';
 import classNames from 'classnames';
+
+import { faComments } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class ChatWidget extends React.PureComponent {
     static propTypes = {
@@ -16,18 +18,26 @@ class ChatWidget extends React.PureComponent {
     render() {
         if (this.props.presentation === 'modal') {
             return (
-                <div className={classNames('modal-widget', 'chat-button')}>
-                    <a href="#hs-chat-open" className="btn btn-primary">
-                        <span className="d-md-inline">Chat With Us</span>
-                    </a>
-                </div>
+                <a
+                    href="#hs-chat-open"
+                    className={classNames(
+                        'modal-widget',
+                        'chat-button',
+                        'text-center'
+                    )}
+                >
+                    <FontAwesomeIcon icon={faComments} />
+                    <span className="btn btn-primary d-md-inline">
+                        Chat With Us
+                    </span>
+                </a>
             );
         }
 
         return (
             <span className={classNames('chat-button')}>
                 <a href="#hs-chat-open">
-                    <ChatBubbleDots />
+                    <FontAwesomeIcon icon={faComments} />
                     <span>Chat With Us</span>
                 </a>
             </span>

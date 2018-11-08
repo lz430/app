@@ -5,21 +5,20 @@ import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../Deals/StyleIcon';
-import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { track } from '../../../core/services';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
         currentPageIsInCheckout: PropTypes.bool,
+        autocompleteResults: PropTypes.object,
+        purchaseStrategy: PropTypes.string,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
-        autocompleteResults: PropTypes.object,
-        router: nextRouterType,
-        searchQuery: PropTypes.object,
+        push: PropTypes.func.isRequired,
     };
 
     state = {
@@ -72,33 +71,34 @@ class SearchWidget extends React.PureComponent {
         if (this.node.contains(e.target)) {
             return;
         }
-
-        this.setState({ query: '' });
-        this.props.onClearSearchResults();
+        if (this.state.query) {
+            this.setState({ query: '' });
+            this.props.onClearSearchResults();
+        }
     };
 
-    onSelectItem(item) {
-        let newSearchQuery = { ...this.props.searchQuery };
-        if (item.query.entity) {
-            newSearchQuery.entity = item.query.entity;
-        }
-
-        if (item.query.filters) {
-            newSearchQuery.filters = item.query.filters;
-        }
+    onSelectItem(category, item) {
+        let newSearchQuery = { ...item.query };
+        newSearchQuery.purchaseStrategy = this.props.purchaseStrategy;
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
         }
 
         const urlQuery = buildSearchQueryUrl(newSearchQuery);
+
+        track('search:bar:select', {
+            'Search Query': this.state.query,
+            'Search Selected Category': category,
+            'Search Selected Value': item.label,
+        });
+
         this.setState({
             query: '',
             SearchMessage: false,
         });
         this.props.onClearSearchResults();
-
-        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
+        this.props.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 
@@ -124,7 +124,7 @@ class SearchWidget extends React.PureComponent {
             <li
                 className="search__results__item"
                 key={item.label}
-                onClick={() => this.onSelectItem(item)}
+                onClick={() => this.onSelectItem(category, item)}
             >
                 <div className="search__results__item__icon">
                     {this.renderResultItemIcon(category, item)}

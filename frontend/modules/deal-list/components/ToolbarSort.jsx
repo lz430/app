@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { find } from 'ramda';
 
-import { toggleSearchSort } from '../../deal-list/actions';
 import {
     Dropdown,
     DropdownToggle,
@@ -48,10 +46,6 @@ class ToolbarSort extends React.Component {
             label: 'Payment: High > Low',
         },
     ];
-
-    change(sort) {
-        this.props.onToggleSearchSort(sort);
-    }
 
     toggle() {
         this.setState(prevState => ({
@@ -104,21 +98,4 @@ class ToolbarSort extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        searchQuery: state.pages.dealList.searchQuery,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onToggleSearchSort: sort => {
-            return dispatch(toggleSearchSort(sort));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ToolbarSort);
+export default ToolbarSort;

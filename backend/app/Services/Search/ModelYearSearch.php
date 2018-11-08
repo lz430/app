@@ -112,26 +112,6 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.cash.payment',
                                                 ],
                                             ],
-                                            'down' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.cash.down'
-                                                ]
-                                            ],
-                                            'rebate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.cash.rebate'
-                                                ]
-                                            ],
-                                            'term' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.cash.term'
-                                                ]
-                                            ],
-                                            'rate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.cash.rate'
-                                                ]
-                                            ],
                                         ]
                                     ],
                                 ],
@@ -153,26 +133,6 @@ class ModelYearSearch extends BaseSearch
                                                 'min' => [
                                                     'field' => 'payments.detroit.finance.payment',
                                                 ],
-                                            ],
-                                            'down' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.finance.down'
-                                                ]
-                                            ],
-                                            'rebate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.finance.rebate'
-                                                ]
-                                            ],
-                                            'term' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.finance.term'
-                                                ]
-                                            ],
-                                            'rate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.finance.rate'
-                                                ]
                                             ],
                                         ]
                                     ],
@@ -196,26 +156,6 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.lease.payment',
                                                 ],
                                             ],
-                                            'down' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.lease.down'
-                                                ]
-                                            ],
-                                            'rebate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.lease.rebate'
-                                                ]
-                                            ],
-                                            'term' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.lease.term'
-                                                ]
-                                            ],
-                                            'rate' => [
-                                                'terms' => [
-                                                    'field' => 'payments.detroit.lease.rate'
-                                                ]
-                                            ],
                                         ]
                                     ],
                                 ],
@@ -231,7 +171,6 @@ class ModelYearSearch extends BaseSearch
                                     ],
                                 ]
                             ],
-
 
                             'year' => [
                                 'reverse_nested' => (object)[],

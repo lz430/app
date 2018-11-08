@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { dealType } from '../../../core/types';
 
 import NoDealsInRange from './NoDealsInRange';
@@ -8,8 +7,6 @@ import NoDealsOutOfRange from './NoDealsOutOfRange';
 import ViewDeals from './ViewDeals';
 import ViewModels from './ViewModels';
 import Loading from '../../../components/Loading';
-import { getUserLocation } from '../../../apps/user/selectors';
-import { getSearchPage } from '../selectors';
 
 class ResultsList extends React.PureComponent {
     static propTypes = {
@@ -20,7 +17,14 @@ class ResultsList extends React.PureComponent {
         zipInRange: PropTypes.bool,
         searchQuery: PropTypes.object.isRequired,
         currentSearchPage: PropTypes.number,
+        purchaseStrategy: PropTypes.string,
+        compareList: PropTypes.array,
+        meta: PropTypes.object.isRequired,
+        onRequestMoreDeals: PropTypes.func.isRequired,
+        onToggleCompare: PropTypes.func.isRequired,
+        onSelectModelYear: PropTypes.func.isRequired,
     };
+
     render() {
         // No pagination for models so we just return loading here anytime we
         // are loading results
@@ -63,22 +67,22 @@ class ResultsList extends React.PureComponent {
 
         // We have some results; which should we prefer?
         return this.props.searchQuery.entity === 'deal' ? (
-            <ViewDeals />
+            <ViewDeals
+                compareList={this.props.compareList}
+                meta={this.props.meta}
+                shouldShowLoading={this.props.loadingSearchResults}
+                deals={this.props.deals}
+                onRequestMoreDeals={this.props.onRequestMoreDeals}
+                onToggleCompare={this.props.onToggleCompare}
+            />
         ) : (
-            <ViewModels />
+            <ViewModels
+                modelYears={this.props.modelYears}
+                onSelectModelYear={this.props.onSelectModelYear}
+                purchaseStrategy={this.props.purchaseStrategy}
+            />
         );
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        deals: state.pages.dealList.deals,
-        currentSearchPage: getSearchPage(state),
-        loadingSearchResults: state.pages.dealList.loadingSearchResults,
-        location: getUserLocation(state),
-        modelYears: state.pages.dealList.modelYears,
-        searchQuery: state.pages.dealList.searchQuery,
-    };
-}
-
-export default connect(mapStateToProps)(ResultsList);
+export default ResultsList;
