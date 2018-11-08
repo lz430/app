@@ -126,7 +126,12 @@ class Header extends React.PureComponent {
      */
     render() {
         return (
-            <Navbar expand="md">
+            <Navbar
+                color="white"
+                fixed="top"
+                expand="md"
+                className="navbar--app"
+            >
                 <NavbarBrand href={config.MARKETING_URL}>
                     <Logo />
                 </NavbarBrand>

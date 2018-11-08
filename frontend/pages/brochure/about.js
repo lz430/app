@@ -19,7 +19,11 @@ class Page extends React.Component {
                     <PageHero
                         backgroundImage="/static/brochure/About_Us.jpg"
                         title="About Deliver My Ride"
-                        button="Find your new car"
+                        cta={{
+                            label: 'Find your new car',
+                            href: '/deal-list',
+                            as: '/filter',
+                        }}
                     />
 
                     <div className="about__twss">
