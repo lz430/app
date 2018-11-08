@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from 'next/link';
 
 export default class PageHero extends React.PureComponent {
     static propTypes = {
@@ -7,6 +8,11 @@ export default class PageHero extends React.PureComponent {
         backgroundImage: PropTypes.string,
         subtitle: PropTypes.string,
         button: PropTypes.string,
+        cta: PropTypes.shape({
+            label: PropTypes.string.isRequired,
+            href: PropTypes.string.isRequired,
+            as: PropTypes.string.isRequired,
+        }),
     };
 
     render() {
@@ -18,7 +24,18 @@ export default class PageHero extends React.PureComponent {
             <div className="page-hero" style={style}>
                 <h1>{this.props.title}</h1>
                 <h4>{this.props.subtitle}</h4>
-                <button className="btn btn-primary">{this.props.button}</button>
+
+                {this.props.cta && (
+                    <Link
+                        as={this.props.cta.as}
+                        href={this.props.cta.href}
+                        passHref
+                    >
+                        <a className="btn btn-primary">
+                            {this.props.cta.label}
+                        </a>
+                    </Link>
+                )}
             </div>
         );
     }
