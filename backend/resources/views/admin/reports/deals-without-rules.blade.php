@@ -61,7 +61,7 @@
                     </table>
 
                     @slot('footer')
-                        Total: {{$item['deals']->count()}}
+                        Total Missing: {{$item['stats']['missing']}} | Total Active Deals: {{$item['stats']['active']}} | Impact: {{number_format(($item['stats']['missing'] / $item['stats']['active']) * 100, 2)}}%
                     @endslot
                 @endcomponent
             @endforeach
