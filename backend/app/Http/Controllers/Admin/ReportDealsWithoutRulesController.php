@@ -29,9 +29,10 @@ class ReportDealsWithoutRulesController extends Controller
                 'fields' => $fields,
                 'dealer' => $dealer,
                 'deals' => [],
+                'stats' => [],
             ];
             if (count($fields)) {
-                $query = Deal::where('dealer_id', '=', $dealer->dealer_id);
+                $query = Deal::where('dealer_id', '=', $dealer->dealer_id)->where('status', '=', 'available');
 
                 $query->where(function($query) use ($fields){
                     foreach ($fields as $field) {
@@ -40,6 +41,9 @@ class ReportDealsWithoutRulesController extends Controller
                 });
 
                 $item['deals'] = $query->get();
+
+                $item['stats']['missing'] = $query->count();
+                $item['stats']['active'] = Deal::where('dealer_id', '=', $dealer->dealer_id)->where('status', '=', 'available')->count();
 
             }
             if (!count($item['deals'])) {
