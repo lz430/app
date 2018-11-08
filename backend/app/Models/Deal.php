@@ -169,6 +169,20 @@ class Deal extends Model
         'Infiniti' => 'INFINITI',
     ];
 
+    private const INDEX_SERIES_MAP = [
+        'Grand Cherokee' => [
+            '2BC' => 'Upland',
+            '2BZ' => 'Altitude',
+            '2BS' => 'High Altitude',
+            '2BE' => 'Loredo',
+            '2BH' => 'Limited',
+            '2BP' => 'Overland',
+            '2BR' => 'Summit',
+            '2BJ' => 'Trailhawk',
+            '2XV' => 'Trackhawk'
+        ],
+    ];
+
     /**
      * @var array
      */
@@ -668,6 +682,22 @@ class Deal extends Model
         return $make;
     }
 
+    private function translateIndexSeries()
+    {
+        $series = $this->version->trim_name;
+        $model = $this->version->model->name;
+
+        if (isset(self::INDEX_SERIES_MAP[$model]) && $this->option_codes && count($this->option_codes)) {
+            foreach($this->option_codes as $code) {
+                if (isset(self::INDEX_SERIES_MAP[$model][$code])) {
+                    return self::INDEX_SERIES_MAP[$model][$code];
+                }
+            }
+        }
+
+        return $series;
+    }
+
     private function translateSearchableData()
     {
         $data = [
@@ -718,7 +748,7 @@ class Deal extends Model
         $record['make'] = $this->translateIndexMake();
         $record['model'] = $this->version->model->name;
         $record['model_code'] = $this->model_code;
-        $record['series'] = $this->version->trim_name;
+        $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
         $record['seating_capacity'] = (int)$this->seating_capacity;
 
