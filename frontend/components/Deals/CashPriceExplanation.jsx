@@ -4,6 +4,7 @@ import Group from '../../apps/pricing/components/Group';
 import Line from '../../apps/pricing/components/Line';
 import Label from '../../apps/pricing/components/Label';
 import Value from '../../apps/pricing/components/Value';
+import DollarsAndCents from '../money/DollarsAndCents';
 
 export default class CashPriceExplanation extends React.Component {
     static propTypes = {
@@ -17,39 +18,39 @@ export default class CashPriceExplanation extends React.Component {
                 <Group>
                     <Line>
                         <Label>MSRP</Label>
-                        <Value>{dealPricing.msrp()}</Value>
+                        <Value>
+                            <DollarsAndCents value={dealPricing.msrp()} />
+                        </Value>
                     </Line>
                     <Line>
                         <Label>Discount</Label>
                         <Value isNegative={true}>
-                            {dealPricing.discount()}
+                            <DollarsAndCents
+                                value={dealPricing.dmrDiscount()}
+                            />
                         </Value>
                     </Line>
-                    <Line isSectionTotal={true}>
-                        <Label>Discounted Price</Label>
-                        <Value is>{dealPricing.discountedPrice()}</Value>
-                    </Line>
-                </Group>
-                <Group>
                     <Line>
                         <Label>Rebates Applied</Label>
                         <Value
                             isNegative={true}
-                            isLoading={dealPricing.dealQuoteIsLoading()}
+                            isLoading={dealPricing.quoteIsLoading()}
                         >
-                            {dealPricing.bestOffer()}
+                            <DollarsAndCents value={dealPricing.rebates()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Taxes &amp; Fees</Label>
+                        <Value isLoading={dealPricing.quoteIsLoading()}>
+                            <DollarsAndCents
+                                value={dealPricing.taxesAndFees()}
+                            />
                         </Value>
                     </Line>
                     <Line isImportant={true} isSectionTotal={true}>
                         <Label>Cash Price</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.cashPrice()}
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Plus Taxes &amp; Fees</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.taxesAndFeesTotal()}
+                        <Value>
+                            <DollarsAndCents value={dealPricing.yourPrice()} />*
                         </Value>
                     </Line>
                 </Group>

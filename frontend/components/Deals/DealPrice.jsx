@@ -60,7 +60,7 @@ class DealPrice extends React.Component {
 
     renderValue() {
         if (this.props.purchaseStrategy === 'cash') {
-            return <Dollars value={this.props.pricing.sellingPrice()} />;
+            return <Dollars value={this.props.pricing.yourPrice()} />;
         }
 
         return <Dollars value={this.props.pricing.monthlyPayment()} />;
@@ -106,7 +106,6 @@ class DealPrice extends React.Component {
     getDisclaimer() {
         switch (this.props.purchaseStrategy) {
             case 'cash':
-                return 'Additional Taxes and Fees Apply';
             case 'finance':
             case 'lease':
                 return 'Includes All Taxes and Fees';
