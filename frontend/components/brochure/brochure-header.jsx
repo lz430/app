@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     Collapse,
+    Container,
     Navbar,
     NavbarToggler,
     NavbarBrand,
@@ -10,7 +11,7 @@ import {
 } from 'reactstrap';
 
 import Link from 'next/link';
-import LogoHeader from '../../static/images/dmr-logo.svg';
+import Logo from '../../static/images/logo.svg';
 
 export default class Header extends React.PureComponent {
     state = {
@@ -23,11 +24,16 @@ export default class Header extends React.PureComponent {
 
     render() {
         return (
-            <header className="brochure-header">
-                <Navbar expand="lg">
+            <Navbar
+                color="white"
+                fixed="top"
+                expand="md"
+                className="navbar--brochure"
+            >
+                <Container>
                     <Link href="/home" as="/brochure" passHref>
                         <NavbarBrand>
-                            <LogoHeader alt="Deliver My Ride" />
+                            <Logo />
                         </NavbarBrand>
                     </Link>
                     <NavbarToggler onClick={this.toggleNavbar} className="" />
@@ -70,8 +76,8 @@ export default class Header extends React.PureComponent {
                             </NavItem>
                         </Nav>
                     </Collapse>
-                </Navbar>
-            </header>
+                </Container>
+            </Navbar>
         );
     }
 }

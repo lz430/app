@@ -18,7 +18,7 @@ body {
 
         min-height: min-content;
 
-        &__app {
+        &--app {
             margin-top: 54px;
 
             @include media-breakpoint-up(sm) {
@@ -28,8 +28,8 @@ body {
             background-color: #f2f2f2;
         }
 
-        &__brochure {
-            margin-top: 61px;
+        &--brochure {
+            margin-top: 55px;
             background-color: #ffffff;
         }
         @include media-breakpoint-down(xs) {
