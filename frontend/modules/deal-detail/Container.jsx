@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { dealType } from '../../core/types';
 
 import { compose } from 'redux';
-import Link from 'next/link';
 
 import { track } from '../../core/services';
 
