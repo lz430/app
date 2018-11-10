@@ -32,7 +32,6 @@ module.exports = withCSS(
                 ) {
                     entries['main.js'].unshift('./core/polyfills.js');
                 }
-                console.log(entries);
 
                 return entries;
             };

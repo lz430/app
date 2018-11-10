@@ -5,7 +5,7 @@ import { StickyContainer } from 'react-sticky';
 import PropTypes from 'prop-types';
 import { dealType, filterItemType, nextRouterType } from '../../core/types';
 import Loading from '../../components/Loading';
-
+import { equals } from 'ramda';
 import {
     getUserLocation,
     getUserPurchaseStrategy,
@@ -91,7 +91,10 @@ class Container extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.initialQuery !== this.props.initialQuery) {
+        //
+        // When user is still on the page but some other external component modifies the query
+        // (Header search bar)
+        if (!equals(prevProps.initialQuery, this.props.initialQuery)) {
             this.props.onInit({
                 initialQuery: this.props.initialQuery,
                 dataOnly: true,
@@ -99,6 +102,8 @@ class Container extends React.Component {
             forceCheck();
         }
 
+        //
+        // Handles user back button logic
         if (this.props.router.beforePopState) {
             this.props.router.beforePopState(({ options }) => {
                 const data = options.data;

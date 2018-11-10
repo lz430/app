@@ -193,6 +193,7 @@ function* searchToggleFilter(action) {
             });
             return keep;
         }, currentFilters);
+    } else if (operation === 'CLEAR_MODEL_YEAR') {
     }
 
     yield put(DealListActions.setSearchFilters(currentFilters));

@@ -29,6 +29,8 @@ import { pricingFromStateFactory } from '../../pricing/pricing/factory';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { withRouter } from 'next/router';
+import BackToSearchResultsLink from '../../apps/page/components/BackToSearchResultsLink';
+import { getSearchQuery } from '../deal-list/selectors';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -47,6 +49,7 @@ class DealDetailContainer extends React.PureComponent {
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
+        searchQuery: PropTypes.object.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         selectDiscountActions: PropTypes.shape({
             selectDmrDiscount: PropTypes.func.isRequired,
@@ -184,9 +187,9 @@ class DealDetailContainer extends React.PureComponent {
             <Container>
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link href="/deal-list" as="/filter">
-                            <a>Search Results</a>
-                        </Link>
+                        <BackToSearchResultsLink
+                            searchQuery={this.props.searchQuery}
+                        />
                     </BreadcrumbItem>
                     <BreadcrumbItem active>View Deal</BreadcrumbItem>
                 </Breadcrumb>
@@ -241,6 +244,7 @@ const mapStateToProps = (state, props) => {
 
     return {
         deal,
+        searchQuery: getSearchQuery(state),
         selectedConditionalRoles:
             state.pages.dealDetails.selectDiscount.conditionalRoles,
         purchaseStrategy: getUserPurchaseStrategy(state),
