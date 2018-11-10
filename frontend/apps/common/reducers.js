@@ -5,7 +5,6 @@ import { persistReducer } from 'redux-persist';
 const initialState = {
     compareList: [],
     employeeBrand: false,
-    fallbackLogoImage: '/images/dmr-logo-small.svg',
 };
 
 const persistConfig = {

@@ -63,7 +63,6 @@ class Container extends React.Component {
         userLocation: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
         makes: PropTypes.arrayOf(filterItemType),
-        fallbackLogoImage: PropTypes.string.isRequired,
         onInit: PropTypes.func.isRequired,
         router: nextRouterType,
         initialQuery: PropTypes.object,
@@ -138,7 +137,6 @@ class Container extends React.Component {
                 selectedFiltersByCategory={this.props.selectedFiltersByCategory}
                 makes={this.props.makes}
                 onToggleSearchFilter={this.props.onToggleMakeFilter}
-                fallbackLogoImage={this.props.fallbackLogoImage}
             />
         );
     }
@@ -261,7 +259,6 @@ const mapStateToProps = state => {
         purchaseStrategy: getUserPurchaseStrategy(state),
         makes: getAllMakes(state),
         selectedMake: dealPage(state).selectedMake,
-        fallbackLogoImage: state.common.fallbackLogoImage,
         isLoading: getIsPageLoading(state),
         filters: state.pages.dealList.filters,
         loadingSearchResults: getLoadingSearchResults(state),
