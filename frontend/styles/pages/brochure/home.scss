@@ -141,6 +141,92 @@
                 }
             }
         }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+
+            button {
+                background: $color-text-white;
+                border: 1px solid $color-text-white;
+                box-shadow: $shadow-subtle;
+                border-radius: 50px;
+                color: $color-text-blue;
+                font-size: 1.5rem;
+                padding: 10px 20px;
+                text-align: left;
+                top: 50%;
+
+                &__prev {
+                }
+                &__next {
+                }
+            }
+        }
+
+        .alice-carousel {
+            &__prev-btn,
+            &__next-btn {
+                background: $color-text-white;
+                border: 1px solid $color-text-white;
+                box-shadow: $shadow-subtle;
+                border-radius: 50px;
+                color: $color-text-blue;
+                font-size: 1.5rem;
+                padding: 0px 25px 0px 10px;
+                position: absolute;
+                text-align: left;
+                top: 25%;
+                max-width: 25px;
+                width: 25px;
+                max-height: 37px;
+                height: 37px;
+
+                p {
+                    padding: 0;
+                    margin: 0;
+                }
+            }
+            &__prev-btn {
+                left: -20px;
+
+                [data-area]::after {
+                    content: '<' !important;
+                    font-size: 2rem;
+                    line-height: 1px;
+                }
+            }
+            &__next-btn {
+                right: -25px;
+
+                [data-area]::after {
+                    content: '>' !important;
+                    font-size: 2rem;
+                    line-height: 1px;
+                }
+            }
+
+            &__stage-item {
+                background: $color-text-white;
+                border-right: 1px solid #fcfcfc;
+                border-radius: $border-radius;
+
+                h3 {
+                    font-size: 1.4rem;
+                    text-align: center;
+                    color: $color-text-blue;
+                }
+
+                .cta {
+                    color: $color-text-blue;
+                    display: block;
+                    font-size: 1.2rem;
+                    margin-top: 20px;
+                }
+            }
+        }
     }
 
     &__brands {
