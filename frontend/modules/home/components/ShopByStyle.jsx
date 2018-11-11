@@ -47,8 +47,6 @@ export default class extends React.Component {
         );
     }
     render() {
-        const { responsive, currentIndex } = this.state;
-
         return (
             <Container className="callout__categories">
                 <AliceCarousel
