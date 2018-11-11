@@ -35,24 +35,6 @@ class Page extends React.Component {
         activeIndex: 0,
     };
 
-    items = [
-        {
-            src: 'https://via.placeholder.com/50.png?text=Dodge',
-            altText: 'Slide 1',
-            caption: 'Slide 1',
-        },
-        {
-            src: 'https://via.placeholder.com/50.png?text=Jeep',
-            altText: 'Slide 2',
-            caption: 'Slide 2',
-        },
-        {
-            src: 'https://via.placeholder.com/50.png?text=Ford',
-            altText: 'Slide 3',
-            caption: 'Slide 3',
-        },
-    ];
-
     render() {
         return (
             <React.Fragment>
