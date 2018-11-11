@@ -4,6 +4,7 @@ import Group from '../../apps/pricing/components/Group';
 import Line from '../../apps/pricing/components/Line';
 import Label from '../../apps/pricing/components/Label';
 import Value from '../../apps/pricing/components/Value';
+import DollarsAndCents from '../money/DollarsAndCents';
 
 export default class FinancePriceExplanation extends React.Component {
     static propTypes = {
@@ -17,30 +18,36 @@ export default class FinancePriceExplanation extends React.Component {
                 <Group>
                     <Line>
                         <Label>Total Selling Price</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.yourPrice()}
+                        <Value isLoading={dealPricing.quoteIsLoading()}>
+                            <DollarsAndCents value={dealPricing.yourPrice()} />
                         </Value>
                     </Line>
-                    <Line isSemiImportant={true}>
+                    <Line>
                         <Label>Down Payment</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.financeDownPayment()}
+                        <Value isLoading={dealPricing.quoteIsLoading()}>
+                            <DollarsAndCents
+                                value={dealPricing.downPayment()}
+                            />
                         </Value>
                     </Line>
                     <Line>
                         <Label>Amount Financed</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.amountFinanced()}
+                        <Value isLoading={dealPricing.quoteIsLoading()}>
+                            <DollarsAndCents
+                                value={dealPricing.amountFinanced()}
+                            />
                         </Value>
                     </Line>
                     <Line>
                         <Label>Term</Label>
-                        <Value>{dealPricing.financeTerm()} months</Value>
+                        <Value>{dealPricing.term()} months</Value>
                     </Line>
-                    <Line isImportant={true}>
+                    <Line isSemiImportant={true}>
                         <Label>Monthly Payment</Label>
-                        <Value isLoading={dealPricing.dealQuoteIsLoading()}>
-                            {dealPricing.monthlyPayments()}
+                        <Value isLoading={dealPricing.quoteIsLoading()}>
+                            <DollarsAndCents
+                                value={dealPricing.monthlyPayment()}
+                            />
                         </Value>
                     </Line>
                 </Group>

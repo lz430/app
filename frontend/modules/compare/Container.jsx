@@ -10,20 +10,26 @@ import ToolbarPrice from './components/ToolbarPrice';
 import EquipmentCategory from './components/EquipmentCategory';
 import ErrorNoDealsToCompare from './components/ErrorNoDealsToCompare';
 
-import { getEquipmentCategories } from './selectors';
+import { getComparedDeals, getEquipmentCategories } from './selectors';
 import { getIsPageLoading } from '../../apps/page/selectors';
 
 import Loading from '../../components/Loading';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
+import { getSearchQuery } from '../deal-list/selectors';
+import { batchRequestDealQuotes } from '../../apps/pricing/actions';
+import Link from 'next/link';
 
 class ComparePageContainer extends React.PureComponent {
     static propTypes = {
         cols: PropTypes.array.isRequired,
+        deals: PropTypes.array,
         compareList: PropTypes.array.isRequired,
         equipmentCategories: PropTypes.array.isRequired,
-        onPageInit: PropTypes.func.isRequired,
         isLoading: PropTypes.bool,
+        searchQuery: PropTypes.object,
+        onPageInit: PropTypes.func.isRequired,
+        onBatchRequestDealQuotes: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -42,12 +48,12 @@ class ComparePageContainer extends React.PureComponent {
         return (
             <Deal deal={deal} key={deal.id}>
                 <div className="deal__buttons">
-                    <button
-                        className="btn btn-success"
-                        onClick={() => (window.location = `/deals/${deal.id}`)}
+                    <Link
+                        href={`/deal-detail?id=${deal.id}`}
+                        as={`/deals/${deal.id}`}
                     >
-                        View
-                    </button>
+                        <a className="btn btn-outline-success btn-sm">View</a>
+                    </Link>
                 </div>
             </Deal>
         );
@@ -82,7 +88,13 @@ class ComparePageContainer extends React.PureComponent {
         };
         return (
             <div className="compare-page">
-                <ToolbarPrice />
+                <ToolbarPrice
+                    searchQuery={this.props.searchQuery}
+                    deals={this.props.deals}
+                    onBatchRequestDealQuotes={
+                        this.props.onBatchRequestDealQuotes
+                    }
+                />
                 <div className="compare-page__body-wrapper">
                     <div className="compare-page__body">
                         <div style={style}>
@@ -110,10 +122,12 @@ class ComparePageContainer extends React.PureComponent {
 
 const mapStateToProps = state => {
     return {
+        deals: getComparedDeals(state),
         cols: state.pages.compare.cols,
         equipmentCategories: getEquipmentCategories(state),
         compareList: state.common.compareList,
         isLoading: getIsPageLoading(state),
+        searchQuery: getSearchQuery(state),
     };
 };
 
@@ -121,6 +135,9 @@ const mapDispatchToProps = dispatch => {
     return {
         onPageInit: () => {
             return dispatch(initPage());
+        },
+        onBatchRequestDealQuotes: deals => {
+            return dispatch(batchRequestDealQuotes(deals));
         },
     };
 };

@@ -59,6 +59,19 @@ export function clearAllSecondaryFilters() {
     };
 }
 
+export function selectModelYear(vehicleModel) {
+    return dispatch => {
+        dispatch({
+            type: ActionTypes.SELECT_MODEL_YEAR,
+            data: vehicleModel,
+        });
+
+        dispatch({
+            type: ActionTypes.SEARCH_REQUEST,
+        });
+    };
+}
+
 export function clearModelYear() {
     return dispatch => {
         dispatch({
@@ -119,19 +132,6 @@ export function receiveModelYears(data) {
     return {
         type: ActionTypes.RECEIVE_MODEL_YEARS,
         data: data,
-    };
-}
-
-export function selectModelYear(vehicleModel) {
-    return dispatch => {
-        dispatch({
-            type: ActionTypes.SELECT_MODEL_YEAR,
-            data: vehicleModel,
-        });
-
-        dispatch({
-            type: ActionTypes.SEARCH_REQUEST,
-        });
     };
 }
 

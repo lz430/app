@@ -19,8 +19,8 @@ export default class extends React.Component {
         const query = {
             entity: 'model',
             sort: 'payment',
-            purchaseStrategy: 'finance',
             filters: make.query,
+            purchaseStrategy: 'finance',
         };
 
         return (

@@ -2,6 +2,7 @@ import { persistReducer } from 'redux-persist';
 import { basePersistConfig } from '../../core/persist';
 
 import * as ActionTypes from './consts';
+import { uniq } from 'ramda';
 
 const initialState = {
     isLoading: false,
@@ -134,14 +135,14 @@ const reducer = function(state = initialState, action = {}) {
                 return {
                     ...state,
                     page: 1,
+                    deals: [],
+                    modelYears: [],
                     showMakeSelectorModal: true,
                     searchQuery: {
                         ...state.searchQuery,
                         entity: 'model',
                         filters: [],
                     },
-                    deals: [],
-                    modelYears: [],
                 };
             } else {
                 return {
@@ -162,10 +163,10 @@ const reducer = function(state = initialState, action = {}) {
                 searchQuery: {
                     ...state.searchQuery,
                     entity: 'deal',
-                    filters: [
+                    filters: uniq([
                         ...state.searchQuery.filters,
                         'model:' + action.data.model,
-                    ],
+                    ]),
                 },
             };
 

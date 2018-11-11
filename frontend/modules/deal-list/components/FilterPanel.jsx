@@ -26,12 +26,6 @@ class FilterPanel extends React.PureComponent {
         isOpen: false,
     };
 
-    state = {
-        openFilter: null,
-        sizeCategory: null,
-        sizeFeatures: [],
-    };
-
     afterSetPurchaseStrategy() {
         this.props.onRequestSearch();
     }

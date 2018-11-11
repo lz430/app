@@ -98,7 +98,7 @@ class ToolbarSelectedFilters extends React.PureComponent {
                 {this.renderSelectedFilters()}
                 <ToolbarSort
                     onToggleSearchSort={this.props.onToggleSearchSort}
-                    searchQuery={this.props.searchQuery}
+                    sort={this.props.searchQuery.sort}
                 />
             </div>
         );
