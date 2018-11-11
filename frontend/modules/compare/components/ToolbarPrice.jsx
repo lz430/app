@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Breadcrumb, BreadcrumbItem } from 'reactstrap';
-import Link from 'next/link';
 
 import GlobalSelectPurchaseStrategy from '../../../apps/user/components/GlobalSelectPurchaseStrategy';
-import { batchRequestDealQuotes } from '../../../apps/pricing/actions';
-import { getComparedDeals } from '../selectors';
+import BackToSearchResultsLink from '../../../apps/page/components/BackToSearchResultsLink';
 
 class ToolbarPrice extends React.PureComponent {
     static propTypes = {
         onBatchRequestDealQuotes: PropTypes.func.isRequired,
-        deals: PropTypes.array.isRequired,
+        deals: PropTypes.array,
+        searchQuery: PropTypes.object,
     };
 
     afterSetPurchaseStrategy() {
@@ -22,9 +20,9 @@ class ToolbarPrice extends React.PureComponent {
             <div className="compare-page__toolbar">
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <Link href="/deal-list" as="/filter">
-                            <a>Search Results</a>
-                        </Link>
+                        <BackToSearchResultsLink
+                            searchQuery={this.props.searchQuery}
+                        />
                     </BreadcrumbItem>
                     <BreadcrumbItem active>Compare Deals</BreadcrumbItem>
                 </Breadcrumb>
@@ -41,21 +39,4 @@ class ToolbarPrice extends React.PureComponent {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        deals: getComparedDeals(state),
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onBatchRequestDealQuotes: deals => {
-            return dispatch(batchRequestDealQuotes(deals));
-        },
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ToolbarPrice);
+export default ToolbarPrice;

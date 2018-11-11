@@ -10,10 +10,10 @@ import {
     DropdownItem,
 } from 'reactstrap';
 
-class ToolbarSort extends React.Component {
+class ToolbarSort extends React.PureComponent {
     static propTypes = {
         onToggleSearchSort: PropTypes.func.isRequired,
-        searchQuery: PropTypes.object.isRequired,
+        sort: PropTypes.string.isRequired,
     };
 
     state = {
@@ -54,7 +54,7 @@ class ToolbarSort extends React.Component {
     }
 
     findActive() {
-        const current = this.props.searchQuery.sort;
+        const current = this.props.sort;
         return find(function(item) {
             return current === item.key;
         })(this.sorts);
@@ -66,7 +66,7 @@ class ToolbarSort extends React.Component {
                 key={item.key}
                 onClick={() => this.props.onToggleSearchSort(item.key)}
                 className={classNames('text-sm', {
-                    active: this.props.searchQuery.sort === item.key,
+                    active: this.props.sort === item.key,
                 })}
             >
                 {item.label}
