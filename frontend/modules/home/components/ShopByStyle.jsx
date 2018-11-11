@@ -9,12 +9,6 @@ import StyleIcon from '../../../components/Deals/StyleIcon';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 
-import {
-    faChevronRight,
-    faChevronLeft,
-} from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export default class extends React.Component {
     responsive = {
         0: { items: 2 },
@@ -23,8 +17,6 @@ export default class extends React.Component {
     };
 
     state = {
-        currentIndex: 0,
-        responsive: { 1024: { items: 3 } },
         items: [],
     };
 

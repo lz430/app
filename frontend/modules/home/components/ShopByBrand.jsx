@@ -1,15 +1,6 @@
 import React from 'react';
 
-import {
-    Container,
-    Row,
-    Col,
-    Carousel,
-    CarouselItem,
-    CarouselControl,
-    CarouselIndicators,
-    CarouselCaption,
-} from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import Link from 'next/link';
 
 import makes from '../../../content/makes';
