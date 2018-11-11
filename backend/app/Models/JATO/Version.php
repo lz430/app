@@ -121,7 +121,7 @@ class Version extends Model
      * @return VersionPhoto|null
      */
     public function thumbnail(): ?VersionPhoto {
-        return  $this->photos()
+        return $this->photos()
             ->where('shot_code', '=', '116')
             ->where('type', '=', 'default')
             ->first();

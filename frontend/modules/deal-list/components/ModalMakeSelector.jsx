@@ -16,7 +16,6 @@ class ModalMakeSelector extends React.PureComponent {
         isOpen: PropTypes.bool,
         makes: PropTypes.arrayOf(filterItemType),
         selectedFiltersByCategory: PropTypes.object.isRequired,
-        fallbackLogoImage: PropTypes.string.isRequired,
         onToggleSearchFilter: PropTypes.func.isRequired,
     };
 
@@ -31,7 +30,7 @@ class ModalMakeSelector extends React.PureComponent {
     getLogoFor(make) {
         return ifElse(
             this.logoMissing(make),
-            () => this.props.fallbackLogoImage,
+            () => '/static/images/dmr-logo-small.svg',
             prop('icon')
         ).bind(this)(make);
     }
