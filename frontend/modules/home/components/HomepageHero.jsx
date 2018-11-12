@@ -24,7 +24,6 @@ export default class extends React.Component {
                         router={this.props.router}
                     />
                 </div>
-                <div className="home__hero__message text-center p-2 text-white" />
             </div>
         );
     }

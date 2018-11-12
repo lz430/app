@@ -69,9 +69,9 @@ export default class Header extends React.PureComponent {
                             </NavItem>
                             <NavItem>
                                 <Link href="/deal-list" as="/filter" passHref>
-                                    <NavLink className="btn btn-primary">
+                                    <a className="btn btn-primary">
                                         Get Started
-                                    </NavLink>
+                                    </a>
                                 </Link>
                             </NavItem>
                         </Nav>

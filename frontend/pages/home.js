@@ -58,33 +58,39 @@ class Page extends React.Component {
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://via.placeholder.com/400x250"
+                                    src="https://source.unsplash.com/random/600x300"
                                     alt="placeholder"
                                 />
-                                <h3>Test it out</h3>
+                                <h3 className="mt-2">Test it out</h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Quae corrupti facere autem
-                                    ut eligendi dignissimos.
+                                    adipisicing elit. Facere eius architecto,
+                                    quo corporis perspiciatis error. Lorem ipsum
+                                    dolor sit amet, consectetur adipisicing
+                                    elit. Facere eius architecto, quo corporis
+                                    perspiciatis error.
                                 </p>
                             </Col>
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://via.placeholder.com/400x250"
+                                    src="https://source.unsplash.com/random/600x300"
                                     alt="placeholder"
                                 />
-                                <h3>Purchase</h3>
+                                <h3 className="mt-2">Purchase</h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Facere eius architecto,
-                                    quo corporis perspiciatis error.
+                                    quo corporis perspiciatis error. Lorem ipsum
+                                    dolor sit amet, consectetur adipisicing
+                                    elit. Facere eius architecto, quo corporis
+                                    perspiciatis error.
                                 </p>
                             </Col>
                         </Row>
                     </Container>
 
-                    <div className="container-fluid callout__testimonials">
+                    <div className="container-fluid callout__testimonials bg-pattern text-white">
                         <Container>
                             <Row>
                                 <Col>
@@ -140,31 +146,31 @@ class Page extends React.Component {
                     </div>
 
                     <Container>
-                        <Row>
+                        <Row className="align-items-center">
                             <Col>
                                 <h5>Featured In: </h5>
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>

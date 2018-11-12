@@ -1,7 +1,7 @@
 .home {
     &__hero {
         &__banner {
-            background: url('/static/brochure/HomepageHero.jpg') bottom;
+            background: url('/static/brochure/Home_Bg.jpg') center;
             background-size: cover;
             height: 420px;
             display: flex;
@@ -134,12 +134,6 @@
                     text-align: center;
                 }
             }
-            &:last-of-type {
-                a {
-                    background: $color-text-blue;
-                    border: $border-none;
-                }
-            }
         }
 
         .navigation {
@@ -268,19 +262,16 @@
     }
 
     &__testimonials {
-        background: #ececec;
         margin-top: 40px;
         margin-bottom: 40px;
         padding: 40px 0;
 
         h4 {
-            color: #213a59;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .author {
-            color: #213a59;
             font-size: 0.9rem;
             font-weight: bold;
         }
@@ -289,4 +280,4 @@
     &__media {
         padding: 40px 0;
     }
-} //end home page and callouts
+}
