@@ -4,6 +4,7 @@
         font-weight: 700;
         margin-bottom: 30px;
     }
+
     h3 {
         font-weight: 700;
         margin-bottom: 30px;
@@ -28,6 +29,7 @@
             font-weight: 700;
             margin-bottom: 20px;
         }
+
         .about__story-image {
             margin: 0;
             background: url('https://source.unsplash.com/random/800x600');
@@ -40,27 +42,18 @@
             font-size: 1.2rem;
             font-weight: bold;
         }
+
         .text-sm {
             font-size: 0.75rem;
         }
     }
 
     &__cost {
-        .container-fluid {
-            background: #ececec;
-            padding: 30px 15px;
+        .btn {
+            width: 15%;
 
-            p {
-                font-size: 0.9rem;
-                margin-bottom: 30px;
-            }
-
-            .btn-primary {
-                width: 15%;
-
-                @include media-breakpoint-down(sm) {
-                    width: auto;
-                }
+            @include media-breakpoint-down(sm) {
+                width: auto;
             }
         }
     }
@@ -78,6 +71,7 @@
                 max-width: 100%;
             }
         }
+
         h5 {
             font-size: 0.8rem;
             font-weight: bold;
@@ -87,6 +81,7 @@
                 font-size: 0.8rem;
             }
         }
+
         .row {
             flex-direction: row;
             justify-content: space-between;

@@ -58,27 +58,33 @@ class Page extends React.Component {
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://source.unsplash.com/random/600x350"
+                                    src="https://source.unsplash.com/random/600x300"
                                     alt="placeholder"
                                 />
-                                <h3>Test it out</h3>
+                                <h3 className="mt-2">Test it out</h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Quae corrupti facere autem
-                                    ut eligendi dignissimos.
+                                    adipisicing elit. Facere eius architecto,
+                                    quo corporis perspiciatis error. Lorem ipsum
+                                    dolor sit amet, consectetur adipisicing
+                                    elit. Facere eius architecto, quo corporis
+                                    perspiciatis error.
                                 </p>
                             </Col>
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://source.unsplash.com/random/600x350"
+                                    src="https://source.unsplash.com/random/600x300"
                                     alt="placeholder"
                                 />
-                                <h3>Purchase</h3>
+                                <h3 className="mt-2">Purchase</h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipisicing elit. Facere eius architecto,
-                                    quo corporis perspiciatis error.
+                                    quo corporis perspiciatis error. Lorem ipsum
+                                    dolor sit amet, consectetur adipisicing
+                                    elit. Facere eius architecto, quo corporis
+                                    perspiciatis error.
                                 </p>
                             </Col>
                         </Row>

@@ -161,34 +161,31 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__cost  mt-5 mb-5">
-                        <Container fluid={true}>
-                            <Container>
-                                <h3 className="text-center">
-                                    What does Deliver My Ride Cost?
-                                </h3>
-                                <p className="text-center">
-                                    Nothing. Zip. Zilch. Zero. In fact, we save
-                                    you money. As an alternate sales channel, we
-                                    replace the salesperson and reduce the cost
-                                    to the dealer, passing the savings to you.
-                                    Since we don’t work for any one dealer and
-                                    aren’t working on a commission percentage,
-                                    we stay unbiased throughout the entire
-                                    buying process. With Deliver My Ride, nobody
-                                    sells you a car, you buy the car that’s
-                                    right for you.
-                                </p>
-                                <div className="text-center">
-                                    <Link
-                                        href="/brochure/faq"
-                                        as="/brochure/faq"
-                                        passHref
-                                    >
-                                        <a className="btn btn-primary">FAQs</a>
-                                    </Link>
-                                </div>
-                            </Container>
+                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4 bg-pattern text-white">
+                        <Container>
+                            <h3 className="text-center">
+                                What does Deliver My Ride Cost?
+                            </h3>
+                            <p className="text-center">
+                                Nothing. Zip. Zilch. Zero. In fact, we save you
+                                money. As an alternate sales channel, we replace
+                                the salesperson and reduce the cost to the
+                                dealer, passing the savings to you. Since we
+                                don’t work for any one dealer and aren’t working
+                                on a commission percentage, we stay unbiased
+                                throughout the entire buying process. With
+                                Deliver My Ride, nobody sells you a car, you buy
+                                the car that’s right for you.
+                            </p>
+                            <div className="text-center">
+                                <Link
+                                    href="/brochure/faq"
+                                    as="/brochure/faq"
+                                    passHref
+                                >
+                                    <a className="btn btn-success">FAQs</a>
+                                </Link>
+                            </div>
                         </Container>
                     </div>
 
