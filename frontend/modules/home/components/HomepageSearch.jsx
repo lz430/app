@@ -105,7 +105,11 @@ class SearchWidget extends React.PureComponent {
             return <StyleIcon style={item.icon} />;
         }
 
-        return <img alt={item.label} src={item.icon} />;
+        if (item.icon) {
+            return <img alt={item.label} src={item.icon} />;
+        }
+
+        return false;
     }
 
     renderResultItem(category, item) {

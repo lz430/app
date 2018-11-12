@@ -58,7 +58,7 @@ class Page extends React.Component {
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://via.placeholder.com/400x250"
+                                    src="https://source.unsplash.com/random/600x350"
                                     alt="placeholder"
                                 />
                                 <h3>Test it out</h3>
@@ -71,7 +71,7 @@ class Page extends React.Component {
                             <Col md="6">
                                 <img
                                     className="img-fluid"
-                                    src="https://via.placeholder.com/400x250"
+                                    src="https://source.unsplash.com/random/600x350"
                                     alt="placeholder"
                                 />
                                 <h3>Purchase</h3>
@@ -84,7 +84,7 @@ class Page extends React.Component {
                         </Row>
                     </Container>
 
-                    <div className="container-fluid callout__testimonials">
+                    <div className="container-fluid callout__testimonials bg-pattern text-white">
                         <Container>
                             <Row>
                                 <Col>
@@ -140,31 +140,31 @@ class Page extends React.Component {
                     </div>
 
                     <Container>
-                        <Row>
+                        <Row className="align-items-center">
                             <Col>
                                 <h5>Featured In: </h5>
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>
                             <Col>
                                 <img
-                                    src="https://via.placeholder.com/200x50"
+                                    src="https://source.unsplash.com/random/200x50"
                                     alt="placeholder"
                                 />
                             </Col>

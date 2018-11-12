@@ -1,0 +1,85 @@
+.faq {
+    .col-sm-3 {
+        border-right: 1px solid $color-grey;
+        padding-left: 0;
+        @include media-breakpoint-down(sm) {
+            padding-left: 15px;
+        }
+        .toc {
+            list-style: none;
+            padding: 0;
+
+            li {
+                padding: 12px 0;
+
+                &:first-of-type {
+                    padding-top: 0;
+                }
+            }
+            a {
+                color: $color-black;
+                display: block;
+
+                &.active {
+                    color: $color-text-blue;
+                }
+            }
+        }
+
+        &:last-of-type {
+            border-right: $border-none;
+        }
+    }
+    @include media-breakpoint-up(md) {
+        .col-sm-9 {
+            padding-left: 100px;
+        }
+    }
+
+    &__accordion {
+        .col {
+            border-top: 1px solid $color-grey;
+            border-bottom: 1px solid $color-grey;
+            padding: 15px 0;
+
+            & + .col {
+                border-top: $border-none;
+            }
+            .title {
+                display: flex;
+                justify-content: space-between;
+
+                &:hover {
+                    cursor: pointer;
+                }
+                &.active {
+                    color: $color-text-blue;
+                    // margin-bottom: 10px;
+                }
+            }
+            .content {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    &__contact {
+        background: $color-lightgrey;
+        border-right: $border-none;
+        padding: 5px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+
+        h4 {
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        a {
+            color: $color-text-blue;
+            display: block;
+            font-size: 0.8rem;
+            padding: 5px 0;
+        }
+    }
+}

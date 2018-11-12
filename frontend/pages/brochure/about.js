@@ -26,7 +26,7 @@ class Page extends React.Component {
                         }}
                     />
 
-                    <div className="about__twss">
+                    <div className="about__twss mt-3 mb-3">
                         <Container>
                             <h2 className="text-center">
                                 There must be a better way!
@@ -46,9 +46,9 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__story">
+                    <div className="about__story mt-5 mb-5">
                         <Container>
-                            <Row>
+                            <Row noGutters>
                                 <Col sm="6">
                                     <h3 className="">Our Story</h3>
                                     <p>
@@ -83,18 +83,14 @@ class Page extends React.Component {
                                         buying process.
                                     </p>
                                 </Col>
-                                <Col sm="6">
-                                    <img
-                                        className="img-fluid"
-                                        src="https://via.placeholder.com/500x400"
-                                        alt="placeholder"
-                                    />
+                                <Col sm="6" className="p-0">
+                                    <div className="about__story-image" />
                                 </Col>
                             </Row>
                         </Container>
                     </div>
 
-                    <div className="about__values">
+                    <div className="about__values  mt-5 mb-5">
                         <Container>
                             <h3 className="text-center">Our Values</h3>
                             <Row className="text-center">
@@ -165,7 +161,7 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__cost">
+                    <div className="about__cost  mt-5 mb-5">
                         <Container fluid={true}>
                             <Container>
                                 <h3 className="text-center">
@@ -196,9 +192,9 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__office">
+                    <div className="about__office  mt-5 mb-5">
                         <Container>
-                            <Row>
+                            <Row className="align-items-center">
                                 <Col md="6">
                                     <img
                                         className="img-fluid"
@@ -242,7 +238,7 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__team text-center">
+                    <div className="about__team text-center  mt-5 mb-5">
                         <Container>
                             <Row>
                                 <div className="mb-3">

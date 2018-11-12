@@ -25,7 +25,7 @@ class Contact extends React.Component {
                 <Head>
                     <title>Deliver My Ride | Contact Us</title>
                 </Head>
-                <Container className="contact mb-5">
+                <Container className="contact mt-5 mb-5">
                     <Row>
                         <Col>
                             <h1>
