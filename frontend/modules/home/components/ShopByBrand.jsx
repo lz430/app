@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Col, Row } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 import Link from 'next/link';
 
 import makes from '../../../content/makes';
