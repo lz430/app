@@ -7,6 +7,12 @@
     ],
     "license": "MIT",
     "type": "project",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mwisner/hubspot-php"
+        }
+    ],
     "require": {
         "php": ">=7.1",
         "adambullmer/usdl-regex": "^1.0",
@@ -25,7 +31,7 @@
         "league/csv": "^9.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
-        "ryanwinchester/hubspot-php": "~1.0",
+        "ryanwinchester/hubspot-php": "dev-feat/ticket-api",
         "sentry/sentry-laravel": "^0.10.0",
         "spatie/laravel-fractal": "^5.0",
         "toin0u/geocoder-laravel": "^4.0",
