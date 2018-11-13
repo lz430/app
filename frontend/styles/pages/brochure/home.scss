@@ -98,8 +98,8 @@
 
 .callout {
     &__categories {
-        margin-top: 60px;
-        margin-bottom: 40px;
+        background: #f5f6f7;
+        padding: 60px 0;
 
         .row {
             align-content: center;
@@ -225,7 +225,6 @@
 
     &__brands {
         background: #ececec;
-        margin-top: 40px;
         margin-bottom: 40px;
         padding: 20px 0;
 
