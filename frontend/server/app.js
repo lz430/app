@@ -49,11 +49,6 @@ app.prepare()
             app.render(req, res, '/compare', queryParams);
         });
 
-        server.get('/trade-in', (req, res) => {
-            const queryParams = { ...req.query };
-            app.render(req, res, '/trade-in', queryParams);
-        });
-
         //
         // Brochure Site
         // Note: Temp prefix with /brochure... will rename all the routes when we go live.
@@ -77,16 +72,28 @@ app.prepare()
             app.render(req, res, '/brochure/contact', req.query);
         });
 
-        server.get('/brochure/concierge', (req, res) => {
-            app.render(req, res, '/brochure/concierge', req.query);
-        });
-
         server.get('/brochure/privacy-policy', (req, res) => {
             app.render(req, res, '/brochure/privacy-policy', req.query);
         });
 
         server.get('/brochure/terms-of-service', (req, res) => {
             app.render(req, res, '/brochure/terms-of-service', req.query);
+        });
+
+        //
+        // Experiment / Beta Pages
+        server.get('/experiments/kb-poc', (req, res) => {
+            const queryParams = { ...req.query };
+            app.render(req, res, '/experiments/kb-poc', queryParams);
+        });
+
+        server.get('/experiments/tp-poc', (req, res) => {
+            const queryParams = { ...req.query };
+            app.render(req, res, '/experiments/tp-poc', queryParams);
+        });
+
+        server.get('/experiments/concierge', (req, res) => {
+            app.render(req, res, '/experiments/concierge', req.query);
         });
 
         server.get('*', (req, res) => {
