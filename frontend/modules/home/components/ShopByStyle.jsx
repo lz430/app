@@ -48,33 +48,37 @@ export default class extends React.Component {
     }
     render() {
         return (
-            <Container className="callout__categories">
-                <AliceCarousel
-                    ref={el => (this.Carousel = el)}
-                    duration={400}
-                    autoPlay={false}
-                    startIndex={1}
-                    fadeOutAnimation={true}
-                    mouseDragEnabled={true}
-                    playButtonEnabled={false}
-                    autoPlayInterval={2000}
-                    autoPlayDirection="rtl"
-                    responsive={this.responsive}
-                    disableAutoPlayOnAction={true}
-                    onSlideChange={this.onSlideChange}
-                    onSlideChanged={this.onSlideChanged}
-                    dotsDisabled={true}
-                >
-                    {styles.map(style => this.renderStyle(style))}
-                </AliceCarousel>
-                <Row>
-                    <Col className="text-center mt-5">
-                        <Link href="/deal-list" as="/filter" passHref>
-                            <a className="btn btn-primary">Browse All Cars</a>
-                        </Link>
-                    </Col>
-                </Row>
-            </Container>
+            <div className="container-fluid callout__categories">
+                <Container>
+                    <AliceCarousel
+                        ref={el => (this.Carousel = el)}
+                        duration={400}
+                        autoPlay={false}
+                        startIndex={1}
+                        fadeOutAnimation={true}
+                        mouseDragEnabled={true}
+                        playButtonEnabled={false}
+                        autoPlayInterval={2000}
+                        autoPlayDirection="rtl"
+                        responsive={this.responsive}
+                        disableAutoPlayOnAction={true}
+                        onSlideChange={this.onSlideChange}
+                        onSlideChanged={this.onSlideChanged}
+                        dotsDisabled={true}
+                    >
+                        {styles.map(style => this.renderStyle(style))}
+                    </AliceCarousel>
+                    <Row>
+                        <Col className="text-center mt-5">
+                            <Link href="/deal-list" as="/filter" passHref>
+                                <a className="btn btn-primary">
+                                    Browse All Cars
+                                </a>
+                            </Link>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         );
     }
 }
