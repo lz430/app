@@ -1,0 +1,21 @@
+.react-autosuggest {
+    &__container {
+        background: #fff;
+        border: 1px solid $primary;
+        margin: 0 auto;
+    }
+    &__input {
+        padding: 0.25rem;
+        font-size: 1.25rem;
+        width: 100%;
+    }
+    &__suggestions-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    &__suggestion {
+        padding: 4px;
+        cursor: pointer;
+    }
+}
