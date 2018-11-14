@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavItem, NavLink } from 'reactstrap';
+import { Container, Col, Row, NavItem, NavLink } from 'reactstrap';
 import Link from 'next/link';
 import LogoFooter from '../../static/images/dmr-logo-footer.svg';
 
@@ -15,9 +15,9 @@ export default class Footer extends React.PureComponent {
     render() {
         return (
             <footer className="brochure-footer">
-                <div className="container">
-                    <div className="row border-bottom">
-                        <div className="col-8 ">
+                <Container>
+                    <Row className=" border-bottom">
+                        <Col sm={8}>
                             <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
                                 <NavItem>
@@ -53,8 +53,8 @@ export default class Footer extends React.PureComponent {
                                     </NavLink>
                                 </NavItem>
                             </ul>
-                        </div>
-                        <div className="col-3 contact">
+                        </Col>
+                        <Col sm={4} className="contact">
                             <h3>Contact</h3>
                             <ul>
                                 <NavItem>
@@ -78,10 +78,10 @@ export default class Footer extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                             </ul>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-9">
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={9} sm={12}>
                             <ul>
                                 <NavItem>
                                     <Link
@@ -106,8 +106,8 @@ export default class Footer extends React.PureComponent {
                                     Reserved.
                                 </li>
                             </ul>
-                        </div>
-                        <div className="col-3 social">
+                        </Col>
+                        <Col md={3} sm={12} className="social">
                             <ul>
                                 <NavItem>
                                     <a
@@ -137,9 +137,9 @@ export default class Footer extends React.PureComponent {
                                     </a>
                                 </NavItem>
                             </ul>
-                        </div>
-                    </div>
-                </div>
+                        </Col>
+                    </Row>
+                </Container>
             </footer>
         );
     }
