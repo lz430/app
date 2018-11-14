@@ -50,6 +50,10 @@ class Rebates extends React.Component {
             title: 'Cadillac Lease Loyalty',
             description: null,
         },
+        cadillacloyalty: {
+            title: 'Cadillac Loyalty',
+            description: null,
+        },
         gmloyalty: {
             title: 'Lease Loyalty',
             description: null,
