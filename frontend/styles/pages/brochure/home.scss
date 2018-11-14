@@ -46,6 +46,7 @@
                 padding: 0.5rem 0.5rem 0.5rem 1.7rem;
                 width: 100%;
             }
+
             svg {
                 left: 5px;
                 right: auto;
@@ -53,6 +54,7 @@
                 path {
                     fill: $color-black !important;
                 }
+
                 &.loading-icon {
                     right: 5px !important;
                     left: auto !important;
@@ -101,38 +103,26 @@
         background: #f5f6f7;
         padding: 80px 0 50px;
 
-        .row {
-            align-content: center;
-            justify-content: center;
-
-            @include media-breakpoint-down(sm) {
-                flex-wrap: wrap;
-            }
-
-            .__category {
-                display: flex;
-                flex-direction: column;
+        .__category {
+            border-radius: $border-radius;
+            padding: 0.25rem;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            box-shadow: $box-shadow-sm;
+            margin: 0.25rem;
+            background: #ffffff;
+            h3 {
+                font-size: 1rem;
+                font-weight: bold;
                 text-align: center;
-                h3 {
-                    font-size: 1rem;
-                    font-weight: bold;
-                    text-align: center;
-                }
-                .icon {
-                    flex: 1;
-                    box-shadow: $box-shadow-sm;
-                    padding: 1rem;
-                    text-align: center;
-                    margin: 0 0 0.5rem 0;
-                }
-                img {
-                    max-width: 90%;
-                    margin: 0 auto;
-                }
-                a {
-                    color: $color-text-blue;
-                    text-align: center;
-                }
+            }
+            img {
+                max-width: 90%;
+                margin: 0 auto;
+            }
+            .cta {
+                margin-top: 0.5rem;
             }
         }
 
@@ -155,6 +145,7 @@
 
                 &__prev {
                 }
+
                 &__next {
                 }
             }
@@ -172,7 +163,7 @@
                 padding: 0px 25px 0px 10px;
                 position: absolute;
                 text-align: left;
-                top: 25%;
+                top: 39%;
                 max-width: 25px;
                 width: 25px;
                 max-height: 37px;
@@ -183,6 +174,7 @@
                     margin: 0;
                 }
             }
+
             &__prev-btn {
                 left: -20px;
 
@@ -192,6 +184,7 @@
                     line-height: 1px;
                 }
             }
+
             &__next-btn {
                 right: -25px;
 
@@ -201,33 +194,10 @@
                     line-height: 1px;
                 }
             }
-
-            &__stage-item {
-                background: $color-text-white;
-                border-right: 1px solid #fcfcfc;
-                border-radius: $border-radius;
-
-                h3 {
-                    font-size: 1.4rem;
-                    text-align: center;
-                    color: $color-text-blue;
-                }
-
-                .cta {
-                    color: $color-text-blue;
-                    display: block;
-                    font-size: 1.2rem;
-                    margin-top: 20px;
-                }
-            }
         }
     }
 
     &__brands {
-        background: #ececec;
-        margin-bottom: 40px;
-        padding: 50px 0;
-
         .row,
         .row + div {
             justify-content: center;
@@ -245,11 +215,13 @@
                     color: $color-text-white;
                     padding: 10px;
                     margin-bottom: 20px;
+
                     span {
                         display: inline-block;
                         padding-right: 10px;
                     }
                 }
+
                 img {
                 }
             }
@@ -266,9 +238,6 @@
     }
 
     &__info {
-        margin-top: 40px;
-        margin-bottom: 40px;
-
         h3 {
             font-size: 1.5rem;
             font-weight: bold;
@@ -276,11 +245,6 @@
     }
 
     &__testimonials {
-        background: #f5f6f7;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        padding: 40px 0;
-
         h2 {
             color: $color-dark-blue;
             margin-bottom: 20px;

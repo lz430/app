@@ -18,7 +18,7 @@ class Page extends Component {
                 <Head>
                     <title>Deliver My Ride | Terms Of Service</title>
                 </Head>
-                <Container className="policy">
+                <Container className="policy pt-5 pb-5 text-sm">
                     <h1>Website Terms of Use and Agreement</h1>
                     <p className="date">Last Modified January 11, 2017</p>
                     <p>

@@ -20,7 +20,7 @@ class Page extends Component {
                 <Head>
                     <title>Deliver My Ride | Privacy Policy</title>
                 </Head>
-                <Container className="policy">
+                <Container className="policy pt-5 pb-5 text-sm">
                     <h1>Privacy Policy</h1>
                     <p className="date">Last Modified January 5, 2017</p>
                     <p>
