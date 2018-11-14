@@ -61,7 +61,7 @@ export default class extends React.Component {
         const normalMakes = makes.filter(make => make.featured === false);
         return Object.keys(normalMakes).map(function(s) {
             return (
-                <div className="brand mb-3" key={featuredMakes[s].title}>
+                <div className="brand mb-3" key={normalMakes[s].title}>
                     <Link
                         key={normalMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
