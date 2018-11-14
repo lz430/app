@@ -9,6 +9,9 @@ import { Row, Col, Button, FormGroup, Label, Alert } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { track } from '../../../core/services';
+
+import ApiClient from '../../../store/api';
 
 const validationSchema = object().shape({
     firstname: string().required(),
@@ -33,23 +36,40 @@ const initialFormValues = {
 };
 
 class ContactForm extends React.Component {
-    static propTypes = {
-        results: PropTypes.object,
-        onSubmit: PropTypes.func.isRequired,
-    };
-
     state = {
+        success: false,
         values: null,
         recaptchaToken: false,
     };
 
     handleOnSubmit(values, actions) {
         this.setState({ values: values });
-        this.props.onSubmit(values, actions);
+
+        ApiClient.brochure
+            .contact(values)
+            .then(() => {
+                track('brochure-contact:form:submitted', {
+                    'Form Submission Success': 'success',
+                });
+
+                this.setState({ success: true });
+            })
+            .catch(error => {
+                track('brochure-contact:form:submitted', {
+                    'Form Submission Success': 'error',
+                });
+
+                actions.setErrors(
+                    ApiClient.translateApiErrors(error.response.data)
+                );
+            })
+            .then(() => {
+                actions.setSubmitting(false);
+            });
     }
 
     render() {
-        if (this.props.results && this.state.values) {
+        if (this.state.success && this.state.values) {
             return (
                 <Alert color="success">
                     Thanks {this.state.values.firstname}, we&#39;ll be in touch

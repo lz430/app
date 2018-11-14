@@ -6,7 +6,6 @@ import * as CompareSagas from '../modules/compare/sagas';
 import * as CheckoutConfirm from '../modules/checkout-confirm/sagas';
 import * as CheckoutFinancing from '../modules/checkout-financing/sagas';
 import * as CheckoutComplete from '../modules/checkout-complete/sagas';
-import * as ContactPage from '../modules/contact/sagas';
 import * as AppUserSagas from '../apps/user/sagas';
 import * as AppPricingSagas from '../apps/pricing/sagas';
 import * as AppCheckoutSagas from '../apps/checkout/sagas';
@@ -23,7 +22,6 @@ export default function* root() {
         fork(CheckoutConfirm.watchInit),
         fork(CheckoutFinancing.watchInit),
         fork(CheckoutComplete.watchInit),
-        fork(ContactPage.watchFormSubmit),
         fork(AppUserSagas.watchIPRequestLocationInfo),
         fork(AppUserSagas.watchRequestLocation),
         fork(AppPricingSagas.watchRequestDealQuote),

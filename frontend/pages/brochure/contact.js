@@ -4,20 +4,17 @@ import PropTypes from 'prop-types';
 
 import { Container, Row, Col } from 'reactstrap';
 
-import { compose } from 'redux';
 import { withRouter } from 'next/router';
-import { connect } from 'react-redux';
 import withTracker from '../../components/withTracker';
-import { submitContactForm } from '../../modules/contact/actions';
 import ContactForm from '../../modules/contact/components/ContactForm';
 
 import Head from 'next/head';
+import { track } from '../../core/services';
 
-class Contact extends React.Component {
-    static propTypes = {
-        results: PropTypes.object,
-        onSubmit: PropTypes.func.isRequired,
-    };
+class Page extends React.Component {
+    componentDidMount() {
+        track('page:brochure-contact:view');
+    }
 
     render() {
         return (
@@ -70,25 +67,4 @@ class Contact extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        results: state.pages.contact.results,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onSubmit: (values, actions) => {
-            return dispatch(submitContactForm(values, actions));
-        },
-    };
-};
-
-export default compose(
-    withRouter,
-    withTracker,
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
-)(Contact);
+export default withRouter(withTracker(Page));
