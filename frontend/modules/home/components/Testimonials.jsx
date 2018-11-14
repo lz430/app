@@ -4,17 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 
 import testimonials from '../../../content/testimonials';
 
-import { nextRouterType } from '../../../core/types';
-import { track } from '../../../core/services';
-
 export default class extends React.Component {
-    trackLinkClick(style, query) {
-        track('brochure:style:select', {
-            'Brochure Style': style.title,
-            'Brochure Strategy': query.purchaseStrategy,
-        });
-    }
-
     renderTestimonials(test) {
         return (
             <Col md="4">
