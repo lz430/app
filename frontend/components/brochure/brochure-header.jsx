@@ -13,6 +13,8 @@ import {
 import Link from 'next/link';
 import Logo from '../../static/images/logo.svg';
 
+import { faBars } from '@fortawesome/free-brands-svg-icons';
+
 export default class Header extends React.PureComponent {
     state = {
         collapsed: true,
@@ -29,6 +31,7 @@ export default class Header extends React.PureComponent {
                 fixed="top"
                 expand="md"
                 className="navbar--brochure"
+                light
             >
                 <Container>
                     <Link href="/home" as="/brochure" passHref>
@@ -36,7 +39,10 @@ export default class Header extends React.PureComponent {
                             <Logo />
                         </NavbarBrand>
                     </Link>
-                    <NavbarToggler onClick={this.toggleNavbar} className="" />
+                    <NavbarToggler
+                        onClick={this.toggleNavbar}
+                        className="mr-2"
+                    />
 
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav className="ml-auto" navbar>
