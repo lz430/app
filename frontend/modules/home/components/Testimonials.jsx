@@ -8,14 +8,6 @@ import { nextRouterType } from '../../../core/types';
 import { track } from '../../../core/services';
 
 export default class extends React.Component {
-    static propTypes = {
-        router: nextRouterType,
-    };
-
-    state = {
-        items: [],
-    };
-
     trackLinkClick(style, query) {
         track('brochure:style:select', {
             'Brochure Style': style.title,
