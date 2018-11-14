@@ -1,9 +1,6 @@
 import React from 'react';
 
 import { Container, Row, Col } from 'reactstrap';
-import Link from 'next/link';
-
-import styles from '../../../content/styles';
 
 import testimonials from '../../../content/testimonials';
 
@@ -30,7 +27,11 @@ export default class extends React.Component {
         return (
             <Col md="4">
                 <h3>{test.title}</h3>
-                <p>"{test.content}"</p>
+                <p>
+                    &quot;
+                    {test.content}
+                    &quot;
+                </p>
                 <div className="author">
                     <span>{test.author}</span>
                     {/*TODO: Add scroller and other fields in testimonial object*/}
@@ -41,7 +42,7 @@ export default class extends React.Component {
     render() {
         return (
             <div className="container-fluid callout__testimonials">
-                <Container className="">
+                <Container>
                     <Row>
                         <Col>
                             <h2>What our customers are saying</h2>
