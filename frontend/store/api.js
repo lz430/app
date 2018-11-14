@@ -3,7 +3,6 @@ import DealService from './services/deal';
 import UserService from './services/user';
 import CheckoutService from './services/checkout';
 import BrochureService from './services/brochure';
-import { call } from 'redux-saga/effects';
 
 class API {
     constructor() {

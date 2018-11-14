@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
 import FormikFieldWithreCaptcha from '../../../components/Forms/FormikFieldWithreCaptcha';
 import { Formik, Form } from 'formik';

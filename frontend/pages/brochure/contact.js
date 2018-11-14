@@ -1,6 +1,5 @@
 import '../../styles/app.scss';
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Container, Row, Col } from 'reactstrap';
 
@@ -55,10 +54,7 @@ class Page extends React.Component {
                             </div>
                         </Col>
                         <Col xl={8}>
-                            <ContactForm
-                                onSubmit={this.props.onSubmit}
-                                results={this.props.results}
-                            />
+                            <ContactForm />
                         </Col>
                     </Row>
                 </Container>
