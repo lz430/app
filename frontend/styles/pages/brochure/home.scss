@@ -276,16 +276,19 @@
     }
 
     &__testimonials {
+        background: #f5f6f7;
         margin-top: 40px;
         margin-bottom: 40px;
         padding: 40px 0;
 
-        h4 {
+        h2 {
+            color: $color-dark-blue;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .author {
+            color: $color-dark-blue;
             font-size: 0.9rem;
             font-weight: bold;
         }
