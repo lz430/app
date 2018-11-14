@@ -63,8 +63,11 @@
     color: $color-text-white;
     padding-top: 30px;
 
-    .container-fluid {
-        max-width: $break-extra-large;
+    @include media-breakpoint-down(md) {
+        .container {
+            max-width: none;
+            width: 100%;
+        }
     }
 
     .row {
