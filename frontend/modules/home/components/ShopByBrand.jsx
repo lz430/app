@@ -7,72 +7,53 @@ import makes from '../../../content/makes';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { track } from '../../../core/services';
 export default class extends React.Component {
     state = {
         collapse: false,
         active: false,
     };
+
     toggle = () =>
         this.setState({
             collapse: !this.state.collapse,
             active: !this.state.active,
         });
 
-    renderFeaturedMakes(make) {
-        const query = {
-            entity: 'model',
-            sort: 'payment',
-            filters: make.query,
-            purchaseStrategy: 'finance',
-        };
-        const featuredMakes = makes.filter(make => make.featured === true);
-        return Object.keys(featuredMakes).map(function(s) {
-            return (
-                <div
-                    className="featured brand mb-3"
-                    key={featuredMakes[s].title}
-                >
-                    <Link
-                        key={featuredMakes[s].title}
-                        href={{ pathname: '/deal-list', query: query }}
-                        as={{ pathname: '/filter', query: query }}
-                        passHref
-                    >
-                        <a>
-                            <img
-                                style={{ height: '80px', width: '80px' }}
-                                src={featuredMakes[s].logo}
-                                alt={featuredMakes[s].title + ' logo'}
-                            />
-                        </a>
-                    </Link>
-                </div>
-            );
+    trackLinkClick(make, query) {
+        track('brochure:brand:select', {
+            'Brochure Brand': make.title,
+            'Brochure Strategy': query.purchaseStrategy,
         });
     }
 
-    renderMake(make) {
-        const query = {
-            entity: 'model',
-            sort: 'payment',
-            filters: make.query,
-            purchaseStrategy: 'finance',
-        };
-        const normalMakes = makes.filter(make => make.featured === false);
-        return Object.keys(normalMakes).map(function(s) {
+    renderMakes(featured = false) {
+        const filteredMakes = makes.filter(make => make.featured === featured);
+        return Object.keys(filteredMakes).map(s => {
+            const query = {
+                entity: 'model',
+                sort: 'payment',
+                filters: filteredMakes[s].query,
+                purchaseStrategy: 'finance',
+            };
+
             return (
-                <div className="brand mb-3" key={normalMakes[s].title}>
+                <div className="brand mb-3" key={filteredMakes[s].title}>
                     <Link
-                        key={normalMakes[s].title}
+                        key={filteredMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
                         as={{ pathname: '/filter', query: query }}
                         passHref
                     >
-                        <a>
+                        <a
+                            onClick={() =>
+                                this.trackLinkClick(filteredMakes[s], query)
+                            }
+                        >
                             <img
                                 style={{ height: '80px', width: '80px' }}
-                                src={normalMakes[s].logo}
-                                alt={normalMakes[s].title + ' logo'}
+                                src={filteredMakes[s].logo}
+                                alt={filteredMakes[s].title + ' logo'}
                             />
                         </a>
                     </Link>
@@ -85,9 +66,9 @@ export default class extends React.Component {
         return (
             <div className="container-fluid callout__brands">
                 <Container>
-                    <Row>{this.renderFeaturedMakes(makes)}</Row>
+                    <Row>{this.renderMakes(true)}</Row>
                     <Collapse className="row" isOpen={this.state.collapse}>
-                        {this.renderMake(makes)}
+                        {this.renderMakes(false)}
                     </Collapse>
                     <Row className="mt-3">
                         <div
@@ -101,16 +82,11 @@ export default class extends React.Component {
                             <a className="btn btn-primary">
                                 <span>See all brands</span>
                                 <FontAwesomeIcon
-                                    className={
-                                        !this.state.active ? '' : 'hidden'
+                                    icon={
+                                        this.state.active
+                                            ? faChevronUp
+                                            : faChevronDown
                                     }
-                                    icon={faChevronDown}
-                                />
-                                <FontAwesomeIcon
-                                    className={
-                                        this.state.active ? '' : 'hidden'
-                                    }
-                                    icon={faChevronUp}
                                 />
                             </a>
                         </div>

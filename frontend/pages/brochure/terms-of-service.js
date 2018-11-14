@@ -5,8 +5,13 @@ import { Container } from 'reactstrap';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
+import { track } from '../../core/services';
 
 class Page extends Component {
+    componentDidMount() {
+        track('page:brochure-terms:view');
+    }
+
     render() {
         return (
             <React.Fragment>
