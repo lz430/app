@@ -7,8 +7,13 @@ import Head from 'next/head';
 
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
+import { track } from '../../core/services';
 
 class Page extends React.Component {
+    componentDidMount() {
+        track('page:brochure-about:view');
+    }
+
     render() {
         return (
             <React.Fragment>
