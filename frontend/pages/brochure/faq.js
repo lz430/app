@@ -7,6 +7,7 @@ import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
+import { track } from '../../core/services';
 
 class Page extends Component {
     state = {
@@ -14,6 +15,10 @@ class Page extends Component {
         active: false,
         category: 'General Questions',
     };
+
+    componentDidMount() {
+        track('page:brochure-faq:view');
+    }
 
     toggle() {
         this.setState({

@@ -8,8 +8,14 @@ import StyleIcon from '../../../components/Deals/StyleIcon';
 
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
+import { nextRouterType } from '../../../core/types';
+import { track } from '../../../core/services';
 
 export default class extends React.Component {
+    static propTypes = {
+        router: nextRouterType,
+    };
+
     responsive = {
         0: { items: 2 },
         600: { items: 3 },
@@ -20,6 +26,13 @@ export default class extends React.Component {
         items: [],
     };
 
+    trackLinkClick(style, query) {
+        track('brochure:style:select', {
+            'Brochure Style': style.title,
+            'Brochure Strategy': query.purchaseStrategy,
+        });
+    }
+
     renderStyle(style) {
         const query = {
             entity: 'model',
@@ -27,6 +40,7 @@ export default class extends React.Component {
             filters: style.query,
             purchaseStrategy: 'finance',
         };
+
         return (
             <Link
                 key={style.title}
@@ -34,13 +48,17 @@ export default class extends React.Component {
                 as={{ pathname: '/filter', query: query }}
                 passHref
             >
-                <Col className="__category m-2 text-center">
+                <Col
+                    tag="a"
+                    onClick={() => this.trackLinkClick(style, query)}
+                    className="__category m-2 text-center"
+                >
                     <h3>{style.title}</h3>
                     <div className="icon">
                         <StyleIcon style={style.value} size="large" />
                     </div>
                     <div>
-                        <a className="cta">See All</a>
+                        <span className="cta">See All</span>
                     </div>
                 </Col>
             </Link>
