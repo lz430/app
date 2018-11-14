@@ -13,8 +13,6 @@ import {
 import Link from 'next/link';
 import Logo from '../../static/images/logo.svg';
 
-import { faBars } from '@fortawesome/free-brands-svg-icons';
-
 export default class Header extends React.PureComponent {
     state = {
         collapsed: true,
