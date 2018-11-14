@@ -25,6 +25,11 @@ class VersionToVehicle
 
     private const MODEL_MAP = [
         'BY_MODEL' => [
+            //
+            // Audi
+            'A5 Sportback' => 'A5',
+            'A5 Coupe' => 'A5',
+
             // Rams
             'Ram 1500 Pickup' => '1500',
             'Ram 1500 Classic' => '1500',
@@ -313,15 +318,20 @@ class VersionToVehicle
     ];
 
     private const BODY_STYLE_MAP = [
-        'Sport Utility Vehicle' => "Sport Utility",
-        'Pickup' => 'Regular Cab',
-        'Minivan' => 'Passenger Van',
+        'BY_BODYSTYLE' => [
+            'Sport Utility Vehicle' => "Sport Utility",
+            'Pickup' => 'Regular Cab',
+            'Minivan' => 'Passenger Van',
+        ],
+        'BY_MODEL' => [
+          'A5 Sportback' => 'Sportback',
+          'A5 Coupe' => 'Coupe',
+        ],
     ];
 
     private const CAB_MAP = [
         'Crew' => 'crew cab',
     ];
-
 
     /* @var RISClient */
     private $client;
@@ -471,12 +481,17 @@ class VersionToVehicle
     private function translateBodyStyle(): string
     {
         $body = $this->version->body_style;
+        $model = $this->version->model->name;
 
-        if (isset(self::BODY_STYLE_MAP[$body])) {
-            return self::BODY_STYLE_MAP[$body];
-        } else {
-            return $body;
+        if (isset(self::BODY_STYLE_MAP['BY_BODYSTYLE'][$body])) {
+            return self::BODY_STYLE_MAP['BY_BODYSTYLE'][$body];
         }
+
+
+        if (isset(self::BODY_STYLE_MAP['BY_MODEL'][$model])) {
+            return self::BODY_STYLE_MAP['BY_MODEL'][$model];
+        }
+        return $body;
     }
 
     private function translateCab(): string
@@ -505,7 +520,6 @@ class VersionToVehicle
     private function translateTransmission()
     {
         $transmission = $this->version->transmission_type;
-
         if ($transmission) {
             return self::TRANSMISSION_MAP[$transmission];
         }
@@ -680,11 +694,14 @@ class VersionToVehicle
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
-
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
+        foreach($vehicles as $vehicle) {
+            print_r($vehicle->filters);
+        }
+        dd($params);
 
         /*
         foreach($vehicles as $vehicle) {
@@ -886,6 +903,7 @@ class VersionToVehicle
             $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
         }
 
+
         $data->rate = 0;
         $data->term = 0;
         $data->rebate = 0;
@@ -901,7 +919,7 @@ class VersionToVehicle
             return $data;
         }
 
-        $program = end($scenario->programs);
+        $program = reset($scenario->programs);
 
         if (isset($program->consumerCash)) {
             $data->rebate = $program->consumerCash->totalConsumerCash;
@@ -910,7 +928,7 @@ class VersionToVehicle
         }
 
         $terms = collect($program->tiers[0]->leaseTerms)
-            ->reject(function($term) {
+            ->reject(function ($term) {
                 return !isset($term->adjRate) || !$term->adjRate || !is_numeric($term->adjRate);
             })->all();
 
@@ -920,7 +938,7 @@ class VersionToVehicle
 
         $data->rateType = $program->rateType;
         $data->term = get_closet_number(array_keys($terms), 36);
-        $data->rate =$terms[$data->term]->adjRate;
+        $data->rate = $terms[$data->term]->adjRate;
 
         if (isset($terms[$data->term]->ccrCash)) {
             $data->rebate += $terms[$data->term]->ccrCash->totalCCR;
