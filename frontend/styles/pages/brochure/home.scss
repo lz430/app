@@ -98,8 +98,8 @@
 
 .callout {
     &__categories {
-        margin-top: 60px;
-        margin-bottom: 40px;
+        background: #f5f6f7;
+        padding: 80px 0 50px;
 
         .row {
             align-content: center;
@@ -225,18 +225,29 @@
 
     &__brands {
         background: #ececec;
-        margin-top: 40px;
         margin-bottom: 40px;
-        padding: 20px 0;
+        padding: 50px 0;
 
         .row {
             justify-content: center;
 
-            a {
-                display: block;
-                padding: 0;
-                margin: 0 10px;
-                img {
+            .brands {
+                a {
+                    display: block;
+                    padding: 0;
+                    margin: 0 10px;
+
+                    &.btn-primary {
+                        color: $color-text-white;
+                        padding: 10px;
+                        margin-bottom: 20px;
+                        span {
+                            display: inline-block;
+                            padding-right: 10px;
+                        }
+                    }
+                    img {
+                    }
                 }
             }
         }
