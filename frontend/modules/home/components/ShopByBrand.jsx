@@ -26,11 +26,9 @@ export default class extends React.Component {
             purchaseStrategy: 'finance',
         };
         const featuredMakes = makes.filter(make => make.featured === true);
-        // console.log(featuredMakes);
         return Object.keys(featuredMakes).map(function(s) {
-            // console.log(featuredMakes[s]);
             return (
-                <div className="brands mb-3">
+                <div className="featured brand mb-3">
                     <Link
                         key={featuredMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
@@ -57,25 +55,27 @@ export default class extends React.Component {
             filters: make.query,
             purchaseStrategy: 'finance',
         };
-
-        return (
-            <Col className="mb-3">
-                <Link
-                    key={make.title}
-                    href={{ pathname: '/deal-list', query: query }}
-                    as={{ pathname: '/filter', query: query }}
-                    passHref
-                >
-                    <a>
-                        <img
-                            style={{ height: '80px', width: '80px' }}
-                            src={make.logo}
-                            alt={make.title + ' logo'}
-                        />
-                    </a>
-                </Link>
-            </Col>
-        );
+        const normalMakes = makes.filter(make => make.featured === false);
+        return Object.keys(normalMakes).map(function(s) {
+            return (
+                <div className="brand mb-3">
+                    <Link
+                        key={normalMakes[s].title}
+                        href={{ pathname: '/deal-list', query: query }}
+                        as={{ pathname: '/filter', query: query }}
+                        passHref
+                    >
+                        <a>
+                            <img
+                                style={{ height: '80px', width: '80px' }}
+                                src={normalMakes[s].logo}
+                                alt={normalMakes[s].title + ' logo'}
+                            />
+                        </a>
+                    </Link>
+                </div>
+            );
+        });
     }
 
     render() {
@@ -83,7 +83,10 @@ export default class extends React.Component {
             <div className="container-fluid callout__brands">
                 <Container>
                     <Row>{this.renderFeaturedMakes(makes)}</Row>
-                    <Row>
+                    <Collapse className="row" isOpen={this.state.collapse}>
+                        {this.renderMake(makes)}
+                    </Collapse>
+                    <Row className="mt-3">
                         <div
                             className={
                                 this.state.active
@@ -108,13 +111,6 @@ export default class extends React.Component {
                                 />
                             </a>
                         </div>
-                    </Row>
-                    <Row>
-                        <Collapse isOpen={this.state.collapse}>
-                            <Row>
-                                {makes.map(make => this.renderMake(make))}
-                            </Row>
-                        </Collapse>
                     </Row>
                 </Container>
             </div>

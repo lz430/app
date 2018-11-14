@@ -57,7 +57,7 @@ export default [
         title: 'Fiat',
         logo: '/static/images/makes/fiat.jpg',
         query: ['make:Fiat'],
-        featured: true,
+        featured: false,
     },
     {
         title: 'Ford',
