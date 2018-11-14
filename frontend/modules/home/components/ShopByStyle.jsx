@@ -4,7 +4,6 @@ import { Container, Row, Col } from 'reactstrap';
 import Link from 'next/link';
 
 import styles from '../../../content/styles';
-import StyleIcon from '../../../components/Deals/StyleIcon';
 
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
