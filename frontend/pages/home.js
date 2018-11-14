@@ -8,6 +8,7 @@ import { Row, Col, Container } from 'reactstrap';
 
 import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
+import Testimonials from '../modules/home/components/Testimonials';
 import HomepageHero from '../modules/home/components/HomepageHero';
 import { setSelectedMake } from '../modules/deal-list/actions';
 
@@ -90,60 +91,7 @@ class Page extends React.Component {
                         </Row>
                     </Container>
 
-                    <div className="container-fluid callout__testimonials bg-pattern text-white">
-                        <Container>
-                            <Row>
-                                <Col>
-                                    <h4>What our customers are saying</h4>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col md="4">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit. Obcaecati quas omnis,
-                                        iusto vero accusamus nam veniam
-                                        reiciendis quaerat quod ipsum
-                                        praesentium, unde molestiae! Obcaecati,
-                                        error temporibus ipsam ipsum voluptas.
-                                        Est?15
-                                    </p>
-                                    <div className="author">
-                                        <span>Monica P</span>
-                                    </div>
-                                </Col>
-                                <Col md="4">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit. Officiis ab aperiam
-                                        suscipit enim, voluptatibus officia
-                                        eaque iusto perspiciatis, excepturi
-                                        necessitatibus aliquam quia impedit
-                                        cumque quo blanditiis magni illo
-                                        accusamus et!15
-                                    </p>
-                                    <div className="author">
-                                        <span>Jason B, Traverse City MI</span>
-                                    </div>
-                                </Col>
-                                <Col md="4">
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit. Quod quae soluta
-                                        maiores recusandae, voluptatem ad
-                                        officiis molestiae sunt cum blanditiis
-                                        harum quasi laborum aliquam magnam
-                                        architecto itaque ullam. Sit,
-                                        distinctio!15
-                                    </p>
-                                    <div className="author">
-                                        <span>Lori P, Birmingham MI</span>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
+                    <Testimonials />
 
                     <Container>
                         <Row className="align-items-center">

@@ -16,7 +16,7 @@ export default class Footer extends React.PureComponent {
         return (
             <footer className="brochure-footer">
                 <Container>
-                    <Row className=" border-bottom">
+                    <Row>
                         <Col sm={8}>
                             <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
@@ -80,6 +80,7 @@ export default class Footer extends React.PureComponent {
                             </ul>
                         </Col>
                     </Row>
+                    <div className="border-bottom mb-3" />
                     <Row>
                         <Col md={9} sm={12}>
                             <ul>
