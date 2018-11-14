@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Col, Collapse } from 'reactstrap';
+import { Container, Row, Collapse } from 'reactstrap';
 import Link from 'next/link';
 
 import makes from '../../../content/makes';
@@ -28,7 +28,10 @@ export default class extends React.Component {
         const featuredMakes = makes.filter(make => make.featured === true);
         return Object.keys(featuredMakes).map(function(s) {
             return (
-                <div className="featured brand mb-3">
+                <div
+                    className="featured brand mb-3"
+                    key={featuredMakes[s].title}
+                >
                     <Link
                         key={featuredMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
@@ -58,7 +61,7 @@ export default class extends React.Component {
         const normalMakes = makes.filter(make => make.featured === false);
         return Object.keys(normalMakes).map(function(s) {
             return (
-                <div className="brand mb-3">
+                <div className="brand mb-3" key={featuredMakes[s].title}>
                     <Link
                         key={normalMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
