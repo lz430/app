@@ -42,7 +42,7 @@ class Page extends React.Component {
                 <Head>
                     <title>Deliver My Ride</title>
                 </Head>
-                <div className="mb-5">
+                <div>
                     <HomepageHero
                         router={this.props.router}
                         autocompleteResults={this.props.autocompleteResults}
@@ -53,77 +53,80 @@ class Page extends React.Component {
                     />
                     <ShopByStyle />
                     <ShopByBrand />
-
-                    <Container className="callout__info">
-                        <Row>
-                            <Col md="6">
-                                <img
-                                    className="img-fluid"
-                                    src="https://source.unsplash.com/random/600x300"
-                                    alt="placeholder"
-                                />
-                                <h3 className="mt-2">Test it out</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Facere eius architecto,
-                                    quo corporis perspiciatis error. Lorem ipsum
-                                    dolor sit amet, consectetur adipisicing
-                                    elit. Facere eius architecto, quo corporis
-                                    perspiciatis error.
-                                </p>
-                            </Col>
-                            <Col md="6">
-                                <img
-                                    className="img-fluid"
-                                    src="https://source.unsplash.com/random/600x300"
-                                    alt="placeholder"
-                                />
-                                <h3 className="mt-2">Purchase</h3>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit. Facere eius architecto,
-                                    quo corporis perspiciatis error. Lorem ipsum
-                                    dolor sit amet, consectetur adipisicing
-                                    elit. Facere eius architecto, quo corporis
-                                    perspiciatis error.
-                                </p>
-                            </Col>
-                        </Row>
-                    </Container>
-
+                    <div className="callout__info bg-light pt-5 pb-5">
+                        <Container>
+                            <Row>
+                                <Col md="6">
+                                    <img
+                                        className="img-fluid"
+                                        src="https://source.unsplash.com/random/600x300"
+                                        alt="placeholder"
+                                    />
+                                    <h3 className="mt-2">Test it out</h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipisicing elit. Facere eius
+                                        architecto, quo corporis perspiciatis
+                                        error. Lorem ipsum dolor sit amet,
+                                        consectetur adipisicing elit. Facere
+                                        eius architecto, quo corporis
+                                        perspiciatis error.
+                                    </p>
+                                </Col>
+                                <Col md="6">
+                                    <img
+                                        className="img-fluid"
+                                        src="https://source.unsplash.com/random/600x300"
+                                        alt="placeholder"
+                                    />
+                                    <h3 className="mt-2">Purchase</h3>
+                                    <p>
+                                        Lorem ipsum dolor sit amet, consectetur
+                                        adipisicing elit. Facere eius
+                                        architecto, quo corporis perspiciatis
+                                        error. Lorem ipsum dolor sit amet,
+                                        consectetur adipisicing elit. Facere
+                                        eius architecto, quo corporis
+                                        perspiciatis error.
+                                    </p>
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
                     <Testimonials />
-
-                    <Container>
-                        <Row className="align-items-center">
-                            <Col>
-                                <h5>Featured In: </h5>
-                            </Col>
-                            <Col>
-                                <img
-                                    src="https://source.unsplash.com/random/200x50"
-                                    alt="placeholder"
-                                />
-                            </Col>
-                            <Col>
-                                <img
-                                    src="https://source.unsplash.com/random/200x50"
-                                    alt="placeholder"
-                                />
-                            </Col>
-                            <Col>
-                                <img
-                                    src="https://source.unsplash.com/random/200x50"
-                                    alt="placeholder"
-                                />
-                            </Col>
-                            <Col>
-                                <img
-                                    src="https://source.unsplash.com/random/200x50"
-                                    alt="placeholder"
-                                />
-                            </Col>
-                        </Row>
-                    </Container>
+                    <div className="bg-light pt-3 pb-3">
+                        <Container>
+                            <Row className="align-items-center">
+                                <Col>
+                                    <h5>Featured In: </h5>
+                                </Col>
+                                <Col>
+                                    <img
+                                        src="https://source.unsplash.com/random/200x50"
+                                        alt="placeholder"
+                                    />
+                                </Col>
+                                <Col>
+                                    <img
+                                        src="https://source.unsplash.com/random/200x50"
+                                        alt="placeholder"
+                                    />
+                                </Col>
+                                <Col>
+                                    <img
+                                        src="https://source.unsplash.com/random/200x50"
+                                        alt="placeholder"
+                                    />
+                                </Col>
+                                <Col>
+                                    <img
+                                        src="https://source.unsplash.com/random/200x50"
+                                        alt="placeholder"
+                                    />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
                 </div>
             </React.Fragment>
         );

@@ -4,7 +4,6 @@ import { Container, Row, Col } from 'reactstrap';
 import Link from 'next/link';
 
 import styles from '../../../content/styles';
-import StyleIcon from '../../../components/Deals/StyleIcon';
 
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
@@ -48,19 +47,21 @@ export default class extends React.Component {
                 as={{ pathname: '/filter', query: query }}
                 passHref
             >
-                <Col
-                    tag="a"
+                <a
                     onClick={() => this.trackLinkClick(style, query)}
                     className="__category m-2 text-center"
                 >
-                    <h3>{style.title}</h3>
+                    <h5>{style.title}</h5>
                     <div className="icon">
-                        <StyleIcon style={style.value} size="large" />
+                        <img
+                            src="https://source.unsplash.com/220x125?car"
+                            className="img-fluid"
+                        />
                     </div>
                     <div>
                         <span className="cta">See All</span>
                     </div>
-                </Col>
+                </a>
             </Link>
         );
     }
