@@ -86,35 +86,6 @@ export default class Discount extends React.PureComponent {
                 )}
             </div>
         );
-
-        /*
-        return (
-            <div className="form-check">
-                <Label className="form-check-input" for={role}>
-                    <input
-                        name="discountType"
-                        value={role}
-                        type="radio"
-                        className="form-check-input"
-                        checked={checked}
-                        onChange={() => this.handleChange(role, pricing.make())}
-                        id={role}
-                    />
-                    {label}
-                </Label>
-                <div className="savings">
-                    <Value
-                        isNegative={true}
-                        showIf={checked}
-                    >
-                        <DollarsAndCents
-                            value={discount}
-                        />
-                    </Value>
-                </div>
-            </div>
-        );
-        */
     }
 
     render() {
