@@ -4,9 +4,8 @@ import PropTypes from 'prop-types';
 import config from '../../../../core/config';
 
 import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+import classNames from 'classnames';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {
@@ -14,9 +13,9 @@ export default class Discount extends React.PureComponent {
         onChange: PropTypes.func.isRequired,
     };
 
-    handleChange = e => {
-        this.props.onChange(e.target.value, this.props.pricing.make());
-    };
+    handleChange(role, make) {
+        this.props.onChange(role, make);
+    }
 
     renderProofOfEligibility = () => {
         return (
@@ -32,46 +31,106 @@ export default class Discount extends React.PureComponent {
         );
     };
 
+    renderPrimaryRole(role) {
+        const { pricing } = this.props;
+
+        let checked, discount, label, price;
+
+        if (role === 'employee') {
+            label = 'Employee Price';
+            checked = pricing.isEffectiveDiscountEmployee();
+            discount = pricing.employeeDiscount();
+            price = pricing.employeePrice();
+        } else if (role === 'supplier') {
+            label = 'Supplier / Friends & Family Price';
+            checked = pricing.isEffectiveDiscountSupplier();
+            discount = pricing.supplierDiscount();
+            price = pricing.supplierPrice();
+        } else {
+            label = 'Deliver My Ride Customer Price';
+            checked = pricing.isEffectiveDiscountDmr();
+            discount = pricing.dmrDiscount();
+            price = pricing.defaultPrice();
+        }
+
+        return (
+            <div
+                onClick={() => this.handleChange(role, pricing.make())}
+                className={classNames(
+                    'cart__discount_role',
+                    'text-center',
+                    'bg-light',
+                    'p-2',
+                    'mb-2',
+                    'border',
+                    { 'border-primary': checked },
+                    { 'border-default': !checked }
+                )}
+            >
+                <div
+                    className={classNames('cart__discount_role_label', {
+                        'font-weight-bold': checked,
+                    })}
+                >
+                    {label}
+                </div>
+                {checked && (
+                    <div className="cart__discount_role_price text-sm">
+                        <DollarsAndCents value={price} />
+                    </div>
+                )}
+                {checked && (
+                    <div className="cart__discount_role_savings text-sm">
+                        Savings: -<DollarsAndCents value={discount} />
+                    </div>
+                )}
+            </div>
+        );
+
+        /*
+        return (
+            <div className="form-check">
+                <Label className="form-check-input" for={role}>
+                    <input
+                        name="discountType"
+                        value={role}
+                        type="radio"
+                        className="form-check-input"
+                        checked={checked}
+                        onChange={() => this.handleChange(role, pricing.make())}
+                        id={role}
+                    />
+                    {label}
+                </Label>
+                <div className="savings">
+                    <Value
+                        isNegative={true}
+                        showIf={checked}
+                    >
+                        <DollarsAndCents
+                            value={discount}
+                        />
+                    </Value>
+                </div>
+            </div>
+        );
+        */
+    }
+
     render() {
         const { pricing } = this.props;
+        const shouldRenderEmployeePricing = config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
+            pricing.make()
+        );
+        const shouldRenderSupplierPricing = config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
+            pricing.make()
+        );
 
         return (
             <div>
-                <Line>
-                    <Label>Discount</Label>
-                </Line>
-                <Line className="">
-                    <div className="form-check">
-                        <Label className="form-check-input" for="dmr">
-                            <input
-                                name="discountType"
-                                value="dmr"
-                                type="radio"
-                                className="form-check-input"
-                                checked={pricing.isEffectiveDiscountDmr()}
-                                onChange={e => this.handleChange(e)}
-                                id={'dmr'}
-                            />
-                            DMR Customer
-                        </Label>
-                        <div className="savings">
-                            <Value
-                                isNegative={true}
-                                showIf={pricing.isEffectiveDiscountDmr()}
-                            >
-                                <DollarsAndCents
-                                    value={pricing.dmrDiscount()}
-                                />
-                            </Value>
-                        </div>
-                    </div>
-                </Line>
-                {(config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
-                    pricing.make()
-                ) ||
-                    config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
-                        pricing.make()
-                    )) && (
+                <Line>{this.renderPrimaryRole('dmr')}</Line>
+                {(shouldRenderEmployeePricing ||
+                    shouldRenderSupplierPricing) && (
                     <div>
                         <div
                             style={{
@@ -81,74 +140,16 @@ export default class Discount extends React.PureComponent {
                         >
                             Or select from the following:
                         </div>
-                        {config.EMPLOYEE_PRICING_WHITELIST_BRANDS.includes(
-                            pricing.make()
-                        ) && (
+                        {shouldRenderEmployeePricing && (
                             <Line>
-                                <div className="form-check">
-                                    <Label
-                                        className="form-check-input"
-                                        for="employee"
-                                    >
-                                        <input
-                                            name="discountType"
-                                            value="employee"
-                                            type="radio"
-                                            className="form-check-input"
-                                            checked={pricing.isEffectiveDiscountEmployee()}
-                                            onChange={e => this.handleChange(e)}
-                                            id={'employee'}
-                                        />
-                                        Employee / Retiree
-                                    </Label>
-                                    <div className="savings">
-                                        <Value
-                                            isNegative={true}
-                                            showIf={pricing.isEffectiveDiscountEmployee()}
-                                        >
-                                            <DollarsAndCents
-                                                value={pricing.employeeDiscount()}
-                                            />
-                                        </Value>
-                                    </div>
-                                </div>
-
+                                {this.renderPrimaryRole('employee')}
                                 {pricing.isEffectiveDiscountEmployee() &&
                                     this.renderProofOfEligibility()}
                             </Line>
                         )}
-                        {config.SUPPLIER_PRICING_WHITELIST_BRANDS.includes(
-                            pricing.make()
-                        ) && (
+                        {shouldRenderSupplierPricing && (
                             <Line>
-                                <div className="form-check">
-                                    <Label
-                                        className="form-check-input"
-                                        for="supplier"
-                                    >
-                                        <input
-                                            name="discountType"
-                                            value="supplier"
-                                            type="radio"
-                                            className="form-check-input"
-                                            checked={pricing.isEffectiveDiscountSupplier()}
-                                            onChange={e => this.handleChange(e)}
-                                            id="supplier"
-                                        />
-                                        Supplier / Friends &amp; Family
-                                    </Label>
-                                    <div className="savings">
-                                        <Value
-                                            isNegative={true}
-                                            showIf={pricing.isEffectiveDiscountSupplier()}
-                                        >
-                                            <DollarsAndCents
-                                                value={pricing.supplierDiscount()}
-                                            />
-                                        </Value>
-                                    </div>
-                                </div>
-
+                                {this.renderPrimaryRole('supplier')}
                                 {pricing.isEffectiveDiscountSupplier() &&
                                     this.renderProofOfEligibility()}
                             </Line>

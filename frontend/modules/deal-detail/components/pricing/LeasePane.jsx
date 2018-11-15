@@ -13,11 +13,11 @@ import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import LeaseTermsSelect from './LeaseTermsSelect';
 import Rebates from './Rebates';
-import Discount from './Discount';
 
-import { faEdit } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'reactstrap';
+import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 export default class LeasePane extends React.PureComponent {
     static propTypes = {
@@ -29,32 +29,118 @@ export default class LeasePane extends React.PureComponent {
 
     state = {
         leaseTermsSelectOpened: false,
+        paymentPopoverOpen: false,
+        duePopoverOpen: false,
     };
 
-    render() {
-        const { pricing, onDiscountChange, onRebatesChange } = this.props;
+    togglePaymentDescription() {
+        this.setState({
+            paymentPopoverOpen: !this.state.paymentPopoverOpen,
+        });
+    }
+
+    toggleDueDescription() {
+        this.setState({
+            duePopoverOpen: !this.state.duePopoverOpen,
+        });
+    }
+
+    renderPaymentDescription() {
+        const { pricing } = this.props;
 
         return (
-            <div>
-                <Group>
-                    <Header>Price</Header>
+            <Popover
+                placement="left"
+                isOpen={this.state.paymentPopoverOpen}
+                target="lease-explain"
+                toggle={this.togglePaymentDescription.bind(this)}
+            >
+                <PopoverHeader>Payment Breakdown</PopoverHeader>
+                <PopoverBody>
                     <Line>
-                        <Label>MSRP</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.msrp()} />
-                        </Value>
-                    </Line>
-                    <Discount pricing={pricing} onChange={onDiscountChange} />
-                    <Line isSectionTotal={true}>
-                        <Label>Discounted Price</Label>
+                        <Label>Pre-Tax Payment</Label>
                         <Value>
                             <DollarsAndCents
-                                value={pricing.discountedPrice()}
+                                value={pricing.monthlyPreTaxPayment()}
                             />
                         </Value>
                     </Line>
-                </Group>
-                <Separator />
+                    <Line>
+                        <Label>Use Tax</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.monthlyUseTax()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Monthly Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.monthlyPayment()} />
+                        </Value>
+                    </Line>
+                </PopoverBody>
+            </Popover>
+        );
+    }
+
+    renderDueDescription() {
+        const { pricing } = this.props;
+
+        return (
+            <Popover
+                placement="left"
+                isOpen={this.state.duePopoverOpen}
+                target="lease-due-explain"
+                toggle={this.toggleDueDescription.bind(this)}
+            >
+                <PopoverHeader>Due At Delivery Breakdown</PopoverHeader>
+                <PopoverBody>
+                    <Line>
+                        <Label>First Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.firstPayment()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Doc Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.docFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Electronic Filing Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.cvrFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Tax on Rebates</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.taxOnRebates()} />
+                        </Value>
+                    </Line>
+                    <Line isSectionTotal={true} isImportant={true}>
+                        <Label>Total Due</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.totalAmountAtDriveOff()}
+                            />
+                            *
+                        </Value>
+                    </Line>
+                </PopoverBody>
+            </Popover>
+        );
+    }
+
+    render() {
+        const { pricing, onRebatesChange } = this.props;
+
+        return (
+            <div>
                 <Group>
                     <Header>Rebates</Header>
                     <Rebates pricing={pricing} onChange={onRebatesChange} />
@@ -139,24 +225,19 @@ export default class LeasePane extends React.PureComponent {
                                     </tbody>
                                 </table>
                             </Line>
-                            <Line>
-                                <Label>Pre-Tax Payment</Label>
-                                <Value>
-                                    <DollarsAndCents
-                                        value={pricing.monthlyPreTaxPayment()}
-                                    />
-                                </Value>
-                            </Line>
-                            <Line>
-                                <Label>Use Tax</Label>
-                                <Value>
-                                    <DollarsAndCents
-                                        value={pricing.monthlyUseTax()}
-                                    />
-                                </Value>
-                            </Line>
                             <Line isImportant={true}>
-                                <Label>Monthly Payment</Label>
+                                <Label>
+                                    Monthly Payment{' '}
+                                    <FontAwesomeIcon
+                                        icon={faInfoCircle}
+                                        className="cursor-pointer"
+                                        id="lease-explain"
+                                        onClick={this.togglePaymentDescription.bind(
+                                            this
+                                        )}
+                                    />
+                                    {this.renderPaymentDescription()}
+                                </Label>
                                 <Value>
                                     <DollarsAndCents
                                         value={pricing.monthlyPayment()}
@@ -169,36 +250,17 @@ export default class LeasePane extends React.PureComponent {
                 <Separator />
                 <Group>
                     <Header>Due at Delivery</Header>
-                    <Line>
-                        <Label>First Payment</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.firstPayment()} />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Doc Fee</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.docFeeWithTaxes()}
-                            />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Electronic Filing Fee</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.cvrFeeWithTaxes()}
-                            />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Tax on Rebates</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.taxOnRebates()} />
-                        </Value>
-                    </Line>
                     <Line isSectionTotal={true} isImportant={true}>
-                        <Label>Total Due</Label>
+                        <Label>
+                            Total Due{' '}
+                            <FontAwesomeIcon
+                                icon={faInfoCircle}
+                                className="cursor-pointer"
+                                id="lease-due-explain"
+                                onClick={this.toggleDueDescription.bind(this)}
+                            />
+                            {this.renderDueDescription()}
+                        </Label>
                         <Value>
                             <DollarsAndCents
                                 value={pricing.totalAmountAtDriveOff()}

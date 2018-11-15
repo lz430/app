@@ -11,19 +11,6 @@
     cursor: pointer;
 }
 
-input.fancyNumberEntry {
-    width: 5rem;
-    text-align: right;
-    font-size: inherit;
-    font-weight: inherit;
-}
-input.fancyNumberEntry::-webkit-inner-spin-button,
-input.fancyNumberEntry::-webkit-outer-spin-button {
-    -webkit-appearance: none !important;
-    margin: 0 !important;
-    -moz-appearance: textfield !important;
-}
-
 .text-center {
     text-align: center;
 }
