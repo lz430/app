@@ -698,27 +698,9 @@ class VersionToVehicle
             return in_array($params['model'], $vehicle->filters->MODEL);
         });
 
-        foreach($vehicles as $vehicle) {
-            print_r($vehicle->filters);
-        }
-
-        /*
-        foreach($vehicles as $vehicle) {
-            print_r($vehicle);
-        }
-        dd($params);
-        */
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-
-        /*
-        foreach($vehicles as $vehicle) {
-            print_r($vehicle->filters);
-        }
-        dd($params);
-        */
-
-
+        
         // Optional
         // Two vehicles means we've found a lease and a non lease option.
         if (count($vehicles) > 2) {
