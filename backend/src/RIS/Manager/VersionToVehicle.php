@@ -701,7 +701,6 @@ class VersionToVehicle
         foreach($vehicles as $vehicle) {
             print_r($vehicle->filters);
         }
-        dd($params);
 
         /*
         foreach($vehicles as $vehicle) {
