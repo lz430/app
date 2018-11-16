@@ -27,7 +27,7 @@ export default [
         category: 'General Questions',
         title: 'Do you sell my data to third-parties?',
         content:
-            '<span>We are not a lead provider so we never sell your information, meaning you will never get calls from <u> anyone </u> trying to sell you a car. We simply are here to provide you with the information and direction you need during your car buying journey.</span>',
+            'We are not a lead provider so we never sell your information, meaning you will never get calls from <u> anyone </u> trying to sell you a car. We simply are here to provide you with the information and direction you need during your car buying journey.',
     },
     {
         category: 'General Questions',
