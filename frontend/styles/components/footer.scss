@@ -62,6 +62,7 @@
     background: #213a59;
     color: $color-text-white;
     padding-top: 30px;
+    margin-top: 50px;
 
     @include media-breakpoint-down(md) {
         .container {
