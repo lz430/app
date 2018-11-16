@@ -49,7 +49,7 @@ export default class extends React.Component {
             >
                 <a
                     onClick={() => this.trackLinkClick(style, query)}
-                    className="__category m-2 text-center"
+                    className="__category text-center"
                 >
                     <h5>{style.title}</h5>
                     <div className="icon">
@@ -58,8 +58,8 @@ export default class extends React.Component {
                             className="img-fluid"
                         />
                     </div>
-                    <div>
-                        <span className="cta">See All</span>
+                    <div className="cta">
+                        <span>See All</span>
                     </div>
                 </a>
             </Link>
