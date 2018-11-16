@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
 
-import MSRPAndDiscountPane from './pricing/MSRPAndDiscountPane';
+import MSRPAndDiscount from './pricing/MSRPAndDiscount';
+import TradeIn from './pricing/TradeIn';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
@@ -229,17 +230,18 @@ export default class AddToCart extends React.PureComponent {
                     Configure Your Payment
                 </h5>
                 <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
-                    <MSRPAndDiscountPane
+                    <MSRPAndDiscount
                         pricing={pricing}
                         onDiscountChange={this.props.handleDiscountChange}
                         onRebatesChange={this.props.handleRebatesChange}
                         onChange={this.props.handleLeaseChange}
                     />
-
                     <PaymentTypes
                         {...{ purchaseStrategy }}
                         onChange={this.props.handlePaymentTypeChange}
                     />
+                    <TradeIn pricing={pricing} />
+
                     {this.renderPane()}
                 </div>
                 {this.renderCta()}

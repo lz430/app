@@ -32,7 +32,6 @@ export default class DealDetail extends React.PureComponent {
     };
 
     state = {
-        featuredImage: [],
         basicFeatures: [],
         fuelEconomy: {},
         upholsteryType: null,
@@ -44,10 +43,6 @@ export default class DealDetail extends React.PureComponent {
 
     componentDidMount() {
         if (this.props.deal) {
-            if (this.props.deal.photos.length) {
-                this.setState({ featuredImage: this.props.deal.photos[0] });
-            }
-
             const {
                 body_style,
                 driven_wheels,

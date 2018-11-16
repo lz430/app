@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+
 import PropTypes from 'prop-types';
 import { dealType } from '../../core/types';
-
-import { compose } from 'redux';
 
 import { track } from '../../core/services';
 
@@ -18,10 +18,19 @@ import {
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
 import { setCheckoutData, checkoutStart } from '../../apps/checkout/actions';
-import * as selectDiscountActions from './modules/selectDiscount';
-import * as financeActions from './modules/finance';
-import * as leaseActions from './modules/lease';
-import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
+import {
+    initPage,
+    receiveDeal,
+    dealDetailRequestDealQuote,
+    selectDmrDiscount,
+    selectEmployeeDiscount,
+    selectSupplierDiscount,
+    selectConditionalRoles,
+    updateDownPayment,
+    updateTerm,
+    updateLease,
+} from './actions';
+
 import { getDeal } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from '../../pricing/pricing/factory';
@@ -50,19 +59,13 @@ class DealDetailContainer extends React.PureComponent {
         router: nextRouterType,
         searchQuery: PropTypes.object.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-        selectDiscountActions: PropTypes.shape({
-            selectDmrDiscount: PropTypes.func.isRequired,
-            selectEmployeeDiscount: PropTypes.func.isRequired,
-            selectSupplierDiscount: PropTypes.func.isRequired,
-            selectConditionalRoles: PropTypes.func.isRequired,
-        }),
-        financeActions: PropTypes.shape({
-            updateDownPayment: PropTypes.func.isRequired,
-            updateTerm: PropTypes.func.isRequired,
-        }),
-        leaseActions: PropTypes.shape({
-            update: PropTypes.func.isRequired,
-        }),
+        selectDmrDiscount: PropTypes.func.isRequired,
+        selectEmployeeDiscount: PropTypes.func.isRequired,
+        selectSupplierDiscount: PropTypes.func.isRequired,
+        selectConditionalRoles: PropTypes.func.isRequired,
+        updateDownPayment: PropTypes.func.isRequired,
+        updateTerm: PropTypes.func.isRequired,
+        updateLease: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -88,15 +91,15 @@ class DealDetailContainer extends React.PureComponent {
     handleDiscountChange = (discountType, make) => {
         switch (discountType) {
             case 'dmr':
-                this.props.selectDiscountActions.selectDmrDiscount();
+                this.props.selectDmrDiscount();
                 break;
 
             case 'employee':
-                this.props.selectDiscountActions.selectEmployeeDiscount(make);
+                this.props.selectEmployeeDiscount(make);
                 break;
 
             case 'supplier':
-                this.props.selectDiscountActions.selectSupplierDiscount(make);
+                this.props.selectSupplierDiscount(make);
                 break;
             default:
                 break;
@@ -119,7 +122,7 @@ class DealDetailContainer extends React.PureComponent {
             selectedRoles.push(role);
         }
 
-        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles);
+        this.props.selectConditionalRoles(selectedRoles);
 
         this.props.dealDetailRequestDealQuote(
             this.props.deal,
@@ -131,15 +134,15 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleFinanceDownPaymentChange = downPayment => {
-        this.props.financeActions.updateDownPayment(downPayment);
+        this.props.updateDownPayment(downPayment);
     };
 
     handleFinanceTermChange = term => {
-        this.props.financeActions.updateTerm(term);
+        this.props.updateTerm(term);
     };
 
     handleLeaseChange = (annualMileage, term, cashDue) => {
-        this.props.leaseActions.update(annualMileage, term, cashDue);
+        this.props.updateLease(annualMileage, term, cashDue);
     };
 
     onSelectDeal(pricing) {
@@ -213,8 +216,8 @@ class DealDetailContainer extends React.PureComponent {
 
                 <DealDetail
                     deal={this.props.deal}
-                    purchaseStrategy={this.props.purchaseStrategy}
                     pricing={this.props.pricing}
+                    purchaseStrategy={this.props.purchaseStrategy}
                     handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
                         this
                     )}
@@ -245,10 +248,10 @@ const mapStateToProps = (state, props) => {
         deal,
         searchQuery: getSearchQuery(state),
         selectedConditionalRoles:
-            state.pages.dealDetails.selectDiscount.conditionalRoles,
+            state.pages.dealDetails.discount.conditionalRoles,
         purchaseStrategy: getUserPurchaseStrategy(state),
         compareList: state.common.compareList,
-        discountType: state.pages.dealDetails.selectDiscount.discountType,
+        discountType: state.pages.dealDetails.discount.discountType,
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
         pricing: pricingFromStateFactory(state, { ...props, deal }),
@@ -256,9 +259,6 @@ const mapStateToProps = (state, props) => {
 };
 
 const mapDispatchToProps = mapAndBindActionCreators({
-    financeActions,
-    leaseActions,
-    selectDiscountActions,
     toggleCompare,
     initPage,
     setPurchaseStrategy,
@@ -266,13 +266,20 @@ const mapDispatchToProps = mapAndBindActionCreators({
     dealDetailRequestDealQuote,
     setCheckoutData,
     checkoutStart,
+    selectDmrDiscount,
+    selectEmployeeDiscount,
+    selectSupplierDiscount,
+    selectConditionalRoles,
+    updateDownPayment,
+    updateTerm,
+    updateLease,
 });
 
 export default compose(
     withRouter,
+    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(DealDetailContainer);

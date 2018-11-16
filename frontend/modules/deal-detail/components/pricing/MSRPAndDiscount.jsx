@@ -10,7 +10,7 @@ import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Discount from './Discount';
 import Separator from '../../../../apps/pricing/components/Separator';
 
-export default class MSRPAndDiscountPane extends React.PureComponent {
+export default class MSRPAndDiscount extends React.PureComponent {
     static propTypes = {
         onDiscountChange: PropTypes.func.isRequired,
         onRebatesChange: PropTypes.func.isRequired,
@@ -29,7 +29,7 @@ export default class MSRPAndDiscountPane extends React.PureComponent {
             <div>
                 <Group style={{}}>
                     <Line>
-                        <Label>MSRP</Label>
+                        <Label style={{ margin: 0 }}>MSRP</Label>
                         <Value>
                             <DollarsAndCents value={pricing.msrp()} />
                         </Value>

@@ -227,7 +227,7 @@ class Rebates extends React.Component {
 const mapStateToProps = state => {
     return {
         selectedConditionalRoles:
-            state.pages.dealDetails.selectDiscount.conditionalRoles,
+            state.pages.dealDetails.discount.conditionalRoles,
     };
 };
 

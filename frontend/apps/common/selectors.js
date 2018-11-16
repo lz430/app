@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 
-import * as R from 'ramda';
+import { prop } from 'ramda';
 import { dealQuoteKey as generateDealQuoteKey } from '../../apps/pricing/helpers';
 
 import {
@@ -19,18 +19,18 @@ export const common = state => state.common;
 export const deal = (state, props) => props.deal;
 
 const employeeBrand = state => {
-    return state.pages.dealDetails.selectDiscount.employeeBrand === false
+    return state.pages.dealDetails.discount.employeeBrand === false
         ? null
-        : state.pages.dealDetails.selectDiscount.employeeBrand;
+        : state.pages.dealDetails.discount.employeeBrand;
 };
 
 const supplierBrand = state =>
-    state.pages.dealDetails.selectDiscount.supplierBrand === false
+    state.pages.dealDetails.discount.supplierBrand === false
         ? null
-        : state.pages.dealDetails.selectDiscount.supplierBrand;
+        : state.pages.dealDetails.discount.supplierBrand;
 
 export const discountType = state =>
-    state.pages.dealDetails.selectDiscount.discountType;
+    state.pages.dealDetails.discount.discountType;
 
 const financeDownPayment = state => state.pages.dealDetails.finance.downPayment;
 const financeTerm = state => state.pages.dealDetails.finance.term;
@@ -47,7 +47,7 @@ const dealLeaseAnnualMileage = createSelector(
 );
 
 const getConditionalRoles = state => {
-    return state.pages.dealDetails.selectDiscount.conditionalRoles;
+    return state.pages.dealDetails.discount.conditionalRoles;
 };
 
 const dealLeaseTerm = createSelector(leaseTerm, leaseTerm => {
@@ -90,7 +90,7 @@ const dealQuoteKey = neverEqualSelector(
 const dealQuote = createSelector(
     [getQuotes, dealQuoteKey],
     (quotes, dealQuoteKey) => {
-        return R.prop(dealQuoteKey, quotes) || null;
+        return prop(dealQuoteKey, quotes) || null;
     }
 );
 
