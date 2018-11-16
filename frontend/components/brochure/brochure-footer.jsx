@@ -80,7 +80,7 @@ export default class Footer extends React.PureComponent {
                             </ul>
                         </Col>
                     </Row>
-                    <div className="border-bottom mb-3" />
+                    <div className="row border-bottom mb-3" />
                     <Row>
                         <Col md={9} sm={12}>
                             <ul>

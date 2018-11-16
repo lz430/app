@@ -10,6 +10,8 @@ import ShopByBrand from '../modules/home/components/ShopByBrand';
 import ShopByStyle from '../modules/home/components/ShopByStyle';
 import Testimonials from '../modules/home/components/Testimonials';
 import HomepageHero from '../modules/home/components/HomepageHero';
+import Media from '../modules/home/components/Media';
+
 import { setSelectedMake } from '../modules/deal-list/actions';
 
 import {
@@ -94,39 +96,7 @@ class Page extends React.Component {
                         </Container>
                     </div>
                     <Testimonials />
-                    <div className="bg-light pt-3 pb-3">
-                        <Container>
-                            <Row className="align-items-center">
-                                <Col>
-                                    <h5>Featured In: </h5>
-                                </Col>
-                                <Col>
-                                    <img
-                                        src="https://source.unsplash.com/random/200x50"
-                                        alt="placeholder"
-                                    />
-                                </Col>
-                                <Col>
-                                    <img
-                                        src="https://source.unsplash.com/random/200x50"
-                                        alt="placeholder"
-                                    />
-                                </Col>
-                                <Col>
-                                    <img
-                                        src="https://source.unsplash.com/random/200x50"
-                                        alt="placeholder"
-                                    />
-                                </Col>
-                                <Col>
-                                    <img
-                                        src="https://source.unsplash.com/random/200x50"
-                                        alt="placeholder"
-                                    />
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
+                    <Media />
                 </div>
             </React.Fragment>
         );

@@ -17,7 +17,7 @@ export default [
             "Deliver My Ride — like Priceline — asks what you are looking for and returns inventory and pricing from sellers in its network. You don't have to go to multiple sites and dealers or even talk to a sales rep.",
         featured: true,
         location: '',
-        logo: 'static/images/DetroitFreePress.png',
+        logo: '../static/images/DetroitFreePress.png',
     },
     {
         category: 'Person',
