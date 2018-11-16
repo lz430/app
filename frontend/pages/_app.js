@@ -11,7 +11,6 @@ import * as Sentry from '@sentry/browser';
 import config from '../core/config';
 
 import { PersistGate } from 'redux-persist/integration/react';
-//import OptinMonster from '../components/OptinMonster';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
@@ -90,7 +89,6 @@ class MyApp extends App {
                             </PersistGate>
                         </DeliverMyRide>
                     </Provider>
-                    {/* <OptinMonster /> */}
                 </Container>
             );
         }
@@ -111,7 +109,6 @@ class MyApp extends App {
                         <Component {...pageProps} />
                     </DeliverMyRide>
                 </Provider>
-                {/* <OptinMonster /> */}
             </Container>
         );
     }

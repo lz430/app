@@ -162,6 +162,7 @@ export default class FinancePane extends React.PureComponent {
                                         id="finance-explain"
                                         onClick={this.toggle.bind(this)}
                                     />
+                                    {this.renderDescription()}
                                 </Label>
                                 <Value>
                                     <DollarsAndCents
@@ -172,7 +173,6 @@ export default class FinancePane extends React.PureComponent {
                         </div>
                     )}
                 </Group>
-                {this.renderDescription()}
             </div>
         );
     }
