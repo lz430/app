@@ -130,3 +130,24 @@ export function selectConditionalRoles(roles) {
         data: roles,
     };
 }
+
+export function tradeSetValue(data) {
+    return {
+        type: ActionTypes.TRADE_SET_VALUE,
+        data: data,
+    };
+}
+
+export function tradeSetOwed(data) {
+    return {
+        type: ActionTypes.TRADE_SET_OWED,
+        data: data,
+    };
+}
+
+export function tradeSetEstimate(data) {
+    return {
+        type: ActionTypes.TRADE_SET_ESTIMATE,
+        data: data,
+    };
+}

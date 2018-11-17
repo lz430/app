@@ -20,7 +20,11 @@ const initialState = {
         employeeBrand: null,
         supplierBrand: null,
     },
-    cash: {},
+    trade: {
+        value: 0,
+        owed: 0,
+        estimate: null,
+    },
 };
 
 const persistConfig = {
@@ -98,6 +102,31 @@ const reducer = function(state = initialState, action = {}) {
                 discount: {
                     ...state.discount,
                     conditionalRoles: action.data,
+                },
+            };
+        case ActionTypes.TRADE_SET_VALUE:
+            return {
+                ...state,
+                trade: {
+                    ...state.trade,
+                    value: action.data,
+                },
+            };
+        case ActionTypes.TRADE_SET_OWED:
+            return {
+                ...state,
+                trade: {
+                    ...state.trade,
+                    owed: action.data,
+                },
+            };
+
+        case ActionTypes.TRADE_SET_ESTIMATE:
+            return {
+                ...state,
+                trade: {
+                    ...state.trade,
+                    estimate: action.data,
                 },
             };
         default:

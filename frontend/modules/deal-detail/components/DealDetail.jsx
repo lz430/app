@@ -29,6 +29,9 @@ export default class DealDetail extends React.PureComponent {
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
+        tradeSetValue: PropTypes.func.isRequired,
+        tradeSetOwed: PropTypes.func.isRequired,
+        tradeSetEstimate: PropTypes.func.isRequired,
     };
 
     state = {
@@ -274,6 +277,9 @@ export default class DealDetail extends React.PureComponent {
                             onToggleCompare={this.props.onToggleCompare}
                             compareList={this.props.compareList}
                             userLocation={this.props.userLocation}
+                            tradeSetValue={this.props.tradeSetValue}
+                            tradeSetOwed={this.props.tradeSetValue}
+                            tradeSetEstimate={this.props.tradeSetEstimate}
                         />
                     </Col>
                 </Row>

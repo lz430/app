@@ -13,3 +13,7 @@ export const SELECT_DMR_DISCOUNT = `${namespace}_SELECT_DMR_DISCOUNT`;
 export const SELECT_EMPLOYEE_DISCOUNT = `${namespace}_SELECT_EMPLOYEE_DISCOUNT`;
 export const SELECT_SUPPLIER_DISCOUNT = `${namespace}_SELECT_SUPPLIER_DISCOUNT`;
 export const SELECT_CONDITIONAL_ROLES = `${namespace}_SELECT_CONDITIONAL_ROLES`;
+
+export const TRADE_SET_VALUE = `${namespace}_TRADE_SET_VALUE`;
+export const TRADE_SET_OWED = `${namespace}_TRADE_SET_OWED`;
+export const TRADE_SET_ESTIMATE = `${namespace}_TRADE_SET_ESTIMATE`;

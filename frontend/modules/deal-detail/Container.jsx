@@ -29,9 +29,12 @@ import {
     updateDownPayment,
     updateTerm,
     updateLease,
+    tradeSetValue,
+    tradeSetOwed,
+    tradeSetEstimate,
 } from './actions';
 
-import { getDeal } from './selectors';
+import { getConditionalRoles, getDeal, getDiscountType } from './selectors';
 import DealDetail from './components/DealDetail';
 import { pricingFromStateFactory } from '../../pricing/pricing/factory';
 import withTracker from '../../components/withTracker';
@@ -66,6 +69,9 @@ class DealDetailContainer extends React.PureComponent {
         updateDownPayment: PropTypes.func.isRequired,
         updateTerm: PropTypes.func.isRequired,
         updateLease: PropTypes.func.isRequired,
+        tradeSetValue: PropTypes.func.isRequired,
+        tradeSetOwed: PropTypes.func.isRequired,
+        tradeSetEstimate: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -230,6 +236,9 @@ class DealDetailContainer extends React.PureComponent {
                         this
                     )}
                     handleLeaseChange={this.handleLeaseChange.bind(this)}
+                    tradeSetValue={this.props.tradeSetValue}
+                    tradeSetOwed={this.props.tradeSetValue}
+                    tradeSetEstimate={this.props.tradeSetEstimate}
                     setCheckoutData={this.props.setCheckoutData}
                     checkoutStart={this.onSelectDeal.bind(this)}
                     onToggleCompare={this.props.toggleCompare}
@@ -247,11 +256,10 @@ const mapStateToProps = (state, props) => {
     return {
         deal,
         searchQuery: getSearchQuery(state),
-        selectedConditionalRoles:
-            state.pages.dealDetails.discount.conditionalRoles,
+        selectedConditionalRoles: getConditionalRoles(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
         compareList: state.common.compareList,
-        discountType: state.pages.dealDetails.discount.discountType,
+        discountType: getDiscountType(state),
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
         pricing: pricingFromStateFactory(state, { ...props, deal }),
@@ -273,6 +281,9 @@ const mapDispatchToProps = mapAndBindActionCreators({
     updateDownPayment,
     updateTerm,
     updateLease,
+    tradeSetValue,
+    tradeSetOwed,
+    tradeSetEstimate,
 });
 
 export default compose(
