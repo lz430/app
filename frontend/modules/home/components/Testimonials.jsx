@@ -15,7 +15,6 @@ export default class extends React.Component {
     };
     renderTestimonials(test) {
         var logo = test.logo.trim() == '';
-        var company = test.companyName.trim() == '';
 
         return (
             <Col className="individual">

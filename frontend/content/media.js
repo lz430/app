@@ -7,13 +7,6 @@ export default [
         link:
             'https://www.freep.com/story/money/business/michigan/2017/01/12/deliver-my-ride-buyers-car/96501240/',
     },
-    /*{
-        name: 'Detroit Free Press', 
-        date: 'Nov. 11, 2018',
-        content: 'Technology think tank helps fuel the dreamers who fuel the tech world.',
-        logo: '../static/images/DetroitFreePress.png',
-        link: 'https://www.freep.com/story/sponsor-story/top-workplaces-2018/2018/11/11/maddog-technology-epitomizes-michigans-tech-prowess-and-entrepreneurial-spirit/1929850002/', 
-    },*/
     {
         name: "Crain's Detroit",
         date: 'Sept. 19, 2018',

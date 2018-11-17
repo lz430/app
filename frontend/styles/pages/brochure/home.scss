@@ -233,8 +233,21 @@
         background: $color-background-primary;
         padding: 40px 0;
 
-        img {
-            max-width: 80%;
+        .row {
+            .col-md-2 {
+                img {
+                    max-width: 100%;
+                }
+
+                @include media-breakpoint-down(md) {
+                    margin-bottom: 20px;
+                    text-align: center;
+
+                    img {
+                        max-height: 50px;
+                    }
+                }
+            }
         }
     }
 }
