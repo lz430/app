@@ -80,9 +80,9 @@ export default class Footer extends React.PureComponent {
                             </ul>
                         </Col>
                     </Row>
-                    <div className="row border-bottom mb-3" />
-                    <Row>
-                        <Col md={9} sm={12}>
+                    <Col className="border-bottom mb-3" />
+                    <Row className="row-bottom">
+                        <Col lg={6} md={9} sm={12}>
                             <ul>
                                 <NavItem>
                                     <Link
@@ -108,7 +108,7 @@ export default class Footer extends React.PureComponent {
                                 </li>
                             </ul>
                         </Col>
-                        <Col md={3} sm={12} className="social">
+                        <Col lg={2} md={3} sm={12} className="social">
                             <ul>
                                 <NavItem>
                                     <a
