@@ -5,7 +5,6 @@ import ImageGallery from 'react-image-gallery';
 import { Container, Row, Col } from 'reactstrap';
 
 import { dealType, pricingType } from '../../../core/types';
-import ApiClient from '../../../store/api';
 import DealColors from '../../../components/Deals/DealColors';
 
 import Header from './Header';
@@ -38,8 +37,6 @@ export default class DealDetail extends React.PureComponent {
         basicFeatures: [],
         fuelEconomy: {},
         upholsteryType: null,
-        warranties: null,
-        dimensions: null,
         standardFeaturesModalOpen: false,
         additionalFeaturesModalOpen: false,
     };
@@ -68,22 +65,6 @@ export default class DealDetail extends React.PureComponent {
             };
 
             this.setState({ basicFeatures, fuelEconomy });
-
-            ApiClient.deal
-                .dealGetDimensions(this.props.deal.id)
-                .then(response => {
-                    this.setState({
-                        dimensions: response.data,
-                    });
-                });
-
-            ApiClient.deal
-                .dealGetWarranties(this.props.deal.id)
-                .then(response => {
-                    this.setState({
-                        warranties: response.data,
-                    });
-                });
         }
     }
 
@@ -290,8 +271,6 @@ export default class DealDetail extends React.PureComponent {
                     deal={this.props.deal}
                     basicFeatures={this.state.basicFeatures}
                     fuelEconomy={this.state.fuelEconomy}
-                    warranties={this.state.warranties}
-                    dimensions={this.state.dimensions}
                 />
 
                 <AdditionalFeaturesModal

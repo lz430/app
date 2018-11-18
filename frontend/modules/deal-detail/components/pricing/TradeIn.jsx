@@ -36,7 +36,7 @@ export default class TradeIn extends React.PureComponent {
                     </Col>
                     <Col>
                         <FormGroup>
-                            <Label for="lastname">Amount Owed</Label>
+                            <Label for="owed">Amount Owed</Label>
                             <Input
                                 type="number"
                                 name="owed"

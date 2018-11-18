@@ -24,6 +24,9 @@ export default class AddToCart extends React.PureComponent {
         handleLeaseChange: PropTypes.func.isRequired,
         handleBuyNow: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
+        tradeSetValue: PropTypes.func.isRequired,
+        tradeSetOwed: PropTypes.func.isRequired,
+        tradeSetEstimate: PropTypes.func.isRequired,
         compareList: PropTypes.array,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
@@ -240,7 +243,12 @@ export default class AddToCart extends React.PureComponent {
                         {...{ purchaseStrategy }}
                         onChange={this.props.handlePaymentTypeChange}
                     />
-                    <TradeIn pricing={pricing} />
+                    <TradeIn
+                        pricing={pricing}
+                        tradeSetValue={this.props.tradeSetValue}
+                        tradeSetOwed={this.props.tradeSetValue}
+                        tradeSetEstimate={this.props.tradeSetEstimate}
+                    />
 
                     {this.renderPane()}
                 </div>

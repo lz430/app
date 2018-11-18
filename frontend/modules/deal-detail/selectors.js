@@ -9,3 +9,7 @@ export const getDiscountType = state => {
 export const getConditionalRoles = state => {
     return state.pages.dealDetails.discount.conditionalRoles;
 };
+
+export const getTradeIn = state => {
+    return state.pages.dealDetails.discount.trade;
+};

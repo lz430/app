@@ -94,13 +94,6 @@ const dealQuote = createSelector(
     }
 );
 
-export const dealQuoteRebatesTotal = createSelector([dealQuote], quote => {
-    if (quote && quote['rebates']) {
-        return quote['rebates']['total'] || 0;
-    }
-    return 0;
-});
-
 export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
     return quote === null;
 });
