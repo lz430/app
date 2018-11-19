@@ -259,7 +259,7 @@ export default class DealDetail extends React.PureComponent {
                             compareList={this.props.compareList}
                             userLocation={this.props.userLocation}
                             tradeSetValue={this.props.tradeSetValue}
-                            tradeSetOwed={this.props.tradeSetValue}
+                            tradeSetOwed={this.props.tradeSetOwed}
                             tradeSetEstimate={this.props.tradeSetEstimate}
                         />
                     </Col>

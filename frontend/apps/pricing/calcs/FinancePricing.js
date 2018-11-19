@@ -13,9 +13,12 @@ export default class FinancePricing extends Pricing {
     basePrice = () =>
         this.discountedPrice()
             .add(this.docFee())
-            .add(this.cvrFee());
+            .add(this.cvrFee())
+            .add(this.tradeIn().owed)
+            .subtract(this.tradeIn().value);
 
     sellingPrice = () => this.withTaxAdded(this.basePrice());
+
     yourPrice = () => this.sellingPrice().subtract(this.rebates());
 
     salesTax = () =>

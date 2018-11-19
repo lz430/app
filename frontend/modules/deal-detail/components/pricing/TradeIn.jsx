@@ -15,6 +15,14 @@ export default class TradeIn extends React.PureComponent {
         tradeSetEstimate: PropTypes.func.isRequired,
     };
 
+    handleValueChange(e) {
+        this.props.tradeSetValue(e.target.value);
+    }
+
+    handleOwedChange(e) {
+        this.props.tradeSetOwed(e.target.value);
+    }
+
     render() {
         return (
             <Group>
@@ -31,6 +39,10 @@ export default class TradeIn extends React.PureComponent {
                                 name="value"
                                 id="value"
                                 placeholder="0"
+                                value={
+                                    this.props.pricing.tradeIn().value.amount
+                                }
+                                onChange={this.handleValueChange.bind(this)}
                             />
                         </FormGroup>
                     </Col>
@@ -42,6 +54,8 @@ export default class TradeIn extends React.PureComponent {
                                 name="owed"
                                 id="owed"
                                 placeholder="0"
+                                value={this.props.pricing.tradeIn().owed.amount}
+                                onChange={this.handleOwedChange.bind(this)}
                             />
                         </FormGroup>
                     </Col>

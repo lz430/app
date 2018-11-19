@@ -20,6 +20,14 @@ export default class Pricing {
 
     msrp = () => fromWholeDollars(this.data.deal.pricing.msrp);
 
+    tradeIn = () => {
+        return {
+            owed: fromWholeDollars(this.data.tradeIn.owed),
+            value: fromWholeDollars(this.data.tradeIn.value),
+            estimate: this.data.tradeIn.estimate,
+        };
+    };
+
     quote = () => this.data.dealQuote;
     quoteIsLoading = () => this.data.dealQuoteIsLoading;
     quoteIsLoaded = () => !this.data.dealQuoteIsLoading;

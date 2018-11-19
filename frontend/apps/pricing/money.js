@@ -78,6 +78,10 @@ export function fromUnknownInput(moneyValue, multiplier = 1) {
     }
 
     if (typeof moneyValue === 'string') {
+        if (!moneyValue) {
+            return Dinero({ amount: 0 });
+        }
+
         const numberfied = moneyValue.replace(/[,]/g, '');
 
         if (numberfied.indexOf('.') === -1) {
@@ -90,7 +94,5 @@ export function fromUnknownInput(moneyValue, multiplier = 1) {
         return Dinero({ amount: truncated });
     }
 
-    throw new TypeError(
-        'Must be an integer, object with an amount key ({amount: XXXX}), or a Dinero instance'
-    );
+    return Dinero({ amount: 0 });
 }

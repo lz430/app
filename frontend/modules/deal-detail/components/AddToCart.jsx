@@ -246,7 +246,7 @@ export default class AddToCart extends React.PureComponent {
                     <TradeIn
                         pricing={pricing}
                         tradeSetValue={this.props.tradeSetValue}
-                        tradeSetOwed={this.props.tradeSetValue}
+                        tradeSetOwed={this.props.tradeSetOwed}
                         tradeSetEstimate={this.props.tradeSetEstimate}
                     />
 

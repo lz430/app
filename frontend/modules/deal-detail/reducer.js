@@ -30,7 +30,7 @@ const initialState = {
 const persistConfig = {
     ...basePersistConfig,
     key: 'dealDetail',
-    blacklist: ['deal', 'selectDiscount', 'lease', 'finance'],
+    blacklist: ['deal', 'discount', 'lease', 'finance', 'trade'],
 };
 
 const reducer = function(state = initialState, action = {}) {

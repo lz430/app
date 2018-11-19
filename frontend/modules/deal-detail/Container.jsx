@@ -241,7 +241,7 @@ class DealDetailContainer extends React.PureComponent {
                     )}
                     handleLeaseChange={this.handleLeaseChange.bind(this)}
                     tradeSetValue={this.props.tradeSetValue}
-                    tradeSetOwed={this.props.tradeSetValue}
+                    tradeSetOwed={this.props.tradeSetOwed}
                     tradeSetEstimate={this.props.tradeSetEstimate}
                     setCheckoutData={this.props.setCheckoutData}
                     checkoutStart={this.onSelectDeal.bind(this)}

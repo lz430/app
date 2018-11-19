@@ -24,7 +24,7 @@ export const getConditionalRoles = state => {
 };
 
 export const getTradeIn = state => {
-    return state.pages.dealDetails.discount.trade;
+    return state.pages.dealDetails.trade;
 };
 
 const employeeBrand = state => {
@@ -114,6 +114,7 @@ export const dealPricingForDetail = createSelector(
     dealLeaseTerm,
     dealLeaseCashDue,
     discountType,
+    getTradeIn,
     dealQuoteIsLoading,
     dealQuote,
     (
@@ -127,6 +128,7 @@ export const dealPricingForDetail = createSelector(
         dealLeaseTerm,
         dealLeaseCashDue,
         discountType,
+        tradeIn,
         dealQuoteIsLoading,
         dealQuote
     ) => {
@@ -143,6 +145,7 @@ export const dealPricingForDetail = createSelector(
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
             discountType,
+            tradeIn,
             dealQuoteIsLoading,
             dealQuote,
         };

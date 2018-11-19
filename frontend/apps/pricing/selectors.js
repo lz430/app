@@ -61,6 +61,7 @@ export const dealPricingForGeneric = createSelector(
             leaseAnnualMileage: null,
             leaseTerm: null,
             discountType: 'default',
+            tradeIn: { owed: 0, value: 0, estimate: null },
             dealQuoteIsLoading,
             dealQuote,
         };
