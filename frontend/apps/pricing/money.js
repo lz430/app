@@ -1,4 +1,4 @@
-import Dinero from '../node_modules/dinero.js/build/cjs/dinero';
+import Dinero from '../../node_modules/dinero.js/build/cjs/dinero';
 
 export const zero = new Dinero({ amount: 0 });
 
@@ -93,11 +93,4 @@ export function fromUnknownInput(moneyValue, multiplier = 1) {
     throw new TypeError(
         'Must be an integer, object with an amount key ({amount: XXXX}), or a Dinero instance'
     );
-}
-
-/**
- * @deprecated
- */
-export function createDineroFromMoneyValue(moneyValue, multiplier = 1) {
-    return fromUnknownInput(moneyValue, multiplier);
 }

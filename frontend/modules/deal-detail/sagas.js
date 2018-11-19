@@ -8,12 +8,11 @@ import {
 } from '../../apps/user/selectors';
 import { requestDealQuote as requestDealQuoteAction } from '../../apps/pricing/actions';
 import { requestDealQuote } from '../../apps/pricing/sagas';
-import { discountType as getDiscountType } from '../../apps/common/selectors';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
-import { getConditionalRoles, getDeal } from './selectors';
+import { getConditionalRoles, getDeal, getDiscountType } from './selectors';
 import { receiveDeal } from './actions';
 
 /*******************************************************************

@@ -9,8 +9,8 @@ import Loading from '../../components/Loading';
 
 import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { pricingFromStateFactory } from '../../pricing/pricing/factory';
 import Dollars from '../money/Dollars';
+import { pricingFromGeneric } from '../../apps/pricing/selectors';
 
 class DealPrice extends React.Component {
     static propTypes = {
@@ -131,7 +131,7 @@ class DealPrice extends React.Component {
 const mapStateToProps = (state, props) => {
     return {
         purchaseStrategy: state.user.purchasePreferences.strategy,
-        pricing: pricingFromStateFactory(state, props),
+        pricing: pricingFromGeneric(state, props),
     };
 };
 

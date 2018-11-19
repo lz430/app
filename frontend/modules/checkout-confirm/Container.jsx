@@ -8,7 +8,7 @@ import { Container, Row, Col } from 'reactstrap';
 
 import strings from '../../util/strings';
 import DealImage from '../../components/Deals/DealImage';
-import { pricingFromCheckoutFactory } from '../../pricing/pricing/factory';
+import { pricingFromCheckoutFactory } from '../../apps/checkout/selectors';
 import {
     checkoutContact,
     clearCheckoutContactFormErrors,

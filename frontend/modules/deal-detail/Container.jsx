@@ -34,9 +34,13 @@ import {
     tradeSetEstimate,
 } from './actions';
 
-import { getConditionalRoles, getDeal, getDiscountType } from './selectors';
+import {
+    getConditionalRoles,
+    getDeal,
+    getDiscountType,
+    pricingFromDealDetail,
+} from './selectors';
 import DealDetail from './components/DealDetail';
-import { pricingFromStateFactory } from '../../pricing/pricing/factory';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { withRouter } from 'next/router';
@@ -262,7 +266,7 @@ const mapStateToProps = (state, props) => {
         discountType: getDiscountType(state),
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
-        pricing: pricingFromStateFactory(state, { ...props, deal }),
+        pricing: pricingFromDealDetail(state, { ...props, deal }),
     };
 };
 

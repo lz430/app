@@ -1,7 +1,7 @@
 import Pricing from './Pricing';
 import { fromDollarsAndCents, zero } from '../money';
-import * as R from 'ramda';
-import { getClosestNumberInRange } from '../util';
+import { indexOf } from 'ramda';
+import { getClosestNumberInRange } from '../../../util/util';
 
 const defaultTerm = 36;
 const defaultAnnualMileage = 10000;
@@ -132,7 +132,7 @@ export default class LeasePricing extends Pricing {
                 for (let annualMileage of Object.keys(
                     payments[term][cashDue]
                 )) {
-                    if (R.indexOf(annualMileage, annualMileageOptions) !== -1) {
+                    if (indexOf(annualMileage, annualMileageOptions) !== -1) {
                         continue;
                     }
 

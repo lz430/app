@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
+import { pricingFromDataFactory } from '../pricing/factory';
 
 export const checkout = state => state.checkout;
 
-export const dealPricingFromCheckoutData = createSelector(
+export const dealPricingDataForCheckout = createSelector(
     [checkout],
     checkout => {
         return {
@@ -20,3 +21,14 @@ export const dealPricingFromCheckoutData = createSelector(
         };
     }
 );
+
+/**
+ * Generate a pricing class using mostly checkout data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
+export const pricingFromCheckoutFactory = (state, props) => {
+    const data = dealPricingDataForCheckout(state, props);
+    return pricingFromDataFactory(data);
+};

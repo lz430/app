@@ -9,7 +9,7 @@ import strings from '../../util/strings';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 
 import DealImage from '../../components/Deals/DealImage';
-import { pricingFromCheckoutFactory } from '../../pricing/pricing/factory';
+import { pricingFromCheckoutFactory } from '../../apps/checkout/selectors';
 import Header from '../../apps/pricing/components/Header';
 import Group from '../../apps/pricing/components/Group';
 import { checkout } from '../../apps/checkout/selectors';

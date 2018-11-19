@@ -4,10 +4,11 @@ import {
     getUserPurchaseStrategy,
     getUserZipcode,
 } from '../../apps/user/selectors';
-import { deal, dealQuoteIsLoading } from '../../apps/common/selectors';
+import { getDealFromProps } from '../../apps/common/selectors';
 import { dealQuoteKey as generateDealQuoteKey } from '../../apps/pricing/helpers';
 import { prop } from 'ramda';
 import { getQuotes } from '../../apps/pricing/selectors';
+import { pricingFromDataFactory } from '../../apps/pricing/factory';
 const neverEqualSelector = createSelectorCreator(defaultMemoize, () => false);
 
 export const getDeal = state => {
@@ -62,16 +63,9 @@ const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
     return leaseCashDue;
 });
 
-const dealQuote = createSelector(
-    [getQuotes, dealQuoteKey],
-    (quotes, dealQuoteKey) => {
-        return prop(dealQuoteKey, quotes) || null;
-    }
-);
-
 const dealQuoteKey = neverEqualSelector(
     [
-        deal,
+        getDealFromProps,
         getUserZipcode,
         getUserPurchaseStrategy,
         discountType,
@@ -98,8 +92,19 @@ const dealQuoteKey = neverEqualSelector(
     }
 );
 
-export const dealPricingData = createSelector(
-    deal,
+const dealQuote = createSelector(
+    [getQuotes, dealQuoteKey],
+    (quotes, dealQuoteKey) => {
+        return prop(dealQuoteKey, quotes) || null;
+    }
+);
+
+export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
+    return quote === null;
+});
+
+export const dealPricingForDetail = createSelector(
+    getDealFromProps,
     getUserPurchaseStrategy,
     employeeBrand,
     supplierBrand,
@@ -143,3 +148,15 @@ export const dealPricingData = createSelector(
         };
     }
 );
+
+/**
+ * Generate a pricing class using data pulled
+ * from a mixture of user profile / deal detail / deal list data.
+ * @param state
+ * @param props
+ * @returns {DealPricing}
+ */
+export const pricingFromDealDetail = (state, props) => {
+    const data = dealPricingForDetail(state, props);
+    return pricingFromDataFactory(data);
+};
