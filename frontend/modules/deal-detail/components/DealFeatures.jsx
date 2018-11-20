@@ -1,36 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { contains, map, prop } from 'ramda';
-import ImageGallery from 'react-image-gallery';
-import { Container, Row, Col } from 'reactstrap';
-
-import { dealType, pricingType } from '../../../core/types';
+import { dealType } from '../../../core/types';
 import DealColors from '../../../components/Deals/DealColors';
-
-import Header from './Header';
-import AddToCart from './AddToCart';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 
-export default class DealDetail extends React.PureComponent {
+export default class extends React.PureComponent {
     static propTypes = {
-        deal: dealType,
-        pricing: pricingType.isRequired,
-        compareList: PropTypes.array,
-        userLocation: PropTypes.object.isRequired,
-        purchaseStrategy: PropTypes.string.isRequired,
-        handlePaymentTypeChange: PropTypes.func.isRequired,
-        handleDiscountChange: PropTypes.func.isRequired,
-        handleRebatesChange: PropTypes.func.isRequired,
-        handleFinanceDownPaymentChange: PropTypes.func.isRequired,
-        handleFinanceTermChange: PropTypes.func.isRequired,
-        handleLeaseChange: PropTypes.func.isRequired,
-        setCheckoutData: PropTypes.func.isRequired,
-        checkoutStart: PropTypes.func.isRequired,
-        onToggleCompare: PropTypes.func.isRequired,
-        tradeSetValue: PropTypes.func.isRequired,
-        tradeSetOwed: PropTypes.func.isRequired,
-        tradeSetEstimate: PropTypes.func.isRequired,
+        deal: dealType.isRequired,
     };
 
     state = {
@@ -68,26 +45,6 @@ export default class DealDetail extends React.PureComponent {
         }
     }
 
-    handleBuyNow() {
-        const { pricing } = this.props;
-
-        const checkoutData = pricing.toCheckoutData();
-
-        this.props.setCheckoutData(
-            checkoutData.deal,
-            checkoutData.quote,
-            checkoutData.paymentStrategy,
-            checkoutData.discountType,
-            checkoutData.effectiveTerm,
-            checkoutData.financeDownPayment,
-            checkoutData.leaseAnnualMileage,
-            checkoutData.employeeBrand,
-            checkoutData.supplierBrand
-        );
-
-        this.props.checkoutStart(pricing);
-    }
-
     toggleStandardFeaturesModal() {
         this.setState({
             standardFeaturesModalOpen: !this.state.standardFeaturesModalOpen,
@@ -101,33 +58,9 @@ export default class DealDetail extends React.PureComponent {
         });
     }
 
-    allImages() {
-        return this.props.deal.photos;
-    }
+    render() {
+        const { deal } = this.props;
 
-    galleryImages() {
-        return this.allImages().map(image => {
-            return { original: image.url };
-        });
-    }
-
-    compareButtonClass() {
-        return (
-            'btn ' +
-            (this.compareListContainsDeal()
-                ? 'btn-outline-primary'
-                : 'btn-primary')
-        );
-    }
-
-    compareListContainsDeal() {
-        return contains(
-            this.props.deal,
-            map(prop('deal'), this.props.compareList)
-        );
-    }
-
-    renderFeaturesAndOptions(deal) {
         return (
             <div className="deal-details__deal-content">
                 <div className="deal-details__deal-content-header">
@@ -203,68 +136,6 @@ export default class DealDetail extends React.PureComponent {
                         </div>
                     )}
                 </div>
-            </div>
-        );
-    }
-
-    render() {
-        return (
-            <Container className="mb-5">
-                <Header deal={this.props.deal} />
-                <Row>
-                    <Col md="6" lg="8">
-                        <div className="deal-details__images">
-                            <ImageGallery
-                                items={this.galleryImages()}
-                                showBullets={true}
-                                showIndex={true}
-                                showThumbnails={false}
-                                showPlayButton={false}
-                                showFullscreenButton={false}
-                            />
-                        </div>
-                        {this.renderFeaturesAndOptions(this.props.deal)}
-                        <button
-                            className={this.compareButtonClass(this.props.deal)}
-                            onClick={() =>
-                                this.props.onToggleCompare(this.props.deal)
-                            }
-                        >
-                            {this.compareListContainsDeal(this.props.deal)
-                                ? 'Remove from compare'
-                                : 'Add to compare'}
-                        </button>
-                    </Col>
-                    <Col md="6" lg="4">
-                        <AddToCart
-                            deal={this.props.deal}
-                            purchaseStrategy={this.props.purchaseStrategy}
-                            handlePaymentTypeChange={
-                                this.props.handlePaymentTypeChange
-                            }
-                            pricing={this.props.pricing}
-                            handleDiscountChange={
-                                this.props.handleDiscountChange
-                            }
-                            handleRebatesChange={this.props.handleRebatesChange}
-                            handleFinanceDownPaymentChange={
-                                this.props.handleFinanceDownPaymentChange
-                            }
-                            handleFinanceTermChange={
-                                this.props.handleFinanceTermChange
-                            }
-                            handleLeaseChange={this.props.handleLeaseChange}
-                            handleBuyNow={this.handleBuyNow.bind(this)}
-                            onToggleCompare={this.props.onToggleCompare}
-                            compareList={this.props.compareList}
-                            userLocation={this.props.userLocation}
-                            tradeSetValue={this.props.tradeSetValue}
-                            tradeSetOwed={this.props.tradeSetOwed}
-                            tradeSetEstimate={this.props.tradeSetEstimate}
-                        />
-                    </Col>
-                </Row>
-
                 <StandardFeaturesModal
                     toggle={this.toggleStandardFeaturesModal.bind(this)}
                     isOpen={this.state.standardFeaturesModalOpen}
@@ -278,7 +149,7 @@ export default class DealDetail extends React.PureComponent {
                     isOpen={this.state.additionalFeaturesModalOpen}
                     deal={this.props.deal}
                 />
-            </Container>
+            </div>
         );
     }
 }

@@ -23,11 +23,9 @@ export default class AddToCart extends React.PureComponent {
         handleFinanceTermChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         handleBuyNow: PropTypes.func.isRequired,
-        onToggleCompare: PropTypes.func.isRequired,
         tradeSetValue: PropTypes.func.isRequired,
         tradeSetOwed: PropTypes.func.isRequired,
         tradeSetEstimate: PropTypes.func.isRequired,
-        compareList: PropTypes.array,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
     };

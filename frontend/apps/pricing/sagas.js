@@ -34,8 +34,6 @@ export function* requestDealQuote(action) {
     const tradeOwed = action.tradeOwed || 0;
     const conditionalRoles = action.conditionalRoles || [];
 
-    console.log(tradeValue);
-
     if (!action.deal || !action.zipcode || !action.paymentType) {
         return;
     }
