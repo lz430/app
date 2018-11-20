@@ -136,9 +136,9 @@ class DealQuote
         string $paymentType,
         array $roles,
         bool $force = false,
-        int $down = 0,
-        int $tradeValue = 0,
-        int $tradeOwed = 0
+        $down = 0,
+        $tradeValue = 0,
+        $tradeOwed = 0
     )
     {
         $this->deal = $deal;
@@ -163,9 +163,6 @@ class DealQuote
                 'dealId' => $this->deal->id,
                 'primaryRole' => $primaryRole,
                 'conditionalRoles' => $conditionalRoles,
-                'down' => $down,
-                'tradeValue' => $tradeValue,
-                'tradeOwed' => $tradeOwed,
                 'key' => $key,
                 'error' => $ratesAndRebates === null
             ];
@@ -182,6 +179,10 @@ class DealQuote
 
             Cache::tags($tagKey)->put($cacheKey, $data, $this->cacheLifetime);
         }
+
+        $data['meta']['down'] = $down;
+        $data['meta']['tradeValue'] = $tradeValue;
+        $data['meta']['tradeOwed'] = $tradeOwed;
 
         if ($paymentType === "lease" && isset($data['rates'][0])) {
             $payments = $this->getLeasePayments($data);

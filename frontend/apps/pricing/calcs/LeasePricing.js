@@ -147,8 +147,6 @@ export default class LeasePricing extends Pricing {
                 (annualMiles, annualMilesIndex) =>
                     annualMilesIndex < maxNumberOfAnnualMileageOptionsInMatrix
             );
-
-        return ret;
     };
 
     isSelectedLeasePaymentForTermAndCashDue(term, annualMileage) {

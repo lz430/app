@@ -23,6 +23,7 @@ import {
     initPage,
     receiveDeal,
     dealDetailRequestDealQuote,
+    dealDetailRefreshDealQuote,
     selectDmrDiscount,
     selectEmployeeDiscount,
     selectSupplierDiscount,
@@ -85,20 +86,22 @@ class DealDetailContainer extends React.PureComponent {
         tradeSetValue: PropTypes.func.isRequired,
         tradeSetOwed: PropTypes.func.isRequired,
         tradeSetEstimate: PropTypes.func.isRequired,
+        dealDetailRefreshDealQuote: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
         this.props.initPage(this.props.router.query.id);
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
         if (
+            prevProps.dealPricingData.tradeIn &&
             !equals(
                 prevProps.dealPricingData.tradeIn,
                 this.props.dealPricingData.tradeIn
             )
         ) {
-            console.log('YEAH');
+            this.props.dealDetailRefreshDealQuote();
         }
     }
 
@@ -257,7 +260,6 @@ class DealDetailContainer extends React.PureComponent {
 
                 <DealDetail
                     deal={this.props.deal}
-                    quote={this.props.quote}
                     pricing={this.props.pricing}
                     purchaseStrategy={this.props.purchaseStrategy}
                     handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
@@ -321,6 +323,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
     tradeSetValue,
     tradeSetOwed,
     tradeSetEstimate,
+    dealDetailRefreshDealQuote,
 });
 
 export default compose(

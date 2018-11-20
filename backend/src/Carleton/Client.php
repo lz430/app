@@ -132,8 +132,8 @@ class Client
 
             if ($tradeAllowance) {
                 $quote['fees']['tradeAllowance'] = [
-                    'Amount' => $tradeAllowance,
-                    'Type' => 'Financed',
+                    'Amount' => -1 * abs($tradeAllowance),
+                    'Type' => 'None',
                     'Base' => 'Fixed',
                     'DescriptionType' => 'TradeAllowance',
                     'TaxIndex' => '1',
@@ -146,7 +146,7 @@ class Client
             if ($tradeLien) {
                 $quote['fees']['tradeLien'] = [
                     'Amount' => $tradeLien,
-                    'Type' => 'Financed',
+                    'Type' => 'None',
                     'Base' => 'Fixed',
                     'DescriptionType' => 'TradeLien',
                     'TaxIndex' => '1',

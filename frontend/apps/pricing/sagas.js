@@ -29,7 +29,12 @@ export function* requestDealQuote(action, store = true) {
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
     const role = action.role;
+    const down = action.down || 0;
+    const tradeValue = action.tradeValue || 0;
+    const tradeOwed = action.tradeOwed || 0;
     const conditionalRoles = action.conditionalRoles || [];
+
+    console.log(tradeValue);
 
     if (!action.deal || !action.zipcode || !action.paymentType) {
         return;
@@ -45,19 +50,21 @@ export function* requestDealQuote(action, store = true) {
 
     const state = yield select();
 
-    if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
-        return;
-    }
+    if (store) {
+        if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
+            return;
+        }
 
-    yield put(
-        requestDealQuoteIsLoading(
-            deal,
-            zipcode,
-            paymentType,
-            role,
-            conditionalRoles
-        )
-    );
+        yield put(
+            requestDealQuoteIsLoading(
+                deal,
+                zipcode,
+                paymentType,
+                role,
+                conditionalRoles
+            )
+        );
+    }
 
     let results = null;
 
@@ -70,7 +77,10 @@ export function* requestDealQuote(action, store = true) {
             paymentType,
             zipcode,
             roles,
-            source.token
+            source.token,
+            down,
+            tradeValue,
+            tradeOwed
         );
         results = results.data;
     } catch (e) {

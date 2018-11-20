@@ -15,7 +15,6 @@ import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 export default class DealDetail extends React.PureComponent {
     static propTypes = {
         deal: dealType,
-        quote: PropTypes.object,
         pricing: pricingType.isRequired,
         compareList: PropTypes.array,
         userLocation: PropTypes.object.isRequired,
@@ -239,7 +238,6 @@ export default class DealDetail extends React.PureComponent {
                     <Col md="6" lg="4">
                         <AddToCart
                             deal={this.props.deal}
-                            quote={this.props.quote}
                             purchaseStrategy={this.props.purchaseStrategy}
                             handlePaymentTypeChange={
                                 this.props.handlePaymentTypeChange

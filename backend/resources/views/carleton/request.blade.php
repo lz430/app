@@ -33,14 +33,13 @@
                     <SolveFor>Payment</SolveFor>
                     <Term>{{$quote['term']}}</Term>
 
-
                     <FinanceTaxes>Yes</FinanceTaxes>
                     <ContractDate>{{$quote['contractDate']}}</ContractDate>
                     <UpfrontPayments>1</UpfrontPayments>
                     <TaxMethod>MonthlyUse</TaxMethod>
                     <ApplyCashDownToUpfront>No</ApplyCashDownToUpfront>
                     <ApplyRebateToUpfront>No</ApplyRebateToUpfront>
-                    <ApplyNetTradeToUpfront>No</ApplyNetTradeToUpfront>
+                    <ApplyNetTradeToUpfront>Yes</ApplyNetTradeToUpfront>
                     <TaxIndex>1</TaxIndex>
                     <RoundDepreciation>Near</RoundDepreciation>
                     <RoundRent>Low</RoundRent>

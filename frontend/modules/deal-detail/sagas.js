@@ -28,14 +28,14 @@ import { dealDetailReceiveDealQuote, receiveDeal } from './actions';
  * @returns {IterableIterator<*>}
  */
 function* dealDetailRequestDealQuote() {
-    console.log('SUP');
+    console.log('dealDetailRequestDealQuote');
     const deal = yield select(getDeal);
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
     const discountType = yield select(getDiscountType);
     const conditionalRoles = yield select(getConditionalRoles);
     const tradeIn = yield select(getTradeIn);
-
+    console.log(tradeIn);
     // Do the regular.
     const quote = yield* requestDealQuote(
         requestDealQuoteAction(
@@ -43,10 +43,15 @@ function* dealDetailRequestDealQuote() {
             location.zipcode,
             purchaseStrategy,
             discountType,
-            conditionalRoles
+            conditionalRoles,
+            0,
+            tradeIn.value,
+            tradeIn.owed
         ),
         false
     );
+
+    console.log(quote.meta);
 
     yield put(dealDetailReceiveDealQuote(quote));
 }

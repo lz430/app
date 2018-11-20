@@ -15,7 +15,6 @@ import { Button } from 'reactstrap';
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
-        quote: PropTypes.object,
         purchaseStrategy: PropTypes.string.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
         handleDiscountChange: PropTypes.func.isRequired,
@@ -184,7 +183,6 @@ export default class AddToCart extends React.PureComponent {
             return (
                 <LeasePricingPane
                     pricing={pricing}
-                    quote={this.props.quote}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
                     onChange={this.props.handleLeaseChange}
