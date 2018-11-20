@@ -52,7 +52,6 @@ export default class Discount extends React.PureComponent {
             discount = pricing.dmrDiscount();
             price = pricing.defaultPrice();
         }
-
         return (
             <div
                 onClick={() => this.handleChange(role, pricing.make())}
@@ -79,7 +78,7 @@ export default class Discount extends React.PureComponent {
                         <DollarsAndCents value={price} />
                     </div>
                 )}
-                {checked && (
+                {!!(checked && discount.getAmount()) && (
                     <div className="cart__discount_role_savings text-sm">
                         Savings: -<DollarsAndCents value={discount} />
                     </div>

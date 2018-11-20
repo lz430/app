@@ -13,6 +13,7 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
+import { requestDealQuote } from '../../apps/pricing/sagas';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
@@ -50,25 +51,37 @@ function* dealDetailRequestDealQuote() {
     let roles = [role, ...conditionalRoles];
     let results = null;
 
-    try {
-        results = yield call(
-            ApiClient.deal.dealGetQuote,
-            deal.id,
-            purchaseStrategy,
-            location.zipcode,
-            roles,
-            source.token,
-            0,
-            tradeIn.value,
-            tradeIn.owed
-        );
-        results = results.data;
-    } catch (e) {
-        results = false;
-        console.log(e);
-    } finally {
-        if (yield cancelled()) {
-            source.cancel();
+    if (tradeIn.value === 0 && tradeIn.owed === 0) {
+        results = yield* requestDealQuote({
+            deal: deal,
+            zipcode: location.zipcode,
+            paymentType: purchaseStrategy,
+            role: role,
+            conditionalRoles: conditionalRoles,
+        });
+    }
+
+    if (!results) {
+        try {
+            results = yield call(
+                ApiClient.deal.dealGetQuote,
+                deal.id,
+                purchaseStrategy,
+                location.zipcode,
+                roles,
+                source.token,
+                0,
+                tradeIn.value,
+                tradeIn.owed
+            );
+            results = results.data;
+        } catch (e) {
+            results = false;
+            console.log(e);
+        } finally {
+            if (yield cancelled()) {
+                source.cancel();
+            }
         }
     }
 

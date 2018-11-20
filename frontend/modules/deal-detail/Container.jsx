@@ -107,12 +107,7 @@ class DealDetailContainer extends React.PureComponent {
 
     handlePaymentTypeChange = strategy => {
         this.props.setPurchaseStrategy(strategy);
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            strategy,
-            this.props.discountType
-        );
+        this.props.dealDetailRefreshDealQuote();
 
         // This is here because purchase strategy is a global thing
         track('deal-detail:quote-form:changed', {
@@ -137,13 +132,7 @@ class DealDetailContainer extends React.PureComponent {
             default:
                 break;
         }
-
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            this.props.purchaseStrategy,
-            discountType
-        );
+        this.props.dealDetailRefreshDealQuote();
     };
 
     handleRebatesChange = role => {
@@ -156,14 +145,7 @@ class DealDetailContainer extends React.PureComponent {
         }
 
         this.props.selectConditionalRoles(selectedRoles);
-
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            this.props.purchaseStrategy,
-            this.props.discountType,
-            selectedRoles
-        );
+        this.props.dealDetailRefreshDealQuote();
     };
 
     handleFinanceDownPaymentChange = downPayment => {
@@ -177,17 +159,6 @@ class DealDetailContainer extends React.PureComponent {
     handleLeaseChange = (annualMileage, term, cashDue) => {
         this.props.updateLease(annualMileage, term, cashDue);
     };
-
-    handleTradeValueChange(value) {
-        this.props.tradeSetValue(value);
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            this.props.purchaseStrategy,
-            this.props.discountType,
-            this.props.selectedConditionalRoles
-        );
-    }
 
     onSelectDeal(pricing) {
         return this.props.checkoutStart(pricing, this.props.router);

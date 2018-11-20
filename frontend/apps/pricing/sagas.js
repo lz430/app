@@ -22,7 +22,7 @@ import { dealQuoteKey } from './helpers';
 /*******************************************************************
  * Request Deal Quote
  ********************************************************************/
-export function* requestDealQuote(action, store = true) {
+export function* requestDealQuote(action) {
     const source = cancelRequest();
 
     const deal = action.deal;
@@ -50,21 +50,19 @@ export function* requestDealQuote(action, store = true) {
 
     const state = yield select();
 
-    if (store) {
-        if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
-            return;
-        }
-
-        yield put(
-            requestDealQuoteIsLoading(
-                deal,
-                zipcode,
-                paymentType,
-                role,
-                conditionalRoles
-            )
-        );
+    if (state.pricing.quotes[key] && state.pricing.quotes[key] !== null) {
+        return;
     }
+
+    yield put(
+        requestDealQuoteIsLoading(
+            deal,
+            zipcode,
+            paymentType,
+            role,
+            conditionalRoles
+        )
+    );
 
     let results = null;
 
@@ -92,9 +90,7 @@ export function* requestDealQuote(action, store = true) {
         }
     }
 
-    if (store) {
-        yield put(receiveDealQuote(results));
-    }
+    yield put(receiveDealQuote(results));
 
     return results;
 }
