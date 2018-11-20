@@ -20,19 +20,20 @@ class DealLeasePaymentsManager
         $this->client = $client;
     }
 
-    private function mungeTerms($terms) {
+    private function mungeTerms($terms)
+    {
         $situations = [];
 
-        foreach($terms as $term) {
-            foreach ($term['residuals']  as $residual) {
+        foreach ($terms as $term) {
+            foreach ($term['residuals'] as $residual) {
                 $data = [
-                    'length' => (int) $term['termLength'],
-                    'mileage' => (int) $residual['annualMileage'],
-                    'residual' => (int) $residual['residualPercent'],
+                    'length' => (int)$term['termLength'],
+                    'mileage' => (int)$residual['annualMileage'],
+                    'residual' => (int)$residual['residualPercent'],
                 ];
 
                 if (isset($term['rate'])) {
-                    $data['rate'] = (float) $term['rate'];
+                    $data['rate'] = (float)$term['rate'];
                 }
 
                 if (isset($term['moneyFactor'])) {
@@ -50,7 +51,15 @@ class DealLeasePaymentsManager
         return $situations;
     }
 
-    public function get($terms, $rebate = 0, $cash_down = [0], $role = 'default') {
+    public function get(
+        $terms,
+        $rebate = 0,
+        $cash_down = 0,
+        $role = 'default',
+        $tradeAllowance = 0,
+        $tradeLien = 0)
+    {
+
         $prices = $this->deal->prices();
         $msrp = $prices->msrp;
         $price = $prices->{$role};
@@ -65,7 +74,10 @@ class DealLeasePaymentsManager
             $this->deal->dealer->registration_fee,
             $this->deal->dealer->cvr_fee,
             $msrp,
-            $price
+            $price,
+            null,
+            $tradeAllowance,
+            $tradeLien
         );
     }
 

@@ -12,8 +12,13 @@ import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
-import { getConditionalRoles, getDeal, getDiscountType } from './selectors';
-import { receiveDeal } from './actions';
+import {
+    getConditionalRoles,
+    getDeal,
+    getDiscountType,
+    getTradeIn,
+} from './selectors';
+import { dealDetailReceiveDealQuote, receiveDeal } from './actions';
 
 /*******************************************************************
  * Request Deal Quote
@@ -23,22 +28,27 @@ import { receiveDeal } from './actions';
  * @returns {IterableIterator<*>}
  */
 function* dealDetailRequestDealQuote() {
+    console.log('SUP');
     const deal = yield select(getDeal);
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
     const discountType = yield select(getDiscountType);
     const conditionalRoles = yield select(getConditionalRoles);
+    const tradeIn = yield select(getTradeIn);
 
     // Do the regular.
-    yield* requestDealQuote(
+    const quote = yield* requestDealQuote(
         requestDealQuoteAction(
             deal,
             location.zipcode,
             purchaseStrategy,
             discountType,
             conditionalRoles
-        )
+        ),
+        false
     );
+
+    yield put(dealDetailReceiveDealQuote(quote));
 }
 
 /*******************************************************************

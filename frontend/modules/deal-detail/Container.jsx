@@ -18,6 +18,7 @@ import {
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
 import { setCheckoutData, checkoutStart } from '../../apps/checkout/actions';
+import { equals } from 'ramda';
 import {
     initPage,
     receiveDeal,
@@ -35,9 +36,12 @@ import {
 } from './actions';
 
 import {
+    dealPricingDataForDetail,
     getConditionalRoles,
     getDeal,
+    getDealDetailQuote,
     getDiscountType,
+    getTradeIn,
     pricingFromDealDetail,
 } from './selectors';
 import DealDetail from './components/DealDetail';
@@ -50,6 +54,7 @@ import { getSearchQuery } from '../deal-list/selectors';
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
         deal: dealType,
+        quote: PropTypes.object,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
@@ -66,6 +71,10 @@ class DealDetailContainer extends React.PureComponent {
         router: nextRouterType,
         searchQuery: PropTypes.object.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+        dealPricingData: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.bool,
+        ]),
         selectDmrDiscount: PropTypes.func.isRequired,
         selectEmployeeDiscount: PropTypes.func.isRequired,
         selectSupplierDiscount: PropTypes.func.isRequired,
@@ -80,6 +89,17 @@ class DealDetailContainer extends React.PureComponent {
 
     componentDidMount() {
         this.props.initPage(this.props.router.query.id);
+    }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (
+            !equals(
+                prevProps.dealPricingData.tradeIn,
+                this.props.dealPricingData.tradeIn
+            )
+        ) {
+            console.log('YEAH');
+        }
     }
 
     handlePaymentTypeChange = strategy => {
@@ -155,6 +175,17 @@ class DealDetailContainer extends React.PureComponent {
         this.props.updateLease(annualMileage, term, cashDue);
     };
 
+    handleTradeValueChange(value) {
+        this.props.tradeSetValue(value);
+        this.props.dealDetailRequestDealQuote(
+            this.props.deal,
+            this.props.userLocation.zipcode,
+            this.props.purchaseStrategy,
+            this.props.discountType,
+            this.props.selectedConditionalRoles
+        );
+    }
+
     onSelectDeal(pricing) {
         return this.props.checkoutStart(pricing, this.props.router);
     }
@@ -226,6 +257,7 @@ class DealDetailContainer extends React.PureComponent {
 
                 <DealDetail
                     deal={this.props.deal}
+                    quote={this.props.quote}
                     pricing={this.props.pricing}
                     purchaseStrategy={this.props.purchaseStrategy}
                     handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
@@ -255,10 +287,9 @@ class DealDetailContainer extends React.PureComponent {
 }
 
 const mapStateToProps = (state, props) => {
-    const deal = getDeal(state);
-
     return {
-        deal,
+        deal: getDeal(state),
+        quote: getDealDetailQuote(state),
         searchQuery: getSearchQuery(state),
         selectedConditionalRoles: getConditionalRoles(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
@@ -266,7 +297,9 @@ const mapStateToProps = (state, props) => {
         discountType: getDiscountType(state),
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
-        pricing: pricingFromDealDetail(state, { ...props, deal }),
+        trade: getTradeIn(state),
+        pricing: pricingFromDealDetail(state),
+        dealPricingData: dealPricingDataForDetail(state, props),
     };
 };
 

@@ -2,7 +2,6 @@
 
 namespace App\Transformers;
 
-use App\Models\Deal;
 use League\Fractal\TransformerAbstract;
 
 class DealQuoteTransformer extends TransformerAbstract
@@ -44,12 +43,12 @@ class DealQuoteTransformer extends TransformerAbstract
         //
         // If we have more than 4... start removing
         if (count($months) > 4) {
-            foreach($months as $key => $month) {
+            foreach ($months as $key => $month) {
                 if ($month['termLength'] % 12 !== 0) {
                     unset($months[$key]);
                 }
 
-                if (count($months) <= 4 ) {
+                if (count($months) <= 4) {
                     break;
                 }
             }

@@ -39,37 +39,6 @@ const reducer = function(state = initialState, action = {}) {
                 };
             }
 
-            if (action.data.payments) {
-                const leasePaymentsMatrix = {};
-                for (let leasePayment of action.data.payments) {
-                    if (!leasePaymentsMatrix[leasePayment.term]) {
-                        leasePaymentsMatrix[leasePayment.term] = {};
-                    }
-
-                    if (
-                        !leasePaymentsMatrix[leasePayment.term][
-                            leasePayment.cash_due
-                        ]
-                    ) {
-                        leasePaymentsMatrix[leasePayment.term][
-                            leasePayment.cash_due
-                        ] = {};
-                    }
-
-                    leasePaymentsMatrix[leasePayment.term][
-                        leasePayment.cash_due
-                    ][leasePayment.annual_mileage] = {
-                        monthlyPayment: leasePayment.monthly_payment,
-                        monthlyUseTax: leasePayment.monthly_use_tax,
-                        monthlyPreTaxPayment:
-                            leasePayment.monthly_pre_tax_payment,
-                        totalAmountAtDriveOff:
-                            leasePayment.total_amount_at_drive_off,
-                    };
-                }
-                action.data.payments = leasePaymentsMatrix;
-            }
-
             return {
                 ...state,
                 quotes: {

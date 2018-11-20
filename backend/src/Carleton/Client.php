@@ -23,7 +23,7 @@ class Client
     }
 
     /**
-     * @param $cashDueOptions
+     * @param $cashDown
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -34,10 +34,12 @@ class Client
      * @param $msrp
      * @param $cashAdvance
      * @param $contractDate
+     * @param $tradeAllowance
+     * @param $tradeLien
      * @return array
      */
     public function buildRequestParams(
-        $cashDueOptions,
+        $cashDown,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -47,7 +49,9 @@ class Client
         $cvrFee,
         $msrp,
         $cashAdvance,
-        $contractDate)
+        $contractDate,
+        $tradeAllowance,
+        $tradeLien)
     {
         $data = [
             'username' => $this->username,
@@ -95,40 +99,64 @@ class Client
             ],
         ];
 
-        foreach ($cashDueOptions as $cashDueValue) {
-            foreach ($terms as $term => $termData) {
-                $quote = [
-                    'taxRate' => $taxRate,
-                    'residualPercent' => $termData['residual'],
-                    'term' => $termData['length'],
-                    'annualMileage' => $termData['mileage'],
-                    'contractDate' => $contractDate->format('Y-m-d'),
-                    'msrp' => $msrp,
-                    'cashAdvance' => $cashAdvance,
-                    'fees' => $fees,
-                ];
+        foreach ($terms as $term => $termData) {
+            $quote = [
+                'taxRate' => $taxRate,
+                'residualPercent' => $termData['residual'],
+                'term' => $termData['length'],
+                'annualMileage' => $termData['mileage'],
+                'contractDate' => $contractDate->format('Y-m-d'),
+                'msrp' => $msrp,
+                'cashAdvance' => $cashAdvance,
+                'fees' => $fees,
+            ];
 
-                if (isset($termData['rate'])) {
-                    $quote['rate'] = $termData['rate'];
-                }
+            if (isset($termData['rate'])) {
+                $quote['rate'] = $termData['rate'];
+            }
 
-                if (isset($termData['moneyFactor'])) {
-                    $quote['moneyFactor'] = $termData['moneyFactor'];
-                }
+            if (isset($termData['moneyFactor'])) {
+                $quote['moneyFactor'] = $termData['moneyFactor'];
+            }
 
-                $quote['fees']['cashDown'] = [
-                    'Amount' => $cashDueValue,
+            $quote['fees']['cashDown'] = [
+                'Amount' => $cashDown,
+                'Type' => 'Financed',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'CashDown',
+                'TaxIndex' => '1',
+                'FinanceTaxes' => 'No',
+                'CCRPortionFeeTaxed' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ];
+
+            if ($tradeAllowance) {
+                $quote['fees']['tradeAllowance'] = [
+                    'Amount' => $tradeAllowance,
                     'Type' => 'Financed',
                     'Base' => 'Fixed',
-                    'DescriptionType' => 'CashDown',
+                    'DescriptionType' => 'TradeAllowance',
                     'TaxIndex' => '1',
                     'FinanceTaxes' => 'No',
                     'CCRPortionFeeTaxed' => 'Yes',
                     'RoundToOption' => 'NearestPenny',
                 ];
-
-                $data['quotes'][] = $quote;
             }
+
+            if ($tradeLien) {
+                $quote['fees']['tradeLien'] = [
+                    'Amount' => $tradeLien,
+                    'Type' => 'Financed',
+                    'Base' => 'Fixed',
+                    'DescriptionType' => 'TradeLien',
+                    'TaxIndex' => '1',
+                    'FinanceTaxes' => 'No',
+                    'CCRPortionFeeTaxed' => 'Yes',
+                    'RoundToOption' => 'NearestPenny',
+                ];
+            }
+
+            $data['quotes'][] = $quote;
         }
         return $data;
     }
@@ -147,7 +175,7 @@ class Client
     }
 
     /**
-     * @param $cashDueOptions
+     * @param $cashDown
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -158,12 +186,15 @@ class Client
      * @param $msrp
      * @param $cashAdvance
      * @param null $contractDate
-     * @return array|mixed
+     * @param int $tradeAllowance
+     * @param int $tradeLien
+     * @return array
+     * @throws CarletonDataException
      * @throws \Throwable
      */
     public function getLeasePaymentsFor(
-        $cashDueOptions,
-        $terms,
+        $cashDown,
+        array $terms,
         $taxRate,
         $acquisitionFee,
         $docFee,
@@ -172,15 +203,16 @@ class Client
         $cvrFee,
         $msrp,
         $cashAdvance,
-        $contractDate = null
-    )
+        $contractDate = null,
+        $tradeAllowance = 0,
+        $tradeLien = 0)
     {
         if (!$contractDate) {
             $contractDate = new \DateTime();
         }
 
         $params = $this->buildRequestParams(
-            $cashDueOptions,
+            $cashDown,
             $terms,
             $taxRate,
             $acquisitionFee,
@@ -190,7 +222,9 @@ class Client
             $cvrFee,
             $msrp,
             $cashAdvance,
-            $contractDate
+            $contractDate,
+            $tradeAllowance,
+            $tradeLien
         );
         $request = $this->buildRequest($params);
         return $this->getLeasePaymentsForQuoteParameters($params, $request);

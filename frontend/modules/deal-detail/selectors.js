@@ -15,6 +15,17 @@ export const getDeal = state => {
     return state.pages.dealDetails.deal;
 };
 
+export const getDealDetailQuote = state => {
+    return state.pages.dealDetails.quote;
+};
+
+export const dealQuoteIsLoading = createSelector(
+    [getDealDetailQuote],
+    quote => {
+        return quote === null;
+    }
+);
+
 export const getDiscountType = state => {
     return state.pages.dealDetails.discount.discountType;
 };
@@ -63,48 +74,8 @@ const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
     return leaseCashDue;
 });
 
-const dealQuoteKey = neverEqualSelector(
-    [
-        getDealFromProps,
-        getUserZipcode,
-        getUserPurchaseStrategy,
-        discountType,
-        getConditionalRoles,
-    ],
-    (deal, zipcode, purchaseStrategy, discountType, conditionalRoles) => {
-        if (!deal || !zipcode || !purchaseStrategy) {
-            return null;
-        }
-        let role = 'default';
-
-        if (discountType === 'dmr' || !discountType) {
-            role = 'default';
-        } else {
-            role = discountType;
-        }
-        return generateDealQuoteKey(
-            deal,
-            zipcode,
-            purchaseStrategy,
-            role,
-            conditionalRoles
-        );
-    }
-);
-
-const dealQuote = createSelector(
-    [getQuotes, dealQuoteKey],
-    (quotes, dealQuoteKey) => {
-        return prop(dealQuoteKey, quotes) || null;
-    }
-);
-
-export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
-    return quote === null;
-});
-
-export const dealPricingForDetail = createSelector(
-    getDealFromProps,
+export const dealPricingDataForDetail = createSelector(
+    getDeal,
     getUserPurchaseStrategy,
     employeeBrand,
     supplierBrand,
@@ -116,7 +87,7 @@ export const dealPricingForDetail = createSelector(
     discountType,
     getTradeIn,
     dealQuoteIsLoading,
-    dealQuote,
+    getDealDetailQuote,
     (
         deal,
         paymentType,
@@ -159,7 +130,7 @@ export const dealPricingForDetail = createSelector(
  * @param props
  * @returns {DealPricing}
  */
-export const pricingFromDealDetail = (state, props) => {
-    const data = dealPricingForDetail(state, props);
+export const pricingFromDealDetail = state => {
+    const data = dealPricingDataForDetail(state);
     return pricingFromDataFactory(data);
 };

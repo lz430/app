@@ -3,6 +3,7 @@ const namespace = 'DEAL_DETAIL';
 export const INIT = `${namespace}_INIT`;
 export const RECEIVE_DEAL = `${namespace}_RECEIVE_DEAL`;
 export const REQUEST_DEAL_QUOTE = `${namespace}_REQUEST_DEAL_QUOTE`;
+export const RECEIVE_DEAL_QUOTE = `${namespace}_RECEIVE_DEAL_QUOTE`;
 
 export const FINANCE_UPDATE_DOWN_PAYMENT = `${namespace}_FINANCE_UPDATE_DOWN_PAYMENT`;
 export const FINANCE_UPDATE_TERM = `${namespace}_FINANCE_UPDATE_TERM`;

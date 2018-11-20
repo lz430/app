@@ -6,7 +6,6 @@ use App\Models\Deal;
 
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
-use App\Services\Quote\DealCalculatePayments;
 
 /**
  */
@@ -108,7 +107,7 @@ class DealBuildBasicPayments
         }
 
         $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-        $payment = $manager->get([$rates], $quote->rebate, [0], 'default');
+        $payment = $manager->get([$rates], $quote->rebate, 0, 'default');
         if (count($payment)) {
             $payload = new \stdClass();
             $payload->term = (int)$quote->term;

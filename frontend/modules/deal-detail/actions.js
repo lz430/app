@@ -46,6 +46,19 @@ export function dealDetailRequestDealQuote(
     };
 }
 
+export function dealDetailRefreshDealQuote() {
+    return {
+        type: ActionTypes.REQUEST_DEAL_QUOTE,
+    };
+}
+
+export function dealDetailReceiveDealQuote(data) {
+    return {
+        type: ActionTypes.RECEIVE_DEAL_QUOTE,
+        data: data,
+    };
+}
+
 export function updateDownPayment(downPayment) {
     track('deal-detail:quote-form:changed', {
         'Form Property': 'Finance Down Payment',

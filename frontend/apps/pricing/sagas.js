@@ -22,7 +22,7 @@ import { dealQuoteKey } from './helpers';
 /*******************************************************************
  * Request Deal Quote
  ********************************************************************/
-export function* requestDealQuote(action) {
+export function* requestDealQuote(action, store = true) {
     const source = cancelRequest();
 
     const deal = action.deal;
@@ -82,7 +82,11 @@ export function* requestDealQuote(action) {
         }
     }
 
-    yield put(receiveDealQuote(results));
+    if (store) {
+        yield put(receiveDealQuote(results));
+    }
+
+    return results;
 }
 
 /**

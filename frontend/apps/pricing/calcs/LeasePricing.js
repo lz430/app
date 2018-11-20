@@ -68,7 +68,7 @@ export default class LeasePricing extends Pricing {
             .filter((term, termIndex) => termIndex < maxNumberOfTermsInMatrix);
     };
 
-    paymentsForTermAndCashDue = (term, cashDue, annualMileage) => {
+    paymentsForTermAndCashDue = (term, annualMileage) => {
         const payments = this.payments();
 
         if (!payments) {
@@ -79,16 +79,16 @@ export default class LeasePricing extends Pricing {
             return null;
         }
 
-        if (!payments[term][cashDue]) {
+        if (!payments[term]) {
             return null;
         }
 
-        if (!payments[term][cashDue][annualMileage]) {
+        if (!payments[term][annualMileage]) {
             return null;
         }
 
         return fromDollarsAndCents(
-            payments[term][cashDue][annualMileage].monthlyPayment
+            payments[term][annualMileage].monthlyPayment
         );
     };
 
@@ -111,11 +111,11 @@ export default class LeasePricing extends Pricing {
             return null;
         }
 
-        if (!payments[this.term()][0][this.annualMileage()]) {
+        if (!payments[this.term()][this.annualMileage()]) {
             return null;
         }
 
-        return payments[this.term()][0][this.annualMileage()];
+        return payments[this.term()][this.annualMileage()];
     };
 
     annualMileageAvailable = () => {
@@ -128,16 +128,12 @@ export default class LeasePricing extends Pricing {
         const annualMileageOptions = [];
 
         for (let term of Object.keys(payments)) {
-            for (let cashDue of Object.keys(payments[term])) {
-                for (let annualMileage of Object.keys(
-                    payments[term][cashDue]
-                )) {
-                    if (indexOf(annualMileage, annualMileageOptions) !== -1) {
-                        continue;
-                    }
-
-                    annualMileageOptions.push(annualMileage);
+            for (let annualMileage of Object.keys(payments[term])) {
+                if (indexOf(annualMileage, annualMileageOptions) !== -1) {
+                    continue;
                 }
+
+                annualMileageOptions.push(annualMileage);
             }
         }
 
@@ -151,14 +147,12 @@ export default class LeasePricing extends Pricing {
                 (annualMiles, annualMilesIndex) =>
                     annualMilesIndex < maxNumberOfAnnualMileageOptionsInMatrix
             );
+
+        return ret;
     };
 
-    isSelectedLeasePaymentForTermAndCashDue(term, cashDue, annualMileage) {
+    isSelectedLeasePaymentForTermAndCashDue(term, annualMileage) {
         if (term !== this.term()) {
-            return false;
-        }
-
-        if (cashDue !== this.cashDue()) {
             return false;
         }
 
