@@ -39,7 +39,7 @@
                     <TaxMethod>MonthlyUse</TaxMethod>
                     <ApplyCashDownToUpfront>No</ApplyCashDownToUpfront>
                     <ApplyRebateToUpfront>No</ApplyRebateToUpfront>
-                    <ApplyNetTradeToUpfront>Yes</ApplyNetTradeToUpfront>
+                    <ApplyNetTradeToUpfront>No</ApplyNetTradeToUpfront>
                     <TaxIndex>1</TaxIndex>
                     <RoundDepreciation>Near</RoundDepreciation>
                     <RoundRent>Low</RoundRent>
