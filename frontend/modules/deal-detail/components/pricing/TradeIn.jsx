@@ -27,9 +27,9 @@ export default class TradeIn extends React.PureComponent {
         return (
             <Group>
                 <Header>Trade In</Header>
-                <div className="cart__trade-start text-center">
+                {/*<div className="cart__trade-start text-center">
                     <Button outline>Add a Trade-In</Button>
-                </div>
+                </div>*/}
                 <Row>
                     <Col>
                         <FormGroup>

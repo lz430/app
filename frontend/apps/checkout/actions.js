@@ -9,7 +9,8 @@ export function setCheckoutData(
     financeDownPayment,
     leaseAnnualMileage,
     employeeBrand,
-    supplierBrand
+    supplierBrand,
+    tradeIn
 ) {
     return {
         type: ActionTypes.SET_CHECKOUT_DATA,
@@ -22,6 +23,7 @@ export function setCheckoutData(
         leaseAnnualMileage,
         employeeBrand,
         supplierBrand,
+        tradeIn,
     };
 }
 

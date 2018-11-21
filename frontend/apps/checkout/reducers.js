@@ -9,6 +9,7 @@ const initialState = {
     purchase: {},
     deal: {},
     quote: {},
+    tradeIn: {},
     strategy: '', // cash | finance | lease
     role: null, // default | supplier | employee
     term: 0, // number of months for fiance or lease

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { dealType } from '../../../core/types';
 import DealColors from '../../../components/Deals/DealColors';
 import StandardFeaturesModal from './StandardFeaturesModal';

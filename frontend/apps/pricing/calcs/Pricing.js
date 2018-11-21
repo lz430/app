@@ -136,6 +136,7 @@ export default class Pricing {
     toCheckoutData = () => ({
         deal: this.data.deal,
         quote: this.quote(),
+        tradeIn: this.data.tradeIn,
         paymentStrategy: this.data.paymentType,
         discountType: this.discountType(),
         effectiveTerm: this.callMethodOrNull('term'),

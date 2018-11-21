@@ -1,15 +1,7 @@
 import { createSelector } from 'reselect';
-import { createSelectorCreator, defaultMemoize } from 'reselect';
-import {
-    getUserPurchaseStrategy,
-    getUserZipcode,
-} from '../../apps/user/selectors';
-import { getDealFromProps } from '../../apps/common/selectors';
-import { dealQuoteKey as generateDealQuoteKey } from '../../apps/pricing/helpers';
-import { prop } from 'ramda';
-import { getQuotes } from '../../apps/pricing/selectors';
+import { getUserPurchaseStrategy } from '../../apps/user/selectors';
+
 import { pricingFromDataFactory } from '../../apps/pricing/factory';
-const neverEqualSelector = createSelectorCreator(defaultMemoize, () => false);
 
 export const getDeal = state => {
     return state.pages.dealDetails.deal;

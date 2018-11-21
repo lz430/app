@@ -176,7 +176,8 @@ class DealDetailContainer extends React.PureComponent {
             checkoutData.financeDownPayment,
             checkoutData.leaseAnnualMileage,
             checkoutData.employeeBrand,
-            checkoutData.supplierBrand
+            checkoutData.supplierBrand,
+            checkoutData.tradeIn
         );
         this.props.checkoutStart(pricing);
     }
