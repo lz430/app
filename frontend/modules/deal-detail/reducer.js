@@ -136,6 +136,12 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 quote: action.data,
             };
+
+        case ActionTypes.RESET_DEAL_QUOTE:
+            return {
+                ...state,
+                quote: null,
+            };
         default:
             return state;
     }

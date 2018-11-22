@@ -46,6 +46,12 @@ export function dealDetailRequestDealQuote(
     };
 }
 
+export function dealDetailResetDealQuote() {
+    return {
+        type: ActionTypes.RESET_DEAL_QUOTE,
+    };
+}
+
 export function dealDetailRefreshDealQuote() {
     return {
         type: ActionTypes.REQUEST_DEAL_QUOTE,

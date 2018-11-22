@@ -73,12 +73,21 @@ class ContactForm extends React.PureComponent {
             );
         }
 
+        let label = 'Confirm and Submit';
+        if (this.props.checkout.strategy !== 'cash') {
+            label = (
+                <span>
+                    <strong>Next:</strong> Apply For Financing
+                </span>
+            );
+        }
+
         return (
             <button
                 disabled={!this.state.recaptchaToken}
                 className="btn btn-success btn-block"
             >
-                Confirm and Submit
+                {label}
             </button>
         );
     }
@@ -318,4 +327,5 @@ class ContactForm extends React.PureComponent {
         );
     }
 }
+
 export default ContactForm;

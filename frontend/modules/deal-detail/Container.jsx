@@ -24,6 +24,7 @@ import {
     receiveDeal,
     dealDetailRequestDealQuote,
     dealDetailRefreshDealQuote,
+    dealDetailResetDealQuote,
     selectDmrDiscount,
     selectEmployeeDiscount,
     selectSupplierDiscount,
@@ -70,6 +71,7 @@ class DealDetailContainer extends React.PureComponent {
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
         dealDetailRequestDealQuote: PropTypes.func.isRequired,
+        dealDetailResetDealQuote: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
@@ -110,6 +112,7 @@ class DealDetailContainer extends React.PureComponent {
     }
 
     handlePaymentTypeChange = strategy => {
+        this.props.dealDetailResetDealQuote();
         this.props.setPurchaseStrategy(strategy);
         this.props.dealDetailRefreshDealQuote();
 
@@ -308,6 +311,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
     setPurchaseStrategy,
     receiveDeal,
     dealDetailRequestDealQuote,
+    dealDetailResetDealQuote,
     setCheckoutData,
     checkoutStart,
     selectDmrDiscount,

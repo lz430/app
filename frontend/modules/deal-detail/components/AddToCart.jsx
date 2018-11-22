@@ -63,7 +63,7 @@ export default class AddToCart extends React.PureComponent {
                 onClick={() => this.handleSubmit()}
                 disabled={!this.props.pricing.canPurchase()}
             >
-                Select Deal
+                <strong>Next:</strong> Start Purchase
             </Button>
         );
     }
