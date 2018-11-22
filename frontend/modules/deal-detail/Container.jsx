@@ -124,6 +124,7 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleDiscountChange = (discountType, make) => {
+        this.props.dealDetailResetDealQuote();
         switch (discountType) {
             case 'dmr':
                 this.props.selectDmrDiscount();
@@ -143,6 +144,7 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleRebatesChange = role => {
+        this.props.dealDetailResetDealQuote();
         let selectedRoles = this.props.selectedConditionalRoles;
         let index = selectedRoles.indexOf(role);
         if (index !== -1) {
