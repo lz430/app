@@ -48,7 +48,6 @@ class CheckoutConfirmContainer extends React.PureComponent {
     };
 
     state = {
-        recaptchaToken: null,
         renderPage: false,
         isPageValid: true,
     };
@@ -58,8 +57,8 @@ class CheckoutConfirmContainer extends React.PureComponent {
         this.props.init();
     }
 
-    onSubmit(fields) {
-        return this.props.checkoutContact(fields, this.props.router);
+    onSubmit(fields, actions) {
+        return this.props.checkoutContact(fields, actions);
     }
 
     render() {

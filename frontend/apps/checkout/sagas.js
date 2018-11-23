@@ -85,7 +85,9 @@ export function* checkoutStart(action) {
  * Checkout Contact
  *******************************************************************/
 export function* checkoutContact(action) {
-    const fields = action.fields;
+    console.log(action);
+    const values = action.values;
+    const actions = action.actions;
     const checkout = yield select(getCheckout);
 
     let results = null;
@@ -94,21 +96,26 @@ export function* checkoutContact(action) {
             ApiClient.checkout.contact,
             checkout.purchase.id,
             checkout.orderToken,
-            fields.email,
-            fields.drivers_license_state,
-            fields.drivers_license_number,
-            fields.first_name,
-            fields.last_name,
-            fields.phone_number,
-            fields.g_recaptcha_response
+            values.email,
+            values.drivers_license_state,
+            values.drivers_license_number,
+            values.first_name,
+            values.last_name,
+            values.phone_number,
+            values.g_recaptcha_response
         );
-    } catch (e) {
-        yield put(setCheckoutContactFormErrors(e.response.data.errors));
+    } catch (error) {
+        console.log('ERRORS');
+        console.log(error);
+
+        actions.setErrors(ApiClient.translateApiErrors(error.response.data));
     }
 
     track('checkout-confirm:contact-form:submitted', {
         'Form Submission Success': results ? 'success' : 'fail',
     });
+
+    actions.setSubmitting(false);
 
     if (results) {
         yield put(receivePurchase(results.data));

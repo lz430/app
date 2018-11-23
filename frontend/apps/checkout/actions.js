@@ -54,11 +54,11 @@ export function checkoutStart(pricing, router) {
     };
 }
 
-export function checkoutContact(fields, router) {
+export function checkoutContact(values, actions) {
     return {
         type: ActionTypes.CHECKOUT_CONTACT,
-        fields,
-        router: router,
+        values,
+        actions: actions,
     };
 }
 

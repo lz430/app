@@ -19,6 +19,17 @@ const CustomBootstrapInputComponent = ({
 }) => {
     const showError = !!(touched[field.name] || submitCount);
 
+    if (field.name === 'drivers_license_number') {
+        console.log(errors[field.name]);
+        /*
+        console.log("START");
+        console.log(touched);
+        console.log(errors);
+        console.log(field);
+        console.log("STOP");
+        */
+    }
+
     return (
         <div>
             <Input
