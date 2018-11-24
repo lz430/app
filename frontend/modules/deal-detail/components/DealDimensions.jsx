@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import ApiClient from '../../../store/api';
 import Loading from '../../../components/Loading';
 
-export default class Header extends React.PureComponent {
+export default class DealDimensions extends React.PureComponent {
     static propTypes = {
         id: PropTypes.number.isRequired,
     };
 
     state = {
-        data: [],
+        data: false,
     };
 
     componentDidMount() {

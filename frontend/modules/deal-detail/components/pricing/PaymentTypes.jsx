@@ -35,8 +35,6 @@ class PaymentTypes extends React.PureComponent {
     render() {
         return (
             <div>
-                <Header>Purchase Method</Header>
-
                 <Row noGutters>
                     {this.strategies.map(role => {
                         const checked =

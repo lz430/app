@@ -4,17 +4,17 @@ import Loading from '../../../components/Loading';
 import ApiClient from '../../../store/api';
 import PropTypes from 'prop-types';
 
-export default class Header extends React.PureComponent {
+export default class DealWarranties extends React.PureComponent {
     static propTypes = {
         id: PropTypes.number.isRequired,
     };
 
     state = {
-        data: [],
+        data: false,
     };
 
     componentDidMount() {
-        ApiClient.deal.dealGetDimensions(this.props.id).then(response => {
+        ApiClient.deal.dealGetWarranties(this.props.id).then(response => {
             this.setState({
                 data: response.data,
             });
