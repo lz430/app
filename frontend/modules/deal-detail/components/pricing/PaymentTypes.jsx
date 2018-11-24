@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import classNames from 'classnames';
-import Header from '../../../../apps/pricing/components/Header';
 
 class PaymentTypes extends React.PureComponent {
     static propTypes = {
