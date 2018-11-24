@@ -16,14 +16,14 @@ class DealBuildBasicPayments
     private $carletonClient;
 
     private const FAKE_LEASE = [
-        'term' => 0,
-        'rate' => 0,
+        'term' => null,
+        'rate' => null,
         'rate_type' => 'factor',
-        'rebate' => 0,
-        'residual' => 0,
-        'miles' => 0,
-        'down' => 0,
-        'payment' => 5000,
+        'rebate' => null,
+        'residual' => null,
+        'miles' => null,
+        'down' => null,
+        'payment' => null,
     ];
 
     public function __construct(Client $carletonClient)
@@ -159,7 +159,9 @@ class DealBuildBasicPayments
                     $payments->detroit->finance = $this->buildFinancePayment($quote, $deal);
                     break;
                 case 'lease':
-                    $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
+                    if(!in_array(strtolower($deal->version->model->name), \DeliverMyRide\RIS\Manager\VersionToVehicle::VEHICLE_MODEL_BLACKLIST)) {
+                        $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
+                    }
                     break;
             }
         }

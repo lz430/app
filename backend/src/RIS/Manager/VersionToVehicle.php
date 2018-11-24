@@ -60,6 +60,26 @@ class VersionToVehicle
             // Jeep
             'All-New Wrangler Unlimited' => 'Wrangler Unlimited',
             'All-New Wrangler' => 'Wrangler',
+
+            // Toyota
+            'Yaris' => 'Yaris Sedan',
+
+            // Hyundai
+            'Ioniq' => 'Ioniq Hybrid',
+
+            // Honda
+            'Civic Hatchback' => 'Civic',
+            'Clarity Plug-In Hybrid' => 'Clarity',
+
+            // Lexus
+            'LS 500' => 'LS',
+
+            // Infiniti
+            'Q60 Coupe' => 'Q60',
+
+            // BMW
+            'M3 Sedan' => 'M3',
+            'M2 Coupe' => 'M2',
         ],
 
         'BY_MODEL_AND_TRIM' => [
@@ -298,6 +318,31 @@ class VersionToVehicle
             'T5 AWD' => 'T5',
             'T6 AWD' => 'T6',
         ],
+    ];
+
+    public const VEHICLE_MODEL_BLACKLIST = [
+        'f-350 super duty',
+        'f-450 super duty chassis cab',
+        'promaster cargo van',
+        'promaster city',
+        'nv cargo',
+        'transit van',
+        'S5 Sportback',
+        '911',
+        'v60',
+        'a3 sedan',
+        'allroad',
+        'silverado 3500hd',
+        'gle-class coupe',
+        'hr-v',
+        'insight',
+        'accent',
+        'cayenne',
+        'land cruiser',
+        'pilot',
+        'clarity',
+        'sienna',
+
     ];
 
     private const DRIVEN_WHEELS_MAP = [
@@ -956,7 +1001,9 @@ class VersionToVehicle
                     $data = $this->buildFinancingRates($data, $vehicle);
                     break;
                 case 'lease':
-                    $data = $this->buildLeaseRates($data, $vehicle);
+                    if(!in_array(strtolower($this->version->model->name), self::VEHICLE_MODEL_BLACKLIST)) {
+                        $data = $this->buildLeaseRates($data, $vehicle);
+                    }
                     break;
             }
             $data->data = $vehicle;
