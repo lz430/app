@@ -46,17 +46,6 @@ const reducer = function(state = initialState, action = {}) {
                 ...action,
             };
 
-        case ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS:
-            return {
-                ...state,
-                contactFormErrors: action.errors,
-            };
-
-        case ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS:
-            return {
-                ...state,
-                contactFormErrors: {},
-            };
         case ActionTypes.RECEIVE_PURCHASE:
             if (action.data.orderToken) {
                 return {

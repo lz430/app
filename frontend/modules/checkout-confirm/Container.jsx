@@ -9,10 +9,7 @@ import { Container, Row, Col } from 'reactstrap';
 import strings from '../../util/strings';
 import DealImage from '../../components/Deals/DealImage';
 import { pricingFromCheckoutFactory } from '../../apps/checkout/selectors';
-import {
-    checkoutContact,
-    clearCheckoutContactFormErrors,
-} from '../../apps/checkout/actions';
+import { checkoutContact } from '../../apps/checkout/actions';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Header from '../../apps/pricing/components/Header';
 import Group from '../../apps/pricing/components/Group';
@@ -177,7 +174,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = mapAndBindActionCreators({
     checkoutContact,
     init,
-    clearCheckoutContactFormErrors,
 });
 
 export default compose(

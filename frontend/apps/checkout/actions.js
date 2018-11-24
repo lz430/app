@@ -68,16 +68,3 @@ export function checkoutFinancingComplete(fields) {
         fields,
     };
 }
-
-export function clearCheckoutContactFormErrors() {
-    return {
-        type: ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS,
-    };
-}
-
-export function setCheckoutContactFormErrors(errors) {
-    return {
-        type: ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS,
-        errors,
-    };
-}

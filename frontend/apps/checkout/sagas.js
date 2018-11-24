@@ -10,7 +10,6 @@ import {
 import {
     checkoutIsLoading,
     checkoutFinishedLoading,
-    setCheckoutContactFormErrors,
     receivePurchase,
 } from './actions';
 import { checkout as getCheckout } from './selectors';
