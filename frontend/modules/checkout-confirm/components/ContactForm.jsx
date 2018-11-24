@@ -4,8 +4,6 @@ import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikField
 import FormikFieldWithreCaptcha from '../../../components/Forms/FormikFieldWithreCaptcha';
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
-import ApiClient from '../../../store/api';
-import { track } from '../../../core/services';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { Row, Col, FormGroup, Label, Button } from 'reactstrap';
@@ -33,19 +31,12 @@ const initialFormValues = {
 
 class ContactForm extends React.Component {
     static propTypes = {
+        onCheckoutContact: PropTypes.func.isRequired,
         checkout: PropTypes.object.isRequired,
-        clearCheckoutContactFormErrors: PropTypes.func.isRequired,
-        checkoutContact: PropTypes.func.isRequired,
-    };
-
-    state = {
-        success: false,
-        values: null,
     };
 
     handleOnSubmit(values, actions) {
-        console.log(actions);
-        this.props.checkoutContact(values, actions);
+        this.props.onCheckoutContact(values, actions);
     }
 
     render() {

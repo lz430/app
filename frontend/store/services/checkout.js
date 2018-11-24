@@ -54,7 +54,7 @@ export default class CheckoutService {
             first_name,
             last_name,
             phone_number,
-            'g-recaptcha-response': g_recaptcha_response,
+            g_recaptcha_response,
         };
 
         return httpclient.post(`/api/checkout/${purchaseId}/contact`, payload);

@@ -85,7 +85,6 @@ export function* checkoutStart(action) {
  * Checkout Contact
  *******************************************************************/
 export function* checkoutContact(action) {
-    console.log(action);
     const values = action.values;
     const actions = action.actions;
     const checkout = yield select(getCheckout);
@@ -104,18 +103,16 @@ export function* checkoutContact(action) {
             values.phone_number,
             values.g_recaptcha_response
         );
+        actions.setStatus({ success: true });
     } catch (error) {
-        console.log('ERRORS');
-        console.log(error);
-
+        actions.setStatus({ success: false });
+        actions.setSubmitting(false);
         actions.setErrors(ApiClient.translateApiErrors(error.response.data));
     }
 
     track('checkout-confirm:contact-form:submitted', {
         'Form Submission Success': results ? 'success' : 'fail',
     });
-
-    actions.setSubmitting(false);
 
     if (results) {
         yield put(receivePurchase(results.data));

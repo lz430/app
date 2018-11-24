@@ -21,7 +21,6 @@ class API {
         let errors = {};
         if (response.errors) {
             Object.entries(response.errors).forEach(([key, value]) => {
-                console.log(value);
                 if (Array.isArray(value)) {
                     errors[key] = value.pop();
                 } else {

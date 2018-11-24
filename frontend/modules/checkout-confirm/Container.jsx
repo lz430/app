@@ -145,11 +145,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                 </Header>
                                 <ContactForm
                                     checkout={this.props.checkout}
-                                    clearCheckoutContactFormErrors={
-                                        this.props
-                                            .clearCheckoutContactFormErrors
-                                    }
-                                    checkoutContact={this.onSubmit.bind(this)}
+                                    onCheckoutContact={this.onSubmit.bind(this)}
                                 />
                             </Group>
                         </Col>
