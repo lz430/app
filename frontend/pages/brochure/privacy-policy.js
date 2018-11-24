@@ -7,15 +7,20 @@ import Link from 'next/link';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
+import { track } from '../../core/services';
 
 class Page extends Component {
+    componentDidMount() {
+        track('page:brochure-privacy:view');
+    }
+
     render() {
         return (
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride | Privacy Policy</title>
                 </Head>
-                <Container className="policy">
+                <Container className="policy pt-5 pb-5 text-sm">
                     <h1>Privacy Policy</h1>
                     <p className="date">Last Modified January 5, 2017</p>
                     <p>

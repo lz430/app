@@ -1,7 +1,7 @@
 .home {
     &__hero {
         &__banner {
-            background: url('/static/brochure/HomepageHero.jpg') bottom;
+            background: url('/static/brochure/Home_Bg.jpg') center;
             background-size: cover;
             height: 420px;
             display: flex;
@@ -46,6 +46,7 @@
                 padding: 0.5rem 0.5rem 0.5rem 1.7rem;
                 width: 100%;
             }
+
             svg {
                 left: 5px;
                 right: auto;
@@ -53,6 +54,7 @@
                 path {
                     fill: $color-black !important;
                 }
+
                 &.loading-icon {
                     right: 5px !important;
                     left: auto !important;
@@ -98,64 +100,92 @@
 
 .callout {
     &__categories {
-        margin-top: 60px;
-        margin-bottom: 40px;
+        background: #f5f6f7;
+        padding: 80px 0 50px;
 
-        .row {
-            align-content: center;
-            justify-content: center;
+        .__category {
+        }
 
-            @include media-breakpoint-down(sm) {
-                flex-wrap: wrap;
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            width: 100%;
+
+            button {
+                background: $color-text-white;
+                border: 1px solid $color-text-white;
+                box-shadow: $shadow-subtle;
+                border-radius: 50px;
+                color: $color-text-blue;
+                font-size: 1.5rem;
+                padding: 10px 20px;
+                text-align: left;
+                top: 50%;
+
+                &__prev {
+                }
+
+                &__next {
+                }
             }
+        }
 
-            .__category {
-                display: flex;
-                flex-direction: column;
+        .alice-carousel {
+            &__stage-item {
+                background: #ffffff;
+                border-radius: $border-radius;
+                box-shadow: $box-shadow-sm;
+                margin: 0 5px;
+                padding: 0.25rem;
                 text-align: center;
-                h3 {
+
+                a:hover {
+                    text-decoration: none;
+                }
+
+                h5 {
                     font-size: 1rem;
                     font-weight: bold;
                     text-align: center;
-                }
-                .icon {
-                    flex: 1;
-                    box-shadow: $box-shadow-sm;
-                    padding: 1rem;
-                    text-align: center;
-                    margin: 0 0 0.5rem 0;
+                    margin-bottom: 0.8rem;
                 }
                 img {
                     max-width: 90%;
                     margin: 0 auto;
                 }
-                a {
-                    color: $color-text-blue;
-                    text-align: center;
-                }
-            }
-            &:last-of-type {
-                a {
-                    background: $color-text-blue;
-                    border: $border-none;
+                .cta {
+                    margin-top: 0.8rem;
                 }
             }
         }
     }
 
     &__brands {
-        background: #ececec;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        padding: 20px 0;
-
-        .row {
+        .row,
+        .row + div {
             justify-content: center;
+
+            .brand {
+                flex: 2 0 15%;
+            }
 
             a {
                 display: block;
                 padding: 0;
                 margin: 0 10px;
+
+                &.btn-primary {
+                    color: $color-text-white;
+                    padding: 10px;
+                    margin-bottom: 20px;
+
+                    span {
+                        display: inline-block;
+                        padding-right: 10px;
+                    }
+                }
+
                 img {
                 }
             }
@@ -172,9 +202,6 @@
     }
 
     &__info {
-        margin-top: 40px;
-        margin-bottom: 40px;
-
         h3 {
             font-size: 1.5rem;
             font-weight: bold;
@@ -182,25 +209,45 @@
     }
 
     &__testimonials {
-        background: #ececec;
-        margin-top: 40px;
-        margin-bottom: 40px;
-        padding: 40px 0;
-
-        h4 {
-            color: #213a59;
+        .individual {
+            img {
+                display: block;
+                margin-left: 25px;
+                max-width: 50%;
+            }
+        }
+        h2 {
+            color: $color-dark-blue;
             margin-bottom: 20px;
             text-align: center;
         }
 
         .author {
-            color: #213a59;
+            color: $color-dark-blue;
             font-size: 0.9rem;
             font-weight: bold;
         }
     }
 
     &__media {
+        background: $color-background-primary;
         padding: 40px 0;
+
+        .row {
+            .col-md-2 {
+                img {
+                    max-width: 100%;
+                }
+
+                @include media-breakpoint-down(md) {
+                    margin-bottom: 20px;
+                    text-align: center;
+
+                    img {
+                        max-height: 50px;
+                    }
+                }
+            }
+        }
     }
-} //end home page and callouts
+}

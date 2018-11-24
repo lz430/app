@@ -78,6 +78,8 @@
 @import 'components/button-group';
 @import 'components/breadcrumb';
 
+@import 'components/brochure/page-hero';
+
 // Pages
 @import 'pages/deal-list/deal-list';
 @import 'pages/deal-list/sortbar';
@@ -91,13 +93,18 @@
 
 @import 'pages/checkout-confirm-page';
 
-// Vendor
-@import '~react-image-gallery/styles/scss/image-gallery.scss';
-
 // Brochure site
-@import 'pages/brochure/brochure';
 @import 'pages/brochure/home';
+@import 'pages/brochure/about';
+@import 'pages/brochure/faqs';
+@import 'pages/brochure/contact';
+@import 'components/brochure/carousel';
+
+@import 'pages/tp-poc';
 
 // Helpers
 @import 'helpers';
 @import 'utilities';
+
+// Vendor
+@import '~react-image-gallery/styles/scss/image-gallery.scss';

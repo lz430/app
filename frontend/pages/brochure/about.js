@@ -7,8 +7,13 @@ import Head from 'next/head';
 
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
+import { track } from '../../core/services';
 
 class Page extends React.Component {
+    componentDidMount() {
+        track('page:brochure-about:view');
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -26,7 +31,7 @@ class Page extends React.Component {
                         }}
                     />
 
-                    <div className="about__twss">
+                    <div className="about__twss mt-3 mb-3">
                         <Container>
                             <h2 className="text-center">
                                 There must be a better way!
@@ -46,9 +51,9 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__story">
+                    <div className="about__story mt-5 mb-5">
                         <Container>
-                            <Row>
+                            <Row noGutters>
                                 <Col sm="6">
                                     <h3 className="">Our Story</h3>
                                     <p>
@@ -83,18 +88,14 @@ class Page extends React.Component {
                                         buying process.
                                     </p>
                                 </Col>
-                                <Col sm="6">
-                                    <img
-                                        className="img-fluid"
-                                        src="https://via.placeholder.com/500x400"
-                                        alt="placeholder"
-                                    />
+                                <Col sm="6" className="p-0">
+                                    <div className="about__story-image" />
                                 </Col>
                             </Row>
                         </Container>
                     </div>
 
-                    <div className="about__values">
+                    <div className="about__values  mt-5 mb-5">
                         <Container>
                             <h3 className="text-center">Our Values</h3>
                             <Row className="text-center">
@@ -165,40 +166,37 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__cost">
-                        <Container fluid={true}>
-                            <Container>
-                                <h3 className="text-center">
-                                    What does Deliver My Ride Cost?
-                                </h3>
-                                <p className="text-center">
-                                    Nothing. Zip. Zilch. Zero. In fact, we save
-                                    you money. As an alternate sales channel, we
-                                    replace the salesperson and reduce the cost
-                                    to the dealer, passing the savings to you.
-                                    Since we don’t work for any one dealer and
-                                    aren’t working on a commission percentage,
-                                    we stay unbiased throughout the entire
-                                    buying process. With Deliver My Ride, nobody
-                                    sells you a car, you buy the car that’s
-                                    right for you.
-                                </p>
-                                <div className="text-center">
-                                    <Link
-                                        href="/brochure/faq"
-                                        as="/brochure/faq"
-                                        passHref
-                                    >
-                                        <a className="btn btn-primary">FAQs</a>
-                                    </Link>
-                                </div>
-                            </Container>
+                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4 bg-pattern text-white">
+                        <Container>
+                            <h3 className="text-center">
+                                What does Deliver My Ride Cost?
+                            </h3>
+                            <p className="text-center">
+                                Nothing. Zip. Zilch. Zero. In fact, we save you
+                                money. As an alternate sales channel, we replace
+                                the salesperson and reduce the cost to the
+                                dealer, passing the savings to you. Since we
+                                don’t work for any one dealer and aren’t working
+                                on a commission percentage, we stay unbiased
+                                throughout the entire buying process. With
+                                Deliver My Ride, nobody sells you a car, you buy
+                                the car that’s right for you.
+                            </p>
+                            <div className="text-center">
+                                <Link
+                                    href="/brochure/faq"
+                                    as="/brochure/faq"
+                                    passHref
+                                >
+                                    <a className="btn btn-success">FAQs</a>
+                                </Link>
+                            </div>
                         </Container>
                     </div>
 
-                    <div className="about__office">
+                    <div className="about__office  mt-5 mb-5">
                         <Container>
-                            <Row>
+                            <Row className="align-items-center">
                                 <Col md="6">
                                     <img
                                         className="img-fluid"
@@ -242,7 +240,7 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__team text-center">
+                    <div className="about__team text-center  mt-5 mb-5">
                         <Container>
                             <Row>
                                 <div className="mb-3">

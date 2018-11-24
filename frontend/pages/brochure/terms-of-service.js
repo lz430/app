@@ -5,15 +5,20 @@ import { Container } from 'reactstrap';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
+import { track } from '../../core/services';
 
 class Page extends Component {
+    componentDidMount() {
+        track('page:brochure-terms:view');
+    }
+
     render() {
         return (
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride | Terms Of Service</title>
                 </Head>
-                <Container className="policy">
+                <Container className="policy pt-5 pb-5 text-sm">
                     <h1>Website Terms of Use and Agreement</h1>
                     <p className="date">Last Modified January 11, 2017</p>
                     <p>

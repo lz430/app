@@ -39,8 +39,14 @@ class ListGroupCollapse extends React.Component {
                         />
                     </div>
                     <Collapse isOpen={this.state.collapse}>
-                        <div className="content">{item.content}</div>
-                        <em>{item.category}</em>
+                        <div className="content">
+                            <span
+                                dangerouslySetInnerHTML={{
+                                    __html: this.props.item.content,
+                                }}
+                            />
+                        </div>
+                        {/*<em>{item.category}</em>*/}
                     </Collapse>
                 </div>
             </Col>

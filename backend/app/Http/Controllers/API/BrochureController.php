@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\API;
+
 use DeliverMyRide\HubSpot\HubspotClient;
 use Illuminate\Http\Request;
+use SevenShores\Hubspot\Exceptions\BadRequest;
 
 class BrochureController extends BaseAPIController
 {
@@ -31,19 +33,45 @@ class BrochureController extends BaseAPIController
             ]
         );
 
-        $portalId = '3388780';
-        $formId = '7234fff9-27e5-41af-9548-3011d45ecbec';
         if (hubspot_enabled()) {
-            $client->forms()->submit($portalId, $formId,
-                [
-                    'firstname' => $request->firstname,
-                    'lastname' => $request->lastname,
-                    'email' => $request->email,
-                    'city' => $request->city,
-                    'state' => $request->state,
-                    'message' => $request->message,
-                ]
-            );
+
+            $contactData = [
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+            ];
+
+
+            $contact = $client->contacts()->createOrUpdate($request->email, $client->mungePayloadData($contactData));
+            $contact = $contact->toArray();
+
+            $ticketData = [
+                'subject' => 'Brochure Site Contact Form',
+                'content' => $request->message,
+                'source_type' => 'FORM',
+                'created_by' => $contact['vid'],
+                'hs_pipeline' => '0',
+                'hs_pipeline_stage' => '1',
+            ];
+
+            try {
+                $ticket = $client->tickets()->create($client->mungePayloadData($ticketData, 'name'));
+                $ticket = $ticket->toArray();
+            } catch (BadRequest $exception) {
+                return abort(400);
+            }
+
+            try {
+                $client->crmAssociations()->create([
+                    "fromObjectId" => $ticket['objectId'],
+                    "toObjectId" => $contact['vid'],
+                    "category" => "HUBSPOT_DEFINED",
+                    "definitionId" => 16
+                ]);
+            } catch (BadRequest $exception) {
+                return abort(400);
+            }
         }
 
         return response()->json(['status' => 'ok']);

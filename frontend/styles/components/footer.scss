@@ -1,3 +1,6 @@
+/**
+ * Application Footer
+ */
 .page-footer {
     padding: 0.5rem 15px;
     @include media-breakpoint-up(sm) {
@@ -50,4 +53,161 @@
 
 #chat-widget-container {
     bottom: 28px !important;
+}
+
+/**
+ * Brochure Footer
+ */
+.brochure-footer {
+    background: #213a59;
+    color: $color-text-white;
+    padding-top: 30px;
+
+    @include media-breakpoint-down(md) {
+        .container {
+            max-width: none;
+            width: 100%;
+        }
+    }
+
+    .row {
+        justify-content: space-between;
+
+        &:first-of-type {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        &:last-of-type {
+            padding-bottom: 25px;
+        }
+        @include media-breakpoint-down(md) {
+            padding: 0;
+        }
+        @include media-breakpoint-down(sm) {
+            margin: 0;
+            max-width: 100%;
+
+            &:last-of-type {
+                ul {
+                    justify-content: flex-start;
+
+                    li {
+                        margin-top: 15px;
+                        text-align: center;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    img {
+        max-width: 25%;
+        margin-bottom: 10px;
+
+        @include media-breakpoint-down(md) {
+            max-width: 100%;
+        }
+    }
+    ul {
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 0.8rem;
+
+        @include media-breakpoint-down(sm) {
+            flex-wrap: wrap;
+        }
+
+        &.footer-nav {
+            width: 50%;
+            @include media-breakpoint-up(md) {
+                margin-top: 20px;
+            }
+            @include media-breakpoint-down(sm) {
+                width: 100%;
+                margin-top: 25px;
+
+                li {
+                    padding: 5px 0;
+                    width: 100%;
+                }
+            }
+        }
+    }
+    a {
+        color: $color-text-white;
+        font-size: 0.8rem;
+        padding: 0;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        .col-8 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            padding: 0;
+        }
+    }
+    .contact {
+        display: flex;
+        flex-direction: column;
+
+        ul {
+            display: flex;
+            flex-direction: column;
+        }
+        @include media-breakpoint-down(sm) {
+            margin-top: 62px;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        @include media-breakpoint-down(xs) {
+            margin-top: 25px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 25px;
+
+            @include media-breakpoint-down(sm) {
+                margin-bottom: 5px;
+            }
+        }
+        a {
+            display: block;
+            margin-bottom: 10px;
+        }
+    }
+
+    .social {
+        display: flex;
+        justify-content: space-between;
+
+        @include media-breakpoint-up(md) {
+            max-width: 9%;
+        }
+
+        ul {
+            @include media-breakpoint-up(sm) {
+                width: 100%;
+            }
+            @include media-breakpoint-down(sm) {
+                flex-wrap: nowrap;
+                width: 100%;
+                svg {
+                    height: 1.3rem;
+                    width: 1.3rem;
+                }
+            }
+            a {
+                font-size: 1rem;
+            }
+        }
+    }
 }

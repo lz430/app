@@ -12,6 +12,27 @@ class API {
         this.checkout = new CheckoutService();
         this.brochure = new BrochureService();
     }
+
+    /**
+     * Translate
+     * @param response
+     */
+    translateApiErrors(response) {
+        let errors = {};
+        if (response.errors) {
+            Object.entries(response.errors).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    errors[key] = value.pop();
+                } else {
+                    errors[key] = value;
+                }
+            });
+        } else {
+            errors['form'] = 'Error submitting form';
+        }
+
+        return errors;
+    }
 }
 
 export default new API();

@@ -48,6 +48,7 @@ export default {
         gmcompetitive: 'gmcomp',
         gmlease: 'gmlease',
         cadillaclease: 'cadlease',
+        cadillacloyalty: 'cadloyal',
         gmloyalty: 'gmloyalty',
     },
 };

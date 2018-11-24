@@ -58,6 +58,7 @@ class Map
         'gmcomp' => 'gmcompetitive',
         'gmlease' => 'gmlease',
         'cadlease' => 'cadillaclease',
+        'cadloyal' => 'cadillacloyalty',
     ];
 
     public const ROLE_TO_PROGRAM_NAME = [
@@ -95,6 +96,9 @@ class Map
         ],
         'cadillaclease' => [
             'cadillac lease loyalty towards'
+        ],
+        'cadillacloyalty' => [
+            'cadillac loyalty towards'
         ]
     ];
 

@@ -7,6 +7,7 @@ import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
+import { track } from '../../core/services';
 
 class Page extends Component {
     state = {
@@ -14,6 +15,10 @@ class Page extends Component {
         active: false,
         category: 'General Questions',
     };
+
+    componentDidMount() {
+        track('page:brochure-faq:view');
+    }
 
     toggle() {
         this.setState({
@@ -69,24 +74,22 @@ class Page extends Component {
                     <Row>
                         <Col sm="3" className="faq__nav">
                             {this.renderNav()}
-                        </Col>
-                        <Col sm="9">
-                            <div className="faq__accordion">
-                                {this.getFaqContent().map(item => (
-                                    <FaqGroup key={item.title} item={item} />
-                                ))}
-                            </div>
-                        </Col>
-                        <Col sm="3">
                             <div className="faq__contact">
                                 <h4>
                                     Not finding what you&apos;re looking for?
                                 </h4>
                                 <a href="tel:855-675-7301">855-675-7301</a>
                                 <a href="mailto:support@delivermyride.com">
-                                    support%40delivermyride.com
+                                    support@delivermyride.com
                                 </a>
                                 <a href="#hs-chat-open">Live Chat</a>
+                            </div>
+                        </Col>
+                        <Col sm="9">
+                            <div className="faq__accordion">
+                                {this.getFaqContent().map(item => (
+                                    <FaqGroup key={item.title} item={item} />
+                                ))}
                             </div>
                         </Col>
                     </Row>
