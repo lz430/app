@@ -4,7 +4,7 @@ import { pricingType } from '../../../../core/types';
 import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
 
-import { Button, Input, Row, Col, FormGroup, Label } from 'reactstrap';
+import { Input, Row, Col, FormGroup, Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 
 export default class TradeIn extends React.PureComponent {
