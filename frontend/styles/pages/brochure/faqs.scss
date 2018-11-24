@@ -12,17 +12,22 @@
             li {
                 padding: 12px 0;
 
+                &:hover {
+                    cursor: pointer;
+                }
+
                 &:first-of-type {
                     padding-top: 0;
+                }
+
+                &.active {
+                    color: $color-black;
+                    font-weight: 700;
                 }
             }
             a {
                 color: $color-black;
                 display: block;
-
-                &.active {
-                    color: $color-text-blue;
-                }
             }
         }
 

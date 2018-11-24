@@ -132,53 +132,6 @@
         }
 
         .alice-carousel {
-            &__prev-btn,
-            &__next-btn {
-                background: $color-text-white;
-                border: 1px solid $color-text-white;
-                box-shadow: $shadow-subtle;
-                border-radius: 50px;
-                color: $color-text-blue;
-                font-size: 1.5rem;
-                padding: 0px 25px 0px 10px;
-                position: absolute;
-                text-align: left;
-                top: 39%;
-                max-width: 25px;
-                width: 25px;
-                max-height: 37px;
-                height: 37px;
-
-                @include media-breakpoint-down(md) {
-                    display: none;
-                }
-
-                p {
-                    padding: 0;
-                    margin: 0;
-                }
-            }
-
-            &__prev-btn {
-                left: -20px;
-
-                [data-area]::after {
-                    content: '<' !important;
-                    font-size: 2rem;
-                    line-height: 1px;
-                }
-            }
-
-            &__next-btn {
-                right: -25px;
-
-                [data-area]::after {
-                    content: '>' !important;
-                    font-size: 2rem;
-                    line-height: 1px;
-                }
-            }
-
             &__stage-item {
                 background: #ffffff;
                 border-radius: $border-radius;
@@ -256,6 +209,13 @@
     }
 
     &__testimonials {
+        .individual {
+            img {
+                display: block;
+                margin-left: 25px;
+                max-width: 50%;
+            }
+        }
         h2 {
             color: $color-dark-blue;
             margin-bottom: 20px;
@@ -270,6 +230,24 @@
     }
 
     &__media {
+        background: $color-background-primary;
         padding: 40px 0;
+
+        .row {
+            .col-md-2 {
+                img {
+                    max-width: 100%;
+                }
+
+                @include media-breakpoint-down(md) {
+                    margin-bottom: 20px;
+                    text-align: center;
+
+                    img {
+                        max-height: 50px;
+                    }
+                }
+            }
+        }
     }
 }
