@@ -129,6 +129,8 @@ class VersionGenerateQuotes extends Command
      */
     public function handle()
     {
+        \DB::connection()->disableQueryLog();
+
         $manager = $this->manager;
         $filter = $this->argument('filter');
         foreach ($this->getVersions($filter) as $versionQuery) {

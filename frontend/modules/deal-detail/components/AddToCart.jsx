@@ -157,7 +157,7 @@ export default class AddToCart extends React.PureComponent {
                 !pricing.annualMileageAvailable().length)
         ) {
             return (
-                <React.Fragment>
+                <div className="pb-4">
                     <div className="mb-2 mt-2 text-center">
                         We&apos;re sorry, there are no incentivized lease rates
                         for this vehicle.
@@ -172,7 +172,7 @@ export default class AddToCart extends React.PureComponent {
                         <a href="tel:855-675-7301">(855) 675-7301</a> for more
                         information.
                     </div>
-                </React.Fragment>
+                </div>
             );
         }
 
