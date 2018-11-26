@@ -4,11 +4,12 @@ import { pricingType } from '../../../../core/types';
 import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
 import TradeInModal from './TradeInModal';
-import { Input, Row, Col, FormGroup, Label } from 'reactstrap';
+import { Label } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Value from '../../../../apps/pricing/components/Value';
+import Line from '../../../../apps/pricing/components/Line';
 
 export default class TradeIn extends React.PureComponent {
     static propTypes = {
@@ -93,8 +94,18 @@ export default class TradeIn extends React.PureComponent {
         const tradeIn = this.props.pricing.tradeIn();
         return (
             <React.Fragment>
-                <DollarsAndCents value={tradeIn.value} />
-                <DollarsAndCents value={tradeIn.owed} />
+                <Line>
+                    <Label>Value Of Trade</Label>
+                    <Value>
+                        <DollarsAndCents value={tradeIn.value} />
+                    </Value>
+                </Line>
+                <Line>
+                    <Label>Owed On Trade</Label>
+                    <Value>
+                        <DollarsAndCents value={tradeIn.owed} />
+                    </Value>
+                </Line>
             </React.Fragment>
         );
     }

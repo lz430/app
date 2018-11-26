@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Row, Col, Card, CardBody, Button } from 'reactstrap';
+import {
+    Row,
+    Col,
+    Card,
+    CardBody,
+    Button,
+    FormGroup,
+    Label,
+    Input,
+} from 'reactstrap';
 
 class StepTradeLien extends Component {
     static propTypes = {
@@ -9,7 +18,7 @@ class StepTradeLien extends Component {
     };
 
     state = {
-        miles: 0,
+        miles: 1,
     };
 
     onMilesChange(value) {
@@ -34,20 +43,27 @@ class StepTradeLien extends Component {
                             elit. Vestibulum eros ligula, congue eu dictum vel,
                             condimentum at lectus. Nunc luctus velit et augue
                             pretium, in elementum ligula aliquam.
-                            <input
-                                type="number"
-                                onChange={e => {
-                                    this.onMilesChange(e.target.value);
-                                }}
-                                value={this.state.miles}
-                                required
-                            />
+                            <FormGroup className="mt-3">
+                                <Label for="first_name">Miles On Vehicle</Label>
+                                <Input
+                                    type="number"
+                                    min="1"
+                                    onChange={e => {
+                                        this.onMilesChange(e.target.value);
+                                    }}
+                                    value={this.state.miles}
+                                    required
+                                />
+                            </FormGroup>
                         </CardBody>
                     </Card>
+                    <Button
+                        color="primary"
+                        onClick={() => this.onMilesConfirm()}
+                    >
+                        Next: Confirm
+                    </Button>
                 </Col>
-                <Button color="primary" onClick={() => this.onMilesConfirm()}>
-                    Next: Confirm
-                </Button>
             </Row>
         );
     }

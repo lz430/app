@@ -8,7 +8,7 @@ import { equals } from 'ramda';
 class StepConfirmation extends Component {
     static propTypes = {
         detailedVehicle: PropTypes.object.isRequired,
-        miles: PropTypes.string.isRequired,
+        miles: PropTypes.number.isRequired,
         zipcode: PropTypes.string.isRequired,
         handleConfirmationComplete: PropTypes.func.isRequired,
     };
