@@ -54,7 +54,7 @@ class Page extends Component {
         this.setState({ selectedYearMakeModel: data.suggestion });
     }
 
-    selectselectedVehicleOption(option) {
+    setSelectedVehicle(option) {
         this.setState({ selectedVehicle: option });
     }
 
@@ -81,9 +81,7 @@ class Page extends Component {
         return (
             <StepEstimateSelectSpecificVehicle
                 vehicle={this.state.selected}
-                onSpecificVehicleSelect={this.selectselectedVehicleOption.bind(
-                    this
-                )}
+                onSpecificVehicleSelect={this.setSelectedVehicle.bind(this)}
             />
         );
     }

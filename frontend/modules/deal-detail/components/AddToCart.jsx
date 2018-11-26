@@ -245,12 +245,14 @@ export default class AddToCart extends React.PureComponent {
                         onRebatesChange={this.props.handleRebatesChange}
                         onChange={this.props.handleLeaseChange}
                     />
+                    {/*
                     <TradeIn
                         pricing={pricing}
                         tradeSetValue={this.props.tradeSetValue}
                         tradeSetOwed={this.props.tradeSetOwed}
                         tradeSetEstimate={this.props.tradeSetEstimate}
                     />
+                    */}
 
                     {this.renderPane()}
                 </div>
