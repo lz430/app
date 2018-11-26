@@ -46,7 +46,15 @@ class MyApp extends App {
     constructor(...args) {
         super(...args);
         if (SENTRY_PUBLIC_DSN) {
-            Sentry.init({ dsn: SENTRY_PUBLIC_DSN });
+            Sentry.init({
+                dsn: SENTRY_PUBLIC_DSN,
+                whitelistUrls: [
+                    'app.delivermyride.com',
+                    'delivermyride.com',
+                    'staging.delivermyride.com',
+                    'localhost:3000',
+                ],
+            });
         }
     }
 

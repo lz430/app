@@ -42,7 +42,7 @@ export const dealQuoteIsLoading = createSelector([dealQuote], quote => {
     return quote === null;
 });
 
-export const dealPricingForGeneric = createSelector(
+export const dealPricingDataForGeneric = createSelector(
     deal,
     getUserPurchaseStrategy,
     dealQuoteIsLoading,
@@ -76,6 +76,6 @@ export const dealPricingForGeneric = createSelector(
  * @returns {DealPricing}
  */
 export const pricingFromGeneric = (state, props) => {
-    const data = dealPricingForGeneric(state, props);
+    const data = dealPricingDataForGeneric(state, props);
     return pricingFromDataFactory(data);
 };

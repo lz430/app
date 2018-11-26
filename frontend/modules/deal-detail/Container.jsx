@@ -46,6 +46,7 @@ import {
     getTradeIn,
     pricingFromDealDetail,
 } from './selectors';
+
 import Breadcrumb from './components/Breadcrumb';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';

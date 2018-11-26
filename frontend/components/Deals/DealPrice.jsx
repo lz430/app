@@ -130,7 +130,6 @@ class DealPrice extends React.Component {
 
 const mapStateToProps = (state, props) => {
     return {
-        purchaseStrategy: state.user.purchasePreferences.strategy,
         pricing: pricingFromGeneric(state, props),
     };
 };
