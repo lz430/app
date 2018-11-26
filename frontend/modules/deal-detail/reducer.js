@@ -122,6 +122,16 @@ const reducer = function(state = initialState, action = {}) {
                 },
             };
 
+        case ActionTypes.TRADE_SET:
+            return {
+                ...state,
+                trade: {
+                    value: action.value,
+                    owed: action.owed,
+                    estimate: action.estimate,
+                },
+            };
+
         case ActionTypes.TRADE_SET_ESTIMATE:
             return {
                 ...state,

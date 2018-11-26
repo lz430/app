@@ -170,3 +170,12 @@ export function tradeSetEstimate(data) {
         data: data,
     };
 }
+
+export function tradeSet(value, owed, estimate) {
+    return {
+        type: ActionTypes.TRADE_SET,
+        value: value,
+        owed: owed,
+        estimate: estimate,
+    };
+}

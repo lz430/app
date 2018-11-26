@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
-//import TradeIn from './pricing/TradeIn';
+import TradeIn from './pricing/TradeIn';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
@@ -26,6 +26,7 @@ export default class AddToCart extends React.PureComponent {
         tradeSetValue: PropTypes.func.isRequired,
         tradeSetOwed: PropTypes.func.isRequired,
         tradeSetEstimate: PropTypes.func.isRequired,
+        tradeSet: PropTypes.func.isRequired,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
     };
@@ -245,15 +246,14 @@ export default class AddToCart extends React.PureComponent {
                         onRebatesChange={this.props.handleRebatesChange}
                         onChange={this.props.handleLeaseChange}
                     />
-                    {/*
                     <TradeIn
+                        onCompleteTradeIn={this.props.tradeSet}
+                        zipcode={this.props.userLocation.zipcode}
                         pricing={pricing}
                         tradeSetValue={this.props.tradeSetValue}
                         tradeSetOwed={this.props.tradeSetOwed}
                         tradeSetEstimate={this.props.tradeSetEstimate}
                     />
-                    */}
-
                     {this.renderPane()}
                 </div>
                 {this.renderCta()}

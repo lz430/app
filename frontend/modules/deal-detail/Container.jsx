@@ -35,6 +35,7 @@ import {
     tradeSetValue,
     tradeSetOwed,
     tradeSetEstimate,
+    tradeSet,
 } from './actions';
 
 import {
@@ -92,6 +93,7 @@ class DealDetailContainer extends React.PureComponent {
         updateLease: PropTypes.func.isRequired,
         tradeSetValue: PropTypes.func.isRequired,
         tradeSetOwed: PropTypes.func.isRequired,
+        tradeSet: PropTypes.func.isRequired,
         tradeSetEstimate: PropTypes.func.isRequired,
         dealDetailRefreshDealQuote: PropTypes.func.isRequired,
     };
@@ -282,6 +284,7 @@ class DealDetailContainer extends React.PureComponent {
                                 tradeSetValue={this.props.tradeSetValue}
                                 tradeSetOwed={this.props.tradeSetOwed}
                                 tradeSetEstimate={this.props.tradeSetEstimate}
+                                tradeSet={this.props.tradeSet}
                             />
                         </Col>
                     </Row>
@@ -327,6 +330,7 @@ const mapDispatchToProps = mapAndBindActionCreators({
     tradeSetValue,
     tradeSetOwed,
     tradeSetEstimate,
+    tradeSet,
     dealDetailRefreshDealQuote,
 });
 

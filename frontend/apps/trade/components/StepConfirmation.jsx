@@ -1,36 +1,59 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import TradePendingClient from '../../../apps/trade/client';
-
+import Loading from '../../../components/Loading';
+import { equals } from 'ramda';
 class StepConfirmation extends Component {
     static propTypes = {
-        show: PropTypes.bool.isRequired,
-        detailedVehicle: PropTypes.object,
-        miles: PropTypes.string,
-        zipcode: PropTypes.string,
+        detailedVehicle: PropTypes.object.isRequired,
+        miles: PropTypes.string.isRequired,
+        zipcode: PropTypes.string.isRequired,
+        handleConfirmationComplete: PropTypes.func.isRequired,
     };
 
     state = {
+        isLoading: true,
         report: null,
     };
 
+    fetchData() {
+        TradePendingClient.report(
+            this.props.detailedVehicle.id,
+            this.props.zipcode,
+            this.props.miles
+        ).then(res => {
+            this.setState({ isLoading: false, report: res.data });
+        });
+    }
+
+    componentDidMount() {
+        if (
+            this.props.detailedVehicle &&
+            this.props.miles &&
+            this.props.zipcode
+        ) {
+            this.fetchData();
+        }
+    }
+
     componentDidUpdate(prevProps) {
-        if (this.props.show && this.props.show !== prevProps.show) {
-            TradePendingClient.report(
-                this.props.detailedVehicle.id,
-                this.props.zipcode,
-                this.props.miles
-            ).then(res => {
-                this.setState({ report: res.data });
-            });
+        if (
+            this.props.detailedVehicle &&
+            this.props.miles &&
+            this.props.zipcode &&
+            !this.state.isLoading &&
+            !this.state.report &&
+            !equals(this.props.detailedVehicle, prevProps.detailedVehicle)
+        ) {
+            this.fetchData();
         }
     }
 
     render() {
-        if (!this.state.report) {
-            return false;
+        if (this.state.isLoading) {
+            return <Loading />;
         }
 
         const { report } = this.state;
@@ -141,6 +164,19 @@ class StepConfirmation extends Component {
                                 {report.vehicle.fuel_type}
                             </ListGroupItem>
                         </ListGroup>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <Button
+                            onClick={() =>
+                                this.props.handleConfirmationComplete(
+                                    this.state.report
+                                )
+                            }
+                        >
+                            Next: Continue
+                        </Button>
                     </Col>
                 </Row>
             </React.Fragment>
