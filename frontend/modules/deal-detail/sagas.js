@@ -1,4 +1,11 @@
-import { takeEvery, select, put, call } from 'redux-saga/effects';
+import {
+    takeEvery,
+    takeLatest,
+    select,
+    put,
+    call,
+    cancelled,
+} from 'redux-saga/effects';
 import { track } from '../../core/services';
 import ApiClient from '../../store/api';
 
@@ -6,15 +13,19 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
-import { requestDealQuote as requestDealQuoteAction } from '../../apps/pricing/actions';
 import { requestDealQuote } from '../../apps/pricing/sagas';
-import { discountType as getDiscountType } from '../../apps/common/selectors';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
-import { getConditionalRoles, getDeal } from './selectors';
-import { receiveDeal } from './actions';
+import {
+    getConditionalRoles,
+    getDeal,
+    getDiscountType,
+    getTradeIn,
+} from './selectors';
+import { dealDetailReceiveDealQuote, receiveDeal } from './actions';
+import { cancelRequest } from '../../store/httpclient';
 
 /*******************************************************************
  * Request Deal Quote
@@ -24,22 +35,57 @@ import { receiveDeal } from './actions';
  * @returns {IterableIterator<*>}
  */
 function* dealDetailRequestDealQuote() {
+    const source = cancelRequest();
+
     const deal = yield select(getDeal);
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
-    const discountType = yield select(getDiscountType);
+    let role = yield select(getDiscountType);
     const conditionalRoles = yield select(getConditionalRoles);
+    const tradeIn = yield select(getTradeIn);
 
-    // Do the regular.
-    yield* requestDealQuote(
-        requestDealQuoteAction(
-            deal,
-            location.zipcode,
-            purchaseStrategy,
-            discountType,
-            conditionalRoles
-        )
-    );
+    if (role === 'dmr') {
+        role = 'default';
+    }
+
+    let roles = [role, ...conditionalRoles];
+    let results = null;
+
+    if (tradeIn.value === 0 && tradeIn.owed === 0) {
+        results = yield* requestDealQuote({
+            deal: deal,
+            zipcode: location.zipcode,
+            paymentType: purchaseStrategy,
+            role: role,
+            conditionalRoles: conditionalRoles,
+        });
+    }
+
+    if (!results) {
+        try {
+            results = yield call(
+                ApiClient.deal.dealGetQuote,
+                deal.id,
+                purchaseStrategy,
+                location.zipcode,
+                roles,
+                source.token,
+                0,
+                tradeIn.value,
+                tradeIn.owed
+            );
+            results = results.data;
+        } catch (e) {
+            results = false;
+            console.log(e);
+        } finally {
+            if (yield cancelled()) {
+                source.cancel();
+            }
+        }
+    }
+
+    yield put(dealDetailReceiveDealQuote(results));
 }
 
 /*******************************************************************
@@ -93,5 +139,5 @@ export function* watchInit() {
 }
 
 export function* watchRequestDealQuote() {
-    yield takeEvery(REQUEST_DEAL_QUOTE, dealDetailRequestDealQuote);
+    yield takeLatest(REQUEST_DEAL_QUOTE, dealDetailRequestDealQuote);
 }

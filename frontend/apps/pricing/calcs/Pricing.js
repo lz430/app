@@ -20,6 +20,21 @@ export default class Pricing {
 
     msrp = () => fromWholeDollars(this.data.deal.pricing.msrp);
 
+    tradeIn = () => {
+        if (!this.data.tradeIn) {
+            return {
+                owed: zero,
+                value: zero,
+                estimate: null,
+            };
+        }
+        return {
+            owed: fromWholeDollars(this.data.tradeIn.owed),
+            value: fromWholeDollars(this.data.tradeIn.value),
+            estimate: this.data.tradeIn.estimate,
+        };
+    };
+
     quote = () => this.data.dealQuote;
     quoteIsLoading = () => this.data.dealQuoteIsLoading;
     quoteIsLoaded = () => !this.data.dealQuoteIsLoading;
@@ -128,6 +143,7 @@ export default class Pricing {
     toCheckoutData = () => ({
         deal: this.data.deal,
         quote: this.quote(),
+        tradeIn: this.data.tradeIn,
         paymentStrategy: this.data.paymentType,
         discountType: this.discountType(),
         effectiveTerm: this.callMethodOrNull('term'),

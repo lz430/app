@@ -33,7 +33,6 @@
                     <SolveFor>Payment</SolveFor>
                     <Term>{{$quote['term']}}</Term>
 
-
                     <FinanceTaxes>Yes</FinanceTaxes>
                     <ContractDate>{{$quote['contractDate']}}</ContractDate>
                     <UpfrontPayments>1</UpfrontPayments>

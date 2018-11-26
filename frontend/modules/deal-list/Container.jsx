@@ -42,6 +42,9 @@ import {
     getSearchQuery,
     getSelectedFiltersByCategory,
 } from './selectors';
+
+import { requestDealQuote } from '../../apps/pricing/actions';
+
 import { setPurchaseStrategy } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
@@ -84,6 +87,7 @@ class Container extends React.Component {
         onToggleCompare: PropTypes.func.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,
         onClearAllSecondaryFilters: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -122,12 +126,16 @@ class Container extends React.Component {
         }
     }
 
+    componentWillUnmount() {
+        this.props.onRequestSearch(true);
+    }
+
     onToggleSearchFilter(category, item) {
         this.props.onToggleSearchFilter(category, item);
     }
 
     onRequestSearch() {
-        this.props.onRequestSearch(this.props.router);
+        this.props.onRequestSearch();
     }
 
     renderMakeSelectionModal() {
@@ -175,6 +183,7 @@ class Container extends React.Component {
                     onRequestMoreDeals={this.props.onRequestMoreDeals}
                     onToggleCompare={this.props.onToggleCompare}
                     onSelectModelYear={this.props.onSelectModelYear}
+                    onRequestDealQuote={this.props.onRequestDealQuote}
                 />
             </div>
         );
@@ -297,8 +306,8 @@ const mapDispatchToProps = dispatch => {
         onClearModelYear: () => {
             return dispatch(clearModelYear());
         },
-        onRequestSearch: () => {
-            return dispatch(requestSearch());
+        onRequestSearch: (cancel = false) => {
+            return dispatch(requestSearch(cancel));
         },
         onToggleSearchSort: sort => {
             return dispatch(toggleSearchSort(sort));
@@ -314,6 +323,9 @@ const mapDispatchToProps = dispatch => {
         },
         onClearAllSecondaryFilters: () => {
             return dispatch(clearAllSecondaryFilters());
+        },
+        onRequestDealQuote: (deal, zipcode, paymentType) => {
+            return dispatch(requestDealQuote(deal, zipcode, paymentType));
         },
     };
 };

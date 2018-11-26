@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
 
-import Line from '../../../apps/pricing/components/Line';
+import MSRPAndDiscount from './pricing/MSRPAndDiscount';
+//import TradeIn from './pricing/TradeIn';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
 import PaymentTypes from './pricing/PaymentTypes';
 import Loading from '../../../components/Loading';
+
+import { Button } from 'reactstrap';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -20,8 +23,9 @@ export default class AddToCart extends React.PureComponent {
         handleFinanceTermChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         handleBuyNow: PropTypes.func.isRequired,
-        onToggleCompare: PropTypes.func.isRequired,
-        compareList: PropTypes.array,
+        tradeSetValue: PropTypes.func.isRequired,
+        tradeSetOwed: PropTypes.func.isRequired,
+        tradeSetEstimate: PropTypes.func.isRequired,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
     };
@@ -40,22 +44,27 @@ export default class AddToCart extends React.PureComponent {
      * @returns {*}
      */
     renderCtaButton() {
+        if (!this.props.pricing) {
+            return false;
+        }
+
         if (this.state.submitted) {
             return (
-                <button className="btn btn-success" disabled={true}>
+                <Button color="success" block disabled={true}>
                     <Loading /> Loading, please wait.
-                </button>
+                </Button>
             );
         }
 
         return (
-            <button
-                className="btn btn-success"
+            <Button
+                color="success"
+                block
                 onClick={() => this.handleSubmit()}
                 disabled={!this.props.pricing.canPurchase()}
             >
-                Select Deal
-            </button>
+                <strong>Next:</strong> Start Purchase
+            </Button>
         );
     }
 
@@ -75,20 +84,39 @@ export default class AddToCart extends React.PureComponent {
             return false;
         }
 
+        let disclaimer;
+
+        if (purchaseStrategy === 'cash') {
+            disclaimer = <div>* includes all taxes and dealer fees</div>;
+        } else if (purchaseStrategy === 'finance') {
+            disclaimer = (
+                <div>
+                    * includes all taxes and dealer fees <br />
+                    Payment calculated with 5% interest <br />
+                    Monthly payment amount applies to qualified credit or lease
+                    applicants having a minimum credit score of 740. Your
+                    monthly payment is established based on a full review of
+                    your credit application and credit report.
+                </div>
+            );
+        } else {
+            disclaimer = (
+                <div>
+                    * includes all taxes and dealer fees <br />
+                    Monthly payment amount applies to qualified credit or lease
+                    applicants having a minimum credit score of 740. Your
+                    monthly payment is established based on a full review of
+                    your credit application and credit report.
+                </div>
+            );
+        }
+
         return (
             <React.Fragment>
-                <div className="deal__buttons">{this.renderCtaButton()}</div>
-                <Line>
-                    <div
-                        style={{
-                            fontStyle: 'italic',
-                            fontSize: '1em',
-                            marginLeft: '.25em',
-                        }}
-                    >
-                        * includes all taxes and dealer fees
-                    </div>
-                </Line>
+                <div className="cart__cta">{this.renderCtaButton()}</div>
+                <div className="cart__disclaimer text-sm font-italic p-1 ">
+                    {disclaimer}
+                </div>
             </React.Fragment>
         );
     }
@@ -129,7 +157,7 @@ export default class AddToCart extends React.PureComponent {
                 !pricing.annualMileageAvailable().length)
         ) {
             return (
-                <React.Fragment>
+                <div className="pb-4">
                     <div className="mb-2 mt-2 text-center">
                         We&apos;re sorry, there are no incentivized lease rates
                         for this vehicle.
@@ -144,7 +172,7 @@ export default class AddToCart extends React.PureComponent {
                         <a href="tel:855-675-7301">(855) 675-7301</a> for more
                         information.
                     </div>
-                </React.Fragment>
+                </div>
             );
         }
 
@@ -162,7 +190,7 @@ export default class AddToCart extends React.PureComponent {
     }
 
     render() {
-        const { purchaseStrategy, deal } = this.props;
+        const { purchaseStrategy, deal, pricing } = this.props;
 
         if (deal.status === 'sold') {
             return (
@@ -202,12 +230,32 @@ export default class AddToCart extends React.PureComponent {
         }
 
         return (
-            <div className="deal-details__pricing bg-white border border-medium p-4">
-                <PaymentTypes
-                    {...{ purchaseStrategy }}
-                    onChange={this.props.handlePaymentTypeChange}
-                />
-                {this.renderPane()}
+            <div className="cart">
+                <h5 className="text-center bg-light m-0 p-1 border border-medium border-bottom-0">
+                    Configure Your Payment
+                </h5>
+                <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
+                    <PaymentTypes
+                        {...{ purchaseStrategy }}
+                        onChange={this.props.handlePaymentTypeChange}
+                    />
+                    <MSRPAndDiscount
+                        pricing={pricing}
+                        onDiscountChange={this.props.handleDiscountChange}
+                        onRebatesChange={this.props.handleRebatesChange}
+                        onChange={this.props.handleLeaseChange}
+                    />
+                    {/*
+                    <TradeIn
+                        pricing={pricing}
+                        tradeSetValue={this.props.tradeSetValue}
+                        tradeSetOwed={this.props.tradeSetOwed}
+                        tradeSetEstimate={this.props.tradeSetEstimate}
+                    />
+                    */}
+
+                    {this.renderPane()}
+                </div>
                 {this.renderCta()}
             </div>
         );

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { modelYearType } from '../../core/types';
 
-import { moneyFormat } from '../../pricing/util';
 import ModelYearImage from './ModelYearImage';
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
 
@@ -30,6 +29,23 @@ class ModelYear extends React.Component {
         this.props.onSelectModelYear(modelYear);
     }
 
+    formatPayment(num) {
+        // Older browser don't support this.
+        if (
+            typeof Intl !== 'undefined' &&
+            typeof Intl.NumberFormat === 'function'
+        ) {
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+            });
+            return formatter.format(Math.round(num));
+        } else {
+            return Math.round(num);
+        }
+    }
+
     /**
      * @returns {string}
      */
@@ -45,7 +61,7 @@ class ModelYear extends React.Component {
 
     renderPrice() {
         let label = 'MSRP starting at';
-        let value = moneyFormat(this.props.modelYear['msrp']);
+        let value = this.formatPayment(this.props.modelYear['msrp']);
 
         if (
             this.props.purchaseStrategy === 'lease' &&
@@ -55,7 +71,7 @@ class ModelYear extends React.Component {
             if (this.props.modelYear.payments.lease.payment === 5000) {
                 return false;
             } else {
-                value = moneyFormat(
+                value = this.formatPayment(
                     this.props.modelYear.payments.lease.payment
                 );
             }
@@ -66,7 +82,9 @@ class ModelYear extends React.Component {
             this.props.modelYear.payments.finance
         ) {
             label = 'Payments starting at';
-            value = moneyFormat(this.props.modelYear.payments.finance.payment);
+            value = this.formatPayment(
+                this.props.modelYear.payments.finance.payment
+            );
         }
 
         if (
@@ -74,7 +92,9 @@ class ModelYear extends React.Component {
             this.props.modelYear.payments.cash
         ) {
             label = 'Price starting at';
-            value = moneyFormat(this.props.modelYear.payments.cash.payment);
+            value = this.formatPayment(
+                this.props.modelYear.payments.cash.payment
+            );
         }
 
         return (

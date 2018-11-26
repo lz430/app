@@ -152,7 +152,6 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-        Laracasts\Utilities\JavaScript\JavaScriptServiceProvider::class,
         Backpack\Base\BaseServiceProvider::class,
 
         /*
@@ -171,7 +170,7 @@ return [
         Spatie\Fractal\FractalServiceProvider::class,
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         App\Providers\ScoutElasticServiceProvider::class,
-        App\Providers\HubSpotServiceProvider::class
+        App\Providers\HubSpotServiceProvider::class,
     ],
 
     /*

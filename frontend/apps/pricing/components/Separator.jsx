@@ -12,7 +12,7 @@ export default class Separator extends React.PureComponent {
 
     render() {
         if (!this.props.showIf) {
-            return <div />;
+            return false;
         }
 
         return <hr />;

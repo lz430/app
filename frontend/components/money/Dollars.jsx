@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { moneyValueType } from '../../core/types';
-import { fromUnknownInput } from '../../pricing/money';
+import { fromUnknownInput } from '../../apps/pricing/money';
 
 export default class Dollars extends React.Component {
     static propTypes = {

@@ -21,7 +21,7 @@ export default class CashSummary extends React.PureComponent {
                 <Line isImportant={true}>
                     <Label>Cash Price</Label>
                     <Value>
-                        <DollarsAndCents value={pricing.cashPrice()} />
+                        <DollarsAndCents value={pricing.yourPrice()} />
                     </Value>
                 </Line>
                 <Line>
