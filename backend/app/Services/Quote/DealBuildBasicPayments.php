@@ -3,15 +3,11 @@
 namespace App\Services\Quote;
 
 use App\Models\Deal;
-
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 
-/**
- */
 class DealBuildBasicPayments
 {
-
     private $carletonClient;
 
     private const FAKE_LEASE = [
@@ -49,9 +45,9 @@ class DealBuildBasicPayments
     {
         $payload = new \stdClass();
 
-        $payload->term = (int)$quote->term;
-        $payload->rate = (float)$quote->rate;
-        $payload->rebate = (float)$quote->rebate;
+        $payload->term = (int) $quote->term;
+        $payload->rate = (float) $quote->rate;
+        $payload->rebate = (float) $quote->rebate;
 
         $payment = DealCalculatePayments::cash($deal, 'default', $quote->rebate);
         $payload->down = $payment->down;
@@ -64,9 +60,9 @@ class DealBuildBasicPayments
     {
         $payload = new \stdClass();
 
-        $payload->term = (int)$quote->term;
-        $payload->rate = (float)$quote->rate;
-        $payload->rebate = (float)$quote->rebate;
+        $payload->term = (int) $quote->term;
+        $payload->rate = (float) $quote->rate;
+        $payload->rebate = (float) $quote->rebate;
 
         $payment = DealCalculatePayments::finance($deal,
             'default',
@@ -78,31 +74,29 @@ class DealBuildBasicPayments
         $payload->payment = $payment->payment;
 
         return $payload;
-
     }
-
 
     private function buildLeasePayment($quote, Deal $deal)
     {
-        if (!$quote->term) {
+        if (! $quote->term) {
             return (object) self::FAKE_LEASE;
         }
 
         $rates = [
-            'termLength' => (int)$quote->term,
+            'termLength' => (int) $quote->term,
             'residuals' => [
                 [
-                    'annualMileage' => (int)$quote->miles,
-                    'residualPercent' => (int)$quote->residual,
-                ]
+                    'annualMileage' => (int) $quote->miles,
+                    'residualPercent' => (int) $quote->residual,
+                ],
             ],
         ];
 
         if ($quote->rate_type != 'Factor') {
-            $rates['rate'] = (float)$quote->rate;
+            $rates['rate'] = (float) $quote->rate;
             $rates['type'] = 'rate';
         } else {
-            $rates['moneyFactor'] = (float)$quote->rate;
+            $rates['moneyFactor'] = (float) $quote->rate;
             $rates['type'] = 'factor';
         }
 
@@ -110,14 +104,15 @@ class DealBuildBasicPayments
         $payment = $manager->get([$rates], $quote->rebate, 0, 'default');
         if (count($payment)) {
             $payload = new \stdClass();
-            $payload->term = (int)$quote->term;
-            $payload->rate = (float)$quote->rate;
+            $payload->term = (int) $quote->term;
+            $payload->rate = (float) $quote->rate;
             $payload->rate_type = $quote->rate_type;
             $payload->rebate = (float) $quote->rebate;
-            $payload->residual = (int)$quote->residual;
+            $payload->residual = (int) $quote->residual;
             $payload->miles = (int) $quote->miles;
             $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
             $payload->payment = round($payment[0]['monthly_payment'], 2);
+
             return $payload;
         }
 
@@ -131,7 +126,7 @@ class DealBuildBasicPayments
      */
     public function calculateBasicPayments(Deal $deal, bool $save = true)
     {
-        if (!$deal->dealer) {
+        if (! $deal->dealer) {
             return false;
         }
 

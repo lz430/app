@@ -2,9 +2,9 @@
 
 namespace DeliverMyRide\Carleton\Manager;
 
-use DeliverMyRide\Carleton\Client;
 use App\Models\Deal;
 use App\Models\Dealer;
+use DeliverMyRide\Carleton\Client;
 
 /**
  * Gets lease payments for a specific deal with the least amount of info.
@@ -27,13 +27,13 @@ class DealLeasePaymentsManager
         foreach ($terms as $term) {
             foreach ($term['residuals'] as $residual) {
                 $data = [
-                    'length' => (int)$term['termLength'],
-                    'mileage' => (int)$residual['annualMileage'],
-                    'residual' => (int)$residual['residualPercent'],
+                    'length' => (int) $term['termLength'],
+                    'mileage' => (int) $residual['annualMileage'],
+                    'residual' => (int) $residual['residualPercent'],
                 ];
 
                 if (isset($term['rate'])) {
-                    $data['rate'] = (float)$term['rate'];
+                    $data['rate'] = (float) $term['rate'];
                 }
 
                 if (isset($term['moneyFactor'])) {
@@ -41,13 +41,14 @@ class DealLeasePaymentsManager
                     $data['moneyFactor'] = ($additionalFactor != null) ? ($term['moneyFactor'] + $additionalFactor) : $term['moneyFactor'];
                 }
 
-                if (!$data['residual']) {
+                if (! $data['residual']) {
                     continue;
                 }
 
                 $situations[] = $data;
             }
         }
+
         return $situations;
     }
 
@@ -59,11 +60,11 @@ class DealLeasePaymentsManager
         $tradeAllowance = 0,
         $tradeLien = 0)
     {
-
         $prices = $this->deal->prices();
         $msrp = $prices->msrp;
         $price = $prices->{$role};
         $terms = $this->mungeTerms($terms);
+
         return $this->client->getLeasePaymentsFor(
             $cash_down,
             $terms,
@@ -84,7 +85,7 @@ class DealLeasePaymentsManager
     public function getAdditionalFactor()
     {
         $dealer = Dealer::select('money_factor')->where('dealer_id', $this->deal->dealer_id)->first();
+
         return $dealer->money_factor;
     }
 }
-

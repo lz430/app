@@ -61,7 +61,7 @@ class Client
 
         $fees = [
             'acquisition' => [
-                'Amount' => (float)$acquisitionFee,
+                'Amount' => (float) $acquisitionFee,
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -70,7 +70,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'doc' => [
-                'Amount' => (float)$docFee,
+                'Amount' => (float) $docFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -89,7 +89,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'cvr' => [
-                'Amount' => (float)$cvrFee,
+                'Amount' => (float) $cvrFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -158,6 +158,7 @@ class Client
 
             $data['quotes'][] = $quote;
         }
+
         return $data;
     }
 
@@ -169,8 +170,9 @@ class Client
     public function buildRequest($data)
     {
         $contents = view('carleton.request', $data)->render();
-        $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
+        $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n".$contents;
         $contents = trim(preg_replace('/\s+/', ' ', $contents));
+
         return $contents;
     }
 
@@ -207,7 +209,7 @@ class Client
         $tradeAllowance = 0,
         $tradeLien = 0)
     {
-        if (!$contractDate) {
+        if (! $contractDate) {
             $contractDate = new \DateTime();
         }
 
@@ -227,6 +229,7 @@ class Client
             $tradeLien
         );
         $request = $this->buildRequest($params);
+
         return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
@@ -240,11 +243,11 @@ class Client
     {
         $headers = [
             'Content-Type: text/xml; charset="utf-8"',
-            'Content-Length: ' . strlen($request),
+            'Content-Length: '.strlen($request),
             'Accept: text/xml',
             'Cache-Control: no-cache',
             'Pragma: no-cache',
-            'SOAPAction: "http://www.carletoninc.com/calcs/lease/GetQuotes"'
+            'SOAPAction: "http://www.carletoninc.com/calcs/lease/GetQuotes"',
         ];
 
         $ch = curl_init();
@@ -262,6 +265,7 @@ class Client
         if ($data === false) {
             $error = curl_error($ch);
             Log::info(var_export($error, true));
+
             return [];
         }
 
@@ -270,9 +274,10 @@ class Client
         if ($xml === false) {
             app('sentry')->captureMessage('Invalid XML', [], [
                 'extra' => [
-                    'xml' => $data
-                ]
+                    'xml' => $data,
+                ],
             ]);
+
             return [];
         }
 
@@ -280,7 +285,8 @@ class Client
 
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
         if ($faults) {
-            Log::info('Could not find lease calculations (response): ' . (string)$faults[0]->faultstring);
+            Log::info('Could not find lease calculations (response): '.(string) $faults[0]->faultstring);
+
             return [];
         }
 
@@ -291,14 +297,15 @@ class Client
             $input = $params['quotes'][$i];
             $results[$i] = [
                 'term' => $input['term'],
-                'cash_due' => (float)$input['fees']['cashDown']['Amount'],
+                'cash_due' => (float) $input['fees']['cashDown']['Amount'],
                 'annual_mileage' => $input['annualMileage'],
-                'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
-                'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),
-                'monthly_use_tax' => (float)sprintf("%.02f", $quote->MonthlyUseTax),
-                'monthly_pre_tax_payment' => (float)sprintf("%.02f", $quote->TaxablePayment),
+                'monthly_payment' => (float) sprintf('%.02f', $quote->RegularPayment),
+                'total_amount_at_drive_off' => (float) sprintf('%.02f', $quote->TotalAmountAtDriveOff),
+                'monthly_use_tax' => (float) sprintf('%.02f', $quote->MonthlyUseTax),
+                'monthly_pre_tax_payment' => (float) sprintf('%.02f', $quote->TaxablePayment),
             ];
         }
+
         return $results;
     }
 }

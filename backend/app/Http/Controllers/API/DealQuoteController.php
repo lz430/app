@@ -6,7 +6,6 @@ use App\Models\Deal;
 
 class DealQuoteController extends BaseAPIController
 {
-
     public function quote(Deal $deal)
     {
         $this->validate(request(), [
@@ -18,6 +17,7 @@ class DealQuoteController extends BaseAPIController
             'trade_owed' => 'integer',
         ]);
         $dealQuoter = resolve('App\Services\Quote\DealQuote');
+
         return $dealQuoter->get(
                 $deal,
                 request('zipcode'),
@@ -29,5 +29,4 @@ class DealQuoteController extends BaseAPIController
                 request('trade_owed', 0)
             );
     }
-
 }

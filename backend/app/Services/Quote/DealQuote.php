@@ -3,14 +3,13 @@
 namespace App\Services\Quote;
 
 use App\Models\Deal;
-use App\Transformers\DealQuoteTransformer;
-use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
-
 use DeliverMyRide\Carleton\Client;
-use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 use DeliverMyRide\DataDelivery\Map;
 use Illuminate\Support\Facades\Cache;
+use App\Transformers\DealQuoteTransformer;
+use DeliverMyRide\DataDelivery\DataDeliveryClient;
+use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
+use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
 
 /**
  * Calculate the price for a given vehicle accurately using specific information
@@ -82,6 +81,7 @@ class DealQuote
                 'totalAmountAtDriveOff' => $result['total_amount_at_drive_off'],
             ];
         }
+
         return $payments;
     }
 
@@ -91,7 +91,7 @@ class DealQuote
      */
     private function extractRoles(string $role): array
     {
-        $roles = explode("-", $role);
+        $roles = explode('-', $role);
         $roles = array_map(function ($role) {
             return Map::SHORT_CONDITIONS_TO_CONDITIONALS[$role];
         }, $roles);
@@ -100,6 +100,7 @@ class DealQuote
         $primaryRole = reset($primaryRole);
 
         $conditionalRoles = array_diff($roles, Map::PRIMARY_ROLES);
+
         return [$primaryRole, $conditionalRoles];
     }
 
@@ -115,7 +116,8 @@ class DealQuote
         }, $roles);
 
         sort($shorts);
-        return implode("-", $shorts);
+
+        return implode('-', $shorts);
     }
 
     /**
@@ -139,8 +141,7 @@ class DealQuote
         $down = 0,
         $tradeValue = 0,
         $tradeOwed = 0
-    )
-    {
+    ) {
         $this->deal = $deal;
 
         $roleKey = $this->buildRoleKey($roles);
@@ -149,14 +150,14 @@ class DealQuote
         //$key = "{$deal->id}-{$paymentType}-{$zip}--{$roleKey}";
         $key = "{$deal->id}-{$paymentType}-detroit--{$roleKey}";
 
-        $cacheKey = md5('quote.' . $key);
-        $tagKey = 'deal-' . $deal->id;
+        $cacheKey = md5('quote.'.$key);
+        $tagKey = 'deal-'.$deal->id;
         $data = Cache::tags($tagKey)->get($cacheKey);
-        if ($force || !$data) {
+        if ($force || ! $data) {
             $this->getRatesAndRebates($paymentType, $zip, $primaryRole, $conditionalRoles);
             $ratesAndRebates = $this->ratesAndRebatesData;
             $potentialConditionalRoles = $this->potentialConditionalRoles;
-            $meta = (object)[
+            $meta = (object) [
                 'paymentType' => $paymentType,
                 'zipcode' => $zip,
                 'area' => 'detroit',
@@ -164,7 +165,7 @@ class DealQuote
                 'primaryRole' => $primaryRole,
                 'conditionalRoles' => $conditionalRoles,
                 'key' => $key,
-                'error' => $ratesAndRebates === null
+                'error' => $ratesAndRebates === null,
             ];
 
             //
@@ -184,12 +185,11 @@ class DealQuote
         $data['meta']['tradeValue'] = $tradeValue;
         $data['meta']['tradeOwed'] = $tradeOwed;
 
-        if ($paymentType === "lease" && isset($data['rates'][0])) {
+        if ($paymentType === 'lease' && isset($data['rates'][0])) {
             $payments = $this->getLeasePayments($data);
             $data['payments'] = $payments;
         }
 
         return $data;
     }
-
 }
