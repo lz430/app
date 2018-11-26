@@ -26,10 +26,8 @@ import StepConfirmation from '../../apps/trade/components/StepConfirmation';
 class Page extends Component {
     state = {
         step: 'know_or_estimate',
-        selected: null,
-
-        // Additional Options (Step Two)
-        detailed: null,
+        selectedYearMakeModel: null,
+        selectedVehicle: null,
 
         // Personal Info (Step Three)
         personalFinished: false,
@@ -43,7 +41,7 @@ class Page extends Component {
             selected: null,
 
             // Additional Options (Step Two)
-            detailed: null,
+            selectedVehicle: null,
 
             // Personal Info (Step Three)
             personalFinished: false,
@@ -53,11 +51,11 @@ class Page extends Component {
     }
 
     onVehicleSearchSelect(event, data) {
-        this.setState({ selected: data.suggestion });
+        this.setState({ selectedYearMakeModel: data.suggestion });
     }
 
-    selectDetailedOption(option) {
-        this.setState({ detailed: option });
+    selectselectedVehicleOption(option) {
+        this.setState({ selectedVehicle: option });
     }
 
     renderEstimateSearchStep() {
@@ -73,14 +71,19 @@ class Page extends Component {
     }
 
     renderSelection() {
-        if (!this.state.selected || this.state.detailed !== null) {
+        if (
+            !this.state.selectedYearMakeModel ||
+            this.state.selectedVehicle !== null
+        ) {
             return false;
         }
 
         return (
             <StepEstimateSelectSpecificVehicle
                 vehicle={this.state.selected}
-                onSpecificVehicleSelect={this.selectDetailedOption.bind(this)}
+                onSpecificVehicleSelect={this.selectselectedVehicleOption.bind(
+                    this
+                )}
             />
         );
     }
@@ -89,7 +92,7 @@ class Page extends Component {
         return (
             <StepConfirmation
                 show={this.state.personalFinished}
-                detailedVehicle={this.state.detailed}
+                selectedVehicleVehicle={this.state.selectedVehicle}
                 miles={this.state.miles}
                 zipcode={this.state.zipcode}
             />
@@ -101,7 +104,7 @@ class Page extends Component {
     }
 
     renderPersonalInfo() {
-        if (!this.state.detailed || this.state.personalFinished) {
+        if (!this.state.selectedVehicle || this.state.personalFinished) {
             return false;
         }
 
