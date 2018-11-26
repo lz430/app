@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import StepEstimateSearchVehicle from '../../../../apps/trade/components/StepEstimateSearchVehicle';
 import StepEstimateSelectSpecificVehicle from '../../../../apps/trade/components/StepEstimateSelectSpecificVehicle';
+import StepKnownValue from '../../../../apps/trade/components/StepKnownValue';
 import StepTradeLien from '../../../../apps/trade/components/StepTradeLien';
 import StepKnownOrEstimateValue from '../../../../apps/trade/components/StepKnownOrEstimateValue';
 import StepMiles from '../../../../apps/trade/components/StepMiles';
@@ -48,7 +49,7 @@ class TradeInModal extends React.Component {
         if (value === 'estimate') {
             this.setState({ step: 'estimate_search_vehicle' });
         } else {
-            this.setState({ step: 'know_ask_for_value' });
+            this.setState({ step: 'know_value' });
         }
     }
 
@@ -77,6 +78,13 @@ class TradeInModal extends React.Component {
         this.setState({
             milesOnVehicle: milesOnVehicle,
             step: 'confirmation',
+        });
+    }
+
+    handleConfirmKnownValue(value) {
+        this.setState({
+            valueOfVehicle: value,
+            step: 'miles',
         });
     }
 
@@ -122,6 +130,14 @@ class TradeInModal extends React.Component {
         );
     }
 
+    renderKnownValue() {
+        return (
+            <StepKnownValue
+                onConfirmValue={this.handleConfirmKnownValue.bind(this)}
+            />
+        );
+    }
+
     renderLienStep() {
         return (
             <StepTradeLien
@@ -141,6 +157,8 @@ class TradeInModal extends React.Component {
     renderConfirmationStep() {
         return (
             <StepConfirmation
+                value={this.state.valueOfVehicle}
+                owed={this.state.amountOwnedOnVehicle}
                 detailedVehicle={this.state.selectedVehicle}
                 miles={this.state.milesOnVehicle}
                 zipcode={this.props.zipcode}
@@ -163,6 +181,8 @@ class TradeInModal extends React.Component {
                 <ModalBody>
                     {this.state.step === 'know_or_estimate' &&
                         this.renderKnowOrEstimateStep()}
+                    {this.state.step === 'know_value' &&
+                        this.renderKnownValue()}
                     {this.state.step === 'estimate_search_vehicle' &&
                         this.renderEstimateSearchStep()}
                     {this.state.step === 'estimate_narrow_down' &&

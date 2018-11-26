@@ -5,10 +5,12 @@ import { Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import TradePendingClient from '../../../apps/trade/client';
 import Loading from '../../../components/Loading';
 import { equals } from 'ramda';
+
 class StepConfirmation extends Component {
     static propTypes = {
-        detailedVehicle: PropTypes.object.isRequired,
-        miles: PropTypes.number.isRequired,
+        detailedVehicle: PropTypes.object,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        miles: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         zipcode: PropTypes.string.isRequired,
         handleConfirmationComplete: PropTypes.func.isRequired,
     };
@@ -36,6 +38,10 @@ class StepConfirmation extends Component {
         ) {
             this.fetchData();
         }
+
+        if (this.props.value) {
+            this.setState({ isLoading: false });
+        }
     }
 
     componentDidUpdate(prevProps) {
@@ -49,20 +55,24 @@ class StepConfirmation extends Component {
         ) {
             this.fetchData();
         }
+
+        if (
+            this.props.value &&
+            this.state.isLoading &&
+            this.props.value !== prevProps.value
+        ) {
+            this.setState({ isLoading: false });
+        }
     }
 
-    render() {
-        if (this.state.isLoading) {
-            return <Loading />;
-        }
-
+    renderDetailedConfirmation() {
         const { report } = this.state;
 
         return (
             <React.Fragment>
                 <Row>
                     <Col>
-                        <h1>{report.report.ymmt}</h1>
+                        <h4>{report.report.ymmt}</h4>
                     </Col>
                 </Row>
                 <Row className="mt-5">
@@ -166,6 +176,30 @@ class StepConfirmation extends Component {
                         </ListGroup>
                     </Col>
                 </Row>
+            </React.Fragment>
+        );
+    }
+
+    renderSimpleConfirmation() {
+        return (
+            <Row>
+                <Col>
+                    Value: {this.props.value} <br />
+                    Miles: {this.props.miles}
+                </Col>
+            </Row>
+        );
+    }
+
+    render() {
+        if (this.state.isLoading) {
+            return <Loading />;
+        }
+
+        return (
+            <React.Fragment>
+                {this.state.report && this.renderDetailedConfirmation()}
+                {!!this.props.value && this.renderSimpleConfirmation()}
                 <Row>
                     <Col>
                         <Button

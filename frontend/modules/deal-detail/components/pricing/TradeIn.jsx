@@ -39,7 +39,6 @@ export default class TradeIn extends React.PureComponent {
     }
 
     handleTradeComplete(value, owed, estimate) {
-        console.log('handleTradeComplete');
         this.props.onCompleteTradeIn(value, owed, estimate);
         this.setState({ tradeInModalOpen: false, hasTrade: true });
     }

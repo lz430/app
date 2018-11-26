@@ -14,19 +14,19 @@ import {
 
 class StepTradeLien extends Component {
     static propTypes = {
-        onConfirmMiles: PropTypes.func.isRequired,
+        onConfirmValue: PropTypes.func.isRequired,
     };
 
     state = {
-        miles: 1,
+        value: 0,
     };
 
-    onMilesChange(value) {
-        this.setState({ miles: value });
+    onValueChange(value) {
+        this.setState({ value: value });
     }
 
-    onMilesConfirm() {
-        this.props.onConfirmMiles(this.state.miles);
+    onValueConfirm() {
+        this.props.onConfirmValue(this.state.value);
     }
 
     render() {
@@ -38,10 +38,10 @@ class StepTradeLien extends Component {
             <React.Fragment>
                 <Row>
                     <Col>
-                        <h3>Please provide miles on the vehicle</h3>
+                        <h3>Input the value of your vehicle</h3>
                     </Col>
                 </Row>
-                <Row>
+                <Row className="mr-auto ml-auto">
                     <Col>
                         <Card className="mb-2">
                             <CardBody className="p-2">
@@ -52,15 +52,15 @@ class StepTradeLien extends Component {
                                 ligula aliquam.
                                 <FormGroup className="mt-3">
                                     <Label for="first_name">
-                                        Miles On Vehicle
+                                        Value Of Vehicle
                                     </Label>
                                     <Input
                                         type="number"
                                         min="1"
                                         onChange={e => {
-                                            this.onMilesChange(e.target.value);
+                                            this.onValueChange(e.target.value);
                                         }}
-                                        value={this.state.miles}
+                                        value={this.state.value}
                                         required
                                     />
                                 </FormGroup>
@@ -68,7 +68,7 @@ class StepTradeLien extends Component {
                         </Card>
                         <Button
                             color="primary"
-                            onClick={() => this.onMilesConfirm()}
+                            onClick={() => this.onValueConfirm()}
                         >
                             Next: Confirm
                         </Button>

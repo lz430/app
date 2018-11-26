@@ -27,8 +27,6 @@ export const getConditionalRoles = state => {
 };
 
 export const getTradeIn = state => {
-    console.log('getTradeIn');
-    console.log(state.pages.dealDetails);
     return state.pages.dealDetails.trade;
 };
 

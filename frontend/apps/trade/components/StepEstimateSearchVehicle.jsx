@@ -114,23 +114,30 @@ class StepEstimateSearchVehicle extends Component {
         };
 
         return (
-            <Row>
-                <Col md={{ size: 6, offset: 3 }}>
-                    <Autosuggest
-                        suggestions={suggestions}
-                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(
-                            this
-                        )}
-                        onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(
-                            this
-                        )}
-                        onSuggestionSelected={this.props.onSearchSelect}
-                        getSuggestionValue={this.getResultValue.bind(this)}
-                        renderSuggestion={this.renderResult.bind(this)}
-                        inputProps={inputProps}
-                    />
-                </Col>
-            </Row>
+            <React.Fragment>
+                <Row>
+                    <Col>
+                        <h3>Search for your vehicle</h3>
+                    </Col>
+                </Row>
+                <Row className="mt-3 mb-3">
+                    <Col md={{ size: 6, offset: 3 }}>
+                        <Autosuggest
+                            suggestions={suggestions}
+                            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(
+                                this
+                            )}
+                            onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(
+                                this
+                            )}
+                            onSuggestionSelected={this.props.onSearchSelect}
+                            getSuggestionValue={this.getResultValue.bind(this)}
+                            renderSuggestion={this.renderResult.bind(this)}
+                            inputProps={inputProps}
+                        />
+                    </Col>
+                </Row>
+            </React.Fragment>
         );
     }
 }
