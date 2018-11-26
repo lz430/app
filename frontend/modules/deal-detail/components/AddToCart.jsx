@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
-import TradeIn from './pricing/TradeIn';
+//import TradeIn from './pricing/TradeIn';
 import CashPricingPane from './pricing/CashPane';
 import FinancePricingPane from './pricing/FinancePane';
 import LeasePricingPane from './pricing/LeasePane';
