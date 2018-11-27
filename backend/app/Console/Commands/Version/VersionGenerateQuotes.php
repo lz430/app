@@ -161,9 +161,9 @@ class VersionGenerateQuotes extends Command
                     ], [
                         'hashcode' => $data->hashcode,
                         'make_hashcode' => $data->makeHashcode,
-                        'rate' => (float)(isset($data->rate)) ? $data->rate : 0,
-                        'term' => (int)(isset($data->term)) ? $data->term : 0,
-                        'rebate' => (int)(isset($data->rebate)) ? $data->rebate : 0,
+                        'rate' => (float)(isset($data->rate)) ? $data->rate : null,
+                        'term' => (int)(isset($data->term)) ? $data->term : null,
+                        'rebate' => (int)(isset($data->rebate)) ? $data->rebate : null,
                         'residual' => (int)(isset($data->residual)) ? $data->residual : null,
                         'miles' => (int)(isset($data->miles)) ? $data->miles : null,
                         'rate_type' => (isset($data->rateType)) ? $data->rateType : null,
