@@ -7,6 +7,7 @@ use App\Models\Deal;
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 use App\Services\Quote\DealCalculatePayments;
+use DeliverMyRide\RIS\Map;
 
 /**
  */
@@ -85,7 +86,7 @@ class DealBuildBasicPayments
 
     private function buildLeasePayment($quote, Deal $deal)
     {
-        if (!$quote->term) {
+        if (!$quote->term && in_array($deal->version->model->name, Map::VEHICLE_MODEL_BLACKLIST)) {
             return (object) self::FAKE_LEASE;
         }
 
@@ -93,7 +94,7 @@ class DealBuildBasicPayments
             'termLength' => (int)$quote->term,
             'residuals' => [
                 [
-                    'annualMileage' => (int)$quote->miles,
+                    'annualMileage' => (int)(isset($quote->miles)) ? $quote->miles : null,
                     'residualPercent' => (int)$quote->residual,
                 ]
             ],
@@ -159,7 +160,7 @@ class DealBuildBasicPayments
                     $payments->detroit->finance = $this->buildFinancePayment($quote, $deal);
                     break;
                 case 'lease':
-                    if(!in_array(strtolower($deal->version->model->name), \DeliverMyRide\RIS\Manager\VersionToVehicle::VEHICLE_MODEL_BLACKLIST)) {
+                    if(!in_array(strtolower($deal->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
                         $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
                     }
                     break;
