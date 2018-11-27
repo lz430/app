@@ -226,8 +226,6 @@ class SearchWidget extends React.PureComponent {
      * @returns {*}
      */
     render() {
-        let mobileButton;
-
         if (!this.state.SearchMobile) {
             mobileButton = (
                 <FontAwesomeIcon
