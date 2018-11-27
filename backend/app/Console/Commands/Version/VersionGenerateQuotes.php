@@ -161,7 +161,7 @@ class VersionGenerateQuotes extends Command
                     ], [
                         'hashcode' => $data->hashcode,
                         'make_hashcode' => $data->makeHashcode,
-                        'rate' => (float)$data->rate,
+                        'rate' => (float)(isset($data->rate)) ? $data->rate : null,
                         'term' => (int)$data->term,
                         'rebate' => (int)$data->rebate,
                         'residual' => (int)$data->residual,

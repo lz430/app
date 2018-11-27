@@ -29,6 +29,9 @@ class VersionToVehicle
             // Audi
             'A5 Sportback' => 'A5',
             'A5 Coupe' => 'A5',
+            'S5 Sportback' => 'S5',
+            'A3 Sedan' => 'A3',
+            'A4 allroad', 'allroad',
 
             // Rams
             'Ram 1500 Pickup' => '1500',
@@ -78,8 +81,8 @@ class VersionToVehicle
             'Q60 Coupe' => 'Q60',
 
             // BMW
-            'M3 Sedan' => 'M3',
-            'M2 Coupe' => 'M2',
+            'M3' => 'M3 Sedan',
+            'M2' => 'M2 Coupe',
         ],
 
         'BY_MODEL_AND_TRIM' => [
@@ -327,22 +330,7 @@ class VersionToVehicle
         'promaster city',
         'nv cargo',
         'transit van',
-        'S5 Sportback',
-        '911',
-        'v60',
-        'a3 sedan',
-        'allroad',
         'silverado 3500hd',
-        'gle-class coupe',
-        'hr-v',
-        'insight',
-        'accent',
-        'cayenne',
-        'land cruiser',
-        'pilot',
-        'clarity',
-        'sienna',
-
     ];
 
     private const DRIVEN_WHEELS_MAP = [
