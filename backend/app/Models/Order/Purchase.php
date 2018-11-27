@@ -6,12 +6,11 @@ use App\Models\Deal;
 use App\Models\User;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Purchase
+ * App\Models\Purchase.
  *
  * @property int $id
  * @property int $user_id
@@ -20,6 +19,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int $deal_id
  * @property Deal $deal
  * @property \stdClass $rebates
+ * @property \stdClass $trade
  * @property float $down_payment
  * @property float $monthly_payment
  * @property int $term
@@ -70,6 +70,7 @@ class Purchase extends Model implements JWTSubject
      */
     protected $casts = [
         'rebates' => 'object',
+        'trade' => 'object',
     ];
 
     /**
@@ -89,7 +90,7 @@ class Purchase extends Model implements JWTSubject
     }
 
     /**
-     * Sum total rebates
+     * Sum total rebates.
      *
      * @return float
      */
@@ -99,11 +100,12 @@ class Purchase extends Model implements JWTSubject
         if ($this->rebates && $this->rebates->total) {
             $total = $this->rebates->total;
         }
+
         return $total;
     }
 
     /**
-     * Return rebates as human friendly string
+     * Return rebates as human friendly string.
      *
      * @return string
      */
@@ -157,5 +159,10 @@ class Purchase extends Model implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function title()
+    {
+        return $this->deal->title();
     }
 }

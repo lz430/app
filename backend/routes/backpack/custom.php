@@ -30,6 +30,10 @@ Route::group([
     Route::get('deal/{deal}/financing', 'DealFinancingController@show');
 
     //
+    // Order tools
+    Route::get('purchase/{purchase}', 'OrderViewController@show');
+
+    //
     // Dealer tools
     Route::get('dealer/{dealer}/routeone', 'DealerRouteoneController@show');
 

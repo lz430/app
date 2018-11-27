@@ -63,7 +63,8 @@ export function* checkoutStart(action) {
             checkout.deal.id,
             checkout.strategy,
             checkout.quote,
-            amounts
+            amounts,
+            checkout.tradeIn
         );
     } catch (e) {
         console.log(e);

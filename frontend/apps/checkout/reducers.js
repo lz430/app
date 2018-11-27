@@ -15,7 +15,6 @@ const initialState = {
     term: 0, // number of months for fiance or lease
     financeDownPayment: 0,
     leaseAnnualMileage: 0,
-    contactFormErrors: {},
 };
 
 const persistConfig = {

@@ -1,33 +1,29 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { pricingType } from '../../../../core/types';
+
+import { Label } from 'reactstrap';
+import classNames from 'classnames';
 
 import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
+import Value from '../../../../apps/pricing/components/Value';
+import Line from '../../../../apps/pricing/components/Line';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+
 import TradeInModal from './TradeInModal';
-import { Input, Row, Col, FormGroup, Label } from 'reactstrap';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 export default class TradeIn extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
-        tradeSetValue: PropTypes.func.isRequired,
-        tradeSetOwed: PropTypes.func.isRequired,
-        tradeSetEstimate: PropTypes.func.isRequired,
+        zipcode: PropTypes.string.isRequired,
+        onCompleteTradeIn: PropTypes.func.isRequired,
     };
 
     state = {
         hasTrade: false,
         tradeInModalOpen: false,
     };
-
-    handleValueChange(e) {
-        this.props.tradeSetValue(e.target.value);
-    }
-
-    handleOwedChange(e) {
-        this.props.tradeSetOwed(e.target.value);
-    }
 
     toggleTradeInModal() {
         this.setState({ tradeInModalOpen: !this.state.tradeInModalOpen });
@@ -41,10 +37,14 @@ export default class TradeIn extends React.PureComponent {
         }
     }
 
-    render() {
+    handleTradeComplete(value, owed, estimate) {
+        this.props.onCompleteTradeIn(value, owed, estimate);
+        this.setState({ tradeInModalOpen: false, hasTrade: true });
+    }
+
+    renderTradeStartCta() {
         return (
-            <Group>
-                <Header>Trade In</Header>
+            <React.Fragment>
                 <div
                     onClick={() => this.handleTradeButton(false)}
                     className={classNames(
@@ -79,40 +79,46 @@ export default class TradeIn extends React.PureComponent {
                 </div>
 
                 <TradeInModal
+                    handleTradeComplete={this.handleTradeComplete.bind(this)}
                     isOpen={this.state.tradeInModalOpen}
                     toggle={this.toggleTradeInModal.bind(this)}
+                    zipcode={this.props.zipcode}
                 />
+            </React.Fragment>
+        );
+    }
 
-                <Row>
-                    <Col>
-                        <FormGroup>
-                            <Label for="value">Value</Label>
-                            <Input
-                                type="number"
-                                name="value"
-                                id="value"
-                                placeholder="0"
-                                value={
-                                    this.props.pricing.tradeIn().value.amount
-                                }
-                                onChange={this.handleValueChange.bind(this)}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col>
-                        <FormGroup>
-                            <Label for="owed">Amount Owed</Label>
-                            <Input
-                                type="number"
-                                name="owed"
-                                id="owed"
-                                placeholder="0"
-                                value={this.props.pricing.tradeIn().owed.amount}
-                                onChange={this.handleOwedChange.bind(this)}
-                            />
-                        </FormGroup>
-                    </Col>
-                </Row>
+    renderTradeResults() {
+        const tradeIn = this.props.pricing.tradeIn();
+        return (
+            <React.Fragment>
+                <Line>
+                    <Label>Value Of Trade</Label>
+                    <Value>
+                        <DollarsAndCents value={tradeIn.value} />
+                    </Value>
+                </Line>
+                <Line>
+                    <Label>Owed On Trade</Label>
+                    <Value>
+                        <DollarsAndCents value={tradeIn.owed} />
+                    </Value>
+                </Line>
+            </React.Fragment>
+        );
+    }
+
+    render() {
+        const tradeIn = this.props.pricing.tradeIn();
+        const showTradeResults = !!(
+            tradeIn.estimate || tradeIn.value.getAmount()
+        );
+
+        return (
+            <Group>
+                <Header>Trade In</Header>
+                {!showTradeResults && this.renderTradeStartCta()}
+                {showTradeResults && this.renderTradeResults()}
                 <hr />
             </Group>
         );

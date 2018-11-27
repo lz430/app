@@ -19,3 +19,4 @@ export const SELECT_CONDITIONAL_ROLES = `${namespace}_SELECT_CONDITIONAL_ROLES`;
 export const TRADE_SET_VALUE = `${namespace}_TRADE_SET_VALUE`;
 export const TRADE_SET_OWED = `${namespace}_TRADE_SET_OWED`;
 export const TRADE_SET_ESTIMATE = `${namespace}_TRADE_SET_ESTIMATE`;
+export const TRADE_SET = `${namespace}_TRADE_SET`;

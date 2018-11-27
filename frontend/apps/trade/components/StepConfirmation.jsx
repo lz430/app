@@ -1,45 +1,78 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import { Row, Col, ListGroup, ListGroupItem, Button } from 'reactstrap';
 import TradePendingClient from '../../../apps/trade/client';
+import Loading from '../../../components/Loading';
+import { equals } from 'ramda';
 
 class StepConfirmation extends Component {
     static propTypes = {
-        show: PropTypes.bool.isRequired,
         detailedVehicle: PropTypes.object,
-        miles: PropTypes.string,
-        zipcode: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        miles: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        zipcode: PropTypes.string.isRequired,
+        handleConfirmationComplete: PropTypes.func.isRequired,
     };
 
     state = {
+        isLoading: true,
         report: null,
     };
 
-    componentDidUpdate(prevProps) {
-        if (this.props.show && this.props.show !== prevProps.show) {
-            TradePendingClient.report(
-                this.props.detailedVehicle.id,
-                this.props.zipcode,
-                this.props.miles
-            ).then(res => {
-                this.setState({ report: res.data });
-            });
+    fetchData() {
+        TradePendingClient.report(
+            this.props.detailedVehicle.id,
+            this.props.zipcode,
+            this.props.miles
+        ).then(res => {
+            this.setState({ isLoading: false, report: res.data });
+        });
+    }
+
+    componentDidMount() {
+        if (
+            this.props.detailedVehicle &&
+            this.props.miles &&
+            this.props.zipcode
+        ) {
+            this.fetchData();
+        }
+
+        if (this.props.value) {
+            this.setState({ isLoading: false });
         }
     }
 
-    render() {
-        if (!this.state.report) {
-            return false;
+    componentDidUpdate(prevProps) {
+        if (
+            this.props.detailedVehicle &&
+            this.props.miles &&
+            this.props.zipcode &&
+            !this.state.isLoading &&
+            !this.state.report &&
+            !equals(this.props.detailedVehicle, prevProps.detailedVehicle)
+        ) {
+            this.fetchData();
         }
 
+        if (
+            this.props.value &&
+            this.state.isLoading &&
+            this.props.value !== prevProps.value
+        ) {
+            this.setState({ isLoading: false });
+        }
+    }
+
+    renderDetailedConfirmation() {
         const { report } = this.state;
 
         return (
             <React.Fragment>
                 <Row>
                     <Col>
-                        <h1>{report.report.ymmt}</h1>
+                        <h4>{report.report.ymmt}</h4>
                     </Col>
                 </Row>
                 <Row className="mt-5">
@@ -141,6 +174,43 @@ class StepConfirmation extends Component {
                                 {report.vehicle.fuel_type}
                             </ListGroupItem>
                         </ListGroup>
+                    </Col>
+                </Row>
+            </React.Fragment>
+        );
+    }
+
+    renderSimpleConfirmation() {
+        return (
+            <Row>
+                <Col>
+                    Value: {this.props.value} <br />
+                    Miles: {this.props.miles}
+                </Col>
+            </Row>
+        );
+    }
+
+    render() {
+        if (this.state.isLoading) {
+            return <Loading />;
+        }
+
+        return (
+            <React.Fragment>
+                {this.state.report && this.renderDetailedConfirmation()}
+                {!!this.props.value && this.renderSimpleConfirmation()}
+                <Row>
+                    <Col>
+                        <Button
+                            onClick={() =>
+                                this.props.handleConfirmationComplete(
+                                    this.state.report
+                                )
+                            }
+                        >
+                            Next: Continue
+                        </Button>
                     </Col>
                 </Row>
             </React.Fragment>

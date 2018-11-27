@@ -59,7 +59,7 @@ class Page extends Component {
     }
 
     renderEstimateSearchStep() {
-        if (this.state.selected) {
+        if (this.state.selectedYearMakeModel) {
             return false;
         }
 
