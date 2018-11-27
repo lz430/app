@@ -88,42 +88,40 @@ class DealBuildBasicPayments
     {
         if (!$quote->term && in_array($deal->version->model->name, Map::VEHICLE_MODEL_BLACKLIST)) {
             return (object) self::FAKE_LEASE;
-        }
-
-        $rates = [
-            'termLength' => (int)$quote->term,
-            'residuals' => [
-                [
-                    'annualMileage' => (int)(isset($quote->miles)) ? $quote->miles : null,
-                    'residualPercent' => (int)$quote->residual,
-                ]
-            ],
-        ];
-
-        if ($quote->rate_type != 'Factor') {
-            $rates['rate'] = (float)$quote->rate;
-            $rates['type'] = 'rate';
         } else {
-            $rates['moneyFactor'] = (float)$quote->rate;
-            $rates['type'] = 'factor';
-        }
+            $rates = [
+                'termLength' => (int)$quote->term,
+                'residuals' => [
+                    [
+                        'annualMileage' => (int)$quote->miles,
+                        'residualPercent' => (int)$quote->residual,
+                    ]
+                ],
+            ];
 
-        $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-        $payment = $manager->get([$rates], $quote->rebate, [0], 'default');
-        if (count($payment)) {
-            $payload = new \stdClass();
-            $payload->term = (int)$quote->term;
-            $payload->rate = (float)$quote->rate;
-            $payload->rate_type = $quote->rate_type;
-            $payload->rebate = (float) $quote->rebate;
-            $payload->residual = (int)$quote->residual;
-            $payload->miles = (int) $quote->miles;
-            $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
-            $payload->payment = round($payment[0]['monthly_payment'], 2);
-            return $payload;
-        }
+            if ($quote->rate_type != 'Factor') {
+                $rates['rate'] = (float)$quote->rate;
+                $rates['type'] = 'rate';
+            } else {
+                $rates['moneyFactor'] = (float)$quote->rate;
+                $rates['type'] = 'factor';
+            }
 
-        return (object) self::FAKE_LEASE;
+            $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
+            $payment = $manager->get([$rates], $quote->rebate, [0], 'default');
+            if (count($payment)) {
+                $payload = new \stdClass();
+                $payload->term = (int)$quote->term;
+                $payload->rate = (float)$quote->rate;
+                $payload->rate_type = $quote->rate_type;
+                $payload->rebate = (float) $quote->rebate;
+                $payload->residual = (int)$quote->residual;
+                $payload->miles = (int) $quote->miles;
+                $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
+                $payload->payment = round($payment[0]['monthly_payment'], 2);
+                return $payload;
+            }
+        }
     }
 
     /**
