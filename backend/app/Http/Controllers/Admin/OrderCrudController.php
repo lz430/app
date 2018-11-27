@@ -57,6 +57,24 @@ class OrderCrudController extends CrudController
 
         $this->crud->denyAccess(['create', 'update', 'reorder', 'delete']);
 
+        $this->crud->addButtonFromView('line', 'open_purchase_in_admin', 'purchase-admin-view', null);
+
+
+        $this->crud->addFilter([ // dropdown filter
+            'name' => 'status',
+            'type' => 'dropdown',
+            'label'=> 'Status'
+        ], [
+            'cart' => 'Cart',
+            'contact' => 'Contact',
+            'financing' => 'Financing',
+            'fulfillment' => 'Fulfillment',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled'
+        ], function($value) { // if the filter is active
+            $this->crud->addClause('where', 'status', $value);
+        });
+
         // ------ CRUD FIELDS
         // $this->crud->addField($options, 'update/create/both');
         // $this->crud->addFields($array_of_arrays, 'update/create/both');
@@ -78,7 +96,7 @@ class OrderCrudController extends CrudController
         // $this->crud->addButtonFromView($stack, $name, $view, $position); // add a button whose HTML is in a view placed at resources\views\vendor\backpack\crud\buttons
         // $this->crud->removeButton($name);
         // $this->crud->removeButtonFromStack($name, $stack);
-        $this->crud->removeAllButtons();
+        //$this->crud->removeAllButtons();
         $this->crud->orderBy('created_at', 'desc');
         // $this->crud->removeAllButtonsFromStack('line');
 

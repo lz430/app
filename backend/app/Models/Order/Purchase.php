@@ -160,4 +160,8 @@ class Purchase extends Model implements JWTSubject
     {
         return [];
     }
+
+    public function title() {
+        return $this->deal->title();
+    }
 }
