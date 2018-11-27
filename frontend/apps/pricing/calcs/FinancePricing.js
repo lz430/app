@@ -1,5 +1,5 @@
 import Pricing from './Pricing';
-import { fromWholeDollars } from '../money';
+import { fromWholeDollars, zero } from '../money';
 
 const defaultTerm = 60;
 const defaultDownPaymentPercent = 0.1; // example: .25 here means 25%
@@ -13,12 +13,25 @@ export default class FinancePricing extends Pricing {
     basePrice = () =>
         this.discountedPrice()
             .add(this.docFee())
-            .add(this.cvrFee());
+            .add(this.cvrFee())
+            .add(this.tradeIn().owed)
+            .subtract(this.tradeIn().value);
 
     sellingPrice = () => this.withTaxAdded(this.basePrice());
+
     yourPrice = () => this.sellingPrice().subtract(this.rebates());
 
-    salesTax = () => this.taxesFor(this.basePrice());
+    salesTax = () =>
+        this.discountedPrice()
+            .add(this.docFee())
+            .add(this.cvrFee())
+            .multiply(this.taxRate());
+
+    taxesAndFees = () =>
+        zero
+            .add(this.docFee())
+            .add(this.cvrFee())
+            .add(this.salesTax());
 
     downPayment = () => {
         const downPayment = this.data.financeDownPayment;

@@ -16,9 +16,10 @@ export function updateEntirePageState(data) {
     };
 }
 
-export function requestSearch() {
+export function requestSearch(cancel = false) {
     return {
         type: ActionTypes.SEARCH_REQUEST,
+        cancel: cancel,
     };
 }
 

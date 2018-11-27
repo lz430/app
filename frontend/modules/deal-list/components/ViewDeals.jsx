@@ -14,11 +14,13 @@ import CardCta from './Cta/CardCta';
 class ViewDeals extends React.PureComponent {
     static propTypes = {
         deals: PropTypes.arrayOf(dealType),
+        purchaseStrategy: PropTypes.string.isRequired,
         compareList: PropTypes.array,
         meta: PropTypes.object.isRequired,
         shouldShowLoading: PropTypes.bool,
         onRequestMoreDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
     };
 
     compareListContainsDeal(deal) {
@@ -56,7 +58,12 @@ class ViewDeals extends React.PureComponent {
 
     renderDeal(deal, index) {
         return (
-            <Deal deal={deal} key={index}>
+            <Deal
+                deal={deal}
+                key={index}
+                purchaseStrategy={this.props.purchaseStrategy}
+                onRequestDealQuote={this.props.onRequestDealQuote}
+            >
                 <div className="deal__buttons">
                     <button
                         className={this.compareButtonClass()}

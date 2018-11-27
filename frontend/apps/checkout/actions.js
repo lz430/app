@@ -9,7 +9,8 @@ export function setCheckoutData(
     financeDownPayment,
     leaseAnnualMileage,
     employeeBrand,
-    supplierBrand
+    supplierBrand,
+    tradeIn
 ) {
     return {
         type: ActionTypes.SET_CHECKOUT_DATA,
@@ -22,6 +23,7 @@ export function setCheckoutData(
         leaseAnnualMileage,
         employeeBrand,
         supplierBrand,
+        tradeIn,
     };
 }
 
@@ -52,11 +54,11 @@ export function checkoutStart(pricing, router) {
     };
 }
 
-export function checkoutContact(fields, router) {
+export function checkoutContact(values, actions) {
     return {
         type: ActionTypes.CHECKOUT_CONTACT,
-        fields,
-        router: router,
+        values,
+        actions: actions,
     };
 }
 
@@ -64,18 +66,5 @@ export function checkoutFinancingComplete(fields) {
     return {
         type: ActionTypes.CHECKOUT_FINANCING_COMPLETE,
         fields,
-    };
-}
-
-export function clearCheckoutContactFormErrors() {
-    return {
-        type: ActionTypes.CLEAR_CHECKOUT_CONTACT_FORM_ERRORS,
-    };
-}
-
-export function setCheckoutContactFormErrors(errors) {
-    return {
-        type: ActionTypes.SET_CHECKOUT_CONTACT_FORM_ERRORS,
-        errors,
     };
 }

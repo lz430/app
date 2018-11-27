@@ -1,5 +1,6 @@
 import { map } from 'ramda';
 import config from '../../core/config';
+
 /**
  * Generates a key for a specific quote.
  * @param deal

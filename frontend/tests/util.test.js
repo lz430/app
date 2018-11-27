@@ -1,7 +1,7 @@
 /* global test */
 /* global expect */
 
-import { getClosestNumberInRange } from '../pricing/util';
+import { getClosestNumberInRange } from '../util/util';
 
 test('it_can_get_the_closest_number_in_a_range', () => {
     expect(getClosestNumberInRange(36, [27, 39])).toEqual(39);

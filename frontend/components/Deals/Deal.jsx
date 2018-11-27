@@ -11,12 +11,10 @@ import Link from 'next/link';
 class Deal extends React.Component {
     static propTypes = {
         deal: dealType.isRequired,
+        purchaseStrategy: PropTypes.string.isRequired,
         children: PropTypes.node,
     };
 
-    /**
-     * Remove once everything supports react router.
-     */
     renderHeaderContent() {
         const deal = this.props.deal;
 
@@ -58,6 +56,7 @@ class Deal extends React.Component {
                     />
 
                     <DealPrice
+                        purchaseStrategy={this.props.purchaseStrategy}
                         deal={this.props.deal}
                         key={'price' + this.props.deal.id}
                     />

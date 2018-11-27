@@ -94,7 +94,7 @@ export default class MyDocument extends Document {
                             id="hs-script-loader"
                             async
                             defer
-                            src="//js.hs-scripts.com/3388780.js"
+                            src="https://js.hs-scripts.com/3388780.js"
                         />
                     )}
 

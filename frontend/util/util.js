@@ -23,28 +23,6 @@ export const toggleItem = (items, item) => {
 
 /**
  *
- * @param num
- * @returns {*}
- */
-export const moneyFormat = num => {
-    // Older browser don't support this.
-    if (
-        typeof Intl !== 'undefined' &&
-        typeof Intl.NumberFormat === 'function'
-    ) {
-        const formatter = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-        });
-        return formatter.format(Math.round(num));
-    } else {
-        return Math.round(num);
-    }
-};
-
-/**
- *
  * @param needle
  * @param haystack
  * @returns {*}

@@ -21,13 +21,18 @@ class RecapchaFormField extends React.Component {
         this.props.form.setFieldValue(this.props.field.name, recaptchaToken);
     };
 
+    state = {
+        submitCount: 0,
+    };
+
     componentDidUpdate() {
         if (
             this.props.field.value &&
             Object.keys(this.props.form.errors).length &&
-            this.props.form.submitCount
+            this.props.form.submitCount !== this.state.submitCount
         ) {
-            this.props.form.setFieldValue(this.props.field.name, '');
+            this.setState({ submitCount: this.props.form.submitCount });
+            this.props.form.setFieldValue(this.props.field.name, '', false);
             this.recaptchaRef.current.reset();
         }
     }
@@ -57,28 +62,7 @@ class RecapchaFormField extends React.Component {
 }
 
 /**
- * A Formik Field whose component is a custom bootstrap input
- * Usage: pass the same props to this component as you would pass to the Input field from reactstrap.
- * Example:
- *    <FormikFieldWithBootstrapInput
- name="email"
- placeholder='Email'
- bsSize='lg'
- className={'mb-2'}
- type={'email'} />
-
- //is equivalent with
- <FormikField name='email'>
- {({ field, form }) => (
-          <Input
-               placeholder='Email'
-               bsSize='lg'
-               className={'mb-2'}
-               type={'email'}
-               invalid={form.touched[field.name] && form.errors[field.name]}
-                />
-          )}
- </FormikField>
+ * A Formik Field whose component is a recapaca field
  * @param props
  * @returns {*}
  */

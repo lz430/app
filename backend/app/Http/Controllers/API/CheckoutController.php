@@ -1,27 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\API;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Transformers\PurchaseTransformer;
-use Illuminate\Http\Request;
 
-use App\Models\Order\Purchase;
+use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\User;
-use Carbon\Carbon;
-
+use Illuminate\Http\Request;
+use App\Models\Order\Purchase;
 use Illuminate\Support\Facades\DB;
+use App\Transformers\PurchaseTransformer;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * Checkout is 4 steps
  *  1) Start (user clicks "Buy now" on deal detail page)
  *  2) Submit Contact Information (user clicks "Submit" on deal confirm page
  *  3) Submit Financing Information (Optional) (user completes route one??)
- *  4) Complete (??)
+ *  4) Complete (??).
  */
 class CheckoutController extends BaseAPIController
 {
-
     /**
      * Create a new AuthController instance.
      *
@@ -31,7 +29,6 @@ class CheckoutController extends BaseAPIController
     {
         $this
         ->middleware(['auth:api', 'can:update,purchase'], ['except' => ['start', 'contact']]);
-
     }
 
     /**
@@ -49,7 +46,6 @@ class CheckoutController extends BaseAPIController
             'deal_id' => 'required|exists:deals,id',
             'strategy' => 'required|in:cash,finance,lease',
             'quote' => 'required',
-
             // Not an awesome name.
             'amounts' => 'required',
         ]);
@@ -63,6 +59,7 @@ class CheckoutController extends BaseAPIController
             'completed_at' => null,
             'type' => $request->get('strategy'),
             'rebates' => $request->get('quote')['rebates'],
+            'trade' => $request->get('trade', null),
             'dmr_price' => $request->get('amounts')['price'],
             'msrp' => $deal->prices()->msrp,
             'term' => isset($amounts['term']) ? $amounts['term'] : 0,
@@ -102,11 +99,11 @@ class CheckoutController extends BaseAPIController
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
-                'g-recaptcha-response' => 'required|recaptcha',
+                'g_recaptcha_response' => 'required|recaptcha',
             ],
             [
                 'drivers_license_number' => 'Please provide a valid License Number.',
-                'g-recaptcha-response' => 'The recaptcha is required.',
+                'g_recaptcha_response' => 'The recaptcha is required.',
             ]
         );
         $this->authorize('update', [$purchase, $request->order_token]);
@@ -122,7 +119,7 @@ class CheckoutController extends BaseAPIController
              */
             $user = User::updateOrCreate(
                 [
-                    'email' => $request->email
+                    'email' => $request->email,
                 ],
                 [
                     'drivers_license_number' => $request->drivers_license_number,
@@ -133,10 +130,11 @@ class CheckoutController extends BaseAPIController
                     'zip' => session()->get('zip'),
                 ]
             );
+
             return $user;
         });
         $purchase->user_id = $user->id;
-        $purchase->status = "contact";
+        $purchase->status = 'contact';
         $purchase->save();
 
         $token = auth('api')->login($user);
@@ -148,7 +146,7 @@ class CheckoutController extends BaseAPIController
         if ($purchase->isCash()) {
             $return['destination'] = '/checkout/complete?method=cash';
         } else {
-            $return['destination'] = "/checkout/financing";
+            $return['destination'] = '/checkout/financing';
         }
 
         return response()->json($return);
@@ -158,7 +156,8 @@ class CheckoutController extends BaseAPIController
      * @param Purchase $purchase
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getFinancing(Purchase $purchase) {
+    public function getFinancing(Purchase $purchase)
+    {
         try {
             $deal = $purchase->deal;
             $dealer = $deal->dealer;
@@ -168,7 +167,7 @@ class CheckoutController extends BaseAPIController
             $query = [
                 'rteOneDmsId' => config('services.routeone.id'),
                 'dealerId' => $dealer->route_one_id,
-                'buyOrLease' => ($purchase->type === "finance" ? 1 : 2),
+                'buyOrLease' => ($purchase->type === 'finance' ? 1 : 2),
                 'email' => $user->email,
                 'vehicle_vin' => $deal->vin,
                 'vehicleYear' => $deal->year,
@@ -195,13 +194,13 @@ class CheckoutController extends BaseAPIController
                 $url = config('services.routeone.production_url');
             }
 
-            $url = $url . '?' . http_build_query($query);
+            $url = $url.'?'.http_build_query($query);
 
             $data = [
                 'url' => $url,
             ];
-            return response()->json($data);
 
+            return response()->json($data);
         } catch (ModelNotFoundException $e) {
             return abort(404);
         }
@@ -211,14 +210,16 @@ class CheckoutController extends BaseAPIController
      * @param Purchase $purchase
      * @return \Illuminate\Http\JsonResponse
      */
-    public function financingComplete(Purchase $purchase) {
-        /**
+    public function financingComplete(Purchase $purchase)
+    {
+        /*
          * Disallow changing completed_at
          */
-        if (!$purchase->completed_at) {
+        if (! $purchase->completed_at) {
             $purchase->completed_at = Carbon::now();
             $purchase->save();
         }
+
         return response()->json(['status' => 'okay']);
     }
 
@@ -232,7 +233,7 @@ class CheckoutController extends BaseAPIController
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
         ];
     }
 }
