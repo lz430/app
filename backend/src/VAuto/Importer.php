@@ -349,6 +349,7 @@ class Importer
      */
     public function import()
     {
+        \DB::connection()->disableQueryLog();
 
         $sources = $this->buildSourceData();
         $hashes = [];

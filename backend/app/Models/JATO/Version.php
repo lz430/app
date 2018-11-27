@@ -118,13 +118,24 @@ class Version extends Model
     }
 
     /**
+     * @param bool $allow_last_year
      * @return VersionPhoto|null
      */
-    public function thumbnail(): ?VersionPhoto {
-        return $this->photos()
+    public function thumbnail($allow_last_year = true): ?VersionPhoto {
+        $thumbnail = $this->photos()
             ->where('shot_code', '=', '116')
             ->where('type', '=', 'default')
             ->first();
+
+        // Only allow us to go back one year.
+        if (!$thumbnail && $allow_last_year) {
+            $thumbnail = Version::where('year', '=', (int) $this->year - 1)
+                ->where('model_id', '=',  $this->model->id)
+                ->has('photos')
+                ->first()->thumbnail(false);
+        }
+
+        return $thumbnail;
     }
 
     public function styleSynonyms() {
