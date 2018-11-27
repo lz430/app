@@ -6,7 +6,7 @@ import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../../components/Deals/StyleIcon';
 import { nextRouterType } from '../../../core/types';
 
-import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
+import { faSearch, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
