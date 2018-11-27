@@ -259,9 +259,6 @@ class SearchWidget extends React.PureComponent {
             <div className="home__search" ref={node => (this.node = node)}>
                 <h2>Search new cars from local dealers</h2>
                 <div className="search__input">
-                    <SmallAndDown>
-                        <div className="search__mobile">{mobileButton}</div>
-                    </SmallAndDown>
                     {this.renderSearchIcon()}
                     <input
                         type="text"
