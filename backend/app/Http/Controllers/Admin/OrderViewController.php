@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\Order\Purchase;
 use App\Http\Controllers\Controller;
-
 
 class OrderViewController extends Controller
 {

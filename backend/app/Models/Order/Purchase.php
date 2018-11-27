@@ -6,12 +6,11 @@ use App\Models\Deal;
 use App\Models\User;
 use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Purchase
+ * App\Models\Purchase.
  *
  * @property int $id
  * @property int $user_id
@@ -91,7 +90,7 @@ class Purchase extends Model implements JWTSubject
     }
 
     /**
-     * Sum total rebates
+     * Sum total rebates.
      *
      * @return float
      */
@@ -101,11 +100,12 @@ class Purchase extends Model implements JWTSubject
         if ($this->rebates && $this->rebates->total) {
             $total = $this->rebates->total;
         }
+
         return $total;
     }
 
     /**
-     * Return rebates as human friendly string
+     * Return rebates as human friendly string.
      *
      * @return string
      */
@@ -161,7 +161,8 @@ class Purchase extends Model implements JWTSubject
         return [];
     }
 
-    public function title() {
+    public function title()
+    {
         return $this->deal->title();
     }
 }

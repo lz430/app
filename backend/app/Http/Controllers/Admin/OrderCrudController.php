@@ -14,7 +14,7 @@ class OrderCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\Order\Purchase');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/purchase');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/purchase');
         $this->crud->setEntityNameStrings('purchase', 'purchases');
 
         /*
@@ -59,19 +59,18 @@ class OrderCrudController extends CrudController
 
         $this->crud->addButtonFromView('line', 'open_purchase_in_admin', 'purchase-admin-view', null);
 
-
         $this->crud->addFilter([ // dropdown filter
             'name' => 'status',
             'type' => 'dropdown',
-            'label'=> 'Status'
+            'label'=> 'Status',
         ], [
             'cart' => 'Cart',
             'contact' => 'Contact',
             'financing' => 'Financing',
             'fulfillment' => 'Fulfillment',
             'completed' => 'Completed',
-            'cancelled' => 'Cancelled'
-        ], function($value) { // if the filter is active
+            'cancelled' => 'Cancelled',
+        ], function ($value) { // if the filter is active
             $this->crud->addClause('where', 'status', $value);
         });
 

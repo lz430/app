@@ -27,7 +27,6 @@ class AddTradeToPurchase extends Migration
     {
         Schema::table('purchases', function (Blueprint $table) {
             $table->dropColumn('trade');
-
         });
     }
 }

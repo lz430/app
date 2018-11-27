@@ -33,7 +33,6 @@ Route::group([
     // Order tools
     Route::get('purchase/{purchase}', 'OrderViewController@show');
 
-
     //
     // Dealer tools
     Route::get('dealer/{dealer}/routeone', 'DealerRouteoneController@show');
