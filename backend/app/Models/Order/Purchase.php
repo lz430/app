@@ -20,6 +20,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property int $deal_id
  * @property Deal $deal
  * @property \stdClass $rebates
+ * @property \stdClass $trade
  * @property float $down_payment
  * @property float $monthly_payment
  * @property int $term
@@ -70,6 +71,7 @@ class Purchase extends Model implements JWTSubject
      */
     protected $casts = [
         'rebates' => 'object',
+        'trade' => 'object',
     ];
 
     /**

@@ -46,7 +46,6 @@ class CheckoutController extends BaseAPIController
             'deal_id' => 'required|exists:deals,id',
             'strategy' => 'required|in:cash,finance,lease',
             'quote' => 'required',
-
             // Not an awesome name.
             'amounts' => 'required',
         ]);
@@ -60,6 +59,7 @@ class CheckoutController extends BaseAPIController
             'completed_at' => null,
             'type' => $request->get('strategy'),
             'rebates' => $request->get('quote')['rebates'],
+            'trade' => $request->get('trade', null),
             'dmr_price' => $request->get('amounts')['price'],
             'msrp' => $deal->prices()->msrp,
             'term' => isset($amounts['term']) ? $amounts['term'] : 0,
