@@ -227,6 +227,7 @@ class SearchWidget extends React.PureComponent {
      */
     render() {
         if (!this.state.SearchMobile) {
+            let mobileButton;
             mobileButton = (
                 <FontAwesomeIcon
                     icon={faSearch}
@@ -240,6 +241,7 @@ class SearchWidget extends React.PureComponent {
                 />
             );
         } else {
+            let mobileButton;
             mobileButton = (
                 <FontAwesomeIcon
                     icon={faTimes}
