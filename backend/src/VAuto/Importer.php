@@ -2,79 +2,70 @@
 
 namespace DeliverMyRide\VAuto;
 
-use App\Models\Dealer;
-use App\Models\JATO\Version;
-use App\Models\Deal;
-
-use DeliverMyRide\JATO\JatoClient;
-
-use Carbon\Carbon;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use Illuminate\Database\QueryException;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\DB;
-
-use Illuminate\Support\Facades\File;
-
+use Carbon\Carbon;
+use App\Models\Deal;
+use App\Models\Dealer;
 use League\Csv\Reader;
 use League\Csv\Statement;
-
-use Illuminate\Support\Facades\Notification;
+use App\Models\JATO\Version;
+use DeliverMyRide\JATO\JatoClient;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Database\QueryException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 use App\Notifications\NotifyToSlackChannel;
+use Illuminate\Support\Facades\Notification;
 
-
-/**
- *
- */
 class Importer
 {
     private const HEADERS = [
-        "DealerId",
-        "Stock #",
-        "VIN",
-        "New/Used",
-        "Year",
-        "Make",
-        "Model",
-        "Model Code",
-        "Body",
-        "Transmission",
-        "Series",
-        "Series Detail",
-        "Door Count",
-        "Odometer",
-        "Engine Cylinder Ct",
-        "Engine Displacement",
-        "Drivetrain Desc",
-        "Colour",
-        "Interior Color",
-        "Price",
-        "MSRP",
-        "Inventory Date",
-        "Certified",
-        "Description",
-        "Features",
-        "City MPG",
-        "Highway MPG",
-        "Photo Count",
-        "Photos",
-        "Photos Last Modified Date",
-        "Dealer Name",
-        "Engine",
-        "Fuel",
-        "Age",
-        "Option Codes",
-        "Invoice",
-        "Sticker",
-        "Dealer Discounted",
-        "MEMOLINE1",
-        "MEMOLINE2",
-        "FLOORPLANAMOUNT",
-        "SALESCOST",
-        "INVOICEAMOUNT",
+        'DealerId',
+        'Stock #',
+        'VIN',
+        'New/Used',
+        'Year',
+        'Make',
+        'Model',
+        'Model Code',
+        'Body',
+        'Transmission',
+        'Series',
+        'Series Detail',
+        'Door Count',
+        'Odometer',
+        'Engine Cylinder Ct',
+        'Engine Displacement',
+        'Drivetrain Desc',
+        'Colour',
+        'Interior Color',
+        'Price',
+        'MSRP',
+        'Inventory Date',
+        'Certified',
+        'Description',
+        'Features',
+        'City MPG',
+        'Highway MPG',
+        'Photo Count',
+        'Photos',
+        'Photos Last Modified Date',
+        'Dealer Name',
+        'Engine',
+        'Fuel',
+        'Age',
+        'Option Codes',
+        'Invoice',
+        'Sticker',
+        'Dealer Discounted',
+        'MEMOLINE1',
+        'MEMOLINE2',
+        'FLOORPLANAMOUNT',
+        'SALESCOST',
+        'INVOICEAMOUNT',
 
     ];
 
@@ -162,11 +153,10 @@ class Importer
      */
     private function parseSourceData(array $source)
     {
-
         $reader = Reader::createFromPath($source['path'], 'r');
         $stmt = (new Statement())
             ->where(function ($row) {
-                return !$this->skipSourceRecord($row);
+                return ! $this->skipSourceRecord($row);
             });
 
         $records = $stmt->process($reader, self::HEADERS);
@@ -214,24 +204,25 @@ class Importer
             list($version, $versionDebugData) = (new VersionMunger($this->jatoClient))->build($row);
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
-            if(isset($versionDebugData['versionPhotos'])) {
+            if (isset($versionDebugData['versionPhotos'])) {
                 $this->debug['versionPhotosUpdated'] = $versionDebugData['versionPhotos'];
             }
 
             //
             // Fail if we don't have a version
-            if (!$version) {
+            if (! $version) {
                 Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                     'VAuto Row' => $row,
                 ]);
                 $this->debug['erroredVins']++;
-                $this->info("    -- Error: Could not find match for vin");
+                $this->info('    -- Error: Could not find match for vin');
+
                 return;
             }
-            if(isset($versionDebugData['versionsCreated'])) {
+            if (isset($versionDebugData['versionsCreated'])) {
                 $this->debug['versionsCreated'] = $versionDebugData['versionsCreated'];
             }
-            if(isset($versionDebugData['versionsUpdated'])) {
+            if (isset($versionDebugData['versionsUpdated'])) {
                 $this->debug['versionsUpdated'] = $versionDebugData['versionsUpdated'];
             }
 
@@ -252,7 +243,7 @@ class Importer
             $this->info("    -- Version ID: {$version->id}");
             $this->info("    -- Deal ID: {$deal->id}");
             $this->info("    -- Deal Title: {$deal->title()}");
-            $this->info("    -- Is New: " . ($deal->wasRecentlyCreated ? "Yes" : "No"));
+            $this->info('    -- Is New: '.($deal->wasRecentlyCreated ? 'Yes' : 'No'));
             $dealMunger = resolve('DeliverMyRide\VAuto\Deal\DealMunger');
             DB::transaction(function () use ($dealMunger, $deal, $row) {
                 $debug = $dealMunger->import($deal, $row);
@@ -262,7 +253,7 @@ class Importer
 
                 if (count($debug['equipment_extracted_codes'])) {
                     $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
-                    $msg = implode(", ", $codes);
+                    $msg = implode(', ', $codes);
                     $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
 
@@ -276,19 +267,17 @@ class Importer
                 $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
                 $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 
-                if($debug['deal_photos_refreshed'] == "Yes") {
+                if ($debug['deal_photos_refreshed'] == 'Yes') {
                     $this->debug['dealPhotosRefreshed']++;
                 }
 
-                if($debug['stock_photos'] > 0) {
+                if ($debug['stock_photos'] > 0) {
                     $this->debug['dealStockPhotos']++;
                 }
-
             });
-
         } catch (ClientException | ServerException $e) {
-            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::channel('jato')->error('Importer error for vin ['.$row['VIN'].']: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
@@ -298,8 +287,8 @@ class Importer
                 throw $e;
             }
         } catch (QueryException | Exception $e) {
-            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::channel('jato')->error('Importer error for vin ['.$row['VIN'].']: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
@@ -308,7 +297,6 @@ class Importer
     }
 
     /**
-     *
      * @param $row
      * @return bool returns true if we should skip the row.
      */
@@ -333,7 +321,7 @@ class Importer
         }
 
         $dealer = Dealer::where('dealer_id', $row['DealerId'])->first();
-        if (!$dealer) {
+        if (! $dealer) {
             $skip = true;
         }
 
@@ -349,6 +337,7 @@ class Importer
      */
     public function import()
     {
+        \DB::connection()->disableQueryLog();
 
         $sources = $this->buildSourceData();
         $hashes = [];
@@ -356,20 +345,20 @@ class Importer
             $this->parseSourceData($source);
             $hashes[] = $source['hash'];
         }
-        
-        $this->info("RESULTS ::::");
 
-        $this->info(" -- Created Deals: " . $this->debug['dealsCreated']);
-        $this->info(" -- Updated Deals: " . $this->debug['dealsUpdated']);
-        $this->info(" -- Skipped Deals: " . $this->debug['skipped']);
+        $this->info('RESULTS ::::');
+
+        $this->info(' -- Created Deals: '.$this->debug['dealsCreated']);
+        $this->info(' -- Updated Deals: '.$this->debug['dealsUpdated']);
+        $this->info(' -- Skipped Deals: '.$this->debug['skipped']);
 
         $queryToDelete = Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases');
         $queryUpdateSold = Deal::whereNotIn('file_hash', $hashes)->where('status', '=', 'available');
 
         //
         // Delete all the hashes
-        $this->info(" -- Records to remove from es: " . $queryUpdateSold->count());
-        $this->info(" -- Records to delete from db: " . $queryToDelete->count());
+        $this->info(' -- Records to remove from es: '.$queryUpdateSold->count());
+        $this->info(' -- Records to delete from db: '.$queryToDelete->count());
 
         // Sets status of deals that are not in feed to sold
         $queryUpdateSold->update(['status' => 'sold', 'sold_at' => Carbon::now()]);
@@ -389,7 +378,7 @@ class Importer
             'title' => 'vAuto Importer',
             'message' => "Import Finished - {$importEnd}",
             'fields' => [
-                'Import File Created' => date("F d Y g:ia", filemtime($source['path'])),
+                'Import File Created' => date('F d Y g:ia', filemtime($source['path'])),
                 'Environment' => config('app.env'),
                 'Deals Created' => $this->debug['dealsCreated'],
                 'Deals Updated' => $this->debug['dealsUpdated'],
@@ -403,20 +392,20 @@ class Importer
                 'Deal Errors No VINS' => $this->debug['erroredVins'],
                 'Misc Errors' => $this->debug['erroredMisc'],
                 'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
-            ]
+            ],
         ];
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
 
         //Copies vauto dump file for current day and saves per date for archives
-        $Path = storage_path() . '/app/public/importbackups';
+        $Path = storage_path().'/app/public/importbackups';
 
-        if (!file_exists($Path)) {
+        if (! file_exists($Path)) {
             File::makeDirectory($Path);
         }
         $baseFile = basename($source['path'], '.csv');
         $sourceFile = $source['path'];
-        $targetFile = $Path . '/' . $baseFile . '-' . date('m-d-Y') . '.csv';
+        $targetFile = $Path.'/'.$baseFile.'-'.date('m-d-Y').'.csv';
         File::copy($sourceFile, $targetFile);
     }
 
@@ -431,7 +420,8 @@ class Importer
         $hours = (int) ($duration / 60 / 60);
         $minutes = (int) ($duration / 60) - $hours * 60;
         $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
-        return ($hours == 0 ? "00":$hours) . " Hours " . ($minutes == 0 ? "00":($minutes < 10? "0".$minutes:$minutes)) . " Minutes " . ($seconds == 0 ? "00":($seconds < 10? "0".$seconds:$seconds)) . " Seconds ";
+
+        return ($hours == 0 ? '00' : $hours).' Hours '.($minutes == 0 ? '00' : ($minutes < 10 ? '0'.$minutes : $minutes)).' Minutes '.($seconds == 0 ? '00' : ($seconds < 10 ? '0'.$seconds : $seconds)).' Seconds ';
     }
 
     /**
@@ -443,19 +433,19 @@ class Importer
 
         /**
          * key: internal value
-         * value: vauto row header
+         * value: vauto row header.
          */
         $map = [
-            'msrp' => "MSRP",
-            'price' => "Price",
-            'invoice' => "Invoice",
-            'sticker' => "Sticker",
-            'dealerdiscounted' => "Dealer Discounted",
-            'memoline1' => "MEMOLINE1",
-            'memoline2' => "MEMOLINE2",
-            'floorplanamount' => "FLOORPLANAMOUNT",
-            'salescost' => "SALESCOST",
-            'invoiceamount' => "INVOICEAMOUNT",
+            'msrp' => 'MSRP',
+            'price' => 'Price',
+            'invoice' => 'Invoice',
+            'sticker' => 'Sticker',
+            'dealerdiscounted' => 'Dealer Discounted',
+            'memoline1' => 'MEMOLINE1',
+            'memoline2' => 'MEMOLINE2',
+            'floorplanamount' => 'FLOORPLANAMOUNT',
+            'salescost' => 'SALESCOST',
+            'invoiceamount' => 'INVOICEAMOUNT',
         ];
 
         $return = [];
@@ -466,7 +456,7 @@ class Importer
             }
         }
 
-        return (object)$return;
+        return (object) $return;
     }
 
     /**
@@ -478,7 +468,7 @@ class Importer
     private function saveOrUpdateDeal(Version $version, string $fileHash, array $row): Deal
     {
         $pricing = $this->getDealSourcePrice($row);
-        if (!isset($pricing->msrp) && $version->msrp) {
+        if (! isset($pricing->msrp) && $version->msrp) {
             $pricing->msrp = $version->msrp;
         }
 
