@@ -105,22 +105,6 @@ const reducer = function(state = initialState, action = {}) {
                     conditionalRoles: action.data,
                 },
             };
-        case ActionTypes.TRADE_SET_VALUE:
-            return {
-                ...state,
-                trade: {
-                    ...state.trade,
-                    value: action.data,
-                },
-            };
-        case ActionTypes.TRADE_SET_OWED:
-            return {
-                ...state,
-                trade: {
-                    ...state.trade,
-                    owed: action.data,
-                },
-            };
 
         case ActionTypes.TRADE_SET:
             return {
@@ -129,15 +113,6 @@ const reducer = function(state = initialState, action = {}) {
                     value: action.value,
                     owed: action.owed,
                     estimate: action.estimate,
-                },
-            };
-
-        case ActionTypes.TRADE_SET_ESTIMATE:
-            return {
-                ...state,
-                trade: {
-                    ...state.trade,
-                    estimate: action.data,
                 },
             };
 

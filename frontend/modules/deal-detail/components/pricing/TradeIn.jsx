@@ -1,23 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { pricingType } from '../../../../core/types';
+
+import { Label } from 'reactstrap';
+import classNames from 'classnames';
 
 import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
-import TradeInModal from './TradeInModal';
-import { Label } from 'reactstrap';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Value from '../../../../apps/pricing/components/Value';
 import Line from '../../../../apps/pricing/components/Line';
+import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+
+import TradeInModal from './TradeInModal';
 
 export default class TradeIn extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
         zipcode: PropTypes.string.isRequired,
-        tradeSetValue: PropTypes.func.isRequired,
-        tradeSetOwed: PropTypes.func.isRequired,
-        tradeSetEstimate: PropTypes.func.isRequired,
         onCompleteTradeIn: PropTypes.func.isRequired,
     };
 
