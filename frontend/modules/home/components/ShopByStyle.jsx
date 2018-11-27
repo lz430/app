@@ -41,28 +41,30 @@ export default class extends React.Component {
         };
 
         return (
-            <Link
-                key={style.title}
-                href={{ pathname: '/deal-list', query: query }}
-                as={{ pathname: '/filter', query: query }}
-                passHref
-            >
-                <a
-                    onClick={() => this.trackLinkClick(style, query)}
-                    className="__category text-center"
+            <div>
+                <Link
+                    key={style.title}
+                    href={{ pathname: '/deal-list', query: query }}
+                    as={{ pathname: '/filter', query: query }}
+                    passHref
                 >
-                    <h5>{style.title}</h5>
-                    <div className="icon">
-                        <img
-                            src="https://source.unsplash.com/220x125?car"
-                            className="img-fluid"
-                        />
-                    </div>
-                    <div className="cta">
-                        <span>See All</span>
-                    </div>
-                </a>
-            </Link>
+                    <a
+                        onClick={() => this.trackLinkClick(style, query)}
+                        className="__category text-center"
+                    >
+                        <h5>{style.title}</h5>
+                        <div className="icon">
+                            <img
+                                src="https://source.unsplash.com/220x125?car"
+                                className="img-fluid"
+                            />
+                        </div>
+                        <div className="cta">
+                            <span>See All</span>
+                        </div>
+                    </a>
+                </Link>
+            </div>
         );
     }
     render() {

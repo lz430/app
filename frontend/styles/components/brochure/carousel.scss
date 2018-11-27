@@ -1,4 +1,7 @@
 .app-content .alice-carousel {
+    @include media-breakpoint-up(md) {
+        width: 99.7%;
+    }
     &__prev-btn,
     &__next-btn {
         background: $color-text-white;
