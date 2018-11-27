@@ -125,6 +125,14 @@ export default class AddToCart extends React.PureComponent {
     renderPane() {
         const { purchaseStrategy, pricing } = this.props;
 
+        if (pricing.quoteIsLoading()) {
+            return (
+                <div className="m-2">
+                    <Loading />
+                </div>
+            );
+        }
+
         if (purchaseStrategy === 'cash') {
             return (
                 <CashPricingPane
