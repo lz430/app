@@ -22,7 +22,10 @@ export function requestDealQuote(
     zipcode,
     paymentType,
     primaryRole = 'default',
-    conditionalRoles = []
+    conditionalRoles = [],
+    down = 0,
+    tradeValue = 0,
+    tradeOwed = 0
 ) {
     // TODO: actually rename this.
     if (primaryRole === 'dmr') {
@@ -36,6 +39,9 @@ export function requestDealQuote(
         paymentType: paymentType,
         role: primaryRole,
         conditionalRoles: conditionalRoles,
+        down: down,
+        tradeValue: tradeValue,
+        tradeOwed: tradeOwed,
     };
 }
 

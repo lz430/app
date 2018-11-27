@@ -9,14 +9,16 @@ export default class CheckoutService {
      * @param strategy
      * @param quote
      * @param amounts
+     * @param trade
      * @returns {*}
      */
-    start(dealId, strategy, quote, amounts) {
+    start(dealId, strategy, quote, amounts, trade) {
         let payload = {
             deal_id: dealId,
             strategy: strategy,
             quote: quote,
             amounts: amounts,
+            trade: trade,
         };
 
         return httpclient.post('/api/checkout/start', payload);
@@ -54,7 +56,7 @@ export default class CheckoutService {
             first_name,
             last_name,
             phone_number,
-            'g-recaptcha-response': g_recaptcha_response,
+            g_recaptcha_response,
         };
 
         return httpclient.post(`/api/checkout/${purchaseId}/contact`, payload);

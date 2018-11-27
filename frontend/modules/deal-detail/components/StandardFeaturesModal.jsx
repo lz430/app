@@ -5,16 +5,16 @@ import { dealType } from '../../../core/types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Loading from '../../../components/Loading';
 
+import DealDimensions from './DealDimensions';
+import DealWarranties from './DealWarranties';
+
 class StandardFeaturesModal extends React.Component {
     static propTypes = {
         toggle: PropTypes.func.isRequired,
         isOpen: PropTypes.bool,
-
         deal: dealType.isRequired,
         basicFeatures: PropTypes.array,
         fuelEconomy: PropTypes.object,
-        warranties: PropTypes.array,
-        dimensions: PropTypes.array,
     };
 
     render() {
@@ -66,34 +66,11 @@ class StandardFeaturesModal extends React.Component {
                     </ul>
 
                     <h6>Dimensions</h6>
-                    <ul className="text-sm">
-                        {this.props.dimensions ? (
-                            this.props.dimensions.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <Loading />
-                        )}
-                    </ul>
+                    <DealDimensions id={this.props.deal.id} />
 
                     <h6>Warranties</h6>
-                    <ul className="text-sm">
-                        {this.props.warranties ? (
-                            this.props.warranties.map((dimension, index) => {
-                                return (
-                                    <li key={index}>
-                                        {dimension.feature}: {dimension.content}
-                                    </li>
-                                );
-                            })
-                        ) : (
-                            <Loading />
-                        )}
-                    </ul>
+                    <DealWarranties id={this.props.deal.id} />
+
                     <h6>Features</h6>
                     <hr />
                     <ul className="text-sm">

@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
+
 import PropTypes from 'prop-types';
 import { dealType } from '../../core/types';
 
-import { compose } from 'redux';
-
 import { track } from '../../core/services';
 
-import { Alert, Container, Breadcrumb, BreadcrumbItem } from 'reactstrap';
+import { Alert, Container, Row, Col } from 'reactstrap';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Loading from '../../components/Loading';
 import { toggleCompare } from '../../apps/common/actions';
@@ -18,22 +18,48 @@ import {
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
 import { setCheckoutData, checkoutStart } from '../../apps/checkout/actions';
-import * as selectDiscountActions from './modules/selectDiscount';
-import * as financeActions from './modules/finance';
-import * as leaseActions from './modules/lease';
-import { initPage, receiveDeal, dealDetailRequestDealQuote } from './actions';
-import { getDeal } from './selectors';
-import DealDetail from './components/DealDetail';
-import { pricingFromStateFactory } from '../../pricing/pricing/factory';
+import { equals } from 'ramda';
+import {
+    initPage,
+    receiveDeal,
+    dealDetailRequestDealQuote,
+    dealDetailRefreshDealQuote,
+    dealDetailResetDealQuote,
+    selectDmrDiscount,
+    selectEmployeeDiscount,
+    selectSupplierDiscount,
+    selectConditionalRoles,
+    updateDownPayment,
+    updateTerm,
+    updateLease,
+    tradeSet,
+} from './actions';
+
+import {
+    dealPricingDataForDetail,
+    getConditionalRoles,
+    getDeal,
+    getDealDetailQuote,
+    getDiscountType,
+    getTradeIn,
+    pricingFromDealDetail,
+} from './selectors';
+
+import Breadcrumb from './components/Breadcrumb';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { withRouter } from 'next/router';
-import BackToSearchResultsLink from '../../apps/page/components/BackToSearchResultsLink';
 import { getSearchQuery } from '../deal-list/selectors';
+import Header from './components/Header';
+import Media from './components/Media';
+import DealFeatures from './components/DealFeatures';
+import CompareButton from './components/CompareButton';
+import AddToCart from './components/AddToCart';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
         deal: dealType,
+        quote: PropTypes.object,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
         isLoading: PropTypes.bool,
@@ -44,39 +70,48 @@ class DealDetailContainer extends React.PureComponent {
         receiveDeal: PropTypes.func.isRequired,
         setPurchaseStrategy: PropTypes.func.isRequired,
         dealDetailRequestDealQuote: PropTypes.func.isRequired,
+        dealDetailResetDealQuote: PropTypes.func.isRequired,
         setCheckoutData: PropTypes.func.isRequired,
         checkoutStart: PropTypes.func.isRequired,
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
         searchQuery: PropTypes.object.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-        selectDiscountActions: PropTypes.shape({
-            selectDmrDiscount: PropTypes.func.isRequired,
-            selectEmployeeDiscount: PropTypes.func.isRequired,
-            selectSupplierDiscount: PropTypes.func.isRequired,
-            selectConditionalRoles: PropTypes.func.isRequired,
-        }),
-        financeActions: PropTypes.shape({
-            updateDownPayment: PropTypes.func.isRequired,
-            updateTerm: PropTypes.func.isRequired,
-        }),
-        leaseActions: PropTypes.shape({
-            update: PropTypes.func.isRequired,
-        }),
+        dealPricingData: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.bool,
+        ]),
+        selectDmrDiscount: PropTypes.func.isRequired,
+        selectEmployeeDiscount: PropTypes.func.isRequired,
+        selectSupplierDiscount: PropTypes.func.isRequired,
+        selectConditionalRoles: PropTypes.func.isRequired,
+        updateDownPayment: PropTypes.func.isRequired,
+        updateTerm: PropTypes.func.isRequired,
+        updateLease: PropTypes.func.isRequired,
+        tradeSet: PropTypes.func.isRequired,
+        dealDetailRefreshDealQuote: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
         this.props.initPage(this.props.router.query.id);
     }
 
+    componentDidUpdate(prevProps) {
+        if (
+            prevProps.dealPricingData.tradeIn &&
+            !equals(
+                prevProps.dealPricingData.tradeIn,
+                this.props.dealPricingData.tradeIn
+            )
+        ) {
+            this.props.dealDetailRefreshDealQuote();
+        }
+    }
+
     handlePaymentTypeChange = strategy => {
+        this.props.dealDetailResetDealQuote();
         this.props.setPurchaseStrategy(strategy);
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            strategy,
-            this.props.discountType
-        );
+        this.props.dealDetailRefreshDealQuote();
 
         // This is here because purchase strategy is a global thing
         track('deal-detail:quote-form:changed', {
@@ -86,31 +121,27 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleDiscountChange = (discountType, make) => {
+        this.props.dealDetailResetDealQuote();
         switch (discountType) {
             case 'dmr':
-                this.props.selectDiscountActions.selectDmrDiscount();
+                this.props.selectDmrDiscount();
                 break;
 
             case 'employee':
-                this.props.selectDiscountActions.selectEmployeeDiscount(make);
+                this.props.selectEmployeeDiscount(make);
                 break;
 
             case 'supplier':
-                this.props.selectDiscountActions.selectSupplierDiscount(make);
+                this.props.selectSupplierDiscount(make);
                 break;
             default:
                 break;
         }
-
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            this.props.purchaseStrategy,
-            discountType
-        );
+        this.props.dealDetailRefreshDealQuote();
     };
 
     handleRebatesChange = role => {
+        this.props.dealDetailResetDealQuote();
         let selectedRoles = this.props.selectedConditionalRoles;
         let index = selectedRoles.indexOf(role);
         if (index !== -1) {
@@ -119,28 +150,39 @@ class DealDetailContainer extends React.PureComponent {
             selectedRoles.push(role);
         }
 
-        this.props.selectDiscountActions.selectConditionalRoles(selectedRoles);
-
-        this.props.dealDetailRequestDealQuote(
-            this.props.deal,
-            this.props.userLocation.zipcode,
-            this.props.purchaseStrategy,
-            this.props.discountType,
-            selectedRoles
-        );
+        this.props.selectConditionalRoles(selectedRoles);
+        this.props.dealDetailRefreshDealQuote();
     };
 
     handleFinanceDownPaymentChange = downPayment => {
-        this.props.financeActions.updateDownPayment(downPayment);
+        this.props.updateDownPayment(downPayment);
     };
 
     handleFinanceTermChange = term => {
-        this.props.financeActions.updateTerm(term);
+        this.props.updateTerm(term);
     };
 
     handleLeaseChange = (annualMileage, term, cashDue) => {
-        this.props.leaseActions.update(annualMileage, term, cashDue);
+        this.props.updateLease(annualMileage, term, cashDue);
     };
+
+    handleBuyNow() {
+        const { pricing } = this.props;
+        const checkoutData = pricing.toCheckoutData();
+        this.props.setCheckoutData(
+            checkoutData.deal,
+            checkoutData.quote,
+            checkoutData.paymentStrategy,
+            checkoutData.discountType,
+            checkoutData.effectiveTerm,
+            checkoutData.financeDownPayment,
+            checkoutData.leaseAnnualMileage,
+            checkoutData.employeeBrand,
+            checkoutData.supplierBrand,
+            checkoutData.tradeIn
+        );
+        this.props.checkoutStart(pricing);
+    }
 
     onSelectDeal(pricing) {
         return this.props.checkoutStart(pricing, this.props.router);
@@ -149,7 +191,7 @@ class DealDetailContainer extends React.PureComponent {
     renderPageLoadingIcon() {
         return (
             <React.Fragment>
-                {this.renderBreadcrumb()}
+                <Breadcrumb searchQuery={this.props.searchQuery} />
                 <Container className="pt-5 pb-5">
                     <Loading />
                 </Container>
@@ -160,7 +202,7 @@ class DealDetailContainer extends React.PureComponent {
     renderDealLoadingError() {
         return (
             <React.Fragment>
-                {this.renderBreadcrumb()}
+                <Breadcrumb searchQuery={this.props.searchQuery} />
                 <Container>
                     <Alert className="mb-5 mt-5" color="danger">
                         Unable to load deal.
@@ -181,21 +223,6 @@ class DealDetailContainer extends React.PureComponent {
         );
     }
 
-    renderBreadcrumb() {
-        return (
-            <Container>
-                <Breadcrumb>
-                    <BreadcrumbItem>
-                        <BackToSearchResultsLink
-                            searchQuery={this.props.searchQuery}
-                        />
-                    </BreadcrumbItem>
-                    <BreadcrumbItem active>View Deal</BreadcrumbItem>
-                </Breadcrumb>
-            </Container>
-        );
-    }
-
     render() {
         if (this.props.isLoading || this.props.deal === null) {
             return this.renderPageLoadingIcon();
@@ -207,72 +234,99 @@ class DealDetailContainer extends React.PureComponent {
 
         return (
             <React.Fragment>
-                {this.renderBreadcrumb()}
+                <Breadcrumb searchQuery={this.props.searchQuery} />
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
-                <DealDetail
-                    deal={this.props.deal}
-                    purchaseStrategy={this.props.purchaseStrategy}
-                    pricing={this.props.pricing}
-                    handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
-                        this
-                    )}
-                    handleDiscountChange={this.handleDiscountChange.bind(this)}
-                    handleRebatesChange={this.handleRebatesChange.bind(this)}
-                    handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
-                        this
-                    )}
-                    handleFinanceTermChange={this.handleFinanceTermChange.bind(
-                        this
-                    )}
-                    handleLeaseChange={this.handleLeaseChange.bind(this)}
-                    setCheckoutData={this.props.setCheckoutData}
-                    checkoutStart={this.onSelectDeal.bind(this)}
-                    onToggleCompare={this.props.toggleCompare}
-                    compareList={this.props.compareList}
-                    userLocation={this.props.userLocation}
-                />
+                <Container className="mb-5">
+                    <Header deal={this.props.deal} />
+                    <Row>
+                        <Col md="6" lg="8">
+                            <Media deal={this.props.deal} />
+                            <DealFeatures deal={this.props.deal} />
+                            <CompareButton
+                                deal={this.props.deal}
+                                compareList={this.props.compareList}
+                                onToggleCompare={this.props.toggleCompare}
+                            />
+                        </Col>
+                        <Col md="6" lg="4">
+                            <AddToCart
+                                deal={this.props.deal}
+                                purchaseStrategy={this.props.purchaseStrategy}
+                                handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
+                                    this
+                                )}
+                                pricing={this.props.pricing}
+                                handleDiscountChange={this.handleDiscountChange.bind(
+                                    this
+                                )}
+                                handleRebatesChange={this.handleRebatesChange.bind(
+                                    this
+                                )}
+                                handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
+                                    this
+                                )}
+                                handleFinanceTermChange={this.handleFinanceTermChange.bind(
+                                    this
+                                )}
+                                handleLeaseChange={this.handleLeaseChange.bind(
+                                    this
+                                )}
+                                handleBuyNow={this.handleBuyNow.bind(this)}
+                                userLocation={this.props.userLocation}
+                                tradeSet={this.props.tradeSet}
+                            />
+                        </Col>
+                    </Row>
+                </Container>
             </React.Fragment>
         );
     }
 }
 
 const mapStateToProps = (state, props) => {
-    const deal = getDeal(state);
-
     return {
-        deal,
+        deal: getDeal(state),
+        quote: getDealDetailQuote(state),
         searchQuery: getSearchQuery(state),
-        selectedConditionalRoles:
-            state.pages.dealDetails.selectDiscount.conditionalRoles,
+        selectedConditionalRoles: getConditionalRoles(state),
         purchaseStrategy: getUserPurchaseStrategy(state),
         compareList: state.common.compareList,
-        discountType: state.pages.dealDetails.selectDiscount.discountType,
+        discountType: getDiscountType(state),
         userLocation: getUserLocation(state),
         isLoading: getIsPageLoading(state),
-        pricing: pricingFromStateFactory(state, { ...props, deal }),
+        trade: getTradeIn(state),
+        pricing: pricingFromDealDetail(state),
+        dealPricingData: dealPricingDataForDetail(state, props),
     };
 };
 
 const mapDispatchToProps = mapAndBindActionCreators({
-    financeActions,
-    leaseActions,
-    selectDiscountActions,
     toggleCompare,
     initPage,
     setPurchaseStrategy,
     receiveDeal,
     dealDetailRequestDealQuote,
+    dealDetailResetDealQuote,
     setCheckoutData,
     checkoutStart,
+    selectDmrDiscount,
+    selectEmployeeDiscount,
+    selectSupplierDiscount,
+    selectConditionalRoles,
+    updateDownPayment,
+    updateTerm,
+    updateLease,
+    tradeSet,
+    dealDetailRefreshDealQuote,
 });
 
 export default compose(
     withRouter,
+    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(DealDetailContainer);

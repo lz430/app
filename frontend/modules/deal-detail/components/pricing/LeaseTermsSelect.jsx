@@ -36,12 +36,11 @@ export default class LeaseTermsSelect extends React.PureComponent {
     }
 
     renderTerm(pricing, term, termIndex, annualMileage) {
-        const value = pricing.paymentsForTermAndCashDue(term, 0, annualMileage);
+        const value = pricing.paymentsForTermAndCashDue(term, annualMileage);
 
         if (value) {
             let className = pricing.isSelectedLeasePaymentForTermAndCashDue(
                 term,
-                0,
                 annualMileage
             )
                 ? 'cash-finance-lease-calculator__lease-table-cell--selected'

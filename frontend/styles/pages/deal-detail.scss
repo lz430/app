@@ -90,46 +90,6 @@
         }
     }
 
-    &__pricing {
-        @include media-breakpoint-up(sm) {
-            margin-top: 0;
-        }
-
-        @include media-breakpoint-up(lg) {
-            flex-direction: row;
-        }
-
-        .info-modal-data {
-            margin: 0;
-            max-width: none;
-            min-width: 0;
-            @include media-breakpoint-up(sm) {
-                width: auto;
-            }
-        }
-
-        .form-check,
-        .form-group > div {
-            align-content: center;
-            display: flex;
-            justify-content: space-between;
-            padding-left: 0;
-
-            label {
-                input {
-                    font-size: 0.9em;
-                    margin: 0 5px 0 0;
-                    position: relative;
-                }
-            }
-        }
-        .eligibility {
-            font-style: italic;
-            font-size: 0.75em;
-            margin-left: 0.25em;
-        }
-    }
-
     &__images-and-title {
         @include media-breakpoint-up(lg) {
             flex-direction: row;
@@ -168,4 +128,68 @@
     font-style: italic;
     text-align: center;
     margin-bottom: 0;
+}
+
+.cart {
+    @include media-breakpoint-up(sm) {
+        margin-top: 0;
+    }
+
+    @include media-breakpoint-up(lg) {
+        flex-direction: row;
+    }
+
+    hr {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &__discount_role {
+        cursor: pointer;
+    }
+
+    &__finance-down-payment {
+        text-align: center;
+        input {
+            font-size: 1.25rem;
+            border-radius: 3px;
+        }
+    }
+
+    &__rebate_description {
+        > div {
+            border-bottom: 1px solid $gray-300;
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    &__cta {
+        .btn {
+            border-radius: 0;
+            padding: 0.75rem 0.75rem;
+        }
+    }
+
+    .form-check,
+    .form-group > div {
+        align-content: center;
+        display: flex;
+        justify-content: space-between;
+        padding-left: 0;
+
+        label {
+            input {
+                font-size: 0.9em;
+                margin: 0 5px 0 0;
+                position: relative;
+            }
+        }
+    }
+    .eligibility {
+        font-style: italic;
+        font-size: 0.75em;
+        margin-left: 0.25em;
+    }
 }

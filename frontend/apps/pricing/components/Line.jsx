@@ -18,7 +18,7 @@ export default class Line extends React.PureComponent {
     };
 
     render() {
-        const style = { margin: '.25em 0', ...this.props.style };
+        const style = { margin: '0', ...this.props.style };
 
         if (this.props.isSemiImportant) {
             style.fontWeight = 'bold';

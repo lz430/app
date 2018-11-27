@@ -30,7 +30,6 @@ class API {
         } else {
             errors['form'] = 'Error submitting form';
         }
-
         return errors;
     }
 }

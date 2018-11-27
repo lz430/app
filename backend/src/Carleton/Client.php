@@ -23,7 +23,7 @@ class Client
     }
 
     /**
-     * @param $cashDueOptions
+     * @param $cashDown
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -34,10 +34,12 @@ class Client
      * @param $msrp
      * @param $cashAdvance
      * @param $contractDate
+     * @param $tradeAllowance
+     * @param $tradeLien
      * @return array
      */
     public function buildRequestParams(
-        $cashDueOptions,
+        $cashDown,
         $terms,
         $taxRate,
         $acquisitionFee,
@@ -47,7 +49,9 @@ class Client
         $cvrFee,
         $msrp,
         $cashAdvance,
-        $contractDate)
+        $contractDate,
+        $tradeAllowance,
+        $tradeLien)
     {
         $data = [
             'username' => $this->username,
@@ -57,7 +61,7 @@ class Client
 
         $fees = [
             'acquisition' => [
-                'Amount' => (float)$acquisitionFee,
+                'Amount' => (float) $acquisitionFee,
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -66,7 +70,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'doc' => [
-                'Amount' => (float)$docFee,
+                'Amount' => (float) $docFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -85,7 +89,7 @@ class Client
                 'RoundToOption' => 'NearestPenny',
             ],
             'cvr' => [
-                'Amount' => (float)$cvrFee,
+                'Amount' => (float) $cvrFee,
                 'Type' => 'Upfront',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'RegularFee',
@@ -95,41 +99,66 @@ class Client
             ],
         ];
 
-        foreach ($cashDueOptions as $cashDueValue) {
-            foreach ($terms as $term => $termData) {
-                $quote = [
-                    'taxRate' => $taxRate,
-                    'residualPercent' => $termData['residual'],
-                    'term' => $termData['length'],
-                    'annualMileage' => $termData['mileage'],
-                    'contractDate' => $contractDate->format('Y-m-d'),
-                    'msrp' => $msrp,
-                    'cashAdvance' => $cashAdvance,
-                    'fees' => $fees,
-                ];
+        foreach ($terms as $term => $termData) {
+            $quote = [
+                'taxRate' => $taxRate,
+                'residualPercent' => $termData['residual'],
+                'term' => $termData['length'],
+                'annualMileage' => $termData['mileage'],
+                'contractDate' => $contractDate->format('Y-m-d'),
+                'msrp' => $msrp,
+                'cashAdvance' => $cashAdvance,
+                'fees' => $fees,
+            ];
 
-                if (isset($termData['rate'])) {
-                    $quote['rate'] = $termData['rate'];
-                }
+            if (isset($termData['rate'])) {
+                $quote['rate'] = $termData['rate'];
+            }
 
-                if (isset($termData['moneyFactor'])) {
-                    $quote['moneyFactor'] = $termData['moneyFactor'];
-                }
+            if (isset($termData['moneyFactor'])) {
+                $quote['moneyFactor'] = $termData['moneyFactor'];
+            }
 
-                $quote['fees']['cashDown'] = [
-                    'Amount' => $cashDueValue,
-                    'Type' => 'Financed',
+            $quote['fees']['cashDown'] = [
+                'Amount' => $cashDown,
+                'Type' => 'Financed',
+                'Base' => 'Fixed',
+                'DescriptionType' => 'CashDown',
+                'TaxIndex' => '1',
+                'FinanceTaxes' => 'No',
+                'CCRPortionFeeTaxed' => 'Yes',
+                'RoundToOption' => 'NearestPenny',
+            ];
+
+            if ($tradeAllowance) {
+                $quote['fees']['tradeAllowance'] = [
+                    'Amount' => -1 * abs($tradeAllowance),
+                    'Type' => 'None',
                     'Base' => 'Fixed',
-                    'DescriptionType' => 'CashDown',
+                    'DescriptionType' => 'TradeAllowance',
                     'TaxIndex' => '1',
                     'FinanceTaxes' => 'No',
                     'CCRPortionFeeTaxed' => 'Yes',
                     'RoundToOption' => 'NearestPenny',
                 ];
-
-                $data['quotes'][] = $quote;
             }
+
+            if ($tradeLien) {
+                $quote['fees']['tradeLien'] = [
+                    'Amount' => $tradeLien,
+                    'Type' => 'None',
+                    'Base' => 'Fixed',
+                    'DescriptionType' => 'TradeLien',
+                    'TaxIndex' => '1',
+                    'FinanceTaxes' => 'No',
+                    'CCRPortionFeeTaxed' => 'Yes',
+                    'RoundToOption' => 'NearestPenny',
+                ];
+            }
+
+            $data['quotes'][] = $quote;
         }
+
         return $data;
     }
 
@@ -141,13 +170,14 @@ class Client
     public function buildRequest($data)
     {
         $contents = view('carleton.request', $data)->render();
-        $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" . $contents;
+        $contents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n".$contents;
         $contents = trim(preg_replace('/\s+/', ' ', $contents));
+
         return $contents;
     }
 
     /**
-     * @param $cashDueOptions
+     * @param $cashDown
      * @param $terms
      * @param $taxRate
      * @param $acquisitionFee
@@ -158,12 +188,15 @@ class Client
      * @param $msrp
      * @param $cashAdvance
      * @param null $contractDate
-     * @return array|mixed
+     * @param int $tradeAllowance
+     * @param int $tradeLien
+     * @return array
+     * @throws CarletonDataException
      * @throws \Throwable
      */
     public function getLeasePaymentsFor(
-        $cashDueOptions,
-        $terms,
+        $cashDown,
+        array $terms,
         $taxRate,
         $acquisitionFee,
         $docFee,
@@ -172,15 +205,16 @@ class Client
         $cvrFee,
         $msrp,
         $cashAdvance,
-        $contractDate = null
-    )
+        $contractDate = null,
+        $tradeAllowance = 0,
+        $tradeLien = 0)
     {
-        if (!$contractDate) {
+        if (! $contractDate) {
             $contractDate = new \DateTime();
         }
 
         $params = $this->buildRequestParams(
-            $cashDueOptions,
+            $cashDown,
             $terms,
             $taxRate,
             $acquisitionFee,
@@ -190,9 +224,12 @@ class Client
             $cvrFee,
             $msrp,
             $cashAdvance,
-            $contractDate
+            $contractDate,
+            $tradeAllowance,
+            $tradeLien
         );
         $request = $this->buildRequest($params);
+
         return $this->getLeasePaymentsForQuoteParameters($params, $request);
     }
 
@@ -206,11 +243,11 @@ class Client
     {
         $headers = [
             'Content-Type: text/xml; charset="utf-8"',
-            'Content-Length: ' . strlen($request),
+            'Content-Length: '.strlen($request),
             'Accept: text/xml',
             'Cache-Control: no-cache',
             'Pragma: no-cache',
-            'SOAPAction: "http://www.carletoninc.com/calcs/lease/GetQuotes"'
+            'SOAPAction: "http://www.carletoninc.com/calcs/lease/GetQuotes"',
         ];
 
         $ch = curl_init();
@@ -228,6 +265,7 @@ class Client
         if ($data === false) {
             $error = curl_error($ch);
             Log::info(var_export($error, true));
+
             return [];
         }
 
@@ -236,9 +274,10 @@ class Client
         if ($xml === false) {
             app('sentry')->captureMessage('Invalid XML', [], [
                 'extra' => [
-                    'xml' => $data
-                ]
+                    'xml' => $data,
+                ],
             ]);
+
             return [];
         }
 
@@ -246,7 +285,8 @@ class Client
 
         $faults = $xml->xpath('/soap:Envelope/soap:Body/soap:Fault');
         if ($faults) {
-            Log::info('Could not find lease calculations (response): ' . (string)$faults[0]->faultstring);
+            Log::info('Could not find lease calculations (response): '.(string) $faults[0]->faultstring);
+
             return [];
         }
 
@@ -257,14 +297,15 @@ class Client
             $input = $params['quotes'][$i];
             $results[$i] = [
                 'term' => $input['term'],
-                'cash_due' => (float)$input['fees']['cashDown']['Amount'],
+                'cash_due' => (float) $input['fees']['cashDown']['Amount'],
                 'annual_mileage' => $input['annualMileage'],
-                'monthly_payment' => (float)sprintf("%.02f", $quote->RegularPayment),
-                'total_amount_at_drive_off' => (float)sprintf("%.02f", $quote->TotalAmountAtDriveOff),
-                'monthly_use_tax' => (float)sprintf("%.02f", $quote->MonthlyUseTax),
-                'monthly_pre_tax_payment' => (float)sprintf("%.02f", $quote->TaxablePayment),
+                'monthly_payment' => (float) sprintf('%.02f', $quote->RegularPayment),
+                'total_amount_at_drive_off' => (float) sprintf('%.02f', $quote->TotalAmountAtDriveOff),
+                'monthly_use_tax' => (float) sprintf('%.02f', $quote->MonthlyUseTax),
+                'monthly_pre_tax_payment' => (float) sprintf('%.02f', $quote->TaxablePayment),
             ];
         }
+
         return $results;
     }
 }

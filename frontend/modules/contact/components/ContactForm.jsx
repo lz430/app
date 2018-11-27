@@ -38,7 +38,6 @@ class ContactForm extends React.Component {
     state = {
         success: false,
         values: null,
-        recaptchaToken: false,
     };
 
     handleOnSubmit(values, actions) {
