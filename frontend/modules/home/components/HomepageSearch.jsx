@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
