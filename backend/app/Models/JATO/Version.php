@@ -131,10 +131,13 @@ class Version extends Model
 
         // Only allow us to go back one year.
         if (! $thumbnail && $allow_last_year) {
-            $thumbnail = self::where('year', '=', (int) $this->year - 1)
+            $oldVersion = self::where('year', '=', (int) $this->year - 1)
                 ->where('model_id', '=', $this->model->id)
                 ->has('photos')
-                ->first()->thumbnail(false);
+                ->first();
+            if ($oldVersion) {
+                $thumbnail = $oldVersion->thumbnail(false);
+            }
         }
 
         return $thumbnail;
