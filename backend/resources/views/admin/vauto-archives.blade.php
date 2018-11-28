@@ -18,15 +18,17 @@
                             <th>Name</th>
                         </tr>
                         <tbody>
-                        @isset($dumps)
-                        @foreach($dumps as $dump)
-                            <tr>
-                                <td>{{$dump['filename']}}</td>
-                                <td><a href="/admin/archived-dumps/download/{{$dump['filename']}}" class="btn btn-xs btn-default"><i class="fa fa-download"></i> Download</a></td>
-                            </tr>
-                        @endforeach
+                        @isset($files)
+                            @foreach($files as $file)
+                                <tr>
+                                    <td>{{$file->name}}</td>
+                                    <td><a href="{{$file->url}}" download="{{$file->name}}"
+                                           class="btn btn-xs btn-default"><i class="fa fa-download"></i> Download</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @endisset
-                        @empty($dumps)
+                        @empty($files)
                             <tr>
                                 <td>There are currently no files.</td>
                             </tr>

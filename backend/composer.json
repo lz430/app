@@ -22,6 +22,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "~1.0",
         "league/csv": "^9.0",
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "league/flysystem-sftp": "^1.0",
         "pda/pheanstalk": "^3.1",
         "predis/predis": "^1.1",
         "ryanwinchester/hubspot-php": "1.1.3",
