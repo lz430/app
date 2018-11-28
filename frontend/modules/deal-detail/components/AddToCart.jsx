@@ -11,6 +11,7 @@ import PaymentTypes from './pricing/PaymentTypes';
 import Loading from '../../../components/Loading';
 
 import { Button } from 'reactstrap';
+import config from '../../../core/config';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -251,11 +252,15 @@ export default class AddToCart extends React.PureComponent {
                         onRebatesChange={this.props.handleRebatesChange}
                         onChange={this.props.handleLeaseChange}
                     />
-                    <TradeIn
-                        onCompleteTradeIn={this.props.tradeSet}
-                        zipcode={this.props.userLocation.zipcode}
-                        pricing={pricing}
-                    />
+
+                    {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
+                        <TradeIn
+                            onCompleteTradeIn={this.props.tradeSet}
+                            zipcode={this.props.userLocation.zipcode}
+                            pricing={pricing}
+                        />
+                    )}
+
                     {this.renderPane()}
                 </div>
                 {this.renderCta()}
