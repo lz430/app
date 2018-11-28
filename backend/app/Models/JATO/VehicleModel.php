@@ -2,11 +2,11 @@
 
 namespace App\Models\JATO;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
- * App\Models\JATO\VehicleModel
+ * App\Models\JATO\VehicleModel.
  *
  * @property int $id
  * @property string $name
@@ -50,7 +50,7 @@ class VehicleModel extends Model
         if (! is_array($makes)) {
             $makes = [$makes];
         }
-        
+
         return $query->whereIn('make_id', $makes);
     }
 }

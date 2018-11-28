@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-use App\Models\Feature;
-use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Http\Request;
-
-use League\Fractal\Serializer\ArraySerializer;
+use DeliverMyRide\JATO\JatoClient;
 use App\Transformers\DealTransformer;
+use League\Fractal\Serializer\ArraySerializer;
 use DeliverMyRide\JATO\Manager\DealCompareData;
 
 class DealsCompareController extends BaseAPIController
@@ -25,13 +23,12 @@ class DealsCompareController extends BaseAPIController
         $equipmentOnDeals = array_values($this->equipmentOnDeals);
         foreach ($equipmentOnDeals as $key => $categories) {
             foreach ($categories as $category => $equipments) {
-
-                if (!isset($compData[$category])) {
+                if (! isset($compData[$category])) {
                     $compData[$category] = [];
                 }
 
                 foreach ($equipments as $schemaId => $label) {
-                    if (!isset($compData[$category][$schemaId])) {
+                    if (! isset($compData[$category][$schemaId])) {
                         $compData[$category][$schemaId] = array_fill(0, $dealCount, '--');
                     }
                     $compData[$category][$schemaId][$key] = $label;
@@ -62,8 +59,8 @@ class DealsCompareController extends BaseAPIController
                 if ($aValue == $bValue) {
                     return 0;
                 }
-                return ($aValue < $bValue) ? -1 : 1;
 
+                return ($aValue < $bValue) ? -1 : 1;
             });
         }
     }
@@ -74,7 +71,7 @@ class DealsCompareController extends BaseAPIController
 
         $this->validate($request, [
             'deals' => 'required|array',
-            'deals.*' => 'integer'
+            'deals.*' => 'integer',
         ]);
 
         //
@@ -104,7 +101,7 @@ class DealsCompareController extends BaseAPIController
             $col['equipment'] = [];
 
             foreach ($compData as $category => $equipments) {
-                if (!isset($col['equipment'][$category])) {
+                if (! isset($col['equipment'][$category])) {
                     $col['equipment'][$category] = [];
                 }
 

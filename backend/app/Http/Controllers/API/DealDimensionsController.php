@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\GuzzleException;
-
 
 class DealDimensionsController extends BaseAPIController
 {

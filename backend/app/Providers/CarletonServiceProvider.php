@@ -24,5 +24,4 @@ class CarletonServiceProvider extends ServiceProvider
     {
         return [Client::class];
     }
-
 }

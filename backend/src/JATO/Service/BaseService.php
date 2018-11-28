@@ -4,8 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 use DeliverMyRide\JATO\JatoClient;
 
-abstract class BaseService {
-
+abstract class BaseService
+{
     /** @var \DeliverMyRide\JATO\JatoClient */
     protected $client;
 
@@ -17,5 +17,4 @@ abstract class BaseService {
     {
         $this->client = $client;
     }
-
 }

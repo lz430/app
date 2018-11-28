@@ -2,16 +2,14 @@
 
 namespace App\Services\Search;
 
-use Illuminate\Database\Eloquent\Collection;
-use ScoutElastic\Indexers\SingleIndexer;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
-use ScoutElastic\Payloads\DocumentPayload;
 use ScoutElastic\Facades\ElasticClient;
-
+use ScoutElastic\Indexers\SingleIndexer;
+use ScoutElastic\Payloads\DocumentPayload;
+use Illuminate\Database\Eloquent\Collection;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 class CustomIndexer extends SingleIndexer
 {
-
     public function delete(Collection $models)
     {
         $models->each(function ($model) {
@@ -23,8 +21,6 @@ class CustomIndexer extends SingleIndexer
             } catch (Missing404Exception $e) {
                 // Bury these. Don't throw exceptions if the record already isn't in ES.
             }
-
         });
     }
-
 }

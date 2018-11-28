@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests;
 
 use Backpack\PermissionManager\app\Http\Requests\UserUpdateCrudRequest as ParentRequest;

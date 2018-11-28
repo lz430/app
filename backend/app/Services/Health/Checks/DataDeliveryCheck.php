@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Services\Health\Checks;
+
 use App\Services\Health\HealthCheck;
 use GuzzleHttp\Exception\ClientException;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
 class DataDeliveryCheck extends HealthCheck
 {
-
     /**
-     * Client factory
+     * Client factory.
      * @return DataDeliveryClient
      */
-    public function getClient() : DataDeliveryClient {
+    public function getClient() : DataDeliveryClient
+    {
         return new DataDeliveryClient(
             config('services.datadelivery.id'),
             config('services.datadelivery.api_key')
@@ -20,7 +21,8 @@ class DataDeliveryCheck extends HealthCheck
     }
 
     /** @test **/
-    public function run() {
+    public function run()
+    {
         $vehicleId = '1430452';
         $zipcode = '48116';
         $search = [
@@ -31,12 +33,13 @@ class DataDeliveryCheck extends HealthCheck
         $response = [];
         try {
             $response = $client->totalrate->get($vehicleId, $zipcode, $zipcode, $search);
-            if($response){
+            if ($response) {
                 return 'OKAY!';
             }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
+
         return 'FAIL';
     }
 }

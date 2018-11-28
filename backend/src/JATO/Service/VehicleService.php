@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class VehicleService extends BaseService
 {
-
     /**
-     * get
+     * get.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55aff4c074be0902ecb19158?
      * @param string $vehicleId
      * @return mixed
@@ -17,5 +16,4 @@ class VehicleService extends BaseService
     {
         return $this->client->get("vehicle/{$vehicleId}");
     }
-
 }

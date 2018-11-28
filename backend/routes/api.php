@@ -30,13 +30,12 @@ Route::post('checkout/{purchase}/financing', 'CheckoutController@financingComple
 Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
 Route::get('location', 'UserLocationController@show')->name('location.show');
 
-/**
+/*
  * Brochure
  */
 Route::post('brochure/contact', 'BrochureController@contact')->name('brochure.contact');
 
-
-/**
+/*
  * Third-party
  */
 Route::post('hubspot/not-in-area', 'HubspotController@notInServiceArea')->name('hubspot.notInArea');

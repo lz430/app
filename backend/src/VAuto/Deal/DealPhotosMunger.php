@@ -2,12 +2,9 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
-use App\Models\Deal;
 use Carbon\Carbon;
+use App\Models\Deal;
 
-/**
- *
- */
 class DealPhotosMunger
 {
     private $debug;
@@ -24,7 +21,7 @@ class DealPhotosMunger
      * @param bool $force
      * @return array
      */
-    public function import(Deal $deal, array $row, bool $force = FALSE)
+    public function import(Deal $deal, array $row, bool $force = false)
     {
         $this->debug = [
             'deal_photos' => 0,
@@ -39,13 +36,13 @@ class DealPhotosMunger
         $modifiedDate = $row['Photos Last Modified Date'];
         $modifiedDate = Carbon::parse($modifiedDate);
         $shouldRefreshPhotos = false;
-        if (!$deal->wasRecentlyCreated && (!$deal->photos_updated_at || $deal->photos_updated_at < $modifiedDate)) {
+        if (! $deal->wasRecentlyCreated && (! $deal->photos_updated_at || $deal->photos_updated_at < $modifiedDate)) {
             $shouldRefreshPhotos = true;
             $this->debug['deal_photos_refreshed'] = 'Yes';
         }
 
         // When No photos.
-        if (!$this->deal->photos()->count() || $shouldRefreshPhotos || $force) {
+        if (! $this->deal->photos()->count() || $shouldRefreshPhotos || $force) {
             $this->debug['deal_photos_skipped'] = 'No';
             $this->saveDealPhotos();
 
@@ -66,7 +63,7 @@ class DealPhotosMunger
     }
 
     /**
-     * Save deal photos from import file
+     * Save deal photos from import file.
      */
     private function saveDealPhotos()
     {
@@ -95,7 +92,7 @@ class DealPhotosMunger
         $deal = $this->deal;
 
         // only do this if we have a color.
-        if (!$deal->color) {
+        if (! $deal->color) {
             return;
         }
 
@@ -110,7 +107,7 @@ class DealPhotosMunger
         foreach ($assets as $asset) {
             $deal->version->photos()->updateOrCreate(
                 [
-                    'url' => $asset->url
+                    'url' => $asset->url,
                 ],
                 [
                     'type' => 'color',

@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class UpdateRamVehiclesToHaveProperManufacturer extends Migration
@@ -15,17 +13,17 @@ class UpdateRamVehiclesToHaveProperManufacturer extends Migration
     {
         $deals = \App\Models\Deal::select('version_id')->where('make', 'Ram')->groupBy('version_id')->get();
         $ids = [];
-        foreach($deals as $d) {
+        foreach ($deals as $d) {
             $ids[] = $d->version_id;
         }
 
         $versions = \App\Models\JATO\Version::select('model_id')->whereIn('id', $ids)->groupBy('model_id')->get();
-        foreach($versions as $v) {
+        foreach ($versions as $v) {
             DB::table('vehicle_models')
                 ->where('id', $v->model_id)
                 ->update(
                     [
-                        'make_id' => 18
+                        'make_id' => 18,
                     ]
                 );
         }

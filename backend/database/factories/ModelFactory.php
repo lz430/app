@@ -12,11 +12,10 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-
-use App\Models\Category;
-use App\Models\Feature;
-use App\Models\JatoFeature;
 use Carbon\Carbon;
+use App\Models\Feature;
+use App\Models\Category;
+use App\Models\JatoFeature;
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [

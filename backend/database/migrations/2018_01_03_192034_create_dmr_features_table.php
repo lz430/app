@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Category;
 use App\Models\Feature;
+use App\Models\Category;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -103,7 +103,7 @@ class CreateDmrFeaturesTable extends Migration
                     'title' => 'Heated steering wheel',
                     'slug' => 'heated_steering_wheel',
                     'jato_schema_ids' => [18409],
-                ]
+                ],
             ],
             'seating' => [
                 [
@@ -379,7 +379,7 @@ class CreateDmrFeaturesTable extends Migration
                     'slug' => 'drive_train_awd',
                     'jato_schema_ids' => [6502],
                 ],
-            ]
+            ],
         ])->each(function ($features, $categorySlug) {
             $categoryQuery = Category::query();
             $categoryQuery->getQuery()->from('dmr_categories');

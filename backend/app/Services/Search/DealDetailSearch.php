@@ -5,7 +5,7 @@ namespace App\Services\Search;
 use App\Models\Deal;
 
 /**
- * One specific deal
+ * One specific deal.
  */
 class DealDetailSearch extends BaseSearch
 {
@@ -16,32 +16,33 @@ class DealDetailSearch extends BaseSearch
                 'id' => $dealId,
             ],
         ];
+
         return $this;
     }
 
     public function addLocationField($location)
     {
-        $lat = (float)$location['lat'];
-        $lon = (float)$location['lon'];
+        $lat = (float) $location['lat'];
+        $lon = (float) $location['lon'];
 
-        if (!isset($lat)) {
+        if (! isset($lat)) {
             return $this;
         }
 
-        if (!isset($lon)) {
+        if (! isset($lon)) {
             return $this;
         }
 
         $this->query['_source'] = ['*'];
         $this->query['script_fields']['in_range'] = [
-            "script" => [
-                "lang" => "painless",
-                "source" => "(doc['location'].arcDistance(params.lat,params.lon) * 0.000621371) <  doc['max_delivery_distance'].value",
-                "params" => [
-                    "lat" => $lat,
-                    "lon" => $lon,
-                ]
-            ]
+            'script' => [
+                'lang' => 'painless',
+                'source' => "(doc['location'].arcDistance(params.lat,params.lon) * 0.000621371) <  doc['max_delivery_distance'].value",
+                'params' => [
+                    'lat' => $lat,
+                    'lon' => $lon,
+                ],
+            ],
         ];
 
         return $this;
@@ -56,5 +57,4 @@ class DealDetailSearch extends BaseSearch
         //$this->query['size'] = 1;
         return Deal::searchRaw($this->query);
     }
-
 }

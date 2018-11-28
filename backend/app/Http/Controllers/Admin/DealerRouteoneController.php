@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Dealer;
 use App\Http\Controllers\Controller;
 
-
 class DealerRouteoneController extends Controller
 {
-
     /**
      * @param Dealer $dealer
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -39,7 +37,7 @@ class DealerRouteoneController extends Controller
                 'dealership_name' => $deal->dealer->name,
             ];
 
-            $url = config('services.routeone.production_url') . '?' . http_build_query($query);
+            $url = config('services.routeone.production_url').'?'.http_build_query($query);
         } else {
             $url = null;
         }

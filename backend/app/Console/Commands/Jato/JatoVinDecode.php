@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands\Jato;
 
-use DeliverMyRide\JATO\JatoClient;
-
 use Illuminate\Console\Command;
-use App\Models\Deal;
-
+use DeliverMyRide\JATO\JatoClient;
 
 class JatoVinDecode extends Command
 {
@@ -48,6 +45,5 @@ class JatoVinDecode extends Command
         $vin = $this->argument('vin');
         $decoded = $this->client->vin->decode($vin);
         print_r($decoded);
-
     }
 }

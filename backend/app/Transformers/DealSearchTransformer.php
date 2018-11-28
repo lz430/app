@@ -2,17 +2,16 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use DeliverMyRide\Fuel\Map;
+use League\Fractal\TransformerAbstract;
 
 class DealSearchTransformer extends TransformerAbstract
 {
-
     public function transform(array $document)
     {
-        $deal = (object)$document['_source'];
-        $dealer = (object)$deal->dealer;
-        $version = (object)$deal->version;
+        $deal = (object) $document['_source'];
+        $dealer = (object) $deal->dealer;
+        $version = (object) $deal->version;
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
         //compares feature id of color attribute to map and gets hex value back for use for swatch
@@ -22,7 +21,7 @@ class DealSearchTransformer extends TransformerAbstract
             $simpleColor = end($simpleColor);
         }
 
-        $simpleColorSwatch =  $simpleColor && isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
+        $simpleColorSwatch = $simpleColor && isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
 
         return [
             'id' => $deal->id,
@@ -53,14 +52,13 @@ class DealSearchTransformer extends TransformerAbstract
             'color_simple' => $simpleColor,
             'exterior_color_swatch' => $simpleColorSwatch,
             'pricing' => $deal->pricing,
-            'fees' => (isset($deal->fees) ?  $deal->fees : null),
-
+            'fees' => (isset($deal->fees) ? $deal->fees : null),
 
             // TODO: refactor frontend to use the fees values instead.
-            'doc_fee' => (float)$dealer->doc_fee,
-            'cvr_fee' => (float)$dealer->cvr_fee,
-            'registration_fee' => (float)$dealer->registration_fee,
-            'acquisition_fee' => (float)$dealer->acquisition_fee,
+            'doc_fee' => (float) $dealer->doc_fee,
+            'cvr_fee' => (float) $dealer->cvr_fee,
+            'registration_fee' => (float) $dealer->registration_fee,
+            'acquisition_fee' => (float) $dealer->acquisition_fee,
         ];
     }
 }

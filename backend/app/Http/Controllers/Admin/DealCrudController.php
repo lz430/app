@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
-
-// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\DealRequest as StoreRequest;
+// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\DealRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 class DealCrudController extends CrudController
 {
@@ -19,7 +18,7 @@ class DealCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\Deal');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/deal');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/deal');
         $this->crud->setEntityNameStrings('deal', 'deals');
 
         /*
@@ -29,7 +28,6 @@ class DealCrudController extends CrudController
         */
 
         //$this->crud->setFromDb();
-
 
         //
         // FORM
@@ -78,14 +76,13 @@ class DealCrudController extends CrudController
 
         $this->crud->addColumn([
             'label' => 'Status',
-            'name' => 'status'
+            'name' => 'status',
         ]);
 
         $this->crud->addButtonFromView('line', 'open_in_app', 'deal-app-view', null);
         $this->crud->addButtonFromView('line', 'open_in_admin', 'deal-admin-view', null);
 
         $this->crud->denyAccess(['create']);
-
 
         $this->crud->enableExportButtons();
     }

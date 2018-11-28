@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\JatoFeature
+ * App\Models\JatoFeature.
  *
  * @property int $id
  * @property string $feature
@@ -112,6 +112,7 @@ class JatoFeature extends Model
         unset($data['created_at']);
         unset($data['created_at']);
         unset($data['updated_at']);
+
         return $data;
     }
 }

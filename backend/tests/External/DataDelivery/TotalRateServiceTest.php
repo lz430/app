@@ -2,18 +2,18 @@
 
 namespace Tests\External\DataDelivery;
 
-use DeliverMyRide\DataDelivery\DataDeliveryClient;
-use GuzzleHttp\Exception\ClientException;
 use Tests\TestCase;
-
+use GuzzleHttp\Exception\ClientException;
+use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
 class TotalRateServiceTest extends TestCase
 {
     /**
-     * Client factory
+     * Client factory.
      * @return DataDeliveryClient
      */
-    public function getClient() : DataDeliveryClient {
+    public function getClient() : DataDeliveryClient
+    {
         return new DataDeliveryClient(
             config('services.datadelivery.id'),
             config('services.datadelivery.api_key')
@@ -21,7 +21,8 @@ class TotalRateServiceTest extends TestCase
     }
 
     /** @test **/
-    public function it_can_get_total_data() {
+    public function it_can_get_total_data()
+    {
         $vehicleId = '1430452';
         $zipcode = '48116';
         $search = [
@@ -38,5 +39,4 @@ class TotalRateServiceTest extends TestCase
 
         $this->assertTrue((bool) $response);
     }
-
 }

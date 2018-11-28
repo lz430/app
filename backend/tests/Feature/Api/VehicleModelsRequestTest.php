@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class VehicleModelsRequestTest extends TestCase
 {
@@ -16,9 +16,9 @@ class VehicleModelsRequestTest extends TestCase
         factory(VehicleModel::class)->create([
             'name' => 'somename',
         ]);
-        
+
         $response = $this->get(route('vehicleModels.index'));
-        
+
         $response->assertJsonFragment(['name' => 'somename']);
         $response->assertJsonFragment(['type' => 'models']);
     }

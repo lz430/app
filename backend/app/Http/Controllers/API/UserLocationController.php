@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use GuzzleHttp;
 use App\Services\Search\DealSearch;
 use App\Http\Controllers\Controller;
-use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
-use GuzzleHttp;
 use GuzzleHttp\Exception\ConnectException;
+use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 
 class UserLocationController extends Controller
 {
-
     /**
      * Lets just do this the worst way possible.
      *
@@ -26,16 +25,15 @@ class UserLocationController extends Controller
             $key = config('services.ipstack.api_key');
             $response = $client->request('GET', $ip, [
                 'connect_timeout' => 3,
-                'query' => ['access_key' => $key, 'format' => 1]
+                'query' => ['access_key' => $key, 'format' => 1],
             ]);
             $response = json_decode($response->getBody());
-
         } catch (ConnectException $e) {
             $response = new \stdClass();
-            $response->city = "Detroit";
-            $response->region_code = "MI";
-            $response->country_code = "US";
-            $response->zip = "48226";
+            $response->city = 'Detroit';
+            $response->region_code = 'MI';
+            $response->country_code = 'US';
+            $response->zip = '48226';
             $response->latitude = 42.3316;
             $response->longitude = -83.049;
         }
@@ -49,7 +47,6 @@ class UserLocationController extends Controller
                 'latitude' => $response->latitude,
                 'longitude' => $response->longitude,
             ];
-
         }
 
         return $location;
@@ -64,6 +61,7 @@ class UserLocationController extends Controller
     private function getLocationForLatLon($geocoder, $lat, $lon)
     {
         $lookup = $geocoder->reverse($lat, $lon)->get()->first();
+
         return $this->formatGeocoderAddress($lookup);
     }
 
@@ -75,6 +73,7 @@ class UserLocationController extends Controller
     private function getLocationForAddress($geocoder, $address)
     {
         $lookup = $geocoder->geocode($address)->get()->first();
+
         return $this->formatGeocoderAddress($lookup);
     }
 
@@ -129,7 +128,7 @@ class UserLocationController extends Controller
 
             $location = $this->getLocationForIp($ip);
         }
-        if ($location && $location['country'] != "US") {
+        if ($location && $location['country'] != 'US') {
             $has_results = false;
         } elseif ($location) {
             $query = new DealSearch();

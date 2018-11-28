@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\JatoFeature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class FeaturesTest extends TestCase
 {
@@ -20,10 +20,10 @@ class FeaturesTest extends TestCase
         factory(JatoFeature::class)->create([
             'group' => null,
         ]);
-        
+
         // When we request to list the features
         $response = $this->getJson(route('features.index'));
-        
+
         // It is successful
         $response->assertStatus(200);
 

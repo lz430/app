@@ -2,14 +2,10 @@
 
 namespace DeliverMyRide\DataDelivery\Manager;
 
-use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use App\Models\Deal;
 use GuzzleHttp\Exception\ClientException;
-use DeliverMyRide\DataDelivery\FetchProgramDataException;
+use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
-/**
- *
- */
 class DealToVehicle
 {
     private const TRANSMISSION_MAP = [
@@ -33,10 +29,10 @@ class DealToVehicle
     ];
 
     private const BODY_STYLE_MAP = [
-        'Sport Utility Vehicle' => "Sport Utility",
+        'Sport Utility Vehicle' => 'Sport Utility',
         'Pickup' => 'Regular Cab',
         'Minivan' => 'Passenger Van',
-        'Mini Mpv' => 'Hatchback'
+        'Mini Mpv' => 'Hatchback',
     ];
 
     private $client;
@@ -66,7 +62,7 @@ class DealToVehicle
         $filtered = array_filter($data, function ($record) use ($attribute, $value) {
             if (is_array($value) && isset($record->{$attribute}) && in_array($record->{$attribute}, $value)) {
                 return true;
-            } else if (isset($record->{$attribute}) && $record->{$attribute} == $value) {
+            } elseif (isset($record->{$attribute}) && $record->{$attribute} == $value) {
                 return true;
             } else {
                 return false;
@@ -112,7 +108,7 @@ class DealToVehicle
         $doors = $this->deal->version->doors;
 
         if (in_array($this->deal->version->body_style, [
-            'Sport Utility Vehicle'
+            'Sport Utility Vehicle',
         ])) {
             $doors = $doors - 1;
         }
@@ -147,6 +143,7 @@ class DealToVehicle
             'body' => $this->translateBodyStyle(),
             'transmission' => $this->translateTransmission(),
         ];
+
         return $params;
     }
 
@@ -182,7 +179,7 @@ class DealToVehicle
     {
         $vehicles = $this->filterUnlessNone($vehicles, 'Trim', $params['trim']);
         $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', $params['option_codes']);
-        $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', "Base");
+        $vehicles = $this->filterUnlessNone($vehicles, 'OptionGroup', 'Base');
         $vehicles = $this->filterUnlessNone($vehicles, 'Package', $params['package_codes']);
         $vehicles = $this->filterUnlessNone($vehicles, 'Trans', $params['transmission']);
         if (count($vehicles)) {
@@ -200,7 +197,7 @@ class DealToVehicle
     {
         $results = null;
 
-        if (!$this->deal->dealer) {
+        if (! $this->deal->dealer) {
             return $results;
         }
 
@@ -213,17 +210,19 @@ class DealToVehicle
         ];
 
         $results = $this->fetchProgramData($search);
-        if (!$results) {
+        if (! $results) {
             app('sentry')->captureMessage('Data Delivery API: Invalid XML returned', [], [
-                'extra' => $params
+                'extra' => $params,
             ]);
+
             return [];
         }
 
-        if ($results->status === "2") {
-            app('sentry')->captureMessage("Data Delivery API: " . $results->error, [], [
-                'extra' => $params
+        if ($results->status === '2') {
+            app('sentry')->captureMessage('Data Delivery API: '.$results->error, [], [
+                'extra' => $params,
             ]);
+
             return [];
         }
         // We have to narrow down the results.
@@ -235,8 +234,6 @@ class DealToVehicle
             $results = $this->fetchProgramData($search);
         }
 
-
         return $results;
     }
-
 }

@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Backpack\CRUD\CrudTrait;
-
 
 /**
- * App\Models\Dealer
+ * App\Models\Dealer.
  *
  * @property int $id
  * @property string $dealer_id
- * @property boolean $is_active
+ * @property bool $is_active
  * @property \stdClass $price_rules
  * @property $acquisition_fee
  * @property $doc_fee
@@ -76,7 +74,6 @@ class Dealer extends Model
         'price_rules' => 'object',
         'notification_emails' => 'object',
     ];
-
 
     /**
      * @var array

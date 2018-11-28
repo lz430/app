@@ -1,9 +1,9 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Carbon\Carbon;
 
 class CreateDealerContactsTable extends Migration
 {
@@ -26,7 +26,7 @@ class CreateDealerContactsTable extends Migration
 
         // Populates dealer_contacts table with the contact info from the dealers table
         $dealerData = \App\Models\Dealer::select('dealer_id', 'phone', 'contact_name', 'contact_email', 'contact_title')->get();
-        foreach($dealerData as $data) {
+        foreach ($dealerData as $data) {
             DB::table('dealer_contacts')->insert(
                 [
                     'dealer_id' => $data->dealer_id,
@@ -35,7 +35,7 @@ class CreateDealerContactsTable extends Migration
                     'email' => $data->contact_email,
                     'title' => $data->contact_title,
                     'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
+                    'updated_at' => Carbon::now(),
                 ]
             );
         }

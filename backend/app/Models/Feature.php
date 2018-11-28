@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-use Backpack\CRUD\CrudTrait;
-
 /**
- * TODO: Rename jato_schema_ids to map_jato_features
+ * TODO: Rename jato_schema_ids to map_jato_features.
  *
  * @property int $id
  * @property string $title
@@ -60,7 +59,7 @@ class Feature extends Model
         'category_id',
         'display_order',
         'jato_schema_ids',
-        'map_vauto_features'
+        'map_vauto_features',
     ];
 
     /**
@@ -86,7 +85,7 @@ class Feature extends Model
      */
     public function scopeWithJatoSchemaId(Builder $query, int $schemaId): Builder
     {
-        return $query->whereRaw("JSON_CONTAINS(jato_schema_ids, ?)", [[(string) $schemaId]]);
+        return $query->whereRaw('JSON_CONTAINS(jato_schema_ids, ?)', [[(string) $schemaId]]);
     }
 
     /**
@@ -96,6 +95,6 @@ class Feature extends Model
      */
     public function scopeWithVautoFeature(Builder $query, string $feature): Builder
     {
-        return $query->whereRaw("JSON_CONTAINS(LOWER(map_vauto_features), JSON_ARRAY(LOWER(?)))", [$feature]);
+        return $query->whereRaw('JSON_CONTAINS(LOWER(map_vauto_features), JSON_ARRAY(LOWER(?)))', [$feature]);
     }
 }

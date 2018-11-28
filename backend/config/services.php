@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /*
@@ -72,7 +73,7 @@ return [
     ],
 
     'googleanalytics' => [
-        'ua' =>     env('GOOGLE_ANALYTICS_UA')
+        'ua' =>     env('GOOGLE_ANALYTICS_UA'),
     ],
 
     'mixpanel' => [

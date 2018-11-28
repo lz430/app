@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands\Version;
 
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
 use App\Models\JATO\Version;
-
 use Illuminate\Console\Command;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 class VersionFillMissingPhotos extends Command
 {
@@ -48,7 +47,7 @@ class VersionFillMissingPhotos extends Command
             $version->photos()->delete();
 
             $vehicle = $this->manager->matchFuelVehicleToVersion($version);
-            if (!$vehicle) {
+            if (! $vehicle) {
                 return $version;
             }
 
@@ -58,11 +57,11 @@ class VersionFillMissingPhotos extends Command
             // Default Assets
             $assets = $this->manager->assets($version, null, $vehicle->id);
             if ($assets && count($assets)) {
-                $this->info(" --- Default: " . count($assets));
+                $this->info(' --- Default: '.count($assets));
                 foreach ($assets as $asset) {
                     $version->photos()->updateOrCreate(
                         [
-                            'url' => $asset->url
+                            'url' => $asset->url,
                         ],
                         [
                             'type' => 'default',
@@ -82,24 +81,22 @@ class VersionFillMissingPhotos extends Command
                 ->unique()
                 ->all();
 
-
             if ($colors && count($colors)) {
                 foreach ($colors as $color) {
-                    if (!$color) {
+                    if (! $color) {
                         continue;
                     }
                     $assets = $this->manager->assets($version, $color);
                     if ($assets && count($assets)) {
-                        $this->info(" --- " . $color . ": " . count($assets));
+                        $this->info(' --- '.$color.': '.count($assets));
                         foreach ($assets as $asset) {
-
-                            if (!isset($asset->shotCode->color->oem_name)) {
+                            if (! isset($asset->shotCode->color->oem_name)) {
                                 continue;
                             }
 
                             $version->photos()->updateOrCreate(
                                 [
-                                    'url' => $asset->url
+                                    'url' => $asset->url,
                                 ],
                                 [
                                     'type' => 'color',
@@ -111,14 +108,10 @@ class VersionFillMissingPhotos extends Command
                                 ]);
                         }
                     }
-
                 }
-
             }
-
 
             return $version;
         });
-
     }
 }

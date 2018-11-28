@@ -2,16 +2,13 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
-
 use App\Models\Deal;
 use App\Models\Feature;
 use DeliverMyRide\JATO\JatoClient;
-
 use GuzzleHttp\Exception\ClientException;
 
 class DealCompareData
 {
-
     private const EQUIPMENT_TO_SKIP = [
         'Internal dimensions',
         'Crash test results',
@@ -50,7 +47,6 @@ class DealCompareData
         $this->deal = $deal;
     }
 
-
     private function buildPotentialDealEquipment()
     {
         try {
@@ -79,7 +75,6 @@ class DealCompareData
 
     private function findOptionalDealEquipment()
     {
-
         $codes = array_merge(
             $this->deal->package_codes ? $this->deal->package_codes : [],
             $this->deal->option_codes ? $this->deal->option_codes : []
@@ -87,10 +82,10 @@ class DealCompareData
 
         return $this->potentialEquipment
             ->reject(function ($equipment) {
-                return $equipment->availability !== "optional";
+                return $equipment->availability !== 'optional';
             })
             ->reject(function ($equipment) use ($codes) {
-                return !in_array($equipment->optionCode, $codes);
+                return ! in_array($equipment->optionCode, $codes);
             })->all();
     }
 
@@ -109,7 +104,6 @@ class DealCompareData
         }
 
         $this->standardEquipmentText = $text;
-
     }
 
     private function dealEquipment()
@@ -144,7 +138,7 @@ class DealCompareData
                 continue;
             }
 
-            if (!isset($equipmentCategories[$equipment->category])) {
+            if (! isset($equipmentCategories[$equipment->category])) {
                 $equipmentCategories[$equipment->category] = [];
             }
 
@@ -152,7 +146,6 @@ class DealCompareData
         }
         $this->equipmentOnDeal = $equipmentCategories;
     }
-
 
     /**
      * @param $equipment
@@ -181,7 +174,7 @@ class DealCompareData
                 break;
             case 'Wheels':
                 if (isset($attributes['rim diameter (in)'])) {
-                    $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value . "\" rims";
+                    $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value.'" rims';
                 }
                 break;
             case 'Drive':
@@ -210,10 +203,10 @@ class DealCompareData
                     $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";
                 }
                 break;
-            case 'Engine';
+            case 'Engine':
                 $labels[$equipment->schemaId] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";
                 break;
-            case 'Fuel';
+            case 'Fuel':
                 $labels[$equipment->schemaId] = "Fuel Type: {$attributes['Fuel type']->value}";
                 break;
 
@@ -222,7 +215,7 @@ class DealCompareData
                 if ($feature) {
                     $labels[$equipment->schemaId] = $feature->title;
                 } else {
-                    if (isset($this->standardEquipmentText[$equipment->schemaId]) && !$equipment->optionId) {
+                    if (isset($this->standardEquipmentText[$equipment->schemaId]) && ! $equipment->optionId) {
                         if ($this->standardEquipmentText[$equipment->schemaId]->itemName == $this->standardEquipmentText[$equipment->schemaId]->content) {
                             $labels[$equipment->schemaId] = $this->standardEquipmentText[$equipment->schemaId]->content;
                         } else {
@@ -243,7 +236,7 @@ class DealCompareData
     {
         $labeledEquipment = [];
         foreach ($this->equipmentOnDeal as $category => $equipments) {
-            if (!isset($labeledEquipment[$category])) {
+            if (! isset($labeledEquipment[$category])) {
                 $labeledEquipment[$category] = [];
             }
 
@@ -258,14 +251,13 @@ class DealCompareData
         $this->equipmentOnDeal = $labeledEquipment;
     }
 
-
     public function build()
     {
         $this->compileEquipmentData();
         $this->dealEquipment();
         $this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
+
         return $this->equipmentOnDeal;
     }
-
 }

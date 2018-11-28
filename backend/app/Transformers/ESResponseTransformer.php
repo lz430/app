@@ -2,9 +2,9 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Models\JATO\Make;
 use DeliverMyRide\JATO\Map;
+use League\Fractal\TransformerAbstract;
 
 class ESResponseTransformer extends TransformerAbstract
 {
@@ -39,7 +39,7 @@ class ESResponseTransformer extends TransformerAbstract
         $filters = [];
 
         foreach ($this->response['aggregations'] as $key => $data) {
-            if ($key == "makeandstyle") {
+            if ($key == 'makeandstyle') {
                 $filters['style'] = $this->transformBuckets($data['style']['value']['buckets']);
                 $filters['make'] = $this->transformBuckets($data['make']['value']['buckets']);
             } elseif (isset($data['buckets'])) {
@@ -101,16 +101,18 @@ class ESResponseTransformer extends TransformerAbstract
         if (isset($filters['vehicle_size'])) {
             $order = array_flip(self::SORT_SIZE_ORDER);
 
-            usort($filters['vehicle_size'], function ($a, $b)  use ($order) {
+            usort($filters['vehicle_size'], function ($a, $b) use ($order) {
                 $aValue = (isset($order[$a['value']]) ? $order[$a['value']] : 100);
                 $bValue = (isset($order[$b['value']]) ? $order[$b['value']] : 100);
 
                 if ($aValue == $bValue) {
                     return 0;
                 }
+
                 return $aValue > $bValue ? 1 : -1;
             });
         }
+
         return $filters;
     }
 
@@ -144,7 +146,7 @@ class ESResponseTransformer extends TransformerAbstract
             if (count($data['year']['year']['buckets']) > 1) {
                 $year = $data['year']['year']['buckets'][0]['key'];
                 $last = end($data['year']['year']['buckets']);
-                $year .= '-' . $last['key'];
+                $year .= '-'.$last['key'];
             } else {
                 $year = $data['year']['year']['buckets'][0]['key'];
             }
@@ -159,14 +161,12 @@ class ESResponseTransformer extends TransformerAbstract
                 'payments' => [],
             ];
 
-            foreach(['lease', 'finance', 'cash' ] as $strategy) {
+            foreach (['lease', 'finance', 'cash'] as $strategy) {
                 if (isset($data[$strategy]['payment']['buckets'][0]['payment']['value']) &&
                     $data[$strategy]['payment']['buckets'][0]['payment']['value']) {
-
                     $element['payments'][$strategy] = [
                         'payment' => round($data[$strategy]['payment']['buckets'][0]['payment']['value'], 2),
                     ];
-
                 } else {
                     $element['payments'][$strategy] = null;
                 }
@@ -215,6 +215,7 @@ class ESResponseTransformer extends TransformerAbstract
         } else {
             $response['results'] = $this->modelRecords();
         }
+
         return $response;
     }
 }

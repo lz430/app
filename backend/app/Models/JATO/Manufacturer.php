@@ -5,7 +5,7 @@ namespace App\Models\JATO;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\JATO\Manufacturer
+ * App\Models\JATO\Manufacturer.
  *
  * @property int $id
  * @property string $name

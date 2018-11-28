@@ -16,10 +16,10 @@ class VersionQuoteObserver
     public function created(VersionQuote $quote)
     {
         $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
-        foreach($quote->version->deals()->get() as $deal) {
-            if($deal->status == 'available') {
+        foreach ($quote->version->deals()->get() as $deal) {
+            if ($deal->status == 'available') {
                 $calculator->calculateBasicPayments($deal);
-                Cache::tags('deal-' . $deal->id)->flush();
+                Cache::tags('deal-'.$deal->id)->flush();
             }
         }
     }
@@ -34,10 +34,10 @@ class VersionQuoteObserver
     {
         if ($quote->getOriginal()['hashcode'] != $quote->hashcode) {
             $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
-            foreach($quote->version->deals()->get() as $deal) {
-                if($deal->status == 'available') {
+            foreach ($quote->version->deals()->get() as $deal) {
+                if ($deal->status == 'available') {
                     $calculator->calculateBasicPayments($deal);
-                    Cache::tags('deal-' . $deal->id)->flush();
+                    Cache::tags('deal-'.$deal->id)->flush();
                 }
             }
         }
@@ -52,8 +52,8 @@ class VersionQuoteObserver
     public function deleted(VersionQuote $quote)
     {
         $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
-        foreach($quote->version->deals()->get() as $deal) {
-            if($deal->status == 'available') {
+        foreach ($quote->version->deals()->get() as $deal) {
+            if ($deal->status == 'available') {
                 $calculator->calculateBasicPayments($deal);
             }
         }

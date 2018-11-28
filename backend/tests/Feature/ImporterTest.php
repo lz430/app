@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Deal;
 use Tests\TestCase;
+use App\Models\Deal;
 use App\Models\JATO\Version;
 use DeliverMyRide\VAuto\Importer;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-
 
 class ImporterTest extends TestCase
 {
@@ -21,9 +20,9 @@ class ImporterTest extends TestCase
     {
         // This test takes 22seconds so I'm not going to have it run every time until I'm able to extract out JATO.
         $this->markTestSkipped();
-        
+
         Config::set('services.vauto.uploads_path', 'tests/Data');
-        
+
         $importer = app(Importer::class);
         $importer->import();
 

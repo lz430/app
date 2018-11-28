@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class OptionService extends BaseService
 {
-
     /**
-     * get
+     * get.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55bbd61174be0903a820e304?
      * @param string $vehicleId
      * @param string $type
@@ -24,5 +23,4 @@ class OptionService extends BaseService
 
         return $this->client->get($path);
     }
-
 }

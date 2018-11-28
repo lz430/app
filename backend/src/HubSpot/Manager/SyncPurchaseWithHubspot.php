@@ -5,9 +5,6 @@ namespace DeliverMyRide\HubSpot\Manager;
 use App\Models\Order\Purchase;
 use DeliverMyRide\HubSpot\HubspotClient;
 
-/**
- *
- */
 class SyncPurchaseWithHubspot
 {
     private $client;
@@ -23,7 +20,7 @@ class SyncPurchaseWithHubspot
      */
     public function submitPurchaseForm(Purchase $purchase)
     {
-        if (!hubspot_enabled()) {
+        if (! hubspot_enabled()) {
             return false;
         }
 
@@ -46,7 +43,7 @@ class SyncPurchaseWithHubspot
      */
     public function createContactAndDeal(Purchase $purchase)
     {
-        if (!hubspot_enabled()) {
+        if (! hubspot_enabled()) {
             return false;
         }
 
@@ -99,7 +96,6 @@ class SyncPurchaseWithHubspot
             'voucher_title' => $purchase->rebatesAsTitle(),
         ];
 
-
         //
         // Create Or Update contact
         $contact = $client->contacts()->createOrUpdate($purchase->buyer->email, $client->mungePayloadData($contactData));
@@ -108,12 +104,12 @@ class SyncPurchaseWithHubspot
         $dealPayload = [
             'associations' => [
                 'associatedVids' => [
-                    $contact['vid']
-                ]
+                    $contact['vid'],
+                ],
             ],
             'properties' => $this->client->mungePayloadData([
                 'pipeline' => 'default',
-                'dealname' => $purchase->buyer->last_name . ', ' . $purchase->buyer->first_name . ' - ' . $purchase->deal->title(),
+                'dealname' => $purchase->buyer->last_name.', '.$purchase->buyer->first_name.' - '.$purchase->deal->title(),
                 'dealstage' => 'b8ace084-d202-47df-bca7-3973eb53120a',
                 'amount' => '500',
 

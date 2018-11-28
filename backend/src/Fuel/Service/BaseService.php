@@ -4,8 +4,8 @@ namespace DeliverMyRide\Fuel\Service;
 
 use DeliverMyRide\Fuel\FuelClient;
 
-abstract class BaseService {
-
+abstract class BaseService
+{
     /** @var \DeliverMyRide\Fuel\FuelClient */
     protected $client;
 
@@ -16,5 +16,4 @@ abstract class BaseService {
     {
         $this->client = $client;
     }
-
 }

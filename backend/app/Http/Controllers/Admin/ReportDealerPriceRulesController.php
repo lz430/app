@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\Models\Dealer;
+use App\Http\Controllers\Controller;
 
 class ReportDealerPriceRulesController extends Controller
 {
     public function index()
     {
         $dealers = Dealer::select('dealer_id', 'name', 'price_rules')->whereNotNull('price_rules')->orderBy('name', 'asc')->get();
+
         return view('admin.reports.dealer-price-rules', ['dealers' => $dealers]);
     }
 
@@ -20,13 +21,13 @@ class ReportDealerPriceRulesController extends Controller
 
         $dealer = Dealer::select('dealer_id', 'name', 'price_rules')->get();
         $data = [];
-        foreach($dealer as $rule) {
+        foreach ($dealer as $rule) {
             $data['dealer_id'] = $rule->dealer_id;
             $data['name'] = $rule->name;
-            foreach($rule->price_rules as $key => $price) {
+            foreach ($rule->price_rules as $key => $price) {
                 $data['Scenario'] = $key;
                 $data['Base Field'] = $price->base_field;
-                foreach($price->rules as $p){
+                foreach ($price->rules as $p) {
                     $data['Value'] = $p->value;
                     $data['Modifier'] = $p->modifier;
                     $data['VIN'] = $p->conditions->vin;

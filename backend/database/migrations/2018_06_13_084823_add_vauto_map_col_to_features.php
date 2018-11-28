@@ -16,7 +16,6 @@ class AddVautoMapColToFeatures extends Migration
         Schema::table('features', function (Blueprint $table) {
             $table->json('map_vauto_features')->nullable();
         });
-
     }
 
     /**

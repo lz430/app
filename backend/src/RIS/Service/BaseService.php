@@ -4,12 +4,10 @@ namespace DeliverMyRide\RIS\Service;
 
 use DeliverMyRide\RIS\RISClient;
 
-abstract class BaseService {
-
-
+abstract class BaseService
+{
     /** @var \DeliverMyRide\RIS\RISClient */
     protected $client;
-
 
     /**
      * TestService constructor.
@@ -19,5 +17,4 @@ abstract class BaseService {
     {
         $this->client = $client;
     }
-
 }

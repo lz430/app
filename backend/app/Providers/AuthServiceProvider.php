@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use App\Models\Order\Purchase;
 use App\Models\User;
-use App\Policies\PurchasePolicy;
 use App\Policies\UserPolicy;
+use App\Models\Order\Purchase;
+use App\Policies\PurchasePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider

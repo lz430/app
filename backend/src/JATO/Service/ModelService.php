@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class ModelService extends BaseService
 {
-
     /**
-     * LIST
+     * LIST.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55a9433574be090dc82f15f4?
      * @param int $page
      * @param int $page_size
@@ -16,14 +15,14 @@ class ModelService extends BaseService
      */
     public function list(int $page = 1, int $page_size = 20)
     {
-        return $this->client->get("makes", [
+        return $this->client->get('makes', [
             'page' => $page,
-            'pageSize' => $page_size
+            'pageSize' => $page_size,
         ]);
     }
 
     /**
-     * List by make
+     * List by make.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55afbc3b74be0902ecb19152?
      * @param string $name
      * @return mixed
@@ -36,7 +35,7 @@ class ModelService extends BaseService
     }
 
     /**
-     * List by make grouped
+     * List by make grouped.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/565f717f74be0900d423477a?
      * @param string $name
      * @return mixed
@@ -49,7 +48,7 @@ class ModelService extends BaseService
     }
 
     /**
-     * GET
+     * GET.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55afb5ce74be0902ecb1914f?
      * @param string $name
      * @param string $style

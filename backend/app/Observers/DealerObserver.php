@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Dealer;
 use App\Models\Deal;
+use App\Models\Dealer;
 
 class DealerObserver
 {
@@ -34,7 +34,7 @@ class DealerObserver
         // Only update if is not new, and pricing is different.
         if ($originalPricing != $pricing) {
             $calculator = resolve('App\Services\Quote\DealBuildBasicPayments');
-            foreach($dealer->deals()->get() as $deal) {
+            foreach ($dealer->deals()->get() as $deal) {
                 $calculator->calculateBasicPayments($deal);
             }
         }

@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use DeliverMyRide\Fuel\FuelClient;
-
 use Illuminate\Support\ServiceProvider;
 
 class FuelServiceProvider extends ServiceProvider

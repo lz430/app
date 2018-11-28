@@ -2,18 +2,15 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
-use App\Models\JatoFeature;
 use App\Models\Deal;
+use App\Models\JatoFeature;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Collection;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
-/**
- *
- */
 class DealFeaturesMunger
 {
     private $debug;
@@ -38,7 +35,7 @@ class DealFeaturesMunger
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import(Deal $deal, bool $force = FALSE)
+    public function import(Deal $deal, bool $force = false)
     {
         $this->deal = $deal;
         $this->version = $this->deal->version;
@@ -53,7 +50,7 @@ class DealFeaturesMunger
             $this->deal->jatoFeatures()->sync([]);
         }
 
-        if ($this->deal->jatoFeatures()->count()){
+        if ($this->deal->jatoFeatures()->count()) {
             return $this->debug;
         }
 
@@ -89,7 +86,7 @@ class DealFeaturesMunger
         $data = [];
 
         foreach ($this->features->all() as $feature) {
-            if (!isset($data[$feature->categoryId])) {
+            if (! isset($data[$feature->categoryId])) {
                 $data[$feature->categoryId] = [];
             }
             $data[$feature->categoryId][] = $feature;
@@ -107,7 +104,6 @@ class DealFeaturesMunger
                 $this->saveDealJatoFeaturesByGroup($features[$group['id']], $group['title']);
             }
         }
-
     }
 
     private function saveDealJatoFeaturesByGroup(array $features, string $group)
@@ -118,14 +114,14 @@ class DealFeaturesMunger
             }, collect())
             ->each(function ($featureAndContent) use ($group) {
 
-                /**
+                /*
                  * Only interior features that contain "seat" should be added to seating
                  */
-                if ($group === JatoFeature::GROUP_SEATING_KEY && !str_contains($featureAndContent['feature'], 'seat')) {
+                if ($group === JatoFeature::GROUP_SEATING_KEY && ! str_contains($featureAndContent['feature'], 'seat')) {
                     return;
                 }
 
-                /**
+                /*
                  * Only add features that have _content_ that starts with "Standard", "Yes".
                  */
                 if (starts_with($featureAndContent['content'], ['Standard', 'Yes'])) {
@@ -211,13 +207,14 @@ class DealFeaturesMunger
                     ];
                 }
             } else {
-                $features = [$prefix, $prefix . ' ' . trim($suffix, '() ')];
+                $features = [$prefix, $prefix.' '.trim($suffix, '() ')];
                 $contents = array_map(function ($str) {
                     return trim($str, ') ');
                 }, explode('(', $content));
 
                 if (count($features) != count($contents)) {
                     Log::channel('jato')->debug("Cannot parse feature: title[$feature] content[$content]");
+
                     return $all;
                 }
 

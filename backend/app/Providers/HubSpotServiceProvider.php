@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use DeliverMyRide\HubSpot\HubspotClient;
-
 use Illuminate\Support\ServiceProvider;
+use DeliverMyRide\HubSpot\HubspotClient;
 
 class HubSpotServiceProvider extends ServiceProvider
 {
@@ -19,9 +18,10 @@ class HubSpotServiceProvider extends ServiceProvider
     {
         $this->app->bind(HubspotClient::class, function ($app) {
             $token = config('services.hubspot.api_key');
-            if (!$token) {
+            if (! $token) {
                 $token = 'no-hubspot-token';
             }
+
             return HubspotClient::create($token);
         });
     }

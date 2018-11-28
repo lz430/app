@@ -6,7 +6,6 @@ use App\Models\Order\Purchase;
 use Illuminate\Console\Command;
 use DeliverMyRide\HubSpot\Manager\SyncPurchaseWithHubspot;
 
-
 class TestHubSpotForm extends Command
 {
     /**

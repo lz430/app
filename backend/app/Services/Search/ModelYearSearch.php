@@ -25,14 +25,15 @@ class ModelYearSearch extends BaseSearch
                 'bucket_sort' => [
                     'sort' => [
                         [$map[$sort] => ['order' => $direction]],
-                    ]
+                    ],
                 ],
             ];
         } else {
             $this->query['aggs']['category']['aggs']['model']['terms']['order'] = [
-                '_key' => $direction
+                '_key' => $direction,
             ];
         }
+
         return $this;
     }
 
@@ -42,7 +43,7 @@ class ModelYearSearch extends BaseSearch
         $this->query['aggs'] = [
             'category' => [
                 'nested' => [
-                    'path' => 'category'
+                    'path' => 'category',
                 ],
                 'aggs' => [
                     'model' => [
@@ -54,49 +55,49 @@ class ModelYearSearch extends BaseSearch
                         'aggs' => [
                             'thumbnail' => [
                                 'terms' => [
-                                    'field' => 'category.thumbnail.keyword'
-                                ]
+                                    'field' => 'category.thumbnail.keyword',
+                                ],
                             ],
                             'id' => [
                                 'terms' => [
-                                    'field' => 'category.id'
-                                ]
+                                    'field' => 'category.id',
+                                ],
                             ],
-                            /**
+                            /*
                              * TODO: Why can't we sort on the existing aggs?
                              */
                             'sort_cash' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'min' => [
                                         'min' => [
                                             'field' => 'payments.detroit.cash.payment',
                                         ],
                                     ],
-                                ]
+                                ],
                             ],
                             'sort_finance' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'min' => [
                                         'min' => [
                                             'field' => 'payments.detroit.finance.payment',
                                         ],
                                     ],
-                                ]
+                                ],
                             ],
                             'sort_lease' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'min' => [
                                         'min' => [
                                             'field' => 'payments.detroit.lease.payment',
                                         ],
                                     ],
-                                ]
+                                ],
                             ],
                             'cash' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'payment' => [
                                         'terms' => [
@@ -112,13 +113,13 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.cash.payment',
                                                 ],
                                             ],
-                                        ]
+                                        ],
                                     ],
                                 ],
                             ],
 
                             'finance' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'payment' => [
                                         'terms' => [
@@ -134,13 +135,13 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.finance.payment',
                                                 ],
                                             ],
-                                        ]
+                                        ],
                                     ],
                                 ],
                             ],
 
                             'lease' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'payment' => [
                                         'terms' => [
@@ -156,24 +157,24 @@ class ModelYearSearch extends BaseSearch
                                                     'field' => 'payments.detroit.lease.payment',
                                                 ],
                                             ],
-                                        ]
+                                        ],
                                     ],
                                 ],
                             ],
 
                             'msrp' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'min' => [
                                         'min' => [
-                                            'field' => 'pricing.msrp'
-                                        ]
+                                            'field' => 'pricing.msrp',
+                                        ],
                                     ],
-                                ]
+                                ],
                             ],
 
                             'year' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'year' => [
                                         'terms' => [
@@ -182,35 +183,35 @@ class ModelYearSearch extends BaseSearch
                                                 '_key' => 'asc',
                                             ],
                                         ],
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ],
                             'make' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'make' => [
                                         'terms' => [
-                                            'field' => 'make.keyword'
-                                        ]
-                                    ]
-                                ]
+                                            'field' => 'make.keyword',
+                                        ],
+                                    ],
+                                ],
                             ],
                             'model' => [
-                                'reverse_nested' => (object)[],
+                                'reverse_nested' => (object) [],
                                 'aggs' => [
                                     'model' => [
                                         'terms' => [
-                                            'field' => 'model.keyword'
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                            'field' => 'model.keyword',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
+
         return $this;
     }
-
 }

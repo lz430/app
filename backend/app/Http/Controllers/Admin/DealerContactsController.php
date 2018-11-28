@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Dealer;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\DealerContact;
-use Carbon\Carbon;
-
+use App\Http\Controllers\Controller;
 
 class DealerContactsController extends Controller
 {
     public function create($id)
     {
         $dealerNumber = Dealer::select('dealer_id')->where('id', $id)->first();
+
         return view('admin.dealer-contact', ['dealerNumber' => $dealerNumber->dealer_id]);
     }
 
@@ -26,7 +25,7 @@ class DealerContactsController extends Controller
     {
         $dealerContact = new DealerContact;
 
-        if(isset($request->contact_id)) {
+        if (isset($request->contact_id)) {
             $data = [
                 'dealer_id' => $request->dealer_id,
                 'name' => $request->name,
@@ -45,6 +44,7 @@ class DealerContactsController extends Controller
         }
 
         $findDealer = Dealer::where('dealer_id', $request->dealer_id)->first();
-        return redirect('admin/dealer/' . $findDealer->id  . '/edit#contacts');
+
+        return redirect('admin/dealer/'.$findDealer->id.'/edit#contacts');
     }
 }

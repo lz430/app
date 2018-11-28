@@ -5,7 +5,6 @@ namespace App\Models\JATO;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-
 /**
  * Note: this is not specifically a JATO model. The data is pulled form the RIS api.
  *
@@ -44,7 +43,6 @@ class VersionQuote extends Model
 {
     protected $table = 'versions_quotes';
     protected $guarded = ['id'];
-
 
     protected $casts = [
         'data' => 'object',

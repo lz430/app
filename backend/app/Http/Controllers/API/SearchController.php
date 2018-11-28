@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Http\Request;
 use App\Services\Search\SuggestSearch;
 use App\Transformers\SearchSuggestTransformer;
-use Illuminate\Http\Request;
-use App\Transformers\ESResponseTransformer;
 use League\Fractal\Serializer\ArraySerializer;
 
 class SearchController extends BaseAPIController
@@ -21,6 +20,7 @@ class SearchController extends BaseAPIController
         $query = $query->filterMustGenericRules();
 
         $results = $query->get();
+
         return fractal()
             ->item($results)
             ->transformWith(SearchSuggestTransformer::class)

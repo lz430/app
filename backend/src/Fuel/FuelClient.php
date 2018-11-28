@@ -4,9 +4,6 @@ namespace DeliverMyRide\Fuel;
 
 use DeliverMyRide\Common\ApiClient;
 
-/**
- *
- */
 class FuelClient extends ApiClient
 {
     /** @var string api key */
@@ -31,14 +28,16 @@ class FuelClient extends ApiClient
 
         // Configure
         $this->apiKey = $apiKey;
-        $this->baseUrl = "https://api.fuelapi.com/v1/json";
+        $this->baseUrl = 'https://api.fuelapi.com/v1/json';
     }
 
-    protected function getRequestHeaders() {
-        $credentials = base64_encode($this->apiKey . ":");
+    protected function getRequestHeaders()
+    {
+        $credentials = base64_encode($this->apiKey.':');
+
         return [
             'Accept' => 'application/json',
-            'Authorization' => 'Basic ' . $credentials,
+            'Authorization' => 'Basic '.$credentials,
         ];
     }
 }

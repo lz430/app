@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Mail\Mailable;
 use App\Mail\DealPurchasedDMR;
 use App\Models\Order\Purchase;
-use App\Models\User;
-use App\Models\Deal;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PurchaseEmailsTest extends TestCase
 {
