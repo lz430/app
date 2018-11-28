@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/php:7.2-node-browsers
+      - image: circleci/php:7.2-node-browsers-legacy
 
       - image: circleci/mysql:5.7
 
@@ -18,36 +18,12 @@ jobs:
 
     steps:
       - checkout
+      ##################################################################
+      # Frontend
+      ##################################################################
 
-      ##################################################################
-      # Install Things
-      ##################################################################
-      - run:
-          name: Install system packages
-          command: sudo apt install -y zlib1g-dev libpng-dev
-      - run:
-          name: Install PHP extensions
-          command: sudo docker-php-ext-install pdo_mysql zip
-      - run:
-          name: Update composer
-          command: sudo composer self-update
-
-      ##################################################################
-      # Composer
-      ##################################################################
-      - restore_cache:
-          keys:
-            - composer-v1-{{ checksum "backend/composer.lock" }}
-            - composer-v1-
-      - run: cd backend && composer install -n --prefer-dist
-      - save_cache:
-          key: composer-v1-{{ checksum "backend/composer.lock" }}
-          paths:
-            - backend/vendor
-
-      ##################################################################
-      # NPM
-      ##################################################################
+      # Packages
+      ##################
       - restore_cache:
           keys:
             - node-v1-{{ checksum "frontend/yarn.lock" }}
@@ -58,28 +34,64 @@ jobs:
           paths:
             - frontend/node_modules
 
-
-      ##################################################################
-      # Application Setup
-      ##################################################################
+      # Build
+      ##################
       - run:
           name: Build frontend assets
           command: cd frontend && yarn build
+
+
+      # Tests
+      ##################
+      #- run:
+      #    name: Run PHPunit tests
+      #    command:  vendor/bin/phpunit
+
+      - run:
+          name: Run Frontend linting
+          command: cd frontend && yarn lint
+
+      - run:
+          name: Run Frontend tests
+          command: cd frontend && yarn test
+
+      ##################################################################
+      # Backend
+      ##################################################################
+
+      # Install system dependencies
+      ##################
+      - run:
+          name: Install system packages
+          command: sudo apt install -y zlib1g-dev libpng-dev
+      - run:
+          name: Install PHP extensions
+          command: sudo -E docker-php-ext-install pdo_mysql zip
+      - run:
+          name: Update composer
+          command: sudo composer self-update
+
+      # Composer
+      ##################
+      - restore_cache:
+          keys:
+            - composer-v1-{{ checksum "backend/composer.lock" }}
+            - composer-v1-
+      - run: cd backend && composer install -n --prefer-dist
+      - save_cache:
+          key: composer-v1-{{ checksum "backend/composer.lock" }}
+          paths:
+            - backend/vendor
+
+      # Application Setup
+      ##################
 
       #- run:
       #    name: Migrate database
       #    command:  php artisan migrate --env=testing --force
 
-      ##################################################################
       # Tests
-      ##################################################################
+      ##################
       #- run:
       #    name: Run PHPunit tests
       #    command:  vendor/bin/phpunit
-      - run:
-          name: Run JavaScript linting
-          command: cd frontend && yarn lint
-
-      - run:
-          name: Run JavaScript tests
-          command: cd frontend && yarn test

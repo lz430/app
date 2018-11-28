@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Models\JATO;
-use DeliverMyRide\JATO\Map;
+
 use App\Models\Deal;
+use DeliverMyRide\JATO\Map;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * App\Models\JATO\Version
+ * App\Models\JATO\Version.
  *
  * @property int $id
  * @property int $jato_vehicle_id
@@ -109,7 +110,7 @@ class Version extends Model
      */
     public function title(): string
     {
-        return implode(" ", [
+        return implode(' ', [
             $this->year,
             $this->model->make->name,
             $this->model->name,
@@ -118,31 +119,46 @@ class Version extends Model
     }
 
     /**
+     * @param bool $allow_last_year
      * @return VersionPhoto|null
      */
-    public function thumbnail(): ?VersionPhoto {
-        return $this->photos()
+    public function thumbnail($allow_last_year = true): ?VersionPhoto
+    {
+        $thumbnail = $this->photos()
             ->where('shot_code', '=', '116')
             ->where('type', '=', 'default')
             ->first();
+
+        // Only allow us to go back one year.
+        if (! $thumbnail && $allow_last_year) {
+            $oldVersion = self::where('year', '=', (int) $this->year - 1)
+                ->where('model_id', '=', $this->model->id)
+                ->has('photos')
+                ->first();
+            if ($oldVersion) {
+                $thumbnail = $oldVersion->thumbnail(false);
+            }
+        }
+
+        return $thumbnail;
     }
 
-    public function styleSynonyms() {
+    public function styleSynonyms()
+    {
         $style = $this->style();
 
         if (isset(Map::BODY_STYLE_SYNONYMS[$style])) {
             return Map::BODY_STYLE_SYNONYMS[$style];
         }
-        return [];
 
+        return [];
     }
 
-
-    public function style() {
+    public function style()
+    {
         if (isset(Map::BODY_STYLE_MAP[$this->body_style])) {
             return Map::BODY_STYLE_MAP[$this->body_style];
         }
-        return null;
     }
 
     /**
@@ -165,6 +181,7 @@ class Version extends Model
         unset($data['jato_uid']);
         unset($data['jato_vehicle_id']);
         unset($data['delivery_price']);
+
         return $data;
     }
 }

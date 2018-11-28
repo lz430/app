@@ -1,4 +1,4 @@
-import { toggleItem } from '../../pricing/util';
+import { toggleItem } from '../../util/util';
 import { prop } from 'ramda';
 import { TOGGLE_COMPARE } from './consts';
 

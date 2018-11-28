@@ -655,6 +655,13 @@ class VersionToVehicle
      */
     public function get(Version $version)
     {
+        $this->makes = null;
+        $this->vehicles = null;
+        $this->selected = [
+            'cash' => null,
+            'finance' => null,
+            'lease' => null,
+        ];
         $this->version = $version;
         $results = null;
         $this->fetchMakeHashcodes();

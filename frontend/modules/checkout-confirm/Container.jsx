@@ -8,11 +8,8 @@ import { Container, Row, Col } from 'reactstrap';
 
 import strings from '../../util/strings';
 import DealImage from '../../components/Deals/DealImage';
-import { pricingFromCheckoutFactory } from '../../pricing/pricing/factory';
-import {
-    checkoutContact,
-    clearCheckoutContactFormErrors,
-} from '../../apps/checkout/actions';
+import { pricingFromCheckoutFactory } from '../../apps/checkout/selectors';
+import { checkoutContact } from '../../apps/checkout/actions';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Header from '../../apps/pricing/components/Header';
 import Group from '../../apps/pricing/components/Group';
@@ -41,14 +38,12 @@ class CheckoutConfirmContainer extends React.PureComponent {
         checkout: PropTypes.object.isRequired,
         currentPage: PropTypes.string,
         init: PropTypes.func.isRequired,
-        clearCheckoutContactFormErrors: PropTypes.func.isRequired,
         checkoutContact: PropTypes.func.isRequired,
         pricing: PropTypes.object,
         router: nextRouterType,
     };
 
     state = {
-        recaptchaToken: null,
         renderPage: false,
         isPageValid: true,
     };
@@ -58,8 +53,8 @@ class CheckoutConfirmContainer extends React.PureComponent {
         this.props.init();
     }
 
-    onSubmit(fields) {
-        return this.props.checkoutContact(fields, this.props.router);
+    onSubmit(fields, actions) {
+        return this.props.checkoutContact(fields, actions);
     }
 
     render() {
@@ -146,11 +141,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                 </Header>
                                 <ContactForm
                                     checkout={this.props.checkout}
-                                    clearCheckoutContactFormErrors={
-                                        this.props
-                                            .clearCheckoutContactFormErrors
-                                    }
-                                    checkoutContact={this.onSubmit.bind(this)}
+                                    onCheckoutContact={this.onSubmit.bind(this)}
                                 />
                             </Group>
                         </Col>
@@ -182,7 +173,6 @@ const mapStateToProps = (state, props) => {
 const mapDispatchToProps = mapAndBindActionCreators({
     checkoutContact,
     init,
-    clearCheckoutContactFormErrors,
 });
 
 export default compose(

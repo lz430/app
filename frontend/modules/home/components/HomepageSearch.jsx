@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../../components/Deals/StyleIcon';
 import { nextRouterType } from '../../../core/types';
 
-import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
+import { faSearch, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
@@ -226,42 +225,10 @@ class SearchWidget extends React.PureComponent {
      * @returns {*}
      */
     render() {
-        let mobileButton;
-
-        if (!this.state.SearchMobile) {
-            mobileButton = (
-                <FontAwesomeIcon
-                    icon={faSearch}
-                    className={classNames({
-                        active: !this.state.SearchMobile,
-                    })}
-                    onClick={() => {
-                        this.toggleSearchMobile();
-                        this.setState({ SearchMessage: true });
-                    }}
-                />
-            );
-        } else {
-            mobileButton = (
-                <FontAwesomeIcon
-                    icon={faTimes}
-                    className={classNames({
-                        active: this.state.SearchMobile,
-                    })}
-                    onClick={() => {
-                        this.toggleSearchMobile();
-                    }}
-                />
-            );
-        }
-
         return (
             <div className="home__search" ref={node => (this.node = node)}>
                 <h2>Search new cars from local dealers</h2>
                 <div className="search__input">
-                    <SmallAndDown>
-                        <div className="search__mobile">{mobileButton}</div>
-                    </SmallAndDown>
                     {this.renderSearchIcon()}
                     <input
                         type="text"

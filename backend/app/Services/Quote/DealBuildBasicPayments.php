@@ -37,6 +37,7 @@ class DealBuildBasicPayments
     {
         $this->carletonClient = $carletonClient;
     }
+
     private function defaultQuote($strategy)
     {
         $quote = new \stdClass();
@@ -49,23 +50,27 @@ class DealBuildBasicPayments
         }
         return $quote;
     }
+
     private function buildCashPayment($quote, Deal $deal)
     {
         $payload = new \stdClass();
-        $payload->term = (int)$quote->term;
-        $payload->rate = (float)$quote->rate;
-        $payload->rebate = (float)$quote->rebate;
+        $payload->term = (int) $quote->term;
+        $payload->rate = (float) $quote->rate;
+        $payload->rebate = (float) $quote->rebate;
         $payment = DealCalculatePayments::cash($deal, 'default', $quote->rebate);
         $payload->down = $payment->down;
         $payload->payment = $payment->payment;
         return $payload;
     }
+
     private function buildFinancePayment($quote, Deal $deal)
     {
         $payload = new \stdClass();
-        $payload->term = (int)$quote->term;
-        $payload->rate = (float)$quote->rate;
-        $payload->rebate = (float)$quote->rebate;
+
+        $payload->term = (int) $quote->term;
+        $payload->rate = (float) $quote->rate;
+        $payload->rebate = (float) $quote->rebate;
+
         $payment = DealCalculatePayments::finance($deal,
             'default',
             $quote->term,
@@ -75,6 +80,8 @@ class DealBuildBasicPayments
         $payload->payment = $payment->payment;
         return $payload;
     }
+
+
     private function buildLeasePayment($quote, Deal $deal)
     {
         // If it's blacklisted, we don't want it to show
@@ -86,40 +93,41 @@ class DealBuildBasicPayments
         //
         // We don't have a quote, and so we we don't have a calculated payment,
         // But we still want the deal to show up on the frontend.
-        if (!$quote->term) {
-            return (object) self::LEASE_FAKE;
+        if (! $quote->term) {
+            return (object)self::LEASE_FAKE;
         }
 
         //
         // Finally we have all the right data so we want to claculate and store lease payments.
         $rates = [
-            'termLength' => (int)$quote->term,
+            'termLength' => (int) $quote->term,
             'residuals' => [
                 [
-                    'annualMileage' => (int)$quote->miles,
-                    'residualPercent' => (int)$quote->residual,
-                ]
+                    'annualMileage' => (int) $quote->miles,
+                    'residualPercent' => (int) $quote->residual,
+                ],
             ],
         ];
         if ($quote->rate_type != 'Factor') {
-            $rates['rate'] = (float)$quote->rate;
+            $rates['rate'] = (float) $quote->rate;
             $rates['type'] = 'rate';
         } else {
-            $rates['moneyFactor'] = (float)$quote->rate;
+            $rates['moneyFactor'] = (float) $quote->rate;
             $rates['type'] = 'factor';
         }
         $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-        $payment = $manager->get([$rates], $quote->rebate, [0], 'default');
+        $payment = $manager->get([$rates], $quote->rebate, 0, 'default');
         if (count($payment)) {
             $payload = new \stdClass();
-            $payload->term = (int)$quote->term;
-            $payload->rate = (float)$quote->rate;
+            $payload->term = (int) $quote->term;
+            $payload->rate = (float) $quote->rate;
             $payload->rate_type = $quote->rate_type;
             $payload->rebate = (float) $quote->rebate;
-            $payload->residual = (int)$quote->residual;
+            $payload->residual = (int) $quote->residual;
             $payload->miles = (int) $quote->miles;
             $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
             $payload->payment = round($payment[0]['monthly_payment'], 2);
+
             return $payload;
         }
 
@@ -129,6 +137,7 @@ class DealBuildBasicPayments
         // We again return the fake lease so they continue to appear in the application
         return (object) self::LEASE_FAKE;
     }
+
     /**
      * @param Deal $deal
      * @param bool $save
@@ -136,7 +145,7 @@ class DealBuildBasicPayments
      */
     public function calculateBasicPayments(Deal $deal, bool $save = true)
     {
-        if (!$deal->dealer) {
+        if (! $deal->dealer) {
             return false;
         }
         $quotes = [];

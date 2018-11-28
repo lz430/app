@@ -23,6 +23,7 @@ class ResultsList extends React.PureComponent {
         onRequestMoreDeals: PropTypes.func.isRequired,
         onToggleCompare: PropTypes.func.isRequired,
         onSelectModelYear: PropTypes.func.isRequired,
+        onRequestDealQuote: PropTypes.func.isRequired,
     };
 
     render() {
@@ -68,10 +69,12 @@ class ResultsList extends React.PureComponent {
         // We have some results; which should we prefer?
         return this.props.searchQuery.entity === 'deal' ? (
             <ViewDeals
-                compareList={this.props.compareList}
-                meta={this.props.meta}
-                shouldShowLoading={this.props.loadingSearchResults}
                 deals={this.props.deals}
+                meta={this.props.meta}
+                purchaseStrategy={this.props.purchaseStrategy}
+                compareList={this.props.compareList}
+                shouldShowLoading={this.props.loadingSearchResults}
+                onRequestDealQuote={this.props.onRequestDealQuote}
                 onRequestMoreDeals={this.props.onRequestMoreDeals}
                 onToggleCompare={this.props.onToggleCompare}
             />

@@ -65,6 +65,11 @@ const takeSearch = (patternOrChannel, saga, ...args) =>
  * @returns {IterableIterator<*>}
  */
 function* requestSearch(action) {
+    // To cancel we just call the request again and all the running requests will be canceled.
+    if (action.cancel) {
+        return;
+    }
+
     if (action.incrementPage) {
         yield put({ type: ActionTypes.SEARCH_INCREMENT_PAGE });
     }

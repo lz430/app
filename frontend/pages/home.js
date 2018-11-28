@@ -23,11 +23,13 @@ import { withRouter } from 'next/router';
 import withTracker from '../components/withTracker';
 import { nextRouterType } from '../core/types';
 import Head from 'next/head';
+import { getUserPurchaseStrategy } from '../apps/user/selectors';
 
 class Page extends React.Component {
     static propTypes = {
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
+        purchaseStrategy: PropTypes.string,
         onRequestSearch: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
@@ -46,7 +48,8 @@ class Page extends React.Component {
                 </Head>
                 <div>
                     <HomepageHero
-                        router={this.props.router}
+                        purchaseStrategy={this.props.purchaseStrategy}
+                        push={this.props.router.push}
                         autocompleteResults={this.props.autocompleteResults}
                         searchQuery={this.props.searchQuery}
                         onClearSearchResults={this.props.onClearSearchResults}
@@ -106,6 +109,7 @@ class Page extends React.Component {
 const mapStateToProps = state => {
     return {
         autocompleteResults: state.page.headerAutocompleteResults,
+        purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };
 
