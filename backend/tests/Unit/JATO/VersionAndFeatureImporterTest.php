@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\JATO;
 
-use DeliverMyRide\VAuto\Importer;
 use Tests\TestCase;
+use DeliverMyRide\VAuto\Importer;
 
 class VersionAndFeatureImporterTest extends TestCase
 {

@@ -17,7 +17,7 @@ class Map
             'Jeep' => 17,
             'Ram' => 17,
             'Fiat' => 17,
-            'Land Rover' => 66
+            'Land Rover' => 66,
         ],
         'supplier' => [
             'Buick' => 65,
@@ -35,7 +35,7 @@ class Map
     ];
 
     /**
-     * primary roles
+     * primary roles.
      */
     public const PRIMARY_ROLES = [
         'default',
@@ -64,23 +64,23 @@ class Map
     public const ROLE_TO_PROGRAM_NAME = [
         'employee' => [
             'ccr for gm employee',
-            'cadillac ccr for eligible gm'
+            'cadillac ccr for eligible gm',
         ],
         'supplier' => [
-            'ccr for gm employee'
+            'ccr for gm employee',
         ],
     ];
 
     public const CONDITIONALS_TO_PROGRAM_NAME = [
         'college' => [
-            'college'
+            'college',
         ],
         'military' => [
-            'military'
+            'military',
         ],
         'conquest' => [
             'conquest lease',
-            'conquest bonus'
+            'conquest bonus',
         ],
         'loyal' => [
             'returning lessee',
@@ -95,11 +95,10 @@ class Map
             'gm lease loyalty towards lease',
         ],
         'cadillaclease' => [
-            'cadillac lease loyalty towards'
+            'cadillac lease loyalty towards',
         ],
         'cadillacloyalty' => [
-            'cadillac loyalty towards'
-        ]
+            'cadillac loyalty towards',
+        ],
     ];
-
 }

@@ -3,9 +3,7 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
-use DeliverMyRide\Fuel\FuelClient;
 use DeliverMyRide\JATO\JatoClient;
-
 
 class DealMunger
 {
@@ -38,7 +36,7 @@ class DealMunger
      * @return array
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import(Deal $deal, array $data, bool $force = FALSE)
+    public function import(Deal $deal, array $data, bool $force = false)
     {
         $debug = [];
 
@@ -48,6 +46,4 @@ class DealMunger
 
         return array_merge($debug, $equipment_debug, $photos_debug, $features_debug);
     }
-
-
 }

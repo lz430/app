@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\HubSpot\HubspotClient;
-use Illuminate\Http\Request;
 
 class HubspotController extends Controller
 {

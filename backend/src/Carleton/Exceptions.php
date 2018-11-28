@@ -2,6 +2,6 @@
 
 namespace DeliverMyRide\Carleton;
 
-class CarletonDataException extends \Exception {
-
+class Exceptions extends \Exception
+{
 }

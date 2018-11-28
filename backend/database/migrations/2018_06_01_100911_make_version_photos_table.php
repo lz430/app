@@ -32,6 +32,5 @@ class MakeVersionPhotosTable extends Migration
     public function down()
     {
         Schema::dropIfExists('versions_photos');
-
     }
 }

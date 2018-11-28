@@ -14,7 +14,7 @@ class ModifyVersionQuotesRateColumn extends Migration
     public function up()
     {
         Schema::table('versions_quotes', function (Blueprint $table) {
-            $table->decimal('rate', 8,6)->change();
+            $table->decimal('rate', 8, 6)->change();
         });
     }
 

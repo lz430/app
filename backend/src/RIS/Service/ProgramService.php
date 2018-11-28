@@ -2,16 +2,16 @@
 
 namespace DeliverMyRide\RIS\Service;
 
-
-class ProgramService extends BaseService {
-
+class ProgramService extends BaseService
+{
     /**
      * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetPrograms
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function list() {
-        return $this->client->get("getprograms");
+    public function list()
+    {
+        return $this->client->get('getprograms');
     }
 
     /**
@@ -20,7 +20,8 @@ class ProgramService extends BaseService {
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(string $programId) {
+    public function get(string $programId)
+    {
         return $this->client->get("getprogrambyid/{$programId}");
     }
 
@@ -29,8 +30,9 @@ class ProgramService extends BaseService {
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function groupList() {
-        return $this->client->get("getprogramgroups");
+    public function groupList()
+    {
+        return $this->client->get('getprogramgroups');
     }
 
     /**
@@ -39,7 +41,8 @@ class ProgramService extends BaseService {
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function groupGet(string $groupId) {
+    public function groupGet(string $groupId)
+    {
         return $this->client->get("getprogramgroupbyid/{$groupId}");
     }
 
@@ -48,8 +51,8 @@ class ProgramService extends BaseService {
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function hashcodes() {
-        return $this->client->get("getprogramhashcodes");
+    public function hashcodes()
+    {
+        return $this->client->get('getprogramhashcodes');
     }
-
 }

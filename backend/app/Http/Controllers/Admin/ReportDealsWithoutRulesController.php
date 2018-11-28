@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use DB;
-use App\Http\Controllers\Controller;
 use App\Models\Deal;
 use App\Models\Dealer;
-
+use App\Http\Controllers\Controller;
 
 class ReportDealsWithoutRulesController extends Controller
 {
@@ -22,7 +20,7 @@ class ReportDealsWithoutRulesController extends Controller
             }
 
             $fields = array_unique(array_filter($fields));
-            if (!count($fields)) {
+            if (! count($fields)) {
                 continue;
             }
             $item = [
@@ -34,9 +32,9 @@ class ReportDealsWithoutRulesController extends Controller
             if (count($fields)) {
                 $query = Deal::where('dealer_id', '=', $dealer->dealer_id)->where('status', '=', 'available');
 
-                $query->where(function($query) use ($fields){
+                $query->where(function ($query) use ($fields) {
                     foreach ($fields as $field) {
-                        $query = $query->whereRaw("not JSON_CONTAINS(JSON_KEYS(source_price), JSON_ARRAY(?))", [$field], 'or');
+                        $query = $query->whereRaw('not JSON_CONTAINS(JSON_KEYS(source_price), JSON_ARRAY(?))', [$field], 'or');
                     }
                 });
 
@@ -44,9 +42,8 @@ class ReportDealsWithoutRulesController extends Controller
 
                 $item['stats']['missing'] = $query->count();
                 $item['stats']['active'] = Deal::where('dealer_id', '=', $dealer->dealer_id)->where('status', '=', 'available')->count();
-
             }
-            if (!count($item['deals'])) {
+            if (! count($item['deals'])) {
                 continue;
             }
             $data[] = $item;

@@ -4,11 +4,10 @@ namespace DeliverMyRide\DataDelivery\Service;
 
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
-abstract class BaseService {
-
+abstract class BaseService
+{
     /** @var \DeliverMyRide\DataDelivery\DataDeliveryClient */
     protected $client;
-
 
     /**
      * @param DataDeliveryClient $client
@@ -17,7 +16,4 @@ abstract class BaseService {
     {
         $this->client = $client;
     }
-
-
-
 }

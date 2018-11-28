@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Models\Category;
-use App\Models\Feature;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Feature;
+use App\Models\Category;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DmrFeatureTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /** @test */
     public function api_returns_features_grouped_by_category()
     {
@@ -20,7 +19,7 @@ class DmrFeatureTest extends TestCase
             'slug'                      => 'first-category',
             'display_order'             => 1,
         ]);
-        
+
         $secondCategory = factory(Category::class)->create([
             'title'                     => 'Second Category',
             'slug'                      => 'second-category',
@@ -34,7 +33,7 @@ class DmrFeatureTest extends TestCase
             'display_order'     => 1,
             'jato_schema_ids'   => collect([12345, 23456])->toJson(),
         ]);
-        
+
         $secondFeature = factory(Feature::class)->create([
             'title'             => 'Second Feature',
             'slug'              => 'second-feature',
@@ -64,7 +63,7 @@ class DmrFeatureTest extends TestCase
         $response->assertJsonFragment([
             [
                 'type'          => 'category',
-                'id'            => '' . $firstCategory->id . '',
+                'id'            => ''.$firstCategory->id.'',
                 'attributes'    => [
                     'title'                     => 'First Category',
                     'slug'                      => 'first-category',
@@ -75,16 +74,16 @@ class DmrFeatureTest extends TestCase
                         'data'  => [
                             [
                                 'type'  => 'feature',
-                                'id'    => '' . $firstFeature->id . '',
+                                'id'    => ''.$firstFeature->id.'',
                             ],
                             [
                                 'type'  => 'feature',
-                                'id'    => '' . $secondFeature->id . '',
+                                'id'    => ''.$secondFeature->id.'',
                             ],
-                        ]
-                    ]
-                ]
-            ]
+                        ],
+                    ],
+                ],
+            ],
         ]);
     }
 }

@@ -2,19 +2,18 @@
 
 namespace Tests\Feature\Api;
 
-use App\Events\UserDataChanged;
-use App\Models\Order\Purchase;
-use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Order\Purchase;
+use App\Events\UserDataChanged;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RouteOneWebhookTest extends TestCase
 {
     use RefreshDatabase;
-    
-    protected $sampleXML = <<< XML
+
+    protected $sampleXML = <<< 'XML'
 	<E:Envelope xmlns:E="http://schemas.xmlsoap.org/soap/envelope/">
 		<SOAP:Header xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
 			<SOAP-SEC:Signature SOAP:mustUnderstand="1" xmlns:SOAP-SEC="http://schemas.xmlsoap.org/soap/security/2000-12">
@@ -248,9 +247,9 @@ XML;
         $user = factory(User::class)->create(['email' => 'msmith@example.com']);
         $purchase = factory(Purchase::class)->create(['user_id' => $user->id]);
         $this->assertNull($purchase->completed_at);
-        
+
         $response = $this->call('POST', route('route-one-webhook'), [], [], [], ['CONTENT_TYPE' => 'text/xml'], $this->sampleXML);
-    
+
         $response->assertStatus(200);
         $purchase->refresh();
         $this->assertNotNull($purchase->completed_at);

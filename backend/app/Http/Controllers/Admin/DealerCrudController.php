@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
-
-// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\DealerRequest as StoreRequest;
+// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\DealerRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 class DealerCrudController extends CrudController
 {
@@ -19,7 +18,7 @@ class DealerCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\Dealer');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/dealer');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/dealer');
         $this->crud->setEntityNameStrings('dealer', 'dealers');
 
         /*
@@ -29,7 +28,6 @@ class DealerCrudController extends CrudController
         */
 
         //$this->crud->setFromDb();
-
 
         //
         // FORM
@@ -73,7 +71,7 @@ class DealerCrudController extends CrudController
             'label' => 'Notification Emails',
             'type'  => 'table',
             'columns' => [
-                'emails' => 'Emails'
+                'emails' => 'Emails',
             ],
             'tab'   => 'General',
         ]);
@@ -82,8 +80,8 @@ class DealerCrudController extends CrudController
             'name'  => 'acquisition_fee',
             'label' => 'Acquisition Fee',
             'type' => 'number',
-            'attributes' => ["step" => "any"],
-            'prefix' => "$",
+            'attributes' => ['step' => 'any'],
+            'prefix' => '$',
             'tab'   => 'Fees',
         ]);
 
@@ -91,8 +89,8 @@ class DealerCrudController extends CrudController
             'name'  => 'cvr_fee',
             'label' => 'CVR Fee',
             'type' => 'number',
-            'attributes' => ["step" => "any"],
-            'prefix' => "$",
+            'attributes' => ['step' => 'any'],
+            'prefix' => '$',
             'tab'   => 'Fees',
         ]);
 
@@ -100,8 +98,8 @@ class DealerCrudController extends CrudController
             'name'  => 'registration_fee',
             'label' => 'Registration Fee',
             'type' => 'number',
-            'attributes' => ["step" => "any"],
-            'prefix' => "$",
+            'attributes' => ['step' => 'any'],
+            'prefix' => '$',
             'tab'   => 'Fees',
         ]);
 
@@ -109,8 +107,8 @@ class DealerCrudController extends CrudController
             'name'  => 'doc_fee',
             'label' => 'Doc Fee',
             'type' => 'number',
-            'attributes' => ["step" => "any"],
-            'prefix' => "$",
+            'attributes' => ['step' => 'any'],
+            'prefix' => '$',
             'tab'   => 'Fees',
         ]);
 
@@ -194,12 +192,11 @@ class DealerCrudController extends CrudController
             'name' => 'updated_at',
         ]);
 
-
         $this->crud->addColumn([
             'label' => 'Is Active',
             'name' => 'is_active',
             'type' => 'boolean',
-            'options' => [0 => 'Inactive', 1 => 'Active']
+            'options' => [0 => 'Inactive', 1 => 'Active'],
         ]);
 
         $this->crud->addColumn([
@@ -213,7 +210,6 @@ class DealerCrudController extends CrudController
         ]);
 
         $this->crud->addButtonFromView('line', 'dealer_routeone_test', 'dealer-routeone-test', null);
-
 
         // ------ CRUD FIELDS
         // $this->crud->addField($options, 'update/create/both');

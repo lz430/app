@@ -2,9 +2,8 @@
 
 namespace App\Providers;
 
-use DeliverMyRide\DataDelivery\DataDeliveryClient;
-
 use Illuminate\Support\ServiceProvider;
+use DeliverMyRide\DataDelivery\DataDeliveryClient;
 
 class DataDeliveryServiceProvider extends ServiceProvider
 {

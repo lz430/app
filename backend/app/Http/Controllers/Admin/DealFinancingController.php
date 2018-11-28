@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Deal;
 use App\Services\Quote\DealQuote;
-
 use App\Http\Controllers\Controller;
 
 class DealFinancingController extends Controller
@@ -29,8 +28,8 @@ class DealFinancingController extends Controller
             'default', 'employee', 'supplier',
         ];
 
-        foreach($paymentTypes as $type) {
-            foreach($roles as $role) {
+        foreach ($paymentTypes as $type) {
+            foreach ($roles as $role) {
                 $quote = $dealQuoter->get(
                     $deal,
                     self::ZIPCODE,

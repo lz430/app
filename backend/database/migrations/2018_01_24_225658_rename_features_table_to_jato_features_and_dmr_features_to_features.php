@@ -10,10 +10,10 @@ class RenameFeaturesTableToJatoFeaturesAndDmrFeaturesToFeatures extends Migratio
     {
         Schema::rename('features', 'jato_features');
         Schema::rename('dmr_features', 'features');
-        
+
         Schema::rename('deal_feature', 'deal_jato_feature');
         Schema::rename('deal_dmr_feature', 'deal_feature');
-        
+
         Schema::rename('dmr_categories', 'categories');
 
         Schema::table('features', function (Blueprint $table) {

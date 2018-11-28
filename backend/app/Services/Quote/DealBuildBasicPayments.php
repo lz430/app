@@ -1,12 +1,12 @@
 <?php
+
 namespace App\Services\Quote;
+
 use App\Models\Deal;
+use DeliverMyRide\RIS\Map;
 use DeliverMyRide\Carleton\Client;
 use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
-use App\Services\Quote\DealCalculatePayments;
-use DeliverMyRide\RIS\Map;
-/**
- */
+
 class DealBuildBasicPayments
 {
     private $carletonClient;
@@ -48,6 +48,7 @@ class DealBuildBasicPayments
             $quote->rate = 5;
             $quote->term = 60;
         }
+
         return $quote;
     }
 
@@ -60,6 +61,7 @@ class DealBuildBasicPayments
         $payment = DealCalculatePayments::cash($deal, 'default', $quote->rebate);
         $payload->down = $payment->down;
         $payload->payment = $payment->payment;
+
         return $payload;
     }
 
@@ -78,9 +80,9 @@ class DealBuildBasicPayments
             $quote->rebate);
         $payload->down = $payment->down;
         $payload->payment = $payment->payment;
+
         return $payload;
     }
-
 
     private function buildLeasePayment($quote, Deal $deal)
     {
@@ -94,7 +96,7 @@ class DealBuildBasicPayments
         // We don't have a quote, and so we we don't have a calculated payment,
         // But we still want the deal to show up on the frontend.
         if (! $quote->term) {
-            return (object)self::LEASE_FAKE;
+            return (object) self::LEASE_FAKE;
         }
 
         //
@@ -168,7 +170,7 @@ class DealBuildBasicPayments
                     $payments->detroit->finance = $this->buildFinancePayment($quote, $deal);
                     break;
                 case 'lease':
-                    if(!in_array(strtolower($deal->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
+                    if (! in_array(strtolower($deal->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
                         $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
                     }
                     break;
@@ -180,6 +182,7 @@ class DealBuildBasicPayments
         if ($save) {
             $deal->save();
         }
+
         return $deal->payments;
     }
 }

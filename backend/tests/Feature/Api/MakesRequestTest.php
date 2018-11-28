@@ -2,10 +2,10 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\JATO\Make;
 use App\Models\JATO\VehicleModel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class MakesRequestTest extends TestCase
 {
@@ -17,9 +17,9 @@ class MakesRequestTest extends TestCase
         factory(Make::class)->create([
             'name' => 'dodge',
         ]);
-        
+
         $response = $this->get(route('makes.index'));
-        
+
         $response->assertJsonFragment(['name' => 'dodge']);
         $response->assertJsonFragment(['type' => 'makes']);
         $response->assertJsonFragment(['logo' => '']);
@@ -29,16 +29,16 @@ class MakesRequestTest extends TestCase
     public function it_includes_models_data_if_requested_via_query_parameters()
     {
         $make = factory(Make::class)->create([
-            'name' => "BMW",
+            'name' => 'BMW',
         ]);
-        
+
         factory(VehicleModel::class)->create([
             'name' => 'i8',
             'make_id' => $make->id,
         ]);
-        
+
         $response = $this->get(route('makes.index', ['includes' => 'models']));
-        
+
         $response->assertJsonStructure([
             'data' => [
                 [

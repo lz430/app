@@ -14,7 +14,7 @@ class FeaturesTableSeeder extends Seeder
         DB::table('categories')->insert([
            [
                'title' => 'Vehicle Color',
-               'slug' => 'vehicle_color'
+               'slug' => 'vehicle_color',
            ],
         ]);
 
@@ -26,79 +26,79 @@ class FeaturesTableSeeder extends Seeder
                 'is_active' => 0,
                 'title' => 'Black',
                 'slug' => 'black',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'White',
                 'slug' => 'white',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Gray',
                 'slug' => 'gray',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Silver',
                 'slug' => 'silver',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Red',
                 'slug' => 'red',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Blue',
                 'slug' => 'blue',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Green',
                 'slug' => 'green',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Tan',
                 'slug' => 'tan',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Burgandy',
                 'slug' => 'burgandy',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Orange',
                 'slug' => 'orange',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Brown',
                 'slug' => 'brown',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Purple',
                 'slug' => 'purple',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
             [
                 'is_active' => 0,
                 'title' => 'Yellow',
                 'slug' => 'yellow',
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
             ],
         ]);
     }

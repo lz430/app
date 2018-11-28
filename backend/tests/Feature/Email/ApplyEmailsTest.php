@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\User;
 use App\Models\JATO\Version;
+use Illuminate\Mail\Mailable;
+use App\Models\Order\Purchase;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\ApplicationSubmittedDMR;
 use App\Mail\ApplicationSubmittedUser;
-use App\Models\Order\Purchase;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
 
 class ApplyEmailsTest extends TestCase
 {

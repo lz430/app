@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 class UserPolicy
 {
     use HandlesAuthorization;
-    
+
     public function view(User $user, User $targetUser)
     {
         return $user->id == $targetUser->id;

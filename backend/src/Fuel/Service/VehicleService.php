@@ -2,11 +2,8 @@
 
 namespace DeliverMyRide\Fuel\Service;
 
-
 class VehicleService extends BaseService
 {
-
-
     /**
      * Get vehicle id... required to find shots.
      * @see http://fuelapi.com/support/documentation#vehicle-products
@@ -21,7 +18,6 @@ class VehicleService extends BaseService
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * Note: please provide 'base' for trim if you wish to request the base trim.
-     *
      */
     public function getVehicleId(int $year,
                                  string $make,
@@ -30,9 +26,7 @@ class VehicleService extends BaseService
                                  int $doors = 0,
                                  string $drive = '',
                                  string $trim = ''
-    )
-    {
-
+    ) {
         $query = [
             'year' => $year,
             'make' => $make,
@@ -58,11 +52,11 @@ class VehicleService extends BaseService
             $query['trim'] = $trim;
         }
 
-        return $this->client->get("vehicles", $query);
+        return $this->client->get('vehicles', $query);
     }
 
     /**
-     * vehicle media
+     * vehicle media.
      * @see http://fuelapi.com/support/documentation#vehicle-products
      * @param int $vehicleId
      * @param string $productId
@@ -72,7 +66,6 @@ class VehicleService extends BaseService
      * @throws \GuzzleHttp\Exception\GuzzleException
      *
      * Note: please provide 'base' for trim if you wish to request the base trim.
-     *
      */
     public function vehicleMedia(int $vehicleId, string $productId = '', string $shotCode = '', string $color = '')
     {
@@ -90,8 +83,6 @@ class VehicleService extends BaseService
             $query['color'] = strtolower($color);
         }
 
-
         return $this->client->get("vehicle/{$vehicleId}", $query);
     }
-
 }

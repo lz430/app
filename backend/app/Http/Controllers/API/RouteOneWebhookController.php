@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Events\UserDataChanged;
-use App\Models\Order\Purchase;
-use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Order\Purchase;
+use App\Events\UserDataChanged;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class RouteOneWebhookController extends BaseAPIController
 {
@@ -22,7 +22,7 @@ class RouteOneWebhookController extends BaseAPIController
         }
 
         try {
-            $xml = simplexml_load_string($request->getContent(), null, null, "http://schemas.xmlsoap.org/soap/envelope/");
+            $xml = simplexml_load_string($request->getContent(), null, null, 'http://schemas.xmlsoap.org/soap/envelope/');
             $payload = json_decode(json_encode($xml->Body->children('B', true)), false);
 
             $email = $payload
@@ -53,6 +53,7 @@ class RouteOneWebhookController extends BaseAPIController
             if (app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
+
             return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
         }
 

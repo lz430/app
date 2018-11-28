@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-use App\Services\Search\DealDetailSearch;
+use Illuminate\Http\Request;
 use App\Services\Search\DealSearch;
+use App\Services\Search\DealDetailSearch;
 use App\Transformers\DealSearchTransformer;
 use App\Transformers\ESResponseTransformer;
-use Illuminate\Http\Request;
-
 use League\Fractal\Serializer\ArraySerializer;
 
 class DealsController extends BaseAPIController
 {
-
     public function list(Request $request)
     {
         $this->validate($request, [
@@ -48,13 +46,9 @@ class DealsController extends BaseAPIController
             $query = $query->sort($request->get('sort'), $request->get('strategy'));
         }
 
-
         $page = ($request->get('page') ? $request->get('page') - 1 : 0);
 
         $per_page = 24;
-
-
-
 
         $query = $query
             ->size($per_page)
@@ -90,11 +84,10 @@ class DealsController extends BaseAPIController
         $results = $query->get();
         if (isset($results['hits']['hits'][0])) {
             $response = (new DealSearchTransformer())->transform($results['hits']['hits'][0]);
+
             return $response;
         }
 
         return abort(404);
     }
-
-
 }

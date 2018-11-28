@@ -2,14 +2,10 @@
 
 namespace App\Console\Commands;
 
-use DeliverMyRide\JATO\JatoClient;
-use Illuminate\Console\Command;
-
-use App\Models\Feature;
-
 use League\Csv\Reader;
-use League\Csv\Statement;
-
+use App\Models\Feature;
+use Illuminate\Console\Command;
+use DeliverMyRide\JATO\JatoClient;
 
 class ImportVautoMapData extends Command
 {
@@ -32,14 +28,13 @@ class ImportVautoMapData extends Command
 
     /**
      * Create a new command instance.
-
+     *
      * @param JatoClient $client
      * @return void
      */
     public function __construct()
     {
         parent::__construct();
-
     }
 
     /**
@@ -54,7 +49,7 @@ class ImportVautoMapData extends Command
 
         foreach ($csv as $record) {
             // Remove counts at the end of the string
-            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", "", $record['vAuto Feature Stipped']);
+            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", '', $record['vAuto Feature Stipped']);
 
             // Remove utf8 chars.
             $vauto_feature = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $vauto_feature);
@@ -69,14 +64,14 @@ class ImportVautoMapData extends Command
                 $record['3rd DMR Name'],
             ];
 
-            $features = array_map("trim", $features);
+            $features = array_map('trim', $features);
             $features = array_filter($features);
 
-            foreach($features as $feature_name) {
+            foreach ($features as $feature_name) {
                 $feature = Feature::where('title', $feature_name)->first();
                 if ($feature) {
                     $vautoData = $feature->map_vauto_features;
-                    if (!$vautoData) {
+                    if (! $vautoData) {
                         $vautoData = [];
                     }
 
@@ -86,15 +81,10 @@ class ImportVautoMapData extends Command
                     $feature->map_vauto_features = $vautoData;
                     $feature->save();
                 }
-
             }
 
             $this->info($vauto_feature);
             print_r($record);
         }
-
-
-
-
     }
 }

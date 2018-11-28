@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Backpack\CRUD\app\Http\Controllers\CrudController;
-
-// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\FeatureRequest as StoreRequest;
+// VALIDATION: change the requests to match your own file names if you need form validation
 use App\Http\Requests\FeatureRequest as UpdateRequest;
+use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 class FeatureCrudController extends CrudController
 {
@@ -19,7 +18,7 @@ class FeatureCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\Feature');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/feature');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/feature');
         $this->crud->setEntityNameStrings('feature', 'features');
 
         /*
@@ -30,7 +29,6 @@ class FeatureCrudController extends CrudController
 
         //$this->crud->setFromDb();
 
-
         //
         // FORM
         $this->crud->addField([
@@ -38,7 +36,6 @@ class FeatureCrudController extends CrudController
             'label' => 'Is Active',
             'type'  => 'checkbox',
         ]);
-
 
         $this->crud->addField([
             'name'  => 'title',
@@ -52,7 +49,7 @@ class FeatureCrudController extends CrudController
             'type' => 'select2',
             'entity' => 'category',
             'attribute' => 'title',
-            'model' => "App\Models\Category"
+            'model' => "App\Models\Category",
         ]);
 
         $this->crud->addField([
@@ -96,14 +93,13 @@ class FeatureCrudController extends CrudController
             'label' => 'Is Active',
             'name' => 'is_active',
             'type' => 'boolean',
-            'options' => [0 => 'Inactive', 1 => 'Active']
+            'options' => [0 => 'Inactive', 1 => 'Active'],
         ]);
 
         $this->crud->addColumn([
             'label' => 'Title',
             'name' => 'title',
         ]);
-
 
         $this->crud->addColumn([
             'label' => 'Category',

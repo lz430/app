@@ -5,7 +5,7 @@ namespace DeliverMyRide\JATO\Service;
 class FeatureService extends BaseService
 {
     /**
-     * get
+     * get.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55b8f76f74be09132c0e18c0?
      * @param string $vehicleId
      * @param string $categoryId
@@ -16,7 +16,7 @@ class FeatureService extends BaseService
      *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function get(string $vehicleId, string $categoryId = '', int $page = 1, int $page_size = 20, bool $async = FALSE)
+    public function get(string $vehicleId, string $categoryId = '', int $page = 1, int $page_size = 20, bool $async = false)
     {
         if ($categoryId) {
             $path = "features/{$vehicleId}/{$categoryId}";
@@ -26,8 +26,7 @@ class FeatureService extends BaseService
 
         return $this->client->get($path, [
             'page' => $page,
-            'pageSize' => $page_size
+            'pageSize' => $page_size,
         ], $async);
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Feature;
 use App\Models\Deal;
+use App\Models\Feature;
 
 class FeatureObserver
 {
@@ -15,7 +15,7 @@ class FeatureObserver
      */
     public function created(Feature $feature)
     {
-        Deal::whereHas('features', function($query) use ($feature) {
+        Deal::whereHas('features', function ($query) use ($feature) {
             $query->where('features.id', $feature->id);
         })->searchable();
     }
@@ -28,8 +28,8 @@ class FeatureObserver
      */
     public function updated(Feature $feature)
     {
-        Deal::whereHas('features', function($query) use ($feature) {
-              $query->where('features.id', $feature->id);
+        Deal::whereHas('features', function ($query) use ($feature) {
+            $query->where('features.id', $feature->id);
         })->searchable();
     }
 

@@ -2,17 +2,13 @@
 
 namespace DeliverMyRide\RIS\Manager;
 
+use DeliverMyRide\RIS\Map;
 use App\Models\JATO\Version;
 use DeliverMyRide\RIS\RISClient;
-use GuzzleHttp\Exception\ClientException;
-
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use DeliverMyRide\RIS\Map;
+use GuzzleHttp\Exception\ClientException;
 
-/**
- *
- */
 class VersionToVehicle
 {
     /* @var RISClient */
@@ -21,13 +17,11 @@ class VersionToVehicle
     /* @var Version */
     private $version;
 
-
     /* @var \Illuminate\Support\Collection */
     private $makes;
 
     /* @var \Illuminate\Support\Collection */
     private $vehicles;
-
 
     private $selected = [
         'cash' => null,
@@ -58,16 +52,14 @@ class VersionToVehicle
             }
 
             return false;
-
         });
 
         $recordsIgnored = array_filter($data, function ($record) use ($parentAttribute, $attribute, $value) {
-            if (!isset($record->{$parentAttribute}->{$attribute})) {
+            if (! isset($record->{$parentAttribute}->{$attribute})) {
                 return true;
             }
 
             return false;
-
         });
 
         if (count($recordsWith)) {
@@ -96,7 +88,7 @@ class VersionToVehicle
     }
 
     /**
-     * <Make> -> <Model> -> <Trim> -> <Name>
+     * <Make> -> <Model> -> <Trim> -> <Name>.
      * @return array
      */
     private function translateTrimName(): array
@@ -110,13 +102,13 @@ class VersionToVehicle
         $model = $this->version->model->name;
         $name = $this->version->name;
         foreach ($trims as &$trim) {
-            if (isset(Map::TRIM_MAP[$make][$model][$trim][$name]) && !is_array(Map::TRIM_MAP[$make][$model][$trim][$name])) {
+            if (isset(Map::TRIM_MAP[$make][$model][$trim][$name]) && ! is_array(Map::TRIM_MAP[$make][$model][$trim][$name])) {
                 $trim = Map::TRIM_MAP[$make][$model][$trim][$name];
-            } elseif (isset(Map::TRIM_MAP[$make][$model][$trim]) && !is_array(Map::TRIM_MAP[$make][$model][$trim])) {
+            } elseif (isset(Map::TRIM_MAP[$make][$model][$trim]) && ! is_array(Map::TRIM_MAP[$make][$model][$trim])) {
                 $trim = Map::TRIM_MAP[$make][$model][$trim];
-            } elseif (isset(Map::TRIM_MAP[$make][$model]) && !is_array(Map::TRIM_MAP[$make][$model])) {
+            } elseif (isset(Map::TRIM_MAP[$make][$model]) && ! is_array(Map::TRIM_MAP[$make][$model])) {
                 $trim = Map::TRIM_MAP[$make][$model];
-            } elseif (isset(Map::TRIM_MAP[$make]) && !is_array(Map::TRIM_MAP[$make])) {
+            } elseif (isset(Map::TRIM_MAP[$make]) && ! is_array(Map::TRIM_MAP[$make])) {
                 $trim = Map::TRIM_MAP[$make];
             }
 
@@ -144,20 +136,18 @@ class VersionToVehicle
         if (isset(Map::MODEL_MAP['BY_MODEL'][$model])) {
             return Map::MODEL_MAP['BY_MODEL'][$model];
 
-            //
+        //
             // Model and trim
         } elseif (isset(Map::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name])) {
             return Map::MODEL_MAP['BY_MODEL_AND_TRIM'][$model][$this->version->trim_name];
 
-            //
+        //
             // Model and trim and name
         } elseif (isset(Map::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name])) {
             return Map::MODEL_MAP['BY_MODEL_AND_TRIM_AND_NAME'][$model][$this->version->trim_name][$this->version->name];
-
         } else {
             return $model;
         }
-
     }
 
     private function translateBodyStyle(): string
@@ -169,10 +159,10 @@ class VersionToVehicle
             return Map::BODY_STYLE_MAP['BY_BODYSTYLE'][$body];
         }
 
-
         if (isset(Map::BODY_STYLE_MAP['BY_MODEL'][$model])) {
             return Map::BODY_STYLE_MAP['BY_MODEL'][$model];
         }
+
         return $body;
     }
 
@@ -191,7 +181,7 @@ class VersionToVehicle
         $doors = $this->version->doors;
 
         if (in_array($this->version->body_style, [
-            'Sport Utility Vehicle'
+            'Sport Utility Vehicle',
         ])) {
             $doors = $doors - 1;
         }
@@ -205,8 +195,6 @@ class VersionToVehicle
         if ($transmission) {
             return Map::TRANSMISSION_MAP[$transmission];
         }
-
-        return null;
     }
 
     private function translateDrivenWheels()
@@ -222,14 +210,10 @@ class VersionToVehicle
 
     private function translateDisplacement()
     {
-
         if (isset(Map::DISPLACEMENT_MAP['BY_VERSION_NAME'][$this->version->name])) {
             return Map::DISPLACEMENT_MAP['BY_VERSION_NAME'][$this->version->name];
         }
-
-        return null;
     }
-
 
     /**
      * @return array
@@ -249,11 +233,12 @@ class VersionToVehicle
             'displacement' => $this->translateDisplacement(),
         ];
 
-        $codes = explode("-", str_replace(['/'], '-', $this->version->manufacturer_code));
+        $codes = explode('-', str_replace(['/'], '-', $this->version->manufacturer_code));
         $codes = array_map('trim', $codes);
         $codes = array_filter($codes);
         $params['model_code'] = array_merge($params['model_code'], $codes);
         $params['model_code'] = array_unique($params['model_code']);
+
         return $params;
     }
 
@@ -264,8 +249,9 @@ class VersionToVehicle
      */
     public function fetchMakeHashcodes($force = false)
     {
-        if (!$force && $data = Cache::tags('ris')->get('ris-makes')) {
+        if (! $force && $data = Cache::tags('ris')->get('ris-makes')) {
             $this->makes = collect($data);
+
             return collect($data);
         }
 
@@ -286,15 +272,13 @@ class VersionToVehicle
         }
 
         $this->makes = $results;
+
         return $results;
     }
 
-    /**
-     *
-     */
     private function fetchVehicles()
     {
-        $results = Cache::remember('ris-make-' . $this->version->model->make->name . Map::REGIONS['detroit'], 240, function () {
+        $results = Cache::remember('ris-make-'.$this->version->model->make->name.Map::REGIONS['detroit'], 240, function () {
             try {
                 $results = $this->client->vehicle->findByMakeAndPostalcode(
                     $this->version->model->make->name,
@@ -317,23 +301,21 @@ class VersionToVehicle
         $results = [];
 
         $hints = str_replace(['{', '}'], '', $hints);
-        $hints = explode(",", $hints);
+        $hints = explode(',', $hints);
         foreach ($hints as $hint) {
-            $hint = explode(":", $hint);
+            $hint = explode(':', $hint);
             if (count($hint) !== 2) {
                 continue;
             }
 
-            if (!isset($results[$hint[0]])) {
+            if (! isset($results[$hint[0]])) {
                 $results[$hint[0]] = [];
             }
 
             $results[$hint[0]][] = strtolower($hint[1]);
-
-
         }
 
-        return (object)$results;
+        return (object) $results;
     }
 
     private function parseVehicles(Collection $vehicles)
@@ -344,11 +326,12 @@ class VersionToVehicle
                 $data->filters = $this->parseHints($vehicle->vehicleHints);
                 if (isset($vehicle->modelYear)) {
                     $data->filters->YEAR = [
-                        $vehicle->modelYear
+                        $vehicle->modelYear,
                     ];
                 }
                 $data->exclude = $this->parseHints($vehicle->vehicleHintsForExclusion);
                 $data->vehicle = $vehicle;
+
                 return $data;
             });
     }
@@ -362,17 +345,18 @@ class VersionToVehicle
             } else {
                 $item = strtolower($item);
             }
+
             return $item;
         }, $params);
-
 
         $vehicles = $vehicles->toArray();
 
         // Require
         $vehicles = array_filter($vehicles, function ($vehicle) use ($params) {
-            if (!isset($vehicle->filters->YEAR)) {
+            if (! isset($vehicle->filters->YEAR)) {
                 return true;
             }
+
             return in_array($params['year'], $vehicle->filters->YEAR);
         });
 
@@ -382,7 +366,7 @@ class VersionToVehicle
 
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'MODEL_CODE', $params['model_code']);
         $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'PACKAGE_CODE', $params['model_code']);
-        
+
         // Optional
         // Two vehicles means we've found a lease and a non lease option.
         if (count($vehicles) > 2) {
@@ -395,6 +379,7 @@ class VersionToVehicle
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'TRAN_TYPE', [$params['transmission']]);
             $vehicles = $this->filterUnlessNone($vehicles, 'filters', 'DISPLACEMENT', [$params['displacement']]);
         }
+
         return collect($vehicles)->map(function ($item) {
             return $item->vehicle;
         });
@@ -414,13 +399,12 @@ class VersionToVehicle
                 }
             }
         }
-
     }
 
     public function transformSelectedVehicles()
     {
         foreach ($this->selected as $strategy => $vehicle) {
-            if (!$vehicle) {
+            if (! $vehicle) {
                 continue;
             }
 
@@ -453,7 +437,6 @@ class VersionToVehicle
                     'cashDealScenarios',
                     'programDealScenarios',
                 ] as $group) {
-
                 if (isset($vehicle->{$group})) {
                     foreach ($vehicle->{$group} as $scenario) {
                         $data->scenarios[$scenario->dealScenarioTypeName] = $scenario;
@@ -490,7 +473,7 @@ class VersionToVehicle
 
     public function reduceResiduals()
     {
-        if (!$this->selected['lease']) {
+        if (! $this->selected['lease']) {
             return;
         }
 
@@ -557,7 +540,6 @@ class VersionToVehicle
      */
     private function buildLeaseRates(\stdClass $data, \stdClass $vehicle): \stdClass
     {
-
         $scenario = null;
 
         if (isset($vehicle->scenarios['Manufacturer - Lease Special']) && isset($vehicle->scenarios['Manufacturer - Lease Special']->programs[0])) {
@@ -566,7 +548,6 @@ class VersionToVehicle
             $scenario = $vehicle->scenarios['Affiliate - Lease Special'];
         }
 
-
         $data->rate = 0;
         $data->term = 0;
         $data->rebate = 0;
@@ -574,11 +555,11 @@ class VersionToVehicle
         $data->miles = null;
         $data->rateType = null;
 
-        if (!$scenario) {
+        if (! $scenario) {
             return $data;
         }
 
-        if (!count($scenario->programs)) {
+        if (! count($scenario->programs)) {
             return $data;
         }
 
@@ -592,10 +573,10 @@ class VersionToVehicle
 
         $terms = collect($program->tiers[0]->leaseTerms)
             ->reject(function ($term) {
-                return !isset($term->adjRate) || !$term->adjRate || !is_numeric($term->adjRate);
+                return ! isset($term->adjRate) || ! $term->adjRate || ! is_numeric($term->adjRate);
             })->all();
 
-        if (!count($terms)) {
+        if (! count($terms)) {
             return $data;
         }
 
@@ -619,7 +600,7 @@ class VersionToVehicle
     private function selectRates()
     {
         foreach ($this->selected as $strategy => $vehicle) {
-            if (!$vehicle) {
+            if (! $vehicle) {
                 continue;
             }
 
@@ -638,7 +619,7 @@ class VersionToVehicle
                     $data = $this->buildFinancingRates($data, $vehicle);
                     break;
                 case 'lease':
-                    if(!in_array(strtolower($this->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
+                    if (! in_array(strtolower($this->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
                         $data = $this->buildLeaseRates($data, $vehicle);
                     }
                     break;
@@ -672,6 +653,7 @@ class VersionToVehicle
         $this->transformSelectedVehicles();
         $this->reduceResiduals();
         $this->selectRates();
+
         return $this->selected;
     }
 }

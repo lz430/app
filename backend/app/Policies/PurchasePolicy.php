@@ -41,7 +41,7 @@ class PurchasePolicy
      * @param  string $token
      * @return mixed
      */
-    public function update(?User $user, Purchase $purchase, string $token = "")
+    public function update(?User $user, Purchase $purchase, string $token = '')
     {
         if ($user) {
             return $purchase->buyer && $purchase->buyer->id === $user->id;
@@ -51,7 +51,7 @@ class PurchasePolicy
             $jwt = resolve('Tymon\JWTAuth\JWT');
             $jwt->setToken($token);
             $valid = $jwt->check();
-            if (!$valid) {
+            if (! $valid) {
                 return false;
             }
 
@@ -60,6 +60,7 @@ class PurchasePolicy
             if ($purchaseId != $purchase->id) {
                 return false;
             }
+
             return true;
         }
 

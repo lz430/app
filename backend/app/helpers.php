@@ -2,30 +2,29 @@
 
 use Imgix\UrlBuilder;
 
-if (!function_exists('marketing_url')) {
+if (! function_exists('marketing_url')) {
     function marketing_url($path = '')
     {
-        if (!starts_with($path, '/')) {
-            $path = '/' . $path;
+        if (! starts_with($path, '/')) {
+            $path = '/'.$path;
         }
 
-        return config('app.marketing_url') . $path;
+        return config('app.marketing_url').$path;
     }
 }
 
-if (!function_exists('generate_asset_url')) {
+if (! function_exists('generate_asset_url')) {
     function generate_asset_url($url, $size = 'thumbnail')
     {
         $imgixUrl = config('services.imgix.url');
         $imgiToken = config('services.imgix.token');
-
 
         $builder = new UrlBuilder($imgixUrl);
         $builder->setSignKey($imgiToken);
         $builder->setUseHttps(true);
 
         $params = [
-            'auto' => 'compress,format'
+            'auto' => 'compress,format',
         ];
 
         $params['w'] = 800;
@@ -39,14 +38,14 @@ if (!function_exists('generate_asset_url')) {
     }
 }
 
-if (!function_exists('hubspot_enabled')) {
+if (! function_exists('hubspot_enabled')) {
     function hubspot_enabled()
     {
         return config('services.hubspot.api_key') ? true : false;
     }
 }
 
-if (!function_exists('get_closet_number')) {
+if (! function_exists('get_closet_number')) {
     function get_closet_number(array $arr, $search)
     {
         $closest = null;
@@ -55,6 +54,7 @@ if (!function_exists('get_closet_number')) {
                 $closest = $item;
             }
         }
+
         return $closest;
     }
 }

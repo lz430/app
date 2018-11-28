@@ -2,22 +2,21 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Models\JATO\Version;
+use Backpack\CRUD\CrudTrait;
+use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use App\Models\Order\Purchase;
-use Backpack\CRUD\CrudTrait;
-use Carbon\Carbon;
-use ScoutElastic\Searchable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use DeliverMyRide\Fuel\Map as ColorMaps;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use DeliverMyRide\Fuel\Map as ColorMaps;
-
 
 /**
- * App\Models\Deal
+ * App\Models\Deal.
  *
  * @property int $id
  * @property string $file_hash
@@ -25,7 +24,7 @@ use DeliverMyRide\Fuel\Map as ColorMaps;
  * @property Dealer $dealer
  * @property string $stock_number
  * @property string $vin
- * @property boolean $new
+ * @property bool $new
  * @property string $year
  * @property string $make
  * @property string $model
@@ -44,7 +43,7 @@ use DeliverMyRide\Fuel\Map as ColorMaps;
  * @property float|null $msrp
  * @property string|null $vauto_features
  * @property \DateTime $inventory_date
- * @property boolean|null $certified
+ * @property bool|null $certified
  * @property string|null $description
  * @property array|null $option_codes
  * @property array|null $package_codes
@@ -179,7 +178,7 @@ class Deal extends Model
             '2BP' => 'Overland',
             '2BR' => 'Summit',
             '2BJ' => 'Trailhawk',
-            '2XV' => 'Trackhawk'
+            '2XV' => 'Trackhawk',
         ],
     ];
 
@@ -192,22 +191,22 @@ class Deal extends Model
                 'type' => 'object',
                 'properties' => [
                     'make' => [
-                        "type" => "text",
-                        "term_vector" => "yes",
-                        "analyzer" => "ngram_analyzer",
-                        "search_analyzer" => "ngram_analyzer"
+                        'type' => 'text',
+                        'term_vector' => 'yes',
+                        'analyzer' => 'ngram_analyzer',
+                        'search_analyzer' => 'ngram_analyzer',
                     ],
                     'model' => [
-                        "type" => "text",
-                        "term_vector" => "yes",
-                        "analyzer" => "ngram_analyzer",
-                        "search_analyzer" => "ngram_analyzer"
+                        'type' => 'text',
+                        'term_vector' => 'yes',
+                        'analyzer' => 'ngram_analyzer',
+                        'search_analyzer' => 'ngram_analyzer',
                     ],
                     'style' => [
-                        "type" => "text",
-                        "term_vector" => "yes",
-                        "analyzer" => "ngram_analyzer",
-                        "search_analyzer" => "ngram_analyzer"
+                        'type' => 'text',
+                        'term_vector' => 'yes',
+                        'analyzer' => 'ngram_analyzer',
+                        'search_analyzer' => 'ngram_analyzer',
                     ],
                 ],
             ],
@@ -233,27 +232,27 @@ class Deal extends Model
                 'type' => 'nested',
                 'properties' => [
                     'id' => [
-                        'type' => 'long'
+                        'type' => 'long',
                     ],
                     'thumbnail' => [
                         'type' => 'text',
                         'fields' => [
                             'keyword' => [
                                 'type' => 'keyword',
-                                'ignore_above' => 512
-                            ]
-                        ]
+                                'ignore_above' => 512,
+                            ],
+                        ],
                     ],
                     'title' => [
                         'type' => 'text',
                         'fields' => [
                             'keyword' => [
                                 'type' => 'keyword',
-                                'ignore_above' => 256
-                            ]
-                        ]
-                    ]
-                ]
+                                'ignore_above' => 256,
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'msrp' => [
                 'type' => 'double',
@@ -268,9 +267,9 @@ class Deal extends Model
                 'type' => 'double',
             ],
             'seating_capacity' => [
-                'type' => 'integer'
+                'type' => 'integer',
             ],
-        ]
+        ],
     ];
 
     /**
@@ -333,7 +332,6 @@ class Deal extends Model
         return $this->belongsToMany(Feature::class);
     }
 
-
     private function getRealPhotos()
     {
         $photos = $this->photos()->get();
@@ -367,7 +365,7 @@ class Deal extends Model
                 ->limit(3)->get();
         }
 
-        if (!count($photos)) {
+        if (! count($photos)) {
             return $photos;
         }
 
@@ -392,7 +390,7 @@ class Deal extends Model
             ->orderBy('shot_code')
             ->get();
 
-        if (!count($photos)) {
+        if (! count($photos)) {
             return $photos;
         }
 
@@ -405,13 +403,12 @@ class Deal extends Model
                 }
             }
 
-            if (!$thumbnailFound) {
+            if (! $thumbnailFound) {
                 $photos[0]->thumbnail = generate_asset_url($photos[0]->url, 'thumbnail');
             }
         }
 
         return $photos;
-
     }
 
     /**
@@ -444,7 +441,7 @@ class Deal extends Model
             }
 
             // We need versions for all non-real photo group options.
-            if ($group !== 'real' && !$this->version) {
+            if ($group !== 'real' && ! $this->version) {
                 continue;
             }
 
@@ -482,7 +479,7 @@ class Deal extends Model
      */
     public function featuredPhoto($size = 'thumbnail', $photos = [])
     {
-        if (!is_array($photos) || !count($photos)) {
+        if (! is_array($photos) || ! count($photos)) {
             $photos = $this->marketingPhotos($size);
         }
 
@@ -498,7 +495,7 @@ class Deal extends Model
      */
     public function simpleExteriorColor(): ?string
     {
-        if (!$this->color) {
+        if (! $this->color) {
             return null;
         }
 
@@ -521,7 +518,7 @@ class Deal extends Model
      */
     public function title(): string
     {
-        return implode(" ", [
+        return implode(' ', [
             $this->year,
             $this->make,
             $this->model,
@@ -539,18 +536,18 @@ class Deal extends Model
         $source = $this->source_price;
         //
         // Migration help
-        if (!$source) {
-            $source = (object)[
+        if (! $source) {
+            $source = (object) [
                 'msrp' => $this->msrp,
                 'price' => $this->price,
             ];
         }
 
-        if (!isset($source->msrp) || !$source->msrp) {
+        if (! isset($source->msrp) || ! $source->msrp) {
             $source->msrp = $this->msrp;
         }
 
-        if (!isset($source->price) || !$source->price) {
+        if (! isset($source->price) || ! $source->price) {
             $source->price = ($this->price ? $this->price : $this->msrp);
         }
 
@@ -569,7 +566,7 @@ class Deal extends Model
             foreach ($dealer->price_rules as $attr => $field) {
                 // If for whatever reason the selected base price for the field doesn't exist or it's false, we fall out
                 // so the default role price is used.
-                if ((!isset($field->base_field) || !$field->base_field) || (!isset($source->{$field->base_field}) || !$source->{$field->base_field})) {
+                if ((! isset($field->base_field) || ! $field->base_field) || (! isset($source->{$field->base_field}) || ! $source->{$field->base_field})) {
                     continue;
                 }
 
@@ -616,7 +613,7 @@ class Deal extends Model
             }
         }
 
-        return (object)array_map('floatval', $prices);
+        return (object) array_map('floatval', $prices);
     }
 
     /**
@@ -648,28 +645,26 @@ class Deal extends Model
      */
     public function shouldIndex()
     {
-
-        if (!$this->dealer) {
-            return FALSE;
+        if (! $this->dealer) {
+            return false;
         }
 
-        if (!$this->features->count()) {
-            return FALSE;
+        if (! $this->features->count()) {
+            return false;
         }
 
-        return TRUE;
+        return true;
     }
 
     public function shouldBeSearchable()
     {
         $shouldIndex = $this->shouldIndex();
-        if (!$shouldIndex) {
+        if (! $shouldIndex) {
             $this->unsearchable();
         }
 
         return $shouldIndex;
     }
-
 
     private function translateIndexMake()
     {
@@ -688,7 +683,7 @@ class Deal extends Model
         $model = $this->version->model->name;
 
         if (isset(self::INDEX_SERIES_MAP[$model]) && $this->option_codes && count($this->option_codes)) {
-            foreach($this->option_codes as $code) {
+            foreach ($this->option_codes as $code) {
                 if (isset(self::INDEX_SERIES_MAP[$model][$code])) {
                     return self::INDEX_SERIES_MAP[$model][$code];
                 }
@@ -707,12 +702,12 @@ class Deal extends Model
             ]),
             'model' => [
                 $this->version->model->name,
-                $this->version->model->make->name . ' ' . $this->version->model->name,
+                $this->version->model->make->name.' '.$this->version->model->name,
             ],
             'style' => array_merge(
                 [$this->version->style()],
                 $this->version->styleSynonyms()
-            )
+            ),
         ];
 
         return $data;
@@ -750,7 +745,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int)$this->seating_capacity;
+        $record['seating_capacity'] = (int) $this->seating_capacity;
 
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
@@ -782,9 +777,9 @@ class Deal extends Model
             $record['thumbnail'] = $thumbnail->toIndexData();
         }
 
-        $record['category'] = (object)[
+        $record['category'] = (object) [
             'id' => $this->version->model->id,
-            'title' => implode(" ", [
+            'title' => implode(' ', [
                 $record['make'],
                 $record['model'],
             ]),
@@ -793,17 +788,17 @@ class Deal extends Model
 
         //
         // Delivery Info
-        $record['location'] = (object)[
+        $record['location'] = (object) [
             'lat' => $this->dealer->latitude,
             'lon' => $this->dealer->longitude,
         ];
 
-        $record['max_delivery_distance'] = (double)$this->dealer->max_delivery_miles;
+        $record['max_delivery_distance'] = (float) $this->dealer->max_delivery_miles;
 
         //
         // Features
         foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
-            if (!isset($record[$feature->category->slug]) || !is_array($record[$feature->category->slug])) {
+            if (! isset($record[$feature->category->slug]) || ! is_array($record[$feature->category->slug])) {
                 $record[$feature->category->slug] = [];
             }
 
@@ -814,10 +809,10 @@ class Deal extends Model
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
         $record['fees'] = [
-            'acquisition' => (float)$this->dealer->acquisition_fee,
-            'cvr' => (float)$this->dealer->cvr_fee,
-            'doc' => (float)$this->dealer->doc_fee,
-            'registration' => (float)$this->dealer->registration_fee,
+            'acquisition' => (float) $this->dealer->acquisition_fee,
+            'cvr' => (float) $this->dealer->cvr_fee,
+            'doc' => (float) $this->dealer->doc_fee,
+            'registration' => (float) $this->dealer->registration_fee,
         ];
 
         $version = $this->version;
@@ -832,7 +827,7 @@ class Deal extends Model
         // Catchall
         if ($this->vauto_features) {
             $record['misc'] = [];
-            $misc = explode("|", $this->vauto_features);
+            $misc = explode('|', $this->vauto_features);
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
         }

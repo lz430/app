@@ -1,19 +1,18 @@
 <?php
 
 namespace App\Services\Health\Checks;
+
 use App\Services\Health\HealthCheck;
-use GuzzleHttp\Exception\ClientException;
 use App\Services\Search\ModelYearSearch;
-use Illuminate\Http\Request;
+use GuzzleHttp\Exception\ClientException;
 use App\Transformers\ESResponseTransformer;
 use League\Fractal\Serializer\ArraySerializer;
 
 class ElasticCheck extends HealthCheck
 {
     /** @test **/
-    public function run() {
-
-
+    public function run()
+    {
         $latitude = 42.5028;
         $longitude = -83.7694;
         $filters = [];
@@ -35,18 +34,19 @@ class ElasticCheck extends HealthCheck
             ->item(['response' => $results,
                 'meta' => [
                     'entity' => 'model',
-                ]])
+                ], ])
             ->transformWith(ESResponseTransformer::class)
             ->serializeWith(new ArraySerializer)
             ->respond();
 
         try {
-            if($returnSearch){
+            if ($returnSearch) {
                 return 'OKAY!';
             }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
+
         return 'FAIL';
     }
 }

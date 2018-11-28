@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use DeliverMyRide\HubSpot\HubspotClient;
 use Illuminate\Http\Request;
+use DeliverMyRide\HubSpot\HubspotClient;
 use SevenShores\Hubspot\Exceptions\BadRequest;
 
 class BrochureController extends BaseAPIController
 {
-
     /**
      * @param Request $request
      * @param HubspotClient $client
@@ -34,14 +33,12 @@ class BrochureController extends BaseAPIController
         );
 
         if (hubspot_enabled()) {
-
             $contactData = [
                 'firstname' => $request->firstname,
                 'lastname' => $request->lastname,
                 'email' => $request->email,
                 'phone' => $request->phone,
             ];
-
 
             $contact = $client->contacts()->createOrUpdate($request->email, $client->mungePayloadData($contactData));
             $contact = $contact->toArray();
@@ -64,10 +61,10 @@ class BrochureController extends BaseAPIController
 
             try {
                 $client->crmAssociations()->create([
-                    "fromObjectId" => $ticket['objectId'],
-                    "toObjectId" => $contact['vid'],
-                    "category" => "HUBSPOT_DEFINED",
-                    "definitionId" => 16
+                    'fromObjectId' => $ticket['objectId'],
+                    'toObjectId' => $contact['vid'],
+                    'category' => 'HUBSPOT_DEFINED',
+                    'definitionId' => 16,
                 ]);
             } catch (BadRequest $exception) {
                 return abort(400);
@@ -76,5 +73,4 @@ class BrochureController extends BaseAPIController
 
         return response()->json(['status' => 'ok']);
     }
-
 }

@@ -1,15 +1,14 @@
 <?php
-namespace App\Services\Search;
 
+namespace App\Services\Search;
 
 use League\Fractal\Pagination\PaginatorInterface;
 
 /**
- * Class ESPaginatorAdapter
+ * Class ESPaginatorAdapter.
  */
-
-class ESPaginatorAdapter implements PaginatorInterface {
-
+class ESPaginatorAdapter implements PaginatorInterface
+{
     public $response;
     public $page;
     public $per_page;
@@ -19,7 +18,6 @@ class ESPaginatorAdapter implements PaginatorInterface {
         $this->response = $response;
         $this->page = $page;
         $this->per_page = $per_page;
-
     }
 
     /**
@@ -31,6 +29,7 @@ class ESPaginatorAdapter implements PaginatorInterface {
     {
         return $this->page;
     }
+
     /**
      * Get the last page.
      *
@@ -40,6 +39,7 @@ class ESPaginatorAdapter implements PaginatorInterface {
     {
         return ceil($this->getTotal() / $this->getPerPage());
     }
+
     /**
      * Get the total.
      *
@@ -59,6 +59,7 @@ class ESPaginatorAdapter implements PaginatorInterface {
     {
         return count($this->response['hits']['hits']);
     }
+
     /**
      * Get the number per page.
      *
@@ -68,6 +69,7 @@ class ESPaginatorAdapter implements PaginatorInterface {
     {
         return $this->per_page;
     }
+
     /**
      * Get the url for the given page.
      *

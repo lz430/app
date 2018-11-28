@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Services\Health\Checks;
+
 use App\Services\Health\HealthCheck;
 use Illuminate\Support\Facades\Redis;
 use GuzzleHttp\Exception\ClientException;
 
-class RedisCheck extends HealthCheck {
-
+class RedisCheck extends HealthCheck
+{
     public function run()
     {
         try {
@@ -20,4 +21,3 @@ class RedisCheck extends HealthCheck {
         return 'FAIL';
     }
 }
-

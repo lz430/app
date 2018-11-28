@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class VinService extends BaseService
 {
-
     /**
-     * decode Vin
+     * decode Vin.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55e8650374be0914c0784d26?
      * @param string $vin
      * @param array $query
@@ -17,12 +16,11 @@ class VinService extends BaseService
      */
     public function decode(string $vin, array $query = [])
     {
-
         return $this->client->get("vin/decode/{$vin}", $query);
     }
 
     /**
-     * validate Vin
+     * validate Vin.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/56d71c8174be0909e4aaf1e4?
      * @param string $vin
      * @return mixed
@@ -35,7 +33,7 @@ class VinService extends BaseService
     }
 
     /**
-     * bulk decode Vin
+     * bulk decode Vin.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/5845771474be090b1c89b283?
      * @param array $vins
      * @return mixed
@@ -44,11 +42,11 @@ class VinService extends BaseService
      */
     public function decodeBulk(array $vins)
     {
-        return $this->client->post("vin/decode", $vins);
+        return $this->client->post('vin/decode', $vins);
     }
 
     /**
-     * decode vin features
+     * decode vin features.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/56d71c8174be0909e4aaf1e4?
      * @param string $vinVersionId
      * @param string $category
@@ -60,5 +58,4 @@ class VinService extends BaseService
     {
         return $this->client->get("vin/features/{$vinVersionId}/{$category}");
     }
-
 }

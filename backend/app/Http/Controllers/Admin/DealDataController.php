@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\Deal;
-use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\JATO\Manager\DealCompareData;
+use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use DeliverMyRide\JATO\Manager\DealCompareData;
 
 class DealDataController extends Controller
 {
@@ -15,7 +16,6 @@ class DealDataController extends Controller
     private $version;
     private $deal;
     private $equipment;
-
 
     private function potentialVersionOptions()
     {
@@ -35,7 +35,8 @@ class DealDataController extends Controller
         }
     }
 
-    private function potentialVersionEquipment() {
+    private function potentialVersionEquipment()
+    {
         try {
             return $this->client->equipment->get($this->version->jato_vehicle_id)->results;
         } catch (ServerException | ClientException $e) {
@@ -43,18 +44,20 @@ class DealDataController extends Controller
         }
     }
 
-    private function potentialJatoVersionsForVin() {
+    private function potentialJatoVersionsForVin()
+    {
         try {
             return $this->client->vin->decode($this->deal->vin);
         } catch (ServerException | ClientException $e) {
-            return null;
+            return;
         }
     }
 
-    private function buildJatoVersionOptions() {
+    private function buildJatoVersionOptions()
+    {
         $versions = $this->potentialJatoVersionsForVin();
 
-        if (!$versions) {
+        if (! $versions) {
             return [];
         }
 
@@ -65,10 +68,12 @@ class DealDataController extends Controller
         unset($versions->versions);
 
         $data['decode'] = $versions;
+
         return $data;
     }
 
-    private function buildStandardEquipment() {
+    private function buildStandardEquipment()
+    {
         return $this->equipment
             ->reject(function ($equipment) {
                 return $equipment->availability !== 'standard';
@@ -77,42 +82,46 @@ class DealDataController extends Controller
             ->all();
     }
 
-    private function buildEquipmentForOptionCode($code) {
+    private function buildEquipmentForOptionCode($code)
+    {
         return $this->equipment
             ->reject(function ($equipment) {
-                return $equipment->availability !== "optional";
+                return $equipment->availability !== 'optional';
             })
             ->reject(function ($equipment) use ($code) {
                 return $equipment->optionCode != $code;
             })->all();
     }
 
-    private function buildPackages() {
+    private function buildPackages()
+    {
         return collect($this->potentialVersionPackages())
             ->map(function ($option) {
                 return [
                     'isOnDeal' => is_array($this->deal->package_codes) && in_array($option->optionCode, $this->deal->package_codes),
                     'option' => $option,
-                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode)
+                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode),
                 ];
             })->all();
     }
 
-    private function buildOptions() {
+    private function buildOptions()
+    {
         return collect($this->potentialVersionOptions())
-            ->map(function ($option)  {
+            ->map(function ($option) {
                 return [
                     'isOnDeal' => is_array($this->deal->option_codes) && in_array($option->optionCode, $this->deal->option_codes),
                     'option' => $option,
-                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode)
+                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode),
                 ];
             })->all();
     }
 
-    private function buildFeatures() {
+    private function buildFeatures()
+    {
         $features = [];
         foreach ($this->deal->features as $feature) {
-            if (!isset($features[$feature->category->title])) {
+            if (! isset($features[$feature->category->title])) {
                 $features[$feature->category->title] = [];
             }
             $features[$feature->category->title][] = $feature;
@@ -134,7 +143,7 @@ class DealDataController extends Controller
             [
                 'Infotainment' => isset($features['Infotainment']) ? $features['Infotainment'] : [],
                 'Comfort & Convenience' => isset($features['Comfort & Convenience']) ? $features['Comfort & Convenience'] : [],
-            ]
+            ],
         ];
 
         return $groups;
@@ -161,10 +170,10 @@ class DealDataController extends Controller
             'title' => 'Version',
             'model' => $this->version->toArray(),
         ];
-        
-        $compare =  (new DealCompareData($client, $deal))->build();
-        
-        foreach($compare as &$labels) {
+
+        $compare = (new DealCompareData($client, $deal))->build();
+
+        foreach ($compare as &$labels) {
             sort($labels);
         }
         $data = [

@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class IncentiveService extends BaseService
 {
-
     /**
-     * list programs
+     * list programs.
      * @see https://www.jatoflex.com/docs/services/55afaedd74be0902ecb1914d/operations/55bfa45274be090f600d5f7c?
      * @param string $vehicleId
      * @param array $query
@@ -23,7 +22,7 @@ class IncentiveService extends BaseService
     }
 
     /**
-     * list targets
+     * list targets.
      * @see https://www.jatoflex.com/docs/services/55afaedd74be0902ecb1914d/operations/5930666a74be09177021c5d5?
      * @param string $vehicleId
      * @param array $query
@@ -40,7 +39,7 @@ class IncentiveService extends BaseService
     }
 
     /**
-     * best offer
+     * best offer.
      * @see https://www.jatoflex.com/docs/services/55afaedd74be0902ecb1914d/operations/59306b7574be09177021c5d8?
      * @param string $vehicleId
      * @param string $paymentType
@@ -79,5 +78,4 @@ class IncentiveService extends BaseService
 
         return $this->client->get("incentives/bestOffer/{$vehicleId}/{$paymentType}", $query);
     }
-
 }

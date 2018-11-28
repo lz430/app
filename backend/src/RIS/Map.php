@@ -111,7 +111,7 @@ class Map
         'BY_MODEL_AND_TRIM_AND_NAME' => [
             'MDX' => [
                 'Advance Package' => [
-                    'Sport Hybrid SH-AWD w/Advance Package' => 'MDX Sport Hybrid'
+                    'Sport Hybrid SH-AWD w/Advance Package' => 'MDX Sport Hybrid',
                 ],
             ],
             'S90' => [
@@ -121,8 +121,8 @@ class Map
             ],
             '718' => [
                 'S' => [
-                    'Cayman S' => '718 Cayman'
-                ]
+                    'Cayman S' => '718 Cayman',
+                ],
             ],
 
             //
@@ -143,7 +143,7 @@ class Map
                 ],
                 'F SPORT' => [
                     'ES 350 F SPORT' => 'ES 350',
-                ]
+                ],
             ],
             'RC' => [
                 'F' => [
@@ -172,7 +172,7 @@ class Map
                 ],
                 '350 F SPORT' => [
                     '350 F SPORT AWD' => 'RX 350',
-                ]
+                ],
             ],
             'NX' => [
                 '300' => [
@@ -184,22 +184,22 @@ class Map
                 ],
                 '300 F SPORT' => [
                     '300 F SPORT AWD' => 'NX 300',
-                ]
+                ],
             ],
             'IS' => [
                 '300' => [
-                    '300 AWD' => "IS 300",
+                    '300 AWD' => 'IS 300',
                 ],
                 '350' => [
-                    '350 AWD' => "IS 350",
+                    '350 AWD' => 'IS 350',
                 ],
             ],
             'GX' => [
                 'Base' => [
-                    '460' => "GX 460",
+                    '460' => 'GX 460',
                 ],
                 'LUXURY' => [
-                    '460 LUXURY' => "GX 460",
+                    '460 LUXURY' => 'GX 460',
                 ],
             ],
             'GS' => [
@@ -208,11 +208,11 @@ class Map
                 ],
                 '350' => [
                     '350 F SPORT AWD' => 'GS 350',
-                ]
+                ],
             ],
             'LC' => [
                 '500' => [
-                    '500' => "LC 500",
+                    '500' => 'LC 500',
                 ],
             ],
             'LS' => [
@@ -221,13 +221,13 @@ class Map
                     '500 F SPORT AWD' => 'LS 500',
                 ],
                 '500h' => [
-                    '500h AWD' => "LS 500h",
+                    '500h AWD' => 'LS 500h',
                 ],
             ],
             'LX' => [
                 '570' => [
-                    '570 THREE-ROW' => "LX 570",
-                    '570 TWO-ROW' => "LX 570",
+                    '570 THREE-ROW' => 'LX 570',
+                    '570 TWO-ROW' => 'LX 570',
                 ],
             ],
         ],
@@ -238,16 +238,15 @@ class Map
         'Mercedes-Benz',
     ];
 
-
     /**
-     *  <Make> -> <Model> -> <Trim> -> <Name>
+     *  <Make> -> <Model> -> <Trim> -> <Name>.
      */
     public const TRIM_MAP = [
         'Jeep' => [
             'Grand Cherokee' => [
                 'Altitude' => '2BZ',
-                'High Altitude' => '2BS'
-            ]
+                'High Altitude' => '2BS',
+            ],
         ],
         'Acura' => [
             'MDX' => [
@@ -342,7 +341,7 @@ class Map
 
     public const BODY_STYLE_MAP = [
         'BY_BODYSTYLE' => [
-            'Sport Utility Vehicle' => "Sport Utility",
+            'Sport Utility Vehicle' => 'Sport Utility',
             'Pickup' => 'Regular Cab',
             'Minivan' => 'Passenger Van',
         ],

@@ -2,10 +2,10 @@
 
 namespace App\Observers;
 
-use App\Models\Order\Purchase;
 use App\Models\Deal;
-use Illuminate\Support\Facades\Notification;
+use App\Models\Order\Purchase;
 use App\Notifications\NotifyToSlackChannel;
+use Illuminate\Support\Facades\Notification;
 
 class PurchaseObserver
 {
@@ -27,7 +27,7 @@ class PurchaseObserver
      */
     public function updated(Purchase $purchase)
     {
-        $originalStatus =$purchase->getOriginal()['status'];
+        $originalStatus = $purchase->getOriginal()['status'];
         if ($originalStatus === 'cart' && $purchase->status === 'contact') {
 
             //
@@ -44,9 +44,9 @@ class PurchaseObserver
                     'Stock Number' => $purchase->deal->stock_number,
                     'VIN' => $purchase->deal->vin,
                     'Deal ID' => $purchase->deal_id,
-                    'Buyer Name' => $purchase->buyer->first_name . ' ' . $purchase->buyer->last_name,
+                    'Buyer Name' => $purchase->buyer->first_name.' '.$purchase->buyer->last_name,
                     'Purchase Strategy' => $purchase->type,
-                ]
+                ],
             ];
 
             Notification::route('slack', config('services.slack.webhook'))

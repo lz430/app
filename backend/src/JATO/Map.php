@@ -29,7 +29,7 @@ class Map
     public const BODY_STYLE_SYNONYMS = [
         'Sport Utility Vehicle' => [
             'SUV',
-            'Crossover'
+            'Crossover',
         ],
         'Pickup' => [
             'Truck',

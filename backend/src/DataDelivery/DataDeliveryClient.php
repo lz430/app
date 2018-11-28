@@ -2,12 +2,12 @@
 
 namespace DeliverMyRide\DataDelivery;
 
-use DeliverMyRide\Common\ApiClient;
 use GuzzleHttp\Psr7\Response;
+use DeliverMyRide\Common\ApiClient;
 use function GuzzleHttp\Psr7\stream_for;
 
 /**
- * https://xmlasvr.aisrebates.com/ais_xml/test.html
+ * https://xmlasvr.aisrebates.com/ais_xml/test.html.
  */
 class DataDeliveryClient extends ApiClient
 {
@@ -36,7 +36,7 @@ class DataDeliveryClient extends ApiClient
         // Configure
         $this->apiKey = $apiKey;
         $this->id = $id;
-        $this->baseUrl = "https://xmlasvr.aisrebates.com/ais_xml/get_data.php";
+        $this->baseUrl = 'https://xmlasvr.aisrebates.com/ais_xml/get_data.php';
     }
 
     protected function getRequestHeaders()
@@ -53,7 +53,7 @@ class DataDeliveryClient extends ApiClient
     public function mungeAttributesIntoArray(&$array, \SimpleXMLElement $element)
     {
         foreach ($element->attributes() as $k => $v) {
-            $array[(string)$k] = (string)$v;
+            $array[(string) $k] = (string) $v;
         }
     }
 
@@ -63,17 +63,17 @@ class DataDeliveryClient extends ApiClient
             if (isset($parent_keys[$key])) {
                 $parent_key = $parent_keys[$key];
             } else {
-                $parent_key = strtolower($key) . "s";
+                $parent_key = strtolower($key).'s';
             }
 
-            if (!isset($array[$parent_key])) {
+            if (! isset($array[$parent_key])) {
                 $array[$parent_key] = [];
             }
 
             $child = [];
             $this->mungeAttributesIntoArray($child, $childData);
             $this->mungeChildrenIntoArray($child, $childData);
-            $array[$parent_key][] = (object)$child;
+            $array[$parent_key][] = (object) $child;
         }
     }
 
@@ -85,7 +85,7 @@ class DataDeliveryClient extends ApiClient
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function post($endpoint, $data, bool $async = FALSE)
+    public function post($endpoint, $data, bool $async = false)
     {
         $data['CustomerID'] = $this->id;
         $data['WebPass'] = $this->apiKey;
@@ -93,8 +93,9 @@ class DataDeliveryClient extends ApiClient
         $response = $this->http_client->request('POST',
             "$this->baseUrl/$endpoint", [
                 'form_params' => $data,
-                'headers' => $this->getRequestHeaders()
+                'headers' => $this->getRequestHeaders(),
             ]);
+
         return $this->handleResponse($response);
     }
 
@@ -111,26 +112,24 @@ class DataDeliveryClient extends ApiClient
         $raw_response = simplexml_load_string($data);
 
         if ($raw_response === false) {
-            throw new FetchProgramDataException("Data Delivery API: Invalid XML returned" . $data);
+            throw new FetchProgramDataException('Data Delivery API: Invalid XML returned'.$data);
         }
 
         return $raw_response;
     }
 
-
-    public function get($endpoint, $query = [], bool $async = FALSE)
+    public function get($endpoint, $query = [], bool $async = false)
     {
         throw new \BadMethodCallException();
     }
 
-    public function put($endpoint, $json, bool $async = FALSE)
+    public function put($endpoint, $json, bool $async = false)
     {
         throw new \BadMethodCallException();
     }
 
-    public function delete($endpoint, bool $async = FALSE)
+    public function delete($endpoint, bool $async = false)
     {
         throw new \BadMethodCallException();
     }
-
 }

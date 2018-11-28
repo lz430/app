@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands\Jato;
 
-use DeliverMyRide\JATO\JatoClient;
-
-use Illuminate\Console\Command;
 use App\Models\Deal;
-
+use Illuminate\Console\Command;
+use DeliverMyRide\JATO\JatoClient;
 
 class JatoDealDecode extends Command
 {
@@ -49,6 +47,5 @@ class JatoDealDecode extends Command
         $deal = Deal::where('id', $deal_id)->first();
         $decoded = $this->client->vin->decode($deal->vin);
         print_r($decoded);
-
     }
 }

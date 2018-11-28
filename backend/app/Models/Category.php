@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Category
+ * Class Category.
  *
  * @property int $id
  * @property string|null $title
@@ -33,7 +33,7 @@ class Category extends Model
         'title',
         'slug',
         'has_custom_jato_mapping',
-        'display_order'];
+        'display_order', ];
 
     public function features()
     {

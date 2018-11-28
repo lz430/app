@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Deal;
 use App\Models\Dealer;
-use App\Http\Controllers\Admin\Traits\ReadsVAutoDump;
-use App\Http\Controllers\Controller;
-use App\Models\JATO\Version;
-use Illuminate\Http\Request;
 use League\Csv\Reader;
 use League\Csv\Statement;
+use App\Models\JATO\Version;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Admin\Traits\ReadsVAutoDump;
 
 class StatisticsController extends Controller
 {
@@ -20,7 +19,7 @@ class StatisticsController extends Controller
         $records = $this->vautoCsvRecords();
 
         $new_vehicle_count = $records->filter(function ($row) {
-            return $row['New/Used'] == "N";
+            return $row['New/Used'] == 'N';
         })->count();
 
         return view('statistics.deals')

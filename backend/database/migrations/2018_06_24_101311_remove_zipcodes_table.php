@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class RemoveZipcodesTable extends Migration
@@ -14,7 +13,6 @@ class RemoveZipcodesTable extends Migration
     public function up()
     {
         Schema::dropIfExists('zipcodes');
-
     }
 
     /**

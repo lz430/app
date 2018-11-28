@@ -6,5 +6,4 @@ use Backpack\PermissionManager\app\Http\Controllers\RoleCrudController as Parent
 
 class RoleCrudController extends ParentController
 {
-
 }

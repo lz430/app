@@ -4,11 +4,6 @@ namespace App\Services\Quote;
 
 use App\Models\Deal;
 
-use DeliverMyRide\Carleton\Client;
-use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
-
-/**
- */
 class DealCalculatePayments
 {
     /**
@@ -17,7 +12,8 @@ class DealCalculatePayments
      * @param int $rebate
      * @return object
      */
-    public static function cash(Deal $deal, string $role, int $rebate = 0) {
+    public static function cash(Deal $deal, string $role, int $rebate = 0)
+    {
         $payment = $deal->prices()->{$role};
         $payment -= $rebate;
 
@@ -35,7 +31,8 @@ class DealCalculatePayments
      * @param float $rebate
      * @return object
      */
-    public static function finance(Deal $deal, string $role, int $term, float $rate, float $rebate = 0) {
+    public static function finance(Deal $deal, string $role, int $term, float $rate, float $rebate = 0)
+    {
         $michiganSalesTax = 0.06;
         $downPaymentPercent = 0.1;
 
