@@ -20,13 +20,13 @@ class VAutoDumpController extends Controller
                     $item, now()->addMinutes(5)
                 );
 
-                return (object)[
+                return (object) [
                     'path' => $item,
                     'name' => $name,
                     'url' => $url,
                 ];
             })
-            ->sortByDesc(function($item) {
+            ->sortByDesc(function ($item) {
                 return $item->name;
             });
 
@@ -35,6 +35,6 @@ class VAutoDumpController extends Controller
 
     public function downloadFile($filename)
     {
-        return response()->download(realpath(base_path('storage/app/public/importbackups/' . $filename)));
+        return response()->download(realpath(base_path('storage/app/public/importbackups/'.$filename)));
     }
 }

@@ -11,14 +11,14 @@ use League\Csv\Statement;
 use App\Models\JATO\Version;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
+use League\Flysystem\MountManager;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\MountManager;
 
 class Importer
 {
@@ -133,10 +133,11 @@ class Importer
                 return pathinfo($item, PATHINFO_EXTENSION) === 'csv';
             })->map(function ($item) use ($prefix) {
                 $path = $prefix.$item;
+
                 return [
                     'name' => $item,
                     'path' => $path,
-                    'hash' => md5_file($path)
+                    'hash' => md5_file($path),
                 ];
             });
 
@@ -398,14 +399,14 @@ class Importer
                 's3' => \Storage::disk('s3')->getDriver(),
                 'vauto' => \Storage::disk('vauto')->getDriver(),
             ]);
-            foreach($sources as $key => $source) {
-                $newName = 'vAuto_DMR-' . date('m-d-Y') .'-'.$key.'.csv';
+            foreach ($sources as $key => $source) {
+                $newName = 'vAuto_DMR-'.date('m-d-Y').'-'.$key.'.csv';
                 $mountManager->copy(
-                    'vauto://' . $source['name'],
-                    's3://logs/vauto/' . $newName,
+                    'vauto://'.$source['name'],
+                    's3://logs/vauto/'.$newName,
                     [
                         'ContentType' => 'text/csv',
-                        'ContentDisposition' => 'attachment'
+                        'ContentDisposition' => 'attachment',
                     ]
                 );
             }
