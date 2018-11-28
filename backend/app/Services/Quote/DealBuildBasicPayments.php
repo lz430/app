@@ -79,7 +79,7 @@ class DealBuildBasicPayments
     {
         // If it's blacklisted, we don't want it to show
         // up on the frontend at all so set the lease payments to null
-        if (!$quote->term && in_array($deal->version->model->name, Map::VEHICLE_MODEL_BLACKLIST)) {
+        if (in_array($deal->version->model->name, Map::VEHICLE_MODEL_BLACKLIST)) {
             return (object) self::LEASE_NO_PAYMENTS;
         }
 
