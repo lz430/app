@@ -12,13 +12,13 @@ use App\Models\JATO\Version;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\File;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Database\QueryException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\MountManager;
 
 class Importer
 {
@@ -74,14 +74,11 @@ class Importer
     private $jatoClient;
 
     private $error;
-    private $filesystem;
     private $info;
     private $debug;
 
-    public function __construct(Filesystem $filesystem,
-                                JatoClient $jatoClient)
+    public function __construct(JatoClient $jatoClient)
     {
-        $this->filesystem = $filesystem;
         $this->jatoClient = $jatoClient;
 
         $this->debug = [
@@ -128,23 +125,22 @@ class Importer
      */
     private function buildSourceData(): array
     {
-        $sources = [];
+        $vautoStorage = Storage::disk('vauto');
+        $files = $vautoStorage->files();
+        $prefix = $vautoStorage->getDriver()->getAdapter()->getPathPrefix();
+        $files = collect($files)
+            ->filter(function ($item) {
+                return pathinfo($item, PATHINFO_EXTENSION) === 'csv';
+            })->map(function ($item) use ($prefix) {
+                $path = $prefix.$item;
+                return [
+                    'name' => $item,
+                    'path' => $path,
+                    'hash' => md5_file($path)
+                ];
+            });
 
-        $files = array_filter(
-            $this->filesystem->files(realpath(base_path(config('services.vauto.uploads_path')))),
-            function ($file) {
-                return pathinfo($file, PATHINFO_EXTENSION) === 'csv';
-            }
-        );
-
-        foreach ($files as $path) {
-            $sources[] = [
-                'path' => $path,
-                'hash' => md5_file($path),
-            ];
-        }
-
-        return $sources;
+        return array_values($files->all());
     }
 
     /**
@@ -397,16 +393,23 @@ class Importer
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
 
-        //Copies vauto dump file for current day and saves per date for archives
-        $Path = storage_path().'/app/public/importbackups';
-
-        if (! file_exists($Path)) {
-            File::makeDirectory($Path);
+        if (config('filesystems.disks.s3.region')) {
+            $mountManager = new MountManager([
+                's3' => \Storage::disk('s3')->getDriver(),
+                'vauto' => \Storage::disk('vauto')->getDriver(),
+            ]);
+            foreach($sources as $key => $source) {
+                $newName = 'vAuto_DMR-' . date('m-d-Y') .'-'.$key.'.csv';
+                $mountManager->copy(
+                    'vauto://' . $source['name'],
+                    's3://logs/vauto/' . $newName,
+                    [
+                        'ContentType' => 'text/csv',
+                        'ContentDisposition' => 'attachment'
+                    ]
+                );
+            }
         }
-        $baseFile = basename($source['path'], '.csv');
-        $sourceFile = $source['path'];
-        $targetFile = $Path.'/'.$baseFile.'-'.date('m-d-Y').'.csv';
-        File::copy($sourceFile, $targetFile);
     }
 
     /**
