@@ -521,3 +521,9 @@
         }
     }
 }
+
+.nav-link {
+    &.active {
+        font-weight: bold;
+    }
+}

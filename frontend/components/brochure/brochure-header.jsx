@@ -12,8 +12,9 @@ import {
 
 import Link from 'next/link';
 import Logo from '../../static/images/logo.svg';
+import ActiveLink from '../../components/ActiveLink';
 
-export default class Header extends React.PureComponent {
+export default class Header extends React.Component {
     state = {
         collapsed: true,
     };
@@ -45,31 +46,31 @@ export default class Header extends React.PureComponent {
                     <Collapse isOpen={!this.state.collapsed} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <Link
+                                <ActiveLink
                                     href="/brochure/how-it-works"
                                     as="/brochure/how-it-works"
                                     passHref
                                 >
                                     <NavLink>How It Works</NavLink>
-                                </Link>
+                                </ActiveLink>
                             </NavItem>
                             <NavItem>
-                                <Link
+                                <ActiveLink
                                     href="/brochure/about"
                                     as="/brochure/about"
                                     passHref
                                 >
                                     <NavLink>About</NavLink>
-                                </Link>
+                                </ActiveLink>
                             </NavItem>
                             <NavItem>
-                                <Link
+                                <ActiveLink
                                     href="/brochure/contact"
                                     as="/brochure/contact"
                                     passHref
                                 >
                                     <NavLink>Contact</NavLink>
-                                </Link>
+                                </ActiveLink>
                             </NavItem>
                             <NavItem>
                                 <Link href="/deal-list" as="/filter" passHref>

@@ -32,7 +32,7 @@ export default class extends React.Component {
     }
     render() {
         return (
-            <div className="container-fluid callout__testimonials bg-light pb-5 pt-5">
+            <div className="container-fluid callout__testimonials bg-white pb-5 pt-5">
                 <Container>
                     <Row>
                         <Col>
