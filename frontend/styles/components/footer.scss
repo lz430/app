@@ -61,6 +61,7 @@
 .brochure-footer {
     background: #213a59;
     color: $color-text-white;
+    margin-top: 30px;
     padding-top: 30px;
 
     @include media-breakpoint-down(md) {
