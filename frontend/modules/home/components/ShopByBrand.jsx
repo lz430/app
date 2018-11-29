@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Collapse } from 'reactstrap';
+import { Container, Row, Collapse, Button } from 'reactstrap';
 import Link from 'next/link';
 
 import makes from '../../../content/makes';
@@ -8,6 +8,7 @@ import makes from '../../../content/makes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { track } from '../../../core/services';
+
 export default class extends React.Component {
     state = {
         collapse: false,
@@ -79,7 +80,11 @@ export default class extends React.Component {
                             }
                             onClick={this.toggle}
                         >
-                            <a className="btn btn-primary">
+                            <Button
+                                tag="a"
+                                color="primary"
+                                className="shadow-sm font-weight-bold"
+                            >
                                 <span>See all brands</span>
                                 <FontAwesomeIcon
                                     icon={
@@ -88,7 +93,7 @@ export default class extends React.Component {
                                             : faChevronDown
                                     }
                                 />
-                            </a>
+                            </Button>
                         </div>
                     </Row>
                 </Container>

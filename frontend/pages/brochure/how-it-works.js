@@ -30,7 +30,7 @@ class Page extends Component {
                         </h4>
                     </Container>
                     <img
-                        className="how-it"
+                        className="how-it img-fluid"
                         src="/static/brochure/works/Select-Style.gif"
                     />
                 </div>
@@ -39,7 +39,7 @@ class Page extends Component {
                         <h4 className="mb-4">View and refine your results</h4>
                     </Container>
                     <img
-                        className="how-it"
+                        className="how-it img-fluid"
                         src="/static/brochure/works/View-Refine.gif"
                     />
                 </div>
@@ -53,7 +53,7 @@ class Page extends Component {
                         </h4>
                     </Container>
                     <img
-                        className="how-it"
+                        className="how-it img-fluid"
                         src="/static/brochure/works/Compare.gif"
                     />
                 </div>
@@ -66,7 +66,7 @@ class Page extends Component {
                         </h4>
                     </Container>
                     <img
-                        className="how-it"
+                        className="how-it img-fluid"
                         src="/static/brochure/works/View-Details.gif"
                     />
                 </div>
@@ -78,7 +78,7 @@ class Page extends Component {
                         </h4>
                     </Container>
                     <img
-                        className="how-it"
+                        className="how-it img-fluid"
                         src="/static/brochure/works/Ready-To-Buy.gif"
                     />
                 </div>
@@ -96,14 +96,14 @@ class Page extends Component {
                         <p>
                             Visit our{' '}
                             <Link href="/brochure/faq" as="/brochure/faq">
-                                FAQ page
+                                <a>FAQ page</a>
                             </Link>{' '}
                             or{' '}
                             <Link
                                 href="/brochure/contact"
                                 as="/brochure/contact"
                             >
-                                contact us
+                                <a>contact us</a>
                             </Link>
                             .
                         </p>

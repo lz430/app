@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import Link from 'next/link';
 
 import styles from '../../../content/styles';
@@ -92,9 +92,13 @@ export default class extends React.Component {
                     <Row>
                         <Col className="text-center mt-5">
                             <Link href="/deal-list" as="/filter" passHref>
-                                <a className="btn btn-primary">
+                                <Button
+                                    tag="a"
+                                    color="primary"
+                                    className="shadow-sm font-weight-bold"
+                                >
                                     Browse All Cars
-                                </a>
+                                </Button>
                             </Link>
                         </Col>
                     </Row>

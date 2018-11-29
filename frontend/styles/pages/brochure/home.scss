@@ -184,21 +184,16 @@
 
             a {
                 display: block;
-                padding: 0;
                 margin: 0 10px;
 
                 &.btn-primary {
                     color: $color-text-white;
-                    padding: 10px;
                     margin-bottom: 20px;
 
                     span {
                         display: inline-block;
                         padding-right: 10px;
                     }
-                }
-
-                img {
                 }
             }
         }
@@ -213,10 +208,9 @@
         }
     }
 
-    &__info {
-        h3 {
-            font-size: 1.5rem;
-            font-weight: bold;
+    &__video {
+        .embed-responsive {
+            max-width: 600px;
         }
     }
 
