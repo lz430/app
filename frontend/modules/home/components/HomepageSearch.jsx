@@ -4,18 +4,18 @@ import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../../components/Deals/StyleIcon';
-import { nextRouterType } from '../../../core/types';
 
 import { faSearch, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
+        purchaseStrategy: PropTypes.string,
+        autocompleteResults: PropTypes.object,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
-        autocompleteResults: PropTypes.object,
-        router: nextRouterType,
+        push: PropTypes.func.isRequired,
     };
 
     state = {
@@ -75,6 +75,7 @@ class SearchWidget extends React.PureComponent {
 
     onSelectItem(category, item) {
         let newSearchQuery = { ...item.query };
+        newSearchQuery.purchaseStrategy = this.props.purchaseStrategy;
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
@@ -86,7 +87,7 @@ class SearchWidget extends React.PureComponent {
             SearchMessage: false,
         });
         this.props.onClearSearchResults();
-        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
+        this.props.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 
