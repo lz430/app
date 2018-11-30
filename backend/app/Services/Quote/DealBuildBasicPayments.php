@@ -170,9 +170,7 @@ class DealBuildBasicPayments
                     $payments->detroit->finance = $this->buildFinancePayment($quote, $deal);
                     break;
                 case 'lease':
-                    if (! in_array(strtolower($deal->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
-                        $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
-                    }
+                    $payments->detroit->lease = $this->buildLeasePayment($quote, $deal);
                     break;
             }
         }
