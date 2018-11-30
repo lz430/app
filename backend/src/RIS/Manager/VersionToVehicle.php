@@ -619,9 +619,7 @@ class VersionToVehicle
                     $data = $this->buildFinancingRates($data, $vehicle);
                     break;
                 case 'lease':
-                    if (! in_array(strtolower($this->version->model->name), Map::VEHICLE_MODEL_BLACKLIST)) {
-                        $data = $this->buildLeaseRates($data, $vehicle);
-                    }
+                    $data = $this->buildLeaseRates($data, $vehicle);
                     break;
             }
             $data->data = $vehicle;
