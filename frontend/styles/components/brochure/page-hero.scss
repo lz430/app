@@ -6,6 +6,19 @@
     align-items: center;
     text-align: center;
     background-position: 0 -150px;
+    position: relative;
+
+    &::after {
+        content: '';
+        opacity: 0.5;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+        z-index: 1;
+        background: #e2e2e2;
+    }
 
     @include media-breakpoint-up(md) {
         min-height: 250px;
@@ -18,17 +31,20 @@
     }
     h1 {
         color: $gray-900;
+        z-index: 2;
         font-size: 2.5rem;
         font-weight: 700;
     }
     h4 {
         color: $color-black;
         font-size: 1rem;
+        z-index: 2;
     }
 
-    button {
+    a.btn {
+        z-index: 2;
         @include media-breakpoint-up(md) {
-            margin-top: 20px;
+            margin-top: 10px;
         }
     }
 }
