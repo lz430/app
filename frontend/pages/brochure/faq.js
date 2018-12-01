@@ -2,6 +2,7 @@ import '../../styles/app.scss';
 import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col } from 'reactstrap';
+import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import withTracker from '../../components/withTracker';
@@ -74,16 +75,19 @@ class Page extends Component {
                     <Row>
                         <Col sm="3" className="faq__nav">
                             {this.renderNav()}
-                            <div className="faq__contact">
-                                <h4>
-                                    Not finding what you&apos;re looking for?
-                                </h4>
-                                <a href="tel:855-675-7301">855-675-7301</a>
-                                <a href="mailto:support@delivermyride.com">
-                                    support@delivermyride.com
-                                </a>
-                                <a href="#hs-chat-open">Live Chat</a>
-                            </div>
+                            <MediumAndUp>
+                                <div className="faq__contact">
+                                    <h4>
+                                        Not finding what you&apos;re looking
+                                        for?
+                                    </h4>
+                                    <a href="tel:855-675-7301">855-675-7301</a>
+                                    <a href="mailto:support@delivermyride.com">
+                                        support@delivermyride.com
+                                    </a>
+                                    <a href="#hs-chat-open">Live Chat</a>
+                                </div>
+                            </MediumAndUp>
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
@@ -91,6 +95,19 @@ class Page extends Component {
                                     <FaqGroup key={item.title} item={item} />
                                 ))}
                             </div>
+                            <SmallAndDown>
+                                <div className="faq__contact">
+                                    <h4>
+                                        Not finding what you&apos;re looking
+                                        for?
+                                    </h4>
+                                    <a href="tel:855-675-7301">855-675-7301</a>
+                                    <a href="mailto:support@delivermyride.com">
+                                        support@delivermyride.com
+                                    </a>
+                                    <a href="#hs-chat-open">Live Chat</a>
+                                </div>
+                            </SmallAndDown>
                         </Col>
                     </Row>
                 </Container>
