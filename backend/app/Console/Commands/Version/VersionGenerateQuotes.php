@@ -155,7 +155,7 @@ class VersionGenerateQuotes extends Command
                         }
                     }
                     foreach ($quoteData as $strategy => $data) {
-                        if (! $data) {
+                        if (! $data || ($strategy != 'cash' && !isset($data->rate))) {
                             $version->quotes()->where('strategy', $strategy)->delete();
                         } else {
                             VersionQuote::updateOrCreate([
@@ -164,10 +164,10 @@ class VersionGenerateQuotes extends Command
                             ], [
                                 'hashcode' => $data->hashcode,
                                 'make_hashcode' => $data->makeHashcode,
-                                'rate' => (float) isset($data->rate) ? $data->rate : 0,
-                                'term' => (int) isset($data->term) ? $data->term : 0,
-                                'rebate' => (int) isset($data->rebate) ? $data->rebate : 0,
-                                'residual' => (int) isset($data->residual) ? $data->residual : 0,
+                                'rate' => (float) $data->rate,
+                                'term' => (int) $data->term,
+                                'rebate' => (int) $data->rebate,
+                                'residual' => (int) $data->residual,
                                 'miles' => (int) $data->miles,
                                 'rate_type' => $data->rateType,
                                 'data' => $data->data,
