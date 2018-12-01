@@ -2,6 +2,7 @@ import '../../styles/app.scss';
 import React from 'react';
 
 import { Container, Row, Col } from 'reactstrap';
+import { SmallAndUp } from '../../components/Responsive';
 
 import { withRouter } from 'next/router';
 import withTracker from '../../components/withTracker';
@@ -33,13 +34,15 @@ class Page extends React.Component {
                     </Row>
                     <Row>
                         <Col xl={4}>
-                            <div>
-                                <img
-                                    alt="Deliver My Ride Location"
-                                    className="img-fluid"
-                                    src="/static/images/about-riker.jpg"
-                                />
-                            </div>
+                            <SmallAndUp>
+                                <div>
+                                    <img
+                                        alt="Deliver My Ride Location"
+                                        className="img-fluid"
+                                        src="/static/images/about-riker.jpg"
+                                    />
+                                </div>
+                            </SmallAndUp>
                             <div className="contact__address">
                                 <span>35 W Huron Street Suite 1000</span>
                                 <br />
