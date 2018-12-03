@@ -187,6 +187,10 @@
             .brand {
                 text-align: center;
                 flex: 2 0 15%;
+
+                @include media-breakpoint-down(md) {
+                    flex: 2 0 33%;
+                }
             }
 
             a {
