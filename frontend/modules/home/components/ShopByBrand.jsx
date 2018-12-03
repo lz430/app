@@ -52,7 +52,7 @@ export default class extends React.Component {
                             }
                         >
                             <img
-                                style={{ height: '80px', width: '80px' }}
+                                style={{ height: '120px', width: '120px' }}
                                 src={filteredMakes[s].logo}
                                 alt={filteredMakes[s].title + ' logo'}
                             />
