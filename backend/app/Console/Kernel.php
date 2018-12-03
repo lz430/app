@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         Commands\Jato\JatoVinDecode::class,
         Commands\Jato\JatoFindMissingVersions::class,
         Commands\Audit\AuditDealPayments::class,
+        Commands\Version\VersionPopulateEquipmentAndOptions::class,
     ];
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Models\JATO;
 
 use App\Models\Deal;
+use App\Models\Equipment;
 use DeliverMyRide\JATO\Map;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -102,6 +103,22 @@ class Version extends Model
     public function deals()
     {
         return $this->hasMany(Deal::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(Equipment::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function options(): HasMany
+    {
+        return $this->hasMany(Option::class);
     }
 
     /**
