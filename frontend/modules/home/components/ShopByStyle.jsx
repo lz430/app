@@ -55,7 +55,8 @@ export default class extends React.Component {
                         <h5>{style.title}</h5>
                         <div className="icon">
                             <img
-                                src="https://source.unsplash.com/220x125?car"
+                                src={style.icon}
+                                alt={style.title}
                                 className="img-fluid"
                             />
                         </div>

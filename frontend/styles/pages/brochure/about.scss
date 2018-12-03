@@ -19,7 +19,7 @@
             box-shadow: $box-shadow;
         }
 
-        .col-sm-6:first-of-type {
+        &-content {
             background: #e7f1f7;
             padding: 45px;
             font-size: 0.8rem;
@@ -30,7 +30,7 @@
             margin-bottom: 20px;
         }
 
-        .about__story-image {
+        &-image {
             margin: 0;
             background: url('https://source.unsplash.com/random/800x600');
             height: 100%;
