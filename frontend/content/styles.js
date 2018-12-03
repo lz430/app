@@ -12,6 +12,18 @@ export default [
         icon: '/static/brochure/styles/Sedan_Grouping.jpg',
     },
     {
+        title: 'Pickups',
+        value: 'pickup',
+        query: ['style:Pickup'],
+        icon: '/static/brochure/styles/Sedan_Grouping.jpg',
+    },
+    {
+        title: 'Hatchbacks & Crossovers',
+        value: 'hatchback',
+        query: ['style:Hatchback'],
+        icon: '/static/brochure/styles/Hatchback_Grouping.jpg',
+    },
+    {
         title: 'Convertibles',
         value: 'convertible',
         query: ['style:Convertible'],
@@ -23,18 +35,7 @@ export default [
         query: ['style:Coupe'],
         icon: '/static/brochure/styles/Coupe_Grouping.jpg',
     },
-    {
-        title: 'Hatchbacks & Crossovers',
-        value: 'hatchback',
-        query: ['style:Hatchback'],
-        icon: '/static/brochure/styles/Hatchback_Grouping.jpg',
-    },
-    {
-        title: 'Pickups',
-        value: 'pickup',
-        query: ['style:Pickup'],
-        icon: '/static/brochure/styles/Pickup_Grouping.jpg',
-    },
+
     {
         title: 'Minivans',
         value: 'minivan',
