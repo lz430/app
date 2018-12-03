@@ -227,21 +227,23 @@ class SearchWidget extends React.PureComponent {
      */
     render() {
         return (
-            <div className="home__search" ref={node => (this.node = node)}>
-                <h2>Search new cars from local dealers</h2>
-                <div className="search__input">
-                    {this.renderSearchIcon()}
-                    <input
-                        type="text"
-                        onChange={e => {
-                            this.handleSearchRequest(e.target.value);
-                        }}
-                        value={this.state.query}
-                        placeholder="Search by Brand or Model"
-                        required
-                    />
+            <div className="home__search-container">
+                <div className="home__search" ref={node => (this.node = node)}>
+                    <h2>Search new cars from local dealers</h2>
+                    <div className="search__input">
+                        {this.renderSearchIcon()}
+                        <input
+                            type="text"
+                            onChange={e => {
+                                this.handleSearchRequest(e.target.value);
+                            }}
+                            value={this.state.query}
+                            placeholder="Search by Brand or Model"
+                            required
+                        />
+                    </div>
+                    {this.state.query && this.renderSearchResults()}
                 </div>
-                {this.state.query && this.renderSearchResults()}
             </div>
         );
     }
