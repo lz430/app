@@ -12,6 +12,7 @@ import Loading from '../../../components/Loading';
 
 import { Button } from 'reactstrap';
 import config from '../../../core/config';
+import classNames from 'classnames';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -30,12 +31,58 @@ export default class AddToCart extends React.PureComponent {
     };
 
     state = {
+        step: 0, // price || payment || detail
         submitted: false,
     };
+
+    steps = [
+        {
+            label: 'Price',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Configure Payments
+                </span>
+            ),
+        },
+        {
+            label: 'Payments',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Review Details
+                </span>
+            ),
+        },
+        {
+            label: 'Details',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Start Purchase
+                </span>
+            ),
+        },
+    ];
 
     handleSubmit() {
         this.setState({ submitted: true });
         this.props.handleBuyNow();
+    }
+
+    progressToNextStep() {
+        //
+        // Progress to the next step
+        if (this.state.step < this.steps.length - 1) {
+            this.setState({ step: this.state.step + 1 });
+        } else {
+            this.handleSubmit();
+        }
+    }
+
+    selectStep(step) {
+        if (step >= this.state.step) {
+            return false;
+        }
+
+        this.setState({ step: step });
     }
 
     /**
@@ -59,10 +106,9 @@ export default class AddToCart extends React.PureComponent {
             <Button
                 color="success"
                 block
-                onClick={() => this.handleSubmit()}
-                disabled={!this.props.pricing.canPurchase()}
+                onClick={() => this.progressToNextStep()}
             >
-                <strong>Next:</strong> Start Purchase
+                {this.steps[this.state.step].cta}
             </Button>
         );
     }
@@ -196,6 +242,29 @@ export default class AddToCart extends React.PureComponent {
         }
     }
 
+    renderProgress() {
+        return (
+            <div className="steps">
+                {this.steps.map((step, index) => {
+                    return (
+                        <div
+                            key={'step' + index}
+                            onClick={() => this.selectStep(index)}
+                            className={classNames(
+                                'step',
+                                { complete: this.state.step > index },
+                                { disabled: this.state.step < index },
+                                { active: this.state.step === index }
+                            )}
+                        >
+                            {step.label}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
     render() {
         const { purchaseStrategy, deal, pricing } = this.props;
 
@@ -242,6 +311,8 @@ export default class AddToCart extends React.PureComponent {
                     Configure Your Payment
                 </h5>
                 <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
+                    {this.renderProgress()}
+
                     <PaymentTypes
                         {...{ purchaseStrategy }}
                         onChange={this.props.handlePaymentTypeChange}
