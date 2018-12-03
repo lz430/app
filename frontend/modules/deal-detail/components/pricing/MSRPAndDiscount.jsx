@@ -13,7 +13,6 @@ import Separator from '../../../../apps/pricing/components/Separator';
 export default class MSRPAndDiscount extends React.PureComponent {
     static propTypes = {
         onDiscountChange: PropTypes.func.isRequired,
-        onRebatesChange: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
         pricing: pricingType.isRequired,
     };

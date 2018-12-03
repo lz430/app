@@ -137,15 +137,10 @@ export default class LeasePane extends React.PureComponent {
     }
 
     render() {
-        const { pricing, onRebatesChange } = this.props;
+        const { pricing } = this.props;
 
         return (
             <div>
-                <Group>
-                    <Header>Rebates</Header>
-                    <Rebates pricing={pricing} onChange={onRebatesChange} />
-                </Group>
-                <Separator />
                 <Group>
                     <Header>
                         Lease Terms

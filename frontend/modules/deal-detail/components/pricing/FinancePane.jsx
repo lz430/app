@@ -97,24 +97,10 @@ export default class FinancePane extends React.PureComponent {
     }
 
     render() {
-        const { pricing, onRebatesChange } = this.props;
+        const { pricing } = this.props;
 
         return (
             <div>
-                <TaxesAndFees pricing={this.props.pricing} />
-                <Separator />
-                <Group>
-                    <Header>Rebates</Header>
-                    <Rebates pricing={pricing} onChange={onRebatesChange} />
-                </Group>
-                <Separator />
-                <Line>
-                    <Label style={{ margin: 0 }}>Total Selling Price</Label>
-                    <Value isLoading={pricing.quoteIsLoading()}>
-                        <DollarsAndCents value={pricing.yourPrice()} />*
-                    </Value>
-                </Line>
-                <Separator />
                 <Group isLoading={pricing.quoteIsLoading()}>
                     {pricing.quoteIsLoading() && <Loading />}
                     {pricing.quoteIsLoading() || (
