@@ -16,6 +16,7 @@ export default class extends React.Component {
         return (
             <div className="home__hero">
                 <div className="home__hero__banner">
+                    <h1>Buy or Lease a New Car, Your Way</h1>
                     <HomepageSearch
                         purchaseStrategy={this.props.purchaseStrategy}
                         push={this.props.push}
