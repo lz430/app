@@ -13,3 +13,9 @@
 .shadow-sm {
     box-shadow: $box-shadow-sm;
 }
+
+.bg-focus {
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+}

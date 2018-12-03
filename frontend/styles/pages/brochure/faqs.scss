@@ -54,13 +54,12 @@
             .title {
                 display: flex;
                 justify-content: space-between;
-
+                align-items: center;
                 &:hover {
                     cursor: pointer;
                 }
                 &.active {
                     color: $color-text-blue;
-                    // margin-bottom: 10px;
                 }
             }
             .content {
