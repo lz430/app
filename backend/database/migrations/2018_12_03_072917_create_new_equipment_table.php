@@ -24,6 +24,7 @@ class CreateNewEquipmentTable extends Migration
             $table->string('availability');
             $table->string('value')->nullable();
             $table->json('attributes');
+            $table->timestamps();
         });
     }
 

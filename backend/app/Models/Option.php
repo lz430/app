@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,13 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Option extends Model
 {
-    use CrudTrait;
-
     protected $guarded = ['id'];
 
     protected $fillable = [
-        'deal_id',
-        'vehicle_id',
+        'version_id',
         'option_id',
         'option_code',
         'option_type',

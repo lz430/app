@@ -86,7 +86,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'value' => $e->value,
                     'attributes' => json_encode($e->attributes),
                 ];
-                DB::table('equipment')->insert($data);
+                \App\Models\Equipment::updateOrCreate($data);
             }
 
             foreach($foundOptions as $o) {
@@ -102,7 +102,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'option_state' => $o->optionState,
                     'option_description' => $o->optionDescription,
                 ];
-                DB::table('options')->insert($data);
+                \App\Models\Option::updateOrCreate($data);
             }
 
             $this->info("Populating equipment/options for " . $version->title());

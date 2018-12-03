@@ -25,6 +25,7 @@ class CreateOptionsTable extends Migration
             $table->string('option_state_name');
             $table->string('option_state');
             $table->text('option_description');
+            $table->timestamps();
         });
     }
 

@@ -15,8 +15,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Equipment extends Model
 {
-    use CrudTrait;
-
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -24,7 +22,7 @@ class Equipment extends Model
     ];
 
     protected $fillable = [
-        'deal_id',
+        'version_id',
         'option_id',
         'vehicle_id',
         'schema_id',
