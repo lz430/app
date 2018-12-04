@@ -33,10 +33,11 @@ export default class TaxesAndFees extends React.PureComponent {
             <React.Fragment>
                 <div className="mb-2">Finance Deal Summary</div>
                 <h5 className="font-weight-bold border-bottom border-medium d-inline-block m-0">
-                    Monthly Payment:{' '}
+                    Payment:{' '}
                     <DollarsAndCents
                         value={this.props.pricing.monthlyPayment()}
                     />
+                    /mo
                 </h5>
                 <div className="text-sm">
                     Down Payment:{' '}
@@ -52,10 +53,11 @@ export default class TaxesAndFees extends React.PureComponent {
             <React.Fragment>
                 <div className="mb-2">Lease Deal Summary</div>
                 <h5 className="font-weight-bold border-bottom border-medium d-inline-block m-0">
-                    Monthly Payment:{' '}
+                    Payment:{' '}
                     <DollarsAndCents
                         value={this.props.pricing.monthlyPayment()}
                     />
+                    /mo
                 </h5>
                 <div className="text-sm">
                     Miles: {this.props.pricing.annualMileage()}

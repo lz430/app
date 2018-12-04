@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import config from '../../../../core/config';
 
 import Line from '../../../../apps/pricing/components/Line';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import classNames from 'classnames';
 
 export default class Discount extends React.PureComponent {
@@ -34,23 +33,17 @@ export default class Discount extends React.PureComponent {
     renderPrimaryRole(role) {
         const { pricing } = this.props;
 
-        let checked, discount, label, price;
+        let checked, label;
 
         if (role === 'employee') {
             label = 'Employee Price';
             checked = pricing.isEffectiveDiscountEmployee();
-            discount = pricing.employeeDiscount();
-            price = pricing.employeePrice();
         } else if (role === 'supplier') {
             label = 'Supplier / Friends & Family Price';
             checked = pricing.isEffectiveDiscountSupplier();
-            discount = pricing.supplierDiscount();
-            price = pricing.supplierPrice();
         } else {
             label = 'Deliver My Ride Customer Price';
             checked = pricing.isEffectiveDiscountDmr();
-            discount = pricing.dmrDiscount();
-            price = pricing.defaultPrice();
         }
         return (
             <div

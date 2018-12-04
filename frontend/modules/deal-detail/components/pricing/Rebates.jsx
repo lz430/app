@@ -3,16 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { sortBy, prop, map } from 'ramda';
 
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 import RebatesRole from './RebatesRole';
 
-import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
 

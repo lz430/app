@@ -5,8 +5,6 @@ import classNames from 'classnames';
 import { Button } from 'reactstrap';
 
 import config from '../../../core/config';
-import Group from '../../../apps/pricing/components/Group';
-import Header from '../../../apps/pricing/components/Header';
 import Loading from '../../../components/Loading';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
