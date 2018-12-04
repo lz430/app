@@ -6,7 +6,6 @@ import config from '../../../../core/config';
 import Line from '../../../../apps/pricing/components/Line';
 import classNames from 'classnames';
 import Separator from '../../../../apps/pricing/components/Separator';
-import Group from '../../../../apps/pricing/components/Group';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {

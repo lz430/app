@@ -141,37 +141,9 @@ export default class AddToCart extends React.PureComponent {
             return false;
         }
 
-        let disclaimer;
-
-        if (purchaseStrategy === 'cash') {
-            disclaimer = false;
-        } else if (purchaseStrategy === 'finance') {
-            disclaimer = (
-                <div>
-                    Payment calculated with 5% interest <br />
-                    Monthly payment amount applies to qualified credit or lease
-                    applicants having a minimum credit score of 740. Your
-                    monthly payment is established based on a full review of
-                    your credit application and credit report.
-                </div>
-            );
-        } else {
-            disclaimer = (
-                <div>
-                    Monthly payment amount applies to qualified credit or lease
-                    applicants having a minimum credit score of 740. Your
-                    monthly payment is established based on a full review of
-                    your credit application and credit report.
-                </div>
-            );
-        }
-
         return (
             <React.Fragment>
                 <div className="cart__cta">{this.renderCtaButton()}</div>
-                <div className="cart__disclaimer text-sm font-italic p-1 ">
-                    {disclaimer}
-                </div>
             </React.Fragment>
         );
     }

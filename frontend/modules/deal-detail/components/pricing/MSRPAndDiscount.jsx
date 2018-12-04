@@ -8,7 +8,6 @@ import Value from '../../../../apps/pricing/components/Value';
 import Group from '../../../../apps/pricing/components/Group';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Discount from './Discount';
-import Separator from '../../../../apps/pricing/components/Separator';
 
 export default class MSRPAndDiscount extends React.PureComponent {
     static propTypes = {
