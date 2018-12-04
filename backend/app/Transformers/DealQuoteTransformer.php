@@ -148,7 +148,7 @@ class DealQuoteTransformer extends TransformerAbstract
         $data['rebates'] = $ratesAndRebates ? $ratesAndRebates->rebates : false;
         $data['rates'] = $ratesAndRebates ? $this->rates() : false;
         $data['selections'] = [
-            'conditionalRoles' => $potentialConditionalRoles,
+            'conditionalRoles' => (object) $potentialConditionalRoles,
         ];
 
         return $data;
