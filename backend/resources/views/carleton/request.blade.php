@@ -37,7 +37,7 @@
                     <ContractDate>{{$quote['contractDate']}}</ContractDate>
                     <UpfrontPayments>1</UpfrontPayments>
                     <TaxMethod>MonthlyUse</TaxMethod>
-                    <ApplyCashDownToUpfront>Yes</ApplyCashDownToUpfront>
+                    <ApplyCashDownToUpfront>No</ApplyCashDownToUpfront>
                     <ApplyRebateToUpfront>No</ApplyRebateToUpfront>
                     <ApplyNetTradeToUpfront>No</ApplyNetTradeToUpfront>
                     <TaxIndex>1</TaxIndex>

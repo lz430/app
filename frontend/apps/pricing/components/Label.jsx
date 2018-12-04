@@ -14,7 +14,11 @@ class Label extends React.PureComponent {
     };
 
     render() {
-        const style = { display: 'inline-block', ...this.props.style };
+        const style = {
+            margin: 0,
+            display: 'inline-block',
+            ...this.props.style,
+        };
 
         return (
             <label htmlFor={this.props.for} style={style}>

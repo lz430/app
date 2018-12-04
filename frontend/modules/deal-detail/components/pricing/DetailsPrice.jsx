@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Line from '../../../../apps/pricing/components/Line';
 import Label from '../../../../apps/pricing/components/Label';
 import Value from '../../../../apps/pricing/components/Value';
+import Header from '../../../../apps/pricing/components/Header';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
@@ -81,7 +82,7 @@ export default class TaxesAndFees extends React.PureComponent {
             label = 'FINANCE PRICE';
         }
 
-        return <strong>{label}</strong>;
+        return <Header>{label}</Header>;
     }
 
     renderDiscountedPriceBreakdown() {
@@ -173,7 +174,7 @@ export default class TaxesAndFees extends React.PureComponent {
                 </Line>
                 {this.renderDiscountedPriceBreakdown()}
                 {this.renderRebates()}
-                <Line>
+                <Line isImportant>
                     <Label style={{ margin: 0 }}>{discountedPriceLabel}</Label>
                     <Value>
                         <DollarsAndCents
