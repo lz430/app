@@ -53,6 +53,12 @@ export default class DetailLeaseDueAtDeliveryFees extends React.PureComponent {
                             <DollarsAndCents value={pricing.taxOnRebates()} />
                         </Value>
                     </Line>
+                    <Line>
+                        <Label>Down Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.cashDownCCR()} />
+                        </Value>
+                    </Line>
                     <Line isSectionTotal={true} isImportant={true}>
                         <Label>Total Due</Label>
                         <Value>

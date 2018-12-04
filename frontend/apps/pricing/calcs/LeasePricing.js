@@ -28,6 +28,8 @@ export default class LeasePricing extends Pricing {
 
     totalAmountAtDriveOff = () =>
         this.paymentDinero(payment => payment.totalAmountAtDriveOff);
+    cashDownCCR = () => this.paymentDinero(payment => payment.cashDownCCR);
+
     monthlyPayment = () =>
         this.paymentDinero(payment => payment.monthlyPayment);
     monthlyPreTaxPayment = () =>
@@ -55,11 +57,12 @@ export default class LeasePricing extends Pricing {
         return this.data.leaseAnnualMileage;
     };
 
-    /**
-     * @deprecated
-     */
     cashDue = () => {
-        return 0;
+        if (!this.data.leaseCashDue) {
+            return zero;
+        }
+
+        return fromDollarsAndCents(this.data.leaseCashDue);
     };
 
     canPurchase = () => {

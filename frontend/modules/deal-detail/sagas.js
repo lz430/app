@@ -23,6 +23,7 @@ import {
     getDeal,
     getDiscountType,
     getTradeIn,
+    getLease,
 } from './selectors';
 import { dealDetailReceiveDealQuote, receiveDeal } from './actions';
 import { cancelRequest } from '../../store/httpclient';
@@ -43,6 +44,7 @@ function* dealDetailRequestDealQuote() {
     let role = yield select(getDiscountType);
     const conditionalRoles = yield select(getConditionalRoles);
     const tradeIn = yield select(getTradeIn);
+    const lease = yield select(getLease);
 
     if (role === 'dmr') {
         role = 'default';
@@ -70,7 +72,9 @@ function* dealDetailRequestDealQuote() {
                 location.zipcode,
                 roles,
                 source.token,
-                0,
+                purchaseStrategy === 'lease' && lease.cashDue
+                    ? lease.cashDue
+                    : 0,
                 tradeIn.value,
                 tradeIn.owed
             );

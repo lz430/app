@@ -30,6 +30,10 @@ export const getTradeIn = state => {
     return state.pages.dealDetails.trade;
 };
 
+export const getLease = state => {
+    return state.pages.dealDetails.lease;
+};
+
 const employeeBrand = state => {
     return state.pages.dealDetails.discount.employeeBrand === false
         ? null
@@ -107,6 +111,7 @@ export const dealPricingDataForDetail = createSelector(
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
+            leaseCashDue: dealLeaseCashDue,
             discountType,
             tradeIn,
             dealQuoteIsLoading,

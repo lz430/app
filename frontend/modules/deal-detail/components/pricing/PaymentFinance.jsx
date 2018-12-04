@@ -57,12 +57,10 @@ export default class PaymentFinance extends React.PureComponent {
         if (percentDownPayment > 100) {
             return false;
         }
-        console.log('handlePercentDownPaymentChange');
-        console.log(percentDownPayment);
+
         const newDownPayment = this.props.pricing
             .calculateDownPayment(percentDownPayment / 100)
             .toRoundedUnit(0);
-        console.log(newDownPayment);
         this.props.onDownPaymentChange(newDownPayment);
     };
 

@@ -78,6 +78,7 @@ class DealQuote
                 'monthlyUseTax' => $result['monthly_use_tax'],
                 'monthlyPreTaxPayment' => $result['monthly_pre_tax_payment'],
                 'monthlyPayment' => $result['monthly_payment'],
+                'cashDownCCR' => $result['cash_down_ccr'],
                 'totalAmountAtDriveOff' => $result['total_amount_at_drive_off'],
             ];
         }

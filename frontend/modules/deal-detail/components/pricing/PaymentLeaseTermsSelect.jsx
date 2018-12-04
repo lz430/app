@@ -47,7 +47,13 @@ export default class PaymentLeaseTermsSelect extends React.PureComponent {
                 <td
                     className={className}
                     key={termIndex}
-                    onClick={() => this.props.onChange(annualMileage, term, 0)}
+                    onClick={() =>
+                        this.props.onChange(
+                            annualMileage,
+                            term,
+                            pricing.cashDue().toRoundedUnit(0)
+                        )
+                    }
                 >
                     <Dollars value={value} />
                 </td>
