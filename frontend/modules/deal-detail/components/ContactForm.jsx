@@ -4,7 +4,7 @@ import FormikFieldWithreCaptcha from '../../../components/Forms/FormikFieldWithr
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
 
-import { Row, Col, Button, FormGroup, Label, Alert } from 'reactstrap';
+import { Row, Col, Button, FormGroup, Alert } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,9 +36,6 @@ class ContactForm extends React.Component {
         values: null,
     };
 
-    handleSelect = selectChoice => {
-        setFieldValue('communication_method', selectChoice.value);
-    };
     handleOnSubmit(values, actions) {
         this.setState({ values: values });
 
@@ -168,7 +165,7 @@ class ContactForm extends React.Component {
                             </Row>
 
                             <FormGroup>
-                                <label for="communication_method">
+                                <label htmlFor="communication_method">
                                     Please indicate your preferred method of
                                     communication:
                                 </label>
