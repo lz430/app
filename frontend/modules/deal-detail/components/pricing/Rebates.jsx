@@ -104,11 +104,11 @@ class Rebates extends React.Component {
     shouldRenderConditionalSelection() {
         const quote = this.props.pricing.quote();
 
-        if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
-            return false;
-        }
-
-        return true;
+        return !(
+            !quote ||
+            !quote.selections ||
+            !quote.selections.conditionalRoles
+        );
     }
 
     renderConditionalRebates() {

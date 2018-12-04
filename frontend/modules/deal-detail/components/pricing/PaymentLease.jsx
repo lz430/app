@@ -4,10 +4,7 @@ import { pricingType } from '../../../../core/types';
 
 import Loading from '../../../../components/Loading';
 import Line from '../../../../apps/pricing/components/Line';
-import DMRLabel from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
 import Group from '../../../../apps/pricing/components/Group';
-import Header from '../../../../apps/pricing/components/Header';
 import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
@@ -64,7 +61,7 @@ export default class PaymentLease extends React.PureComponent {
                     <div className="pr-1">
                         <FormGroup>
                             <Label for="down-payment" className="text-sm">
-                                Down Payment
+                                Cash Due
                             </Label>
                             <Input
                                 type="text"
@@ -89,19 +86,6 @@ export default class PaymentLease extends React.PureComponent {
                             />
                         </Line>
                     </div>
-                </Group>
-                <Separator />
-                <Group>
-                    <Header>Due at Delivery</Header>
-                    <Line isSectionTotal={true} isImportant={true}>
-                        <DMRLabel>Total Due</DMRLabel>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.totalAmountAtDriveOff()}
-                            />
-                            *
-                        </Value>
-                    </Line>
                 </Group>
             </div>
         );

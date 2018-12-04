@@ -105,6 +105,9 @@ export default class Pricing {
         return 'dmr';
     };
 
+    discountedAndRebatedPrice = () =>
+        this.discountedPrice().subtract(this.rebates());
+
     isEffectiveDiscountEmployee = () => {
         return (
             this.data.discountType === 'employee' &&

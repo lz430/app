@@ -18,7 +18,13 @@ import PaymentLease from './pricing/PaymentLease';
 import PaymentStrategySelect from './pricing/PaymentStrategySelect';
 import Rebates from './pricing/Rebates';
 import TaxesAndFees from './pricing/TaxesAndFees';
-import DetailLeaseDueAtDeliveryFees from './pricing/DetailLeaseDueAtDeliveryFees';
+import DetailsLeaseDueAtDeliveryFees from './pricing/DetailsLeaseDueAtDeliveryFees';
+import DetailsSummary from './pricing/DetailsSummary';
+import DetailsPrice from './pricing/DetailsPrice';
+import Line from '../../../apps/pricing/components/Line';
+import Label from '../../../apps/pricing/components/Label';
+import Value from '../../../apps/pricing/components/Value';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -103,7 +109,7 @@ export default class AddToCart extends React.PureComponent {
         if (this.state.submitted) {
             return (
                 <Button color="success" block disabled={true}>
-                    <Loading /> Loading, please wait.
+                    <Loading size={1} /> Loading, please wait.
                 </Button>
             );
         }
@@ -178,7 +184,7 @@ export default class AddToCart extends React.PureComponent {
         if (pricing.quoteIsLoading()) {
             return (
                 <div className="m-2">
-                    <Loading />
+                    <Loading size={4} />
                 </div>
             );
         }
@@ -248,7 +254,7 @@ export default class AddToCart extends React.PureComponent {
 
     renderProgress() {
         return (
-            <div className="steps">
+            <div className="steps border border-medium border-bottom-0">
                 {this.steps.map((step, index) => {
                     return (
                         <div
@@ -319,7 +325,22 @@ export default class AddToCart extends React.PureComponent {
         if (purchaseStrategy === 'cash') {
             return (
                 <React.Fragment>
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+
                     <TaxesAndFees pricing={pricing} />
+                    <Line isImportant={true} isSectionTotal={true}>
+                        <Label>Total Selling Price</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.totalPrice()} />
+                        </Value>
+                    </Line>
                 </React.Fragment>
             );
         }
@@ -327,6 +348,14 @@ export default class AddToCart extends React.PureComponent {
         if (purchaseStrategy === 'finance') {
             return (
                 <React.Fragment>
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
                     <TaxesAndFees pricing={pricing} />
                 </React.Fragment>
             );
@@ -335,7 +364,15 @@ export default class AddToCart extends React.PureComponent {
         if (purchaseStrategy === 'lease') {
             return (
                 <React.Fragment>
-                    <DetailLeaseDueAtDeliveryFees pricing={pricing} />
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsLeaseDueAtDeliveryFees pricing={pricing} />
                 </React.Fragment>
             );
         }
@@ -385,9 +422,6 @@ export default class AddToCart extends React.PureComponent {
         if (!pricing) {
             return (
                 <div className="cart">
-                    <h5 className="text-center bg-light m-0 p-1 border border-medium border-bottom-0">
-                        Configure Your Payment
-                    </h5>
                     <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
                         <Loading />
                     </div>
@@ -397,11 +431,9 @@ export default class AddToCart extends React.PureComponent {
 
         return (
             <div className="cart">
-                <h5 className="text-center bg-light m-0 p-1 border border-medium border-bottom-0">
-                    Configure Your Payment
-                </h5>
+                {this.renderProgress()}
+
                 <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
-                    {this.renderProgress()}
                     {this.state.step === 0 && this.renderPriceStep()}
                     {this.state.step === 1 && this.renderPaymentStep()}
                     {this.state.step === 2 && this.renderDetailsStep()}

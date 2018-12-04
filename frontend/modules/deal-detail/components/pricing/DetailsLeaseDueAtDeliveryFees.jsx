@@ -8,7 +8,7 @@ import Group from '../../../../apps/pricing/components/Group';
 import Header from '../../../../apps/pricing/components/Header';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
-export default class DetailLeaseDueAtDeliveryFees extends React.PureComponent {
+export default class DetailsLeaseDueAtDeliveryFees extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
     };
