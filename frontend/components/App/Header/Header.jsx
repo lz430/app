@@ -132,7 +132,7 @@ class Header extends React.PureComponent {
                 expand="md"
                 className="navbar--app"
             >
-                <Link href="/home" as="/brochure" passHref>
+                <Link href="/home" as="/" passHref>
                     <NavbarBrand>
                         <Logo />
                     </NavbarBrand>

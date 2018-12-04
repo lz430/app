@@ -33,7 +33,7 @@ export default class Header extends React.Component {
                 light
             >
                 <Container>
-                    <Link href="/home" as="/brochure" passHref>
+                    <Link href="/home" as="/" passHref>
                         <NavbarBrand>
                             <Logo />
                         </NavbarBrand>
