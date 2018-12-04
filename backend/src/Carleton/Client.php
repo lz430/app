@@ -306,6 +306,7 @@ class Client
                 'monthly_pre_tax_payment' => (float) sprintf('%.02f', $quote->TaxablePayment),
             ];
         }
+
         return $results;
     }
 }
