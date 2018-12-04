@@ -1,5 +1,5 @@
 import Pricing from './Pricing';
-import { fromDollarsAndCents, zero } from '../money';
+import { fromDollarsAndCents, fromWholeDollars, zero } from '../money';
 import { indexOf } from 'ramda';
 import { getClosestNumberInRange } from '../../../util/util';
 
@@ -25,10 +25,13 @@ export default class LeasePricing extends Pricing {
     docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
     cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
     taxOnRebates = () => this.taxesFor(this.rebates());
-
-    totalAmountAtDriveOff = () =>
-        this.paymentDinero(payment => payment.totalAmountAtDriveOff);
     cashDownCCR = () => this.paymentDinero(payment => payment.cashDownCCR);
+
+    totalAmountAtDriveOff = () => {
+        return this.paymentDinero(payment => payment.totalAmountAtDriveOff).add(
+            this.cashDownCCR()
+        );
+    };
 
     monthlyPayment = () =>
         this.paymentDinero(payment => payment.monthlyPayment);
@@ -57,12 +60,29 @@ export default class LeasePricing extends Pricing {
         return this.data.leaseAnnualMileage;
     };
 
+    calculateCashDue = cashDuePercent => {
+        const calculatedDownPayment = this.yourPrice()
+            .multiply(cashDuePercent)
+            .toRoundedUnit(0);
+
+        return fromWholeDollars(calculatedDownPayment);
+    };
+
     cashDue = () => {
         if (!this.data.leaseCashDue) {
             return zero;
         }
 
         return fromDollarsAndCents(this.data.leaseCashDue);
+    };
+
+    cashDuePercent = () => {
+        const downPayment = this.cashDue().toRoundedUnit(0);
+        if (!downPayment) {
+            return zero.toRoundedUnit(0);
+        }
+        const price = this.yourPrice().toRoundedUnit(0);
+        return Math.round((downPayment / price) * 100);
     };
 
     canPurchase = () => {

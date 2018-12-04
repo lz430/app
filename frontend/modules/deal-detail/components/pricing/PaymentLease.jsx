@@ -41,6 +41,34 @@ export default class PaymentLease extends React.PureComponent {
         );
     };
 
+    handleCashDuePercent = e => {
+        const percentDownPayment = Number(
+            Math.round(e.target.value.replace(/[\D.]/g, ''))
+        );
+
+        if (isNaN(percentDownPayment)) {
+            return false;
+        }
+
+        if (percentDownPayment < 0) {
+            return false;
+        }
+
+        if (percentDownPayment > 100) {
+            return false;
+        }
+
+        const newDownPayment = this.props.pricing
+            .calculateCashDue(percentDownPayment / 100)
+            .toRoundedUnit(0);
+
+        this.props.onChange(
+            this.props.pricing.annualMileage(),
+            this.props.pricing.term(),
+            newDownPayment
+        );
+    };
+
     render() {
         const { pricing } = this.props;
 
@@ -71,8 +99,23 @@ export default class PaymentLease extends React.PureComponent {
                             />
                         </FormGroup>
                     </div>
+                    <div className="pl-1">
+                        <FormGroup>
+                            <Label
+                                for="down-payment-percent"
+                                className="text-sm"
+                            >
+                                Down Payment %
+                            </Label>
+                            <Input
+                                type="text"
+                                name="down-payment-percent"
+                                value={pricing.cashDuePercent()}
+                                onChange={this.handleCashDuePercent}
+                            />
+                        </FormGroup>
+                    </div>
                 </div>
-
                 <Separator />
                 <Group>
                     <div>
