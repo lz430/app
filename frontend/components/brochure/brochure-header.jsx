@@ -47,26 +47,22 @@ export default class Header extends React.Component {
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 <ActiveLink
-                                    href="/brochure/how-it-works"
-                                    as="/brochure/how-it-works"
+                                    href="/how-it-works"
+                                    as="/how-it-works"
                                     passHref
                                 >
                                     <NavLink>How It Works</NavLink>
                                 </ActiveLink>
                             </NavItem>
                             <NavItem>
-                                <ActiveLink
-                                    href="/brochure/about"
-                                    as="/brochure/about"
-                                    passHref
-                                >
+                                <ActiveLink href="/about" as="/about" passHref>
                                     <NavLink>About</NavLink>
                                 </ActiveLink>
                             </NavItem>
                             <NavItem>
                                 <ActiveLink
-                                    href="/brochure/contact"
-                                    as="/brochure/contact"
+                                    href="/contact"
+                                    as="/contact"
                                     passHref
                                 >
                                     <NavLink>Contact</NavLink>

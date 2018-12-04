@@ -28,8 +28,8 @@ import { setSelectedMake } from '../../../modules/deal-list/actions';
 import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import config from '../../../core/config';
 import Logo from '../../../static/images/logo.svg';
+import Link from 'next/link';
 
 class Header extends React.PureComponent {
     static propTypes = {
@@ -132,9 +132,11 @@ class Header extends React.PureComponent {
                 expand="md"
                 className="navbar--app"
             >
-                <NavbarBrand href={config.MARKETING_URL}>
-                    <Logo />
-                </NavbarBrand>
+                <Link href="/home" as="/brochure" passHref>
+                    <NavbarBrand>
+                        <Logo />
+                    </NavbarBrand>
+                </Link>
                 <div className="mr-auto" />
 
                 <div className="navbar-text">
