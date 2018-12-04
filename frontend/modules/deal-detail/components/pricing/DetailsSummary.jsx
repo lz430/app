@@ -1,11 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import Group from '../../../../apps/pricing/components/Group';
-import Header from '../../../../apps/pricing/components/Header';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
 
@@ -37,6 +32,17 @@ export default class TaxesAndFees extends React.PureComponent {
         return (
             <React.Fragment>
                 <div className="mb-2">Finance Deal Summary</div>
+                <h5 className="font-weight-bold border-bottom border-medium d-inline-block m-0">
+                    Monthly Payment:{' '}
+                    <DollarsAndCents
+                        value={this.props.pricing.monthlyPayment()}
+                    />
+                </h5>
+                <div className="text-sm">
+                    Down Payment:{' '}
+                    <DollarsAndCents value={this.props.pricing.downPayment()} />
+                </div>
+                <div className="text-sm">Term: {this.props.pricing.term()}</div>
             </React.Fragment>
         );
     }
@@ -45,6 +51,16 @@ export default class TaxesAndFees extends React.PureComponent {
         return (
             <React.Fragment>
                 <div className="mb-2">Lease Deal Summary</div>
+                <h5 className="font-weight-bold border-bottom border-medium d-inline-block m-0">
+                    Monthly Payment:{' '}
+                    <DollarsAndCents
+                        value={this.props.pricing.monthlyPayment()}
+                    />
+                </h5>
+                <div className="text-sm">
+                    Miles: {this.props.pricing.annualMileage()}
+                </div>
+                <div className="text-sm">Term: {this.props.pricing.term()}</div>
             </React.Fragment>
         );
     }
