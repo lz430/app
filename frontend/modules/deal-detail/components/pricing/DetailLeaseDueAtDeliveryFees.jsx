@@ -14,7 +14,6 @@ export default class DetailLeaseDueAtDeliveryFees extends React.PureComponent {
     };
 
     state = {
-        leaseTermsSelectOpened: false,
         paymentPopoverOpen: false,
         duePopoverOpen: false,
     };

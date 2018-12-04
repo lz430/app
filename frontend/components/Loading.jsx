@@ -12,6 +12,7 @@ export default class LoadingIcon extends React.PureComponent {
     static defaultProps = {
         size: 4,
     };
+
     render() {
         return (
             <div

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../../../components/Loading';
 
-import DMRLabel from '../../../../apps/pricing/components/Label';
 import Group from '../../../../apps/pricing/components/Group';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';

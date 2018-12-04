@@ -6,8 +6,6 @@ import { pricingType } from '../../../../core/types';
 
 export default class PaymentLeaseTermsSelect extends React.PureComponent {
     static propTypes = {
-        isOpen: PropTypes.bool.isRequired,
-        toggle: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
         pricing: pricingType.isRequired,
     };
@@ -35,10 +33,10 @@ export default class PaymentLeaseTermsSelect extends React.PureComponent {
     }
 
     renderTerm(pricing, term, termIndex, annualMileage) {
-        const value = pricing.paymentsForTermAndCashDue(term, annualMileage);
+        const value = pricing.paymentsForTermAndMileage(term, annualMileage);
 
         if (value) {
-            let className = pricing.isSelectedLeasePaymentForTermAndCashDue(
+            let className = pricing.isSelectedLeasePaymentForTermAndMileage(
                 term,
                 annualMileage
             )

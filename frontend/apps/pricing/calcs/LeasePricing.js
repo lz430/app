@@ -79,7 +79,7 @@ export default class LeasePricing extends Pricing {
             .filter((term, termIndex) => termIndex < maxNumberOfTermsInMatrix);
     };
 
-    paymentsForTermAndCashDue = (term, annualMileage) => {
+    paymentsForTermAndMileage = (term, annualMileage) => {
         const payments = this.payments();
 
         if (!payments) {
@@ -160,16 +160,12 @@ export default class LeasePricing extends Pricing {
             );
     };
 
-    isSelectedLeasePaymentForTermAndCashDue(term, annualMileage) {
+    isSelectedLeasePaymentForTermAndMileage(term, annualMileage) {
         if (term !== this.term()) {
             return false;
         }
 
-        if (annualMileage !== this.annualMileage()) {
-            return false;
-        }
-
-        return true;
+        return annualMileage === this.annualMileage();
     }
 
     calculateDefaultTerm = () => {

@@ -13,78 +13,22 @@ import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import PaymentLeaseTermsSelect from './PaymentLeaseTermsSelect';
 
-import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
-
 export default class PaymentLease extends React.PureComponent {
     static propTypes = {
-        onDiscountChange: PropTypes.func.isRequired,
-        onRebatesChange: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
         pricing: pricingType.isRequired,
     };
 
-    state = {
-        leaseTermsSelectOpened: false,
-        paymentPopoverOpen: false,
-        duePopoverOpen: false,
-    };
-
-    togglePaymentDescription() {
-        this.setState({
-            paymentPopoverOpen: !this.state.paymentPopoverOpen,
-        });
-    }
-
     handleLeaseTermsChange = (annualMileage, term, cashDue) => {
         this.props.onChange(annualMileage, term, cashDue);
-        this.toggleTermsSelect();
     };
-
-    toggleTermsSelect() {
-        this.setState({
-            leaseTermsSelectOpened: !this.state.leaseTermsSelectOpened,
-        });
-    }
-
-    renderPaymentDescription() {
-        const { pricing } = this.props;
-
-        return (
-            <Popover
-                placement="left"
-                isOpen={this.state.paymentPopoverOpen}
-                target="lease-explain"
-                toggle={this.togglePaymentDescription.bind(this)}
-            >
-                <PopoverHeader>Payment Breakdown</PopoverHeader>
-                <PopoverBody>
-                    <Line>
-                        <Label>Pre-Tax Payment</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.monthlyPreTaxPayment()}
-                            />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Use Tax</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.monthlyUseTax()} />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Monthly Payment</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.monthlyPayment()} />
-                        </Value>
-                    </Line>
-                </PopoverBody>
-            </Popover>
-        );
-    }
 
     render() {
         const { pricing } = this.props;
+
+        if (pricing.quoteIsLoading()) {
+            return <Loading size={4} />;
+        }
 
         return (
             <div>
@@ -96,22 +40,17 @@ export default class PaymentLease extends React.PureComponent {
                 </div>
                 <Separator />
                 <Group>
-                    {pricing.quoteIsLoading() && <Loading />}
-                    {pricing.quoteIsLoading() || (
-                        <div>
-                            <Line>
-                                <div>Select Lease Terms</div>
-                                <PaymentLeaseTermsSelect
-                                    pricing={pricing}
-                                    isOpen={this.state.leaseTermsSelectOpened}
-                                    toggle={this.toggleTermsSelect.bind(this)}
-                                    onChange={this.handleLeaseTermsChange.bind(
-                                        this
-                                    )}
-                                />
-                            </Line>
-                        </div>
-                    )}
+                    <div>
+                        <Line>
+                            <div>Select Lease Terms</div>
+                            <PaymentLeaseTermsSelect
+                                pricing={pricing}
+                                onChange={this.handleLeaseTermsChange.bind(
+                                    this
+                                )}
+                            />
+                        </Line>
+                    </div>
                 </Group>
                 <Separator />
                 <Group>

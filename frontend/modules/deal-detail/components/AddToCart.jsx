@@ -240,8 +240,6 @@ export default class AddToCart extends React.PureComponent {
             return (
                 <PaymentLease
                     pricing={pricing}
-                    onDiscountChange={this.props.handleDiscountChange}
-                    onRebatesChange={this.props.handleRebatesChange}
                     onChange={this.props.handleLeaseChange}
                 />
             );

@@ -17,10 +17,6 @@ export default class MSRPAndDiscount extends React.PureComponent {
         pricing: pricingType.isRequired,
     };
 
-    state = {
-        leaseTermsSelectOpened: false,
-    };
-
     render() {
         const { pricing, onDiscountChange } = this.props;
 
