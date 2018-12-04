@@ -1,13 +1,8 @@
 import React from 'react';
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import Group from '../../../../apps/pricing/components/Group';
-import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
 
-export default class CashPane extends React.PureComponent {
+export default class PaymentCash extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
     };

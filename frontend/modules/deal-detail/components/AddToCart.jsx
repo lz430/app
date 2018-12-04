@@ -1,27 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
+import classNames from 'classnames';
+import { Button } from 'reactstrap';
+
+import config from '../../../core/config';
+import Group from '../../../apps/pricing/components/Group';
+import Header from '../../../apps/pricing/components/Header';
+import Loading from '../../../components/Loading';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
 import TradeIn from './pricing/TradeIn';
-import CashPricingPane from './pricing/CashPane';
-import FinancePricingPane from './pricing/FinancePane';
-import LeasePricingPane from './pricing/LeasePane';
-import PaymentTypes from './pricing/PaymentTypes';
-import Loading from '../../../components/Loading';
 
-import { Button } from 'reactstrap';
-import config from '../../../core/config';
-import classNames from 'classnames';
+import PaymentCash from './pricing/PaymentCash';
+import PaymentFinance from './pricing/PaymentFinance';
+import PaymentLease from './pricing/PaymentLease';
+import PaymentStrategySelect from './pricing/PaymentStrategySelect';
 import Rebates from './pricing/Rebates';
-import Group from '../../../apps/pricing/components/Group';
-import Header from '../../../apps/pricing/components/Header';
-import Separator from '../../../apps/pricing/components/Separator';
-import Line from '../../../apps/pricing/components/Line';
-import Label from '../../../apps/pricing/components/Label';
-import Value from '../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../components/money/DollarsAndCents';
 import TaxesAndFees from './pricing/TaxesAndFees';
+import DetailLeaseDueAtDeliveryFees from './pricing/DetailLeaseDueAtDeliveryFees';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -188,7 +185,7 @@ export default class AddToCart extends React.PureComponent {
 
         if (purchaseStrategy === 'cash') {
             return (
-                <CashPricingPane
+                <PaymentCash
                     pricing={pricing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
@@ -198,7 +195,7 @@ export default class AddToCart extends React.PureComponent {
 
         if (purchaseStrategy === 'finance') {
             return (
-                <FinancePricingPane
+                <PaymentFinance
                     pricing={pricing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
@@ -241,7 +238,7 @@ export default class AddToCart extends React.PureComponent {
         // Lease
         if (purchaseStrategy === 'lease') {
             return (
-                <LeasePricingPane
+                <PaymentLease
                     pricing={pricing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
@@ -309,7 +306,7 @@ export default class AddToCart extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <PaymentTypes
+                <PaymentStrategySelect
                     {...{ purchaseStrategy }}
                     onChange={this.props.handlePaymentTypeChange}
                 />
@@ -321,13 +318,30 @@ export default class AddToCart extends React.PureComponent {
     renderDetailsStep() {
         const { pricing, purchaseStrategy } = this.props;
 
-        return (
-            <React.Fragment>
-                {purchaseStrategy !== 'lease' && (
+        if (purchaseStrategy === 'cash') {
+            return (
+                <React.Fragment>
                     <TaxesAndFees pricing={pricing} />
-                )}
-            </React.Fragment>
-        );
+                </React.Fragment>
+            );
+        }
+
+        if (purchaseStrategy === 'finance') {
+            return (
+                <React.Fragment>
+                    <TaxesAndFees pricing={pricing} />
+                </React.Fragment>
+            );
+        }
+
+        if (purchaseStrategy === 'lease') {
+            return (
+                <React.Fragment>
+                    <DetailLeaseDueAtDeliveryFees pricing={pricing} />
+                </React.Fragment>
+            );
+        }
+        return false;
     }
 
     render() {

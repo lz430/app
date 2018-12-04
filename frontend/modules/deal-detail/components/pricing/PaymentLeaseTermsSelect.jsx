@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Dollars from '../../../../components/money/Dollars';
 import { pricingType } from '../../../../core/types';
 
-export default class LeaseTermsSelect extends React.PureComponent {
+export default class PaymentLeaseTermsSelect extends React.PureComponent {
     static propTypes = {
         isOpen: PropTypes.bool.isRequired,
         toggle: PropTypes.func.isRequired,

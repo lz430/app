@@ -33,18 +33,35 @@ export default class FinancePricing extends Pricing {
             .add(this.cvrFee())
             .add(this.salesTax());
 
+    calculateDownPayment = downPaymentPercent => {
+        const calculatedDownPayment = this.yourPrice()
+            .multiply(downPaymentPercent)
+            .toRoundedUnit(0);
+
+        return fromWholeDollars(calculatedDownPayment);
+    };
+
     downPayment = () => {
         const downPayment = this.data.financeDownPayment;
 
         if (downPayment === null || downPayment === undefined) {
-            const calculatedDownPayment = this.yourPrice()
-                .multiply(defaultDownPaymentPercent)
-                .toRoundedUnit(0);
-
-            return fromWholeDollars(calculatedDownPayment);
+            return this.calculateDownPayment(defaultDownPaymentPercent);
         }
 
         return fromWholeDollars(downPayment);
+    };
+
+    downPaymentPercent = () => {
+        const downPayment = this.downPayment().toRoundedUnit(0);
+        if (!downPayment) {
+            return zero.toRoundedUnit(0);
+        }
+
+        const price = this.yourPrice().toRoundedUnit(0);
+
+        console.log('downPaymentPercent');
+        console.log(downPayment);
+        return Math.round((downPayment / price) * 100);
     };
 
     maxDownPayment = () => this.yourPrice().multiply(maxDownPaymentPercent);

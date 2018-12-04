@@ -11,14 +11,11 @@ import Header from '../../../../apps/pricing/components/Header';
 import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
-import LeaseTermsSelect from './LeaseTermsSelect';
+import PaymentLeaseTermsSelect from './PaymentLeaseTermsSelect';
 
-import { faEdit, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from 'reactstrap';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
-export default class LeasePane extends React.PureComponent {
+export default class PaymentLease extends React.PureComponent {
     static propTypes = {
         onDiscountChange: PropTypes.func.isRequired,
         onRebatesChange: PropTypes.func.isRequired,
@@ -38,9 +35,14 @@ export default class LeasePane extends React.PureComponent {
         });
     }
 
-    toggleDueDescription() {
+    handleLeaseTermsChange = (annualMileage, term, cashDue) => {
+        this.props.onChange(annualMileage, term, cashDue);
+        this.toggleTermsSelect();
+    };
+
+    toggleTermsSelect() {
         this.setState({
-            duePopoverOpen: !this.state.duePopoverOpen,
+            leaseTermsSelectOpened: !this.state.leaseTermsSelectOpened,
         });
     }
 
@@ -81,60 +83,6 @@ export default class LeasePane extends React.PureComponent {
         );
     }
 
-    renderDueDescription() {
-        const { pricing } = this.props;
-
-        return (
-            <Popover
-                placement="left"
-                isOpen={this.state.duePopoverOpen}
-                target="lease-due-explain"
-                toggle={this.toggleDueDescription.bind(this)}
-            >
-                <PopoverHeader>Due At Delivery Breakdown</PopoverHeader>
-                <PopoverBody>
-                    <Line>
-                        <Label>First Payment</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.firstPayment()} />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Doc Fee</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.docFeeWithTaxes()}
-                            />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Electronic Filing Fee</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.cvrFeeWithTaxes()}
-                            />
-                        </Value>
-                    </Line>
-                    <Line>
-                        <Label>Tax on Rebates</Label>
-                        <Value>
-                            <DollarsAndCents value={pricing.taxOnRebates()} />
-                        </Value>
-                    </Line>
-                    <Line isSectionTotal={true} isImportant={true}>
-                        <Label>Total Due</Label>
-                        <Value>
-                            <DollarsAndCents
-                                value={pricing.totalAmountAtDriveOff()}
-                            />
-                            *
-                        </Value>
-                    </Line>
-                </PopoverBody>
-            </Popover>
-        );
-    }
-
     render() {
         const { pricing } = this.props;
 
@@ -153,7 +101,7 @@ export default class LeasePane extends React.PureComponent {
                         <div>
                             <Line>
                                 <div>Select Lease Terms</div>
-                                <LeaseTermsSelect
+                                <PaymentLeaseTermsSelect
                                     pricing={pricing}
                                     isOpen={this.state.leaseTermsSelectOpened}
                                     toggle={this.toggleTermsSelect.bind(this)}
@@ -169,16 +117,7 @@ export default class LeasePane extends React.PureComponent {
                 <Group>
                     <Header>Due at Delivery</Header>
                     <Line isSectionTotal={true} isImportant={true}>
-                        <Label>
-                            Total Due{' '}
-                            <FontAwesomeIcon
-                                icon={faInfoCircle}
-                                className="cursor-pointer"
-                                id="lease-due-explain"
-                                onClick={this.toggleDueDescription.bind(this)}
-                            />
-                            {this.renderDueDescription()}
-                        </Label>
+                        <Label>Total Due</Label>
                         <Value>
                             <DollarsAndCents
                                 value={pricing.totalAmountAtDriveOff()}
@@ -189,16 +128,5 @@ export default class LeasePane extends React.PureComponent {
                 </Group>
             </div>
         );
-    }
-
-    handleLeaseTermsChange = (annualMileage, term, cashDue) => {
-        this.props.onChange(annualMileage, term, cashDue);
-        this.toggleTermsSelect();
-    };
-
-    toggleTermsSelect() {
-        this.setState({
-            leaseTermsSelectOpened: !this.state.leaseTermsSelectOpened,
-        });
     }
 }
