@@ -11,12 +11,25 @@ const maxNumberOfAnnualMileageOptionsInMatrix = 4;
 const annualMileageOptionsMustBeMoreThan = 7500; // miles
 
 export default class LeasePricing extends Pricing {
+    basePrice = () =>
+        this.discountedPrice()
+            .add(this.docFee())
+            .add(this.cvrFee())
+            .add(this.tradeIn().owed)
+            .subtract(this.tradeIn().value);
+
+    sellingPrice = () => this.withTaxAdded(this.basePrice());
+
+    yourPrice = () => this.sellingPrice().subtract(this.rebates());
+
     docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
     cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
     taxOnRebates = () => this.taxesFor(this.rebates());
 
     totalAmountAtDriveOff = () =>
         this.paymentDinero(payment => payment.totalAmountAtDriveOff);
+    cashDownCCR = () => this.paymentDinero(payment => payment.cashDownCCR);
+
     monthlyPayment = () =>
         this.paymentDinero(payment => payment.monthlyPayment);
     monthlyPreTaxPayment = () =>
@@ -44,11 +57,12 @@ export default class LeasePricing extends Pricing {
         return this.data.leaseAnnualMileage;
     };
 
-    /**
-     * @deprecated
-     */
     cashDue = () => {
-        return 0;
+        if (!this.data.leaseCashDue) {
+            return zero;
+        }
+
+        return fromDollarsAndCents(this.data.leaseCashDue);
     };
 
     canPurchase = () => {
@@ -68,7 +82,7 @@ export default class LeasePricing extends Pricing {
             .filter((term, termIndex) => termIndex < maxNumberOfTermsInMatrix);
     };
 
-    paymentsForTermAndCashDue = (term, annualMileage) => {
+    paymentsForTermAndMileage = (term, annualMileage) => {
         const payments = this.payments();
 
         if (!payments) {
@@ -149,16 +163,12 @@ export default class LeasePricing extends Pricing {
             );
     };
 
-    isSelectedLeasePaymentForTermAndCashDue(term, annualMileage) {
+    isSelectedLeasePaymentForTermAndMileage(term, annualMileage) {
         if (term !== this.term()) {
             return false;
         }
 
-        if (annualMileage !== this.annualMileage()) {
-            return false;
-        }
-
-        return true;
+        return annualMileage === this.annualMileage();
     }
 
     calculateDefaultTerm = () => {

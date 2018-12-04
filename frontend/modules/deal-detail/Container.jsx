@@ -106,6 +106,13 @@ class DealDetailContainer extends React.PureComponent {
         ) {
             this.props.dealDetailRefreshDealQuote();
         }
+
+        if (
+            prevProps.dealPricingData.leaseCashDue !==
+            this.props.dealPricingData.leaseCashDue
+        ) {
+            this.props.dealDetailRefreshDealQuote();
+        }
     }
 
     handlePaymentTypeChange = strategy => {
