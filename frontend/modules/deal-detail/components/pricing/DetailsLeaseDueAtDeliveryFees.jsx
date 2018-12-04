@@ -59,13 +59,12 @@ export default class DetailsLeaseDueAtDeliveryFees extends React.PureComponent {
                             <DollarsAndCents value={pricing.cashDownCCR()} />
                         </Value>
                     </Line>
-                    <Line isSectionTotal={true} isImportant={true}>
+                    <Line isImportant>
                         <Label>Total Due</Label>
                         <Value>
                             <DollarsAndCents
                                 value={pricing.totalAmountAtDriveOff()}
                             />
-                            *
                         </Value>
                     </Line>
                 </Group>

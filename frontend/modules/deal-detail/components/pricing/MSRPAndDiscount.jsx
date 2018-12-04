@@ -37,7 +37,7 @@ export default class MSRPAndDiscount extends React.PureComponent {
                             />
                         </Value>
                     </Line>
-                    <Line style={{ marginBottom: '1rem' }}>
+                    <Line style={{ marginBottom: '1rem' }} isImportant>
                         <Label style={{ margin: 0 }}>Your Price</Label>
                         <Value isLoading={pricing.quoteIsLoading()}>
                             <DollarsAndCents
@@ -47,7 +47,6 @@ export default class MSRPAndDiscount extends React.PureComponent {
                     </Line>
                     <Discount pricing={pricing} onChange={onDiscountChange} />
                 </Group>
-                <Separator />
             </div>
         );
     }
