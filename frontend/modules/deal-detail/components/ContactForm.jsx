@@ -101,17 +101,16 @@ class ContactForm extends React.Component {
                     } else {
                         button = (
                             <Button type="submit" color="primary" size="md">
-                                Submit
+                                Send my question
                             </Button>
                         );
                     }
 
                     return (
-                        <Form>
+                        <Form className="deal__contact">
                             <Row>
                                 <Col>
                                     <FormGroup>
-                                        <Label for="subject" />
                                         <FormikFieldWithBootstrapInput
                                             type="text"
                                             name="subject"
@@ -128,7 +127,7 @@ class ContactForm extends React.Component {
                                             type="text"
                                             name="firstname"
                                             id="firstname"
-                                            placeholder="Jane"
+                                            placeholder="First Name"
                                         />
                                     </FormGroup>
                                 </Col>
@@ -138,7 +137,7 @@ class ContactForm extends React.Component {
                                             type="text"
                                             name="lastname"
                                             id="lastname"
-                                            placeholder="Smith"
+                                            placeholder="Last Name"
                                         />
                                     </FormGroup>
                                 </Col>

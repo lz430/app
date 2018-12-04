@@ -71,6 +71,28 @@
             }
         }
     }
+    &__contact {
+        input[type='text'],
+        input[type='email'],
+        input[type='tel'],
+        select {
+            background-color: transparent;
+            border-top: 0 none;
+            border-left: 0 none;
+            border-right: 0 none;
+            border-bottom: 1px solid $color-grey;
+            color: $color-black;
+
+            &::placeholder {
+                color: $color-darkgrey;
+            }
+
+            &:active,
+            &:focus {
+                background-color: transparent;
+            }
+        }
+    }
 }
 
 .thumbnail-container {
