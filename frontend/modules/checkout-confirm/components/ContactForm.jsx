@@ -76,6 +76,7 @@ class ContactForm extends React.Component {
 
                         button = (
                             <Button
+                                className="border-radius-0"
                                 type="submit"
                                 color="success"
                                 size="lg"
@@ -87,89 +88,98 @@ class ContactForm extends React.Component {
                     }
 
                     return (
-                        <Form>
-                            <FormGroup>
-                                <Label for="first_name">First Name</Label>
-                                <FormikFieldWithBootstrapInput
-                                    type="text"
-                                    name="first_name"
-                                    id="first_name"
-                                    placeholder="Jane"
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="last_name">Last Name</Label>
-                                <FormikFieldWithBootstrapInput
-                                    type="text"
-                                    name="last_name"
-                                    id="last_name"
-                                    placeholder="Smith"
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="email">Email</Label>
-                                <FormikFieldWithBootstrapInput
-                                    type="email"
-                                    name="email"
-                                    id="email"
-                                    placeholder="jane@example.com"
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="phone_number">Phone</Label>
-                                <FormikFieldWithBootstrapInput
-                                    type="tel"
-                                    name="phone_number"
-                                    id="phone_number"
-                                    placeholder="(231) 225 5555"
-                                />
-                            </FormGroup>
-                            <div className="d-flex">
-                                <div className="pr-2 flex-grow-1 ">
+                        <React.Fragment>
+                            <Form>
+                                <div className="pl-4 pr-4 pt-2">
                                     <FormGroup>
-                                        <Label for="drivers_license_number">
-                                            Drivers License Number
+                                        <Label for="first_name">
+                                            First Name
                                         </Label>
                                         <FormikFieldWithBootstrapInput
                                             type="text"
-                                            name="drivers_license_number"
-                                            id="drivers_license_number"
-                                            placeholder=""
+                                            name="first_name"
+                                            id="first_name"
+                                            placeholder="Jane"
                                         />
                                     </FormGroup>
-                                </div>
-                                <div className="pl-2">
                                     <FormGroup>
-                                        <Label for="drivers_license_state">
-                                            State
-                                        </Label>
+                                        <Label for="last_name">Last Name</Label>
                                         <FormikFieldWithBootstrapInput
-                                            type="select"
-                                            name="drivers_license_state"
-                                            id="drivers_license_state"
-                                        >
-                                            {states.map(item => (
-                                                <option
-                                                    key={item.abbreviation}
-                                                    value={item.abbreviation}
-                                                >
-                                                    {item.abbreviation}
-                                                </option>
-                                            ))}
-                                        </FormikFieldWithBootstrapInput>
+                                            type="text"
+                                            name="last_name"
+                                            id="last_name"
+                                            placeholder="Smith"
+                                        />
                                     </FormGroup>
+                                    <FormGroup>
+                                        <Label for="email">Email</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            placeholder="jane@example.com"
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="phone_number">Phone</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="tel"
+                                            name="phone_number"
+                                            id="phone_number"
+                                            placeholder="(231) 225 5555"
+                                        />
+                                    </FormGroup>
+                                    <div className="d-flex">
+                                        <div className="pr-2 flex-grow-1 ">
+                                            <FormGroup>
+                                                <Label for="drivers_license_number">
+                                                    Drivers License Number
+                                                </Label>
+                                                <FormikFieldWithBootstrapInput
+                                                    type="text"
+                                                    name="drivers_license_number"
+                                                    id="drivers_license_number"
+                                                    placeholder=""
+                                                />
+                                            </FormGroup>
+                                        </div>
+                                        <div className="pl-2">
+                                            <FormGroup>
+                                                <Label for="drivers_license_state">
+                                                    State
+                                                </Label>
+                                                <FormikFieldWithBootstrapInput
+                                                    type="select"
+                                                    name="drivers_license_state"
+                                                    id="drivers_license_state"
+                                                >
+                                                    {states.map(item => (
+                                                        <option
+                                                            key={
+                                                                item.abbreviation
+                                                            }
+                                                            value={
+                                                                item.abbreviation
+                                                            }
+                                                        >
+                                                            {item.abbreviation}
+                                                        </option>
+                                                    ))}
+                                                </FormikFieldWithBootstrapInput>
+                                            </FormGroup>
+                                        </div>
+                                    </div>
+                                    <Row>
+                                        <Col>
+                                            <FormikFieldWithreCaptcha name="g_recaptcha_response" />
+                                        </Col>
+                                    </Row>
                                 </div>
-                            </div>
-                            <Row>
-                                <Col>
-                                    <FormikFieldWithreCaptcha name="g_recaptcha_response" />
-                                </Col>
-                            </Row>
-
-                            <Row className="mt-3">
-                                <Col>{button}</Col>
-                            </Row>
-                        </Form>
+                                <Row className="mt-3">
+                                    <Col>{button}</Col>
+                                </Row>
+                            </Form>
+                        </React.Fragment>
                     );
                 }}
             </Formik>

@@ -144,11 +144,10 @@ export default class AddToCart extends React.PureComponent {
         let disclaimer;
 
         if (purchaseStrategy === 'cash') {
-            disclaimer = <div>* includes all taxes and dealer fees</div>;
+            disclaimer = false;
         } else if (purchaseStrategy === 'finance') {
             disclaimer = (
                 <div>
-                    * includes all taxes and dealer fees <br />
                     Payment calculated with 5% interest <br />
                     Monthly payment amount applies to qualified credit or lease
                     applicants having a minimum credit score of 740. Your
@@ -159,7 +158,6 @@ export default class AddToCart extends React.PureComponent {
         } else {
             disclaimer = (
                 <div>
-                    * includes all taxes and dealer fees <br />
                     Monthly payment amount applies to qualified credit or lease
                     applicants having a minimum credit score of 740. Your
                     monthly payment is established based on a full review of
@@ -443,7 +441,7 @@ export default class AddToCart extends React.PureComponent {
         if (!pricing) {
             return (
                 <div className="cart">
-                    <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
+                    <div className="p-4 bg-white border border-medium border-top-0">
                         <Loading />
                     </div>
                 </div>
@@ -454,7 +452,7 @@ export default class AddToCart extends React.PureComponent {
             <div className="cart">
                 {this.renderProgress()}
 
-                <div className="pt-4 pl-4 pr-4 bg-white border border-medium border-top-0">
+                <div className="p-4 bg-white border border-medium border-top-0">
                     {this.state.step === 0 && this.renderPriceStep()}
                     {this.state.step === 1 && this.renderPaymentStep()}
                     {this.state.step === 2 && this.renderDetailsStep()}

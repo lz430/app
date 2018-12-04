@@ -13,9 +13,9 @@ export default class DealColors extends React.PureComponent {
         const upholsteryType = strings.dealUpholsteryType(deal);
 
         return (
-            <span>
-                <span>
-                    {deal.color} Exterior{' '}
+            <div>
+                <div>
+                    Exterior: {deal.color}{' '}
                     <div
                         style={{
                             width: '15px',
@@ -26,12 +26,11 @@ export default class DealColors extends React.PureComponent {
                             display: 'inline-block',
                         }}
                     />
-                </span>
-                ,{' '}
-                <span>
-                    {deal.interior_color} {upholsteryType} Interior
-                </span>
-            </span>
+                </div>
+                <div>
+                    Interior: {deal.interior_color} {upholsteryType}
+                </div>
+            </div>
         );
     }
 }
