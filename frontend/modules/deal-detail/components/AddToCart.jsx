@@ -24,6 +24,7 @@ import Label from '../../../apps/pricing/components/Label';
 import Value from '../../../apps/pricing/components/Value';
 import DollarsAndCents from '../../../components/money/DollarsAndCents';
 import Separator from '../../../apps/pricing/components/Separator';
+import Group from '../../../apps/pricing/components/Group';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -331,7 +332,7 @@ export default class AddToCart extends React.PureComponent {
                     />
 
                     <TaxesAndFees pricing={pricing} />
-                    <Line isImportant={true} isSectionTotal={true}>
+                    <Line isImportant>
                         <Label>Total Selling Price</Label>
                         <Value>
                             <DollarsAndCents value={pricing.totalPrice()} />
@@ -353,6 +354,30 @@ export default class AddToCart extends React.PureComponent {
                         purchaseStrategy={purchaseStrategy}
                     />
                     <TaxesAndFees pricing={pricing} />
+                    <Group>
+                        <Line>
+                            <Label>Final Price</Label>
+                            <Value>
+                                <DollarsAndCents value={pricing.yourPrice()} />
+                            </Value>
+                        </Line>
+                        <Line>
+                            <Label>Down Payment</Label>
+                            <Value>
+                                <DollarsAndCents
+                                    value={pricing.downPayment()}
+                                />
+                            </Value>
+                        </Line>
+                        <Line isImportant>
+                            <Label>Total Financed Amount</Label>
+                            <Value>
+                                <DollarsAndCents
+                                    value={pricing.amountFinanced()}
+                                />
+                            </Value>
+                        </Line>
+                    </Group>
                 </React.Fragment>
             );
         }

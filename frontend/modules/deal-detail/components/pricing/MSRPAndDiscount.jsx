@@ -45,7 +45,6 @@ export default class MSRPAndDiscount extends React.PureComponent {
                             />
                         </Value>
                     </Line>
-                    <Separator />
                     <Discount pricing={pricing} onChange={onDiscountChange} />
                 </Group>
                 <Separator />

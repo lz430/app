@@ -61,7 +61,7 @@ export default class PaymentLease extends React.PureComponent {
                     <div className="pr-1">
                         <FormGroup>
                             <Label for="down-payment" className="text-sm">
-                                Cash Due
+                                Down Payment
                             </Label>
                             <Input
                                 type="text"

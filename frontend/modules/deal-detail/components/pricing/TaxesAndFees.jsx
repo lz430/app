@@ -37,7 +37,7 @@ export default class TaxesAndFees extends React.PureComponent {
                         <DollarsAndCents value={pricing.salesTax()} />
                     </Value>
                 </Line>
-                <Line isSectionTotal={true}>
+                <Line isImportant>
                     <Label>Total Taxes & Fees</Label>
                     <Value>
                         <DollarsAndCents value={pricing.taxesAndFees()} />

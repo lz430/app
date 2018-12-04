@@ -5,6 +5,8 @@ import config from '../../../../core/config';
 
 import Line from '../../../../apps/pricing/components/Line';
 import classNames from 'classnames';
+import Separator from '../../../../apps/pricing/components/Separator';
+import Group from '../../../../apps/pricing/components/Group';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {
@@ -13,7 +15,9 @@ export default class Discount extends React.PureComponent {
     };
 
     handleChange(role, make) {
-        this.props.onChange(role, make);
+        if (role !== this.props.pricing.discountType()) {
+            this.props.onChange(role, make);
+        }
     }
 
     renderProofOfEligibility = () => {
@@ -79,36 +83,39 @@ export default class Discount extends React.PureComponent {
             pricing.make()
         );
 
+        if (!shouldRenderSupplierPricing && !shouldRenderEmployeePricing) {
+            return false;
+        }
+
         return (
             <div>
                 <Line>{this.renderPrimaryRole('dmr')}</Line>
-                {(shouldRenderEmployeePricing ||
-                    shouldRenderSupplierPricing) && (
-                    <div>
-                        <div
-                            style={{
-                                fontSize: '.75em',
-                                marginLeft: '.25em',
-                            }}
-                        >
-                            Or select from the following:
-                        </div>
-                        {shouldRenderEmployeePricing && (
-                            <Line>
-                                {this.renderPrimaryRole('employee')}
-                                {pricing.isEffectiveDiscountEmployee() &&
-                                    this.renderProofOfEligibility()}
-                            </Line>
-                        )}
-                        {shouldRenderSupplierPricing && (
-                            <Line>
-                                {this.renderPrimaryRole('supplier')}
-                                {pricing.isEffectiveDiscountSupplier() &&
-                                    this.renderProofOfEligibility()}
-                            </Line>
-                        )}
+
+                <div>
+                    <div
+                        style={{
+                            fontSize: '.75em',
+                            marginLeft: '.25em',
+                        }}
+                    >
+                        Or select from the following:
                     </div>
-                )}
+                    {shouldRenderEmployeePricing && (
+                        <Line>
+                            {this.renderPrimaryRole('employee')}
+                            {pricing.isEffectiveDiscountEmployee() &&
+                                this.renderProofOfEligibility()}
+                        </Line>
+                    )}
+                    {shouldRenderSupplierPricing && (
+                        <Line>
+                            {this.renderPrimaryRole('supplier')}
+                            {pricing.isEffectiveDiscountSupplier() &&
+                                this.renderProofOfEligibility()}
+                        </Line>
+                    )}
+                </div>
+                <Separator />
             </div>
         );
     }
