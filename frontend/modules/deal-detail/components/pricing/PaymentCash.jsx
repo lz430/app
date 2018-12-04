@@ -16,7 +16,6 @@ export default class PaymentCash extends React.PureComponent {
                 <h3 className="font-weight-bold m-0">
                     <DollarsAndCents value={pricing.yourPrice()} />
                 </h3>
-                <div>Taxes and fees included</div>
             </div>
         );
     }

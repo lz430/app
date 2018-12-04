@@ -25,6 +25,7 @@ import Line from '../../../apps/pricing/components/Line';
 import Label from '../../../apps/pricing/components/Label';
 import Value from '../../../apps/pricing/components/Value';
 import DollarsAndCents from '../../../components/money/DollarsAndCents';
+import Separator from '../../../apps/pricing/components/Separator';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -293,20 +294,12 @@ export default class AddToCart extends React.PureComponent {
                         pricing={pricing}
                     />
                 )}
-
-                <Group>
-                    <Header>Rebates</Header>
-                    <Rebates
-                        pricing={pricing}
-                        onChange={this.props.handleRebatesChange}
-                    />
-                </Group>
             </React.Fragment>
         );
     }
 
     renderPaymentStep() {
-        const { purchaseStrategy } = this.props;
+        const { pricing, purchaseStrategy } = this.props;
 
         return (
             <React.Fragment>
@@ -315,6 +308,11 @@ export default class AddToCart extends React.PureComponent {
                     onChange={this.props.handlePaymentTypeChange}
                 />
                 {this.renderPane()}
+                <Separator showIf={pricing.hasPotentialConditionalRebates()} />
+                <Rebates
+                    pricing={pricing}
+                    onChange={this.props.handleRebatesChange}
+                />
             </React.Fragment>
         );
     }

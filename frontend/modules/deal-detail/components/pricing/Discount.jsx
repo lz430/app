@@ -73,16 +73,6 @@ export default class Discount extends React.PureComponent {
                 >
                     {label}
                 </div>
-                {checked && (
-                    <div className="cart__discount_role_price text-sm">
-                        <DollarsAndCents value={price} />
-                    </div>
-                )}
-                {!!(checked && discount.getAmount()) && (
-                    <div className="cart__discount_role_savings text-sm">
-                        Savings: -<DollarsAndCents value={discount} />
-                    </div>
-                )}
             </div>
         );
     }

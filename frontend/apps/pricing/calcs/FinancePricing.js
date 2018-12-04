@@ -56,11 +56,7 @@ export default class FinancePricing extends Pricing {
         if (!downPayment) {
             return zero.toRoundedUnit(0);
         }
-
         const price = this.yourPrice().toRoundedUnit(0);
-
-        console.log('downPaymentPercent');
-        console.log(downPayment);
         return Math.round((downPayment / price) * 100);
     };
 

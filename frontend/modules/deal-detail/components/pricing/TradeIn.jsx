@@ -119,7 +119,6 @@ export default class TradeIn extends React.PureComponent {
                 <Header>Trade In</Header>
                 {!showTradeResults && this.renderTradeStartCta()}
                 {showTradeResults && this.renderTradeResults()}
-                <hr />
             </Group>
         );
     }

@@ -13,6 +13,8 @@ import RebatesRole from './RebatesRole';
 
 import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Group from '../../../../apps/pricing/components/Group';
+import Header from '../../../../apps/pricing/components/Header';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -181,45 +183,15 @@ class Rebates extends React.Component {
     render() {
         const pricing = this.props.pricing;
 
+        if (!pricing.hasPotentialConditionalRebates()) {
+            return false;
+        }
+
         return (
-            <div>
-                {/*
-                Conditional Rebates Selection
-                */}
-
-                {this.shouldRenderConditionalSelection() &&
-                    this.renderConditionalRebates()}
-
-                {/*
-                Total Rebates
-                */}
-                {pricing.hasRebatesApplied() || (
-                    <Line>
-                        <Label>No rebates applied</Label>
-                    </Line>
-                )}
-
-                {pricing.hasRebatesApplied() && (
-                    <Line isSectionTotal={true}>
-                        <Label>
-                            Total Rebates Applied{' '}
-                            <FontAwesomeIcon
-                                icon={faInfoCircle}
-                                className="cursor-pointer"
-                                id="rebates-explain"
-                                onClick={this.toggle.bind(this)}
-                            />
-                        </Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={pricing.quoteIsLoading()}
-                        >
-                            <DollarsAndCents value={pricing.rebates()} />
-                        </Value>
-                        {this.renderDescription()}
-                    </Line>
-                )}
-            </div>
+            <Group>
+                <Header>Rebates</Header>
+                {this.renderConditionalRebates()}
+            </Group>
         );
     }
 }

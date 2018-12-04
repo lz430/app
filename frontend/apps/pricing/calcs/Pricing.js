@@ -52,6 +52,16 @@ export default class Pricing {
         return zero;
     };
 
+    hasPotentialConditionalRebates = () => {
+        const quote = this.quote();
+        return !!(
+            quote &&
+            quote.selections &&
+            quote.selections.conditionalRoles &&
+            quote.selections.conditionalRoles.length
+        );
+    };
+
     canPurchase = () => {
         return this.quoteIsLoaded();
     };
@@ -107,6 +117,9 @@ export default class Pricing {
 
     discountedAndRebatedPrice = () =>
         this.discountedPrice().subtract(this.rebates());
+
+    discountsAndRebatesValue = () =>
+        this.msrp().subtract(this.discountedAndRebatedPrice());
 
     isEffectiveDiscountEmployee = () => {
         return (

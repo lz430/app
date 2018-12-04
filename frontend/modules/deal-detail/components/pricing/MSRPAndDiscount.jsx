@@ -29,10 +29,20 @@ export default class MSRPAndDiscount extends React.PureComponent {
                             <DollarsAndCents value={pricing.msrp()} />
                         </Value>
                     </Line>
+                    <Line>
+                        <Label style={{ margin: 0 }}>Discounts & Rebates</Label>
+                        <Value isNegative={true}>
+                            <DollarsAndCents
+                                value={pricing.discountsAndRebatesValue()}
+                            />
+                        </Value>
+                    </Line>
                     <Line style={{ marginBottom: '1rem' }}>
-                        <Label style={{ margin: 0 }}>Total Selling Price</Label>
+                        <Label style={{ margin: 0 }}>Your Price</Label>
                         <Value isLoading={pricing.quoteIsLoading()}>
-                            <DollarsAndCents value={pricing.yourPrice()} />*
+                            <DollarsAndCents
+                                value={pricing.discountedAndRebatedPrice()}
+                            />
                         </Value>
                     </Line>
                     <Separator />
