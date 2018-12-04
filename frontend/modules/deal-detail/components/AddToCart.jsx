@@ -300,15 +300,6 @@ export default class AddToCart extends React.PureComponent {
                         onChange={this.props.handleRebatesChange}
                     />
                 </Group>
-
-                <Separator />
-
-                <Line style={{ marginBottom: '1rem' }}>
-                    <Label style={{ margin: 0 }}>Total Selling Price</Label>
-                    <Value isLoading={pricing.quoteIsLoading()}>
-                        <DollarsAndCents value={pricing.yourPrice()} />*
-                    </Value>
-                </Line>
             </React.Fragment>
         );
     }

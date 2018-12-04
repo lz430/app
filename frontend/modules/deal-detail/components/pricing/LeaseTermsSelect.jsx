@@ -18,7 +18,7 @@ export default class LeaseTermsSelect extends React.PureComponent {
             <thead>
                 <tr>
                     <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                        Annual Miles
+                        Miles/Yr.
                     </td>
                     {pricing.termsAvailable().map((term, index) => {
                         return (
@@ -26,7 +26,7 @@ export default class LeaseTermsSelect extends React.PureComponent {
                                 className="cash-finance-lease-calculator__lease-table-cell--dark"
                                 key={index}
                             >
-                                {term} Months
+                                {term} MO
                             </td>
                         );
                     })}
@@ -105,24 +105,12 @@ export default class LeaseTermsSelect extends React.PureComponent {
         }
 
         return (
-            <Modal
-                size="content-fit"
-                centered
-                isOpen={this.props.isOpen || false}
-                toggle={this.props.toggle}
-            >
-                <ModalHeader toggle={this.props.toggle}>
-                    Select your lease terms
-                </ModalHeader>
-                <ModalBody>
-                    <div className="cash-finance-lease-calculator__lease-table-container">
-                        <table className="cash-finance-lease-calculator__lease-table">
-                            {this.renderTableHeader(pricing)}
-                            {this.renderTableBody(pricing)}
-                        </table>
-                    </div>
-                </ModalBody>
-            </Modal>
+            <div className="cash-finance-lease-calculator__lease-table-container">
+                <table className="cash-finance-lease-calculator__lease-table text-sm">
+                    {this.renderTableHeader(pricing)}
+                    {this.renderTableBody(pricing)}
+                </table>
+            </div>
         );
     }
 }

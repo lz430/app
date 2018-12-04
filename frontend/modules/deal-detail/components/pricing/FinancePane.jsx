@@ -6,21 +6,11 @@ import Line from '../../../../apps/pricing/components/Line';
 import Label from '../../../../apps/pricing/components/Label';
 import Value from '../../../../apps/pricing/components/Value';
 import Group from '../../../../apps/pricing/components/Group';
-import Header from '../../../../apps/pricing/components/Header';
-import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
-import {
-    Popover,
-    PopoverHeader,
-    PopoverBody,
-    Button,
-    ButtonGroup,
-} from 'reactstrap';
-import Rebates from './Rebates';
-import TaxesAndFees from './TaxesAndFees';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
+import { Button, ButtonGroup, Input, FormGroup } from 'reactstrap';
+
+import Separator from '../../../../apps/pricing/components/Separator';
 
 export default class FinancePane extends React.PureComponent {
     static propTypes = {
@@ -30,17 +20,7 @@ export default class FinancePane extends React.PureComponent {
         pricing: pricingType.isRequired,
     };
 
-    state = {
-        popoverOpen: false,
-    };
-
     terms = [24, 36, 48, 60, 72, 84];
-
-    toggle() {
-        this.setState({
-            popoverOpen: !this.state.popoverOpen,
-        });
-    }
 
     handleDownPaymentChange = e => {
         const newDownPayment = Number(
@@ -68,60 +48,62 @@ export default class FinancePane extends React.PureComponent {
         this.props.onTermChange(Number(term));
     }
 
-    renderDescription() {
-        const { pricing } = this.props;
-
-        return (
-            <Popover
-                placement="left"
-                isOpen={this.state.popoverOpen}
-                target="finance-explain"
-                toggle={this.toggle.bind(this)}
-            >
-                <PopoverHeader>Finance Breakdown</PopoverHeader>
-                <PopoverBody className="text-sm">
-                    <Line>
-                        <Label>Amount Financed </Label>
-                        <Value
-                            style={{
-                                marginLeft: '10px',
-                                display: 'inline-block',
-                            }}
-                        >
-                            <DollarsAndCents value={pricing.amountFinanced()} />
-                        </Value>
-                    </Line>
-                </PopoverBody>
-            </Popover>
-        );
-    }
-
     render() {
         const { pricing } = this.props;
 
         return (
             <div>
+                <div className="text-center mb-4 mt-4">
+                    <div>Your Finance Payment</div>
+                    <h3 className="font-weight-bold m-0">
+                        <DollarsAndCents value={pricing.monthlyPayment()} />
+                    </h3>
+                </div>
+                <Separator />
                 <Group isLoading={pricing.quoteIsLoading()}>
                     {pricing.quoteIsLoading() && <Loading />}
                     {pricing.quoteIsLoading() || (
                         <div>
-                            <div className="cart__finance-down-payment">
-                                <input
-                                    className="border border-primary text-center p-1 text-center"
-                                    type="text"
-                                    name="down-payment"
-                                    value={pricing
-                                        .downPayment()
-                                        .toFormat('$0,0')}
-                                    onChange={this.handleDownPaymentChange}
-                                />
-                                <div className="text-sm">
-                                    Select Down Payment
+                            <div className="d-flex">
+                                <div className="pr-1">
+                                    <FormGroup>
+                                        <Label for="down-payment">
+                                            Down Payment
+                                        </Label>
+                                        <Input
+                                            type="text"
+                                            name="down-payment"
+                                            value={pricing
+                                                .downPayment()
+                                                .toFormat('$0,0')}
+                                            onChange={
+                                                this.handleDownPaymentChange
+                                            }
+                                        />
+                                    </FormGroup>
+                                </div>
+                                <div className="pl-1">
+                                    <FormGroup>
+                                        <Label for="down-payment">
+                                            Down Payment %
+                                        </Label>
+                                        <Input
+                                            type="text"
+                                            name="down-payment"
+                                            value={pricing
+                                                .downPayment()
+                                                .toFormat('$0,0')}
+                                            onChange={
+                                                this.handleDownPaymentChange
+                                            }
+                                        />
+                                    </FormGroup>
                                 </div>
                             </div>
 
-                            <div className="cart__finance-term text-center mt-3">
-                                <ButtonGroup>
+                            <div className="cart__finance-term">
+                                <div className="text-sm">Select Term</div>
+                                <ButtonGroup className="d-flex">
                                     {this.terms.map(term => (
                                         <Button
                                             key={term}
@@ -131,31 +113,13 @@ export default class FinancePane extends React.PureComponent {
                                                 this.handleTermChange(term)
                                             }
                                             active={pricing.term() === term}
+                                            className="w-100"
                                         >
                                             {term}
                                         </Button>
                                     ))}
                                 </ButtonGroup>
-                                <div className="text-sm">Select Term</div>
                             </div>
-                            <hr />
-                            <Line isImportant={true}>
-                                <Label>
-                                    Monthly Payment{' '}
-                                    <FontAwesomeIcon
-                                        icon={faInfoCircle}
-                                        className="cursor-pointer"
-                                        id="finance-explain"
-                                        onClick={this.toggle.bind(this)}
-                                    />
-                                    {this.renderDescription()}
-                                </Label>
-                                <Value>
-                                    <DollarsAndCents
-                                        value={pricing.monthlyPayment()}
-                                    />
-                                </Value>
-                            </Line>
                         </div>
                     )}
                 </Group>

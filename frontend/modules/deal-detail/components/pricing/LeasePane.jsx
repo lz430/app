@@ -12,7 +12,6 @@ import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import LeaseTermsSelect from './LeaseTermsSelect';
-import Rebates from './Rebates';
 
 import { faEdit, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -141,103 +140,27 @@ export default class LeasePane extends React.PureComponent {
 
         return (
             <div>
+                <div className="text-center mb-4 mt-4">
+                    <div>Your Lease Payment</div>
+                    <h3 className="font-weight-bold m-0">
+                        <DollarsAndCents value={pricing.monthlyPayment()} />
+                    </h3>
+                </div>
+                <Separator />
                 <Group>
-                    <Header>
-                        Lease Terms
-                        <Button
-                            color="primary"
-                            onClick={() => this.toggleTermsSelect()}
-                            style={{
-                                marginLeft: 'auto',
-                                fontSize: '0.8rem',
-                                padding: '0.1rem 0.25rem',
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faEdit} /> Edit
-                        </Button>
-                    </Header>
                     {pricing.quoteIsLoading() && <Loading />}
                     {pricing.quoteIsLoading() || (
                         <div>
                             <Line>
-                                <table
-                                    style={{
-                                        border: '1px solid black',
-                                        borderSpacing: 0,
-                                        padding: '.5em 0',
-                                        margin: '1em auto',
-                                        cursor: 'pointer',
-                                    }}
-                                    onClick={() => this.toggleTermsSelect()}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th
-                                                style={{
-                                                    fontWeight: 100,
-                                                    fontSize: '.75em',
-                                                    padding: '.25em 1em 0',
-                                                    borderRight:
-                                                        '1px solid black',
-                                                }}
-                                            >
-                                                Annual Miles
-                                            </th>
-                                            <th
-                                                style={{
-                                                    fontWeight: 100,
-                                                    fontSize: '.75em',
-                                                    padding: '.25em 1em 0',
-                                                }}
-                                            >
-                                                Months
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td
-                                                style={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 'bold',
-                                                    padding: '0 1em .25em',
-                                                    borderRight:
-                                                        '1px solid black',
-                                                }}
-                                            >
-                                                {pricing.annualMileage()}
-                                            </td>
-                                            <td
-                                                style={{
-                                                    textAlign: 'center',
-                                                    fontWeight: 'bold',
-                                                    padding: '0 1em .25em',
-                                                }}
-                                            >
-                                                {pricing.term()}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </Line>
-                            <Line isImportant={true}>
-                                <Label>
-                                    Monthly Payment{' '}
-                                    <FontAwesomeIcon
-                                        icon={faInfoCircle}
-                                        className="cursor-pointer"
-                                        id="lease-explain"
-                                        onClick={this.togglePaymentDescription.bind(
-                                            this
-                                        )}
-                                    />
-                                    {this.renderPaymentDescription()}
-                                </Label>
-                                <Value>
-                                    <DollarsAndCents
-                                        value={pricing.monthlyPayment()}
-                                    />
-                                </Value>
+                                <div>Select Lease Terms</div>
+                                <LeaseTermsSelect
+                                    pricing={pricing}
+                                    isOpen={this.state.leaseTermsSelectOpened}
+                                    toggle={this.toggleTermsSelect.bind(this)}
+                                    onChange={this.handleLeaseTermsChange.bind(
+                                        this
+                                    )}
+                                />
                             </Line>
                         </div>
                     )}
@@ -264,14 +187,6 @@ export default class LeasePane extends React.PureComponent {
                         </Value>
                     </Line>
                 </Group>
-                {this.state.leaseTermsSelectOpened && (
-                    <LeaseTermsSelect
-                        pricing={pricing}
-                        isOpen={this.state.leaseTermsSelectOpened}
-                        toggle={this.toggleTermsSelect.bind(this)}
-                        onChange={this.handleLeaseTermsChange.bind(this)}
-                    />
-                )}
             </div>
         );
     }
