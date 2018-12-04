@@ -59,6 +59,7 @@
         }
 
         &.disabled {
+            cursor: not-allowed;
             background: $gray-400;
             &:after {
                 border-left: 17px solid $gray-400;
