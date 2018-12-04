@@ -58,7 +58,7 @@ export default class Pricing {
             quote &&
             quote.selections &&
             quote.selections.conditionalRoles &&
-            quote.selections.conditionalRoles.length
+            Object.keys(quote.selections.conditionalRoles).length
         );
     };
 
