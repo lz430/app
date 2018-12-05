@@ -25,7 +25,11 @@ import {
     getTradeIn,
     getLease,
 } from './selectors';
-import { dealDetailReceiveDealQuote, receiveDeal } from './actions';
+import {
+    dealDetailReceiveDealQuote,
+    receiveDeal,
+    setQuoteIsLoading,
+} from './actions';
 import { cancelRequest } from '../../store/httpclient';
 
 /*******************************************************************
@@ -37,7 +41,7 @@ import { cancelRequest } from '../../store/httpclient';
  */
 function* dealDetailRequestDealQuote() {
     const source = cancelRequest();
-
+    yield put(setQuoteIsLoading(true));
     const deal = yield select(getDeal);
     const location = yield select(getUserLocation);
     const purchaseStrategy = yield select(getUserPurchaseStrategy);
@@ -90,6 +94,7 @@ function* dealDetailRequestDealQuote() {
     }
 
     yield put(dealDetailReceiveDealQuote(results));
+    yield put(setQuoteIsLoading(false));
 }
 
 /*******************************************************************

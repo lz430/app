@@ -31,6 +31,7 @@ export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
         handleDiscountChange: PropTypes.func.isRequired,
         handleRebatesChange: PropTypes.func.isRequired,
@@ -168,6 +169,7 @@ export default class AddToCart extends React.PureComponent {
             return (
                 <PaymentCash
                     pricing={pricing}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
                 />
@@ -178,6 +180,7 @@ export default class AddToCart extends React.PureComponent {
             return (
                 <PaymentFinance
                     pricing={pricing}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
                     onDownPaymentChange={
@@ -222,6 +225,7 @@ export default class AddToCart extends React.PureComponent {
                 <PaymentLease
                     pricing={pricing}
                     onChange={this.props.handleLeaseChange}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                 />
             );
         }

@@ -13,8 +13,9 @@ import { Input, FormGroup, Label } from 'reactstrap';
 
 export default class PaymentLease extends React.PureComponent {
     static propTypes = {
-        onChange: PropTypes.func.isRequired,
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         pricing: pricingType.isRequired,
+        onChange: PropTypes.func.isRequired,
     };
 
     handleLeaseTermsChange = (annualMileage, term, cashDue) => {
@@ -50,11 +51,12 @@ export default class PaymentLease extends React.PureComponent {
 
         return (
             <div>
-                <div className="text-center mb-4 mt-4">
+                <div className="cart__payment-summary text-center mb-4 mt-4">
                     <div>Your Lease Payment</div>
                     <h3 className="font-weight-bold m-0">
                         <DollarsAndCents value={pricing.monthlyPayment()} />
                     </h3>
+                    {this.props.isDealQuoteRefreshing && <Loading size={2} />}
                 </div>
                 <Separator />
                 <div className="d-flex">

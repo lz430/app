@@ -11,6 +11,7 @@ import Separator from '../../../../apps/pricing/components/Separator';
 
 export default class PaymentFinance extends React.PureComponent {
     static propTypes = {
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         onRebatesChange: PropTypes.func.isRequired,
         onDownPaymentChange: PropTypes.func.isRequired,
         onTermChange: PropTypes.func.isRequired,
@@ -50,11 +51,12 @@ export default class PaymentFinance extends React.PureComponent {
 
         return (
             <div>
-                <div className="text-center mb-4 mt-4">
+                <div className="cart__payment-summary text-center mb-4 mt-4">
                     <div>Your Finance Payment</div>
                     <h3 className="font-weight-bold m-0">
                         <DollarsAndCents value={pricing.monthlyPayment()} />
                     </h3>
+                    {this.props.isDealQuoteRefreshing && <Loading size={2} />}
                 </div>
                 <Separator />
                 <Group isLoading={pricing.quoteIsLoading()}>
