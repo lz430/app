@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 use Backpack\CRUD\CrudTrait;
+use App\Models\JATO\Version;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use DeliverMyRide\Fuel\Map as ColorMaps;
@@ -29,4 +30,9 @@ class Option extends Model
         'option_state',
         'option_description'
     ];
+
+    public function version(): BelongsTo
+    {
+        return $this->belongsTo(Version::class);
+    }
 }

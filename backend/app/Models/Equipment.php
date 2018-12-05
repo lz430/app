@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\JATO\Version;
 use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
@@ -17,9 +18,9 @@ class Equipment extends Model
 {
     protected $guarded = ['id'];
 
-    protected $casts = [
+    /*protected $casts = [
         'attributes' => 'object',
-    ];
+    ];*/
 
     protected $fillable = [
         'version_id',
@@ -33,4 +34,9 @@ class Equipment extends Model
         'value',
         'attributes',
     ];
+
+    public function version(): BelongsTo
+    {
+        return $this->belongsTo(Version::class);
+    }
 }

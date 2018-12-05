@@ -46,7 +46,6 @@ class VersionPopulateEquipmentAndOptions extends Command
      */
     public function handle()
     {
-
         $data = Version::query();
         $versions = $data->whereHas('deals', function ($query) {
             $query->where('status', 'available');
