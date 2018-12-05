@@ -48,7 +48,9 @@ class RebatesRole extends React.Component {
                         <p style={{ color: 'red' }}>
                             Rebate Expires: {this.props.role.stopDate}
                         </p>
+                        <p>Value: ${this.props.role.value}</p>
                         <div
+                            className="text-sm"
                             dangerouslySetInnerHTML={{
                                 __html: this.props.role.description,
                             }}
@@ -60,12 +62,13 @@ class RebatesRole extends React.Component {
     }
 
     render() {
-        const role = this.props.role;
+        const { role } = this.props;
         let canUserHaveRebatePerAffinity;
-        if (
-            this.props.role.isSelected === true &&
-            this.props.role.isApplied === false
-        ) {
+
+        const wasRoleCancelled =
+            role.isSelected === true && role.isApplied === false;
+
+        if (wasRoleCancelled) {
             canUserHaveRebatePerAffinity = (
                 <span style={{ textDecorationLine: 'line-through' }}>
                     {role.title}
@@ -108,7 +111,7 @@ class RebatesRole extends React.Component {
                     />
                     {this.renderProgramExplanationModal()}
                     {this.props.isRoleChecked &&
-                        role.help && (
+                        (canUserHaveRebatePerAffinity || role.help) && (
                             <div
                                 style={{
                                     fontStyle: 'italic',
@@ -116,7 +119,13 @@ class RebatesRole extends React.Component {
                                     marginLeft: '.25em',
                                 }}
                             >
-                                {role.help}
+                                {!!role.help && role.help}{' '}
+                                {!wasRoleCancelled && (
+                                    <span>
+                                        ($
+                                        {role.value})
+                                    </span>
+                                )}
                             </div>
                         )}
                 </Line>

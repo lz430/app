@@ -11,6 +11,10 @@ export const getDealDetailQuote = state => {
     return state.pages.dealDetails.quote;
 };
 
+export const getIsDealQuoteRefreshing = state => {
+    return state.pages.dealDetails.isQuoteLoading;
+};
+
 export const dealQuoteIsLoading = createSelector(
     [getDealDetailQuote],
     quote => {
@@ -28,6 +32,10 @@ export const getConditionalRoles = state => {
 
 export const getTradeIn = state => {
     return state.pages.dealDetails.trade;
+};
+
+export const getLease = state => {
+    return state.pages.dealDetails.lease;
 };
 
 const employeeBrand = state => {
@@ -107,6 +115,7 @@ export const dealPricingDataForDetail = createSelector(
             financeTerm,
             leaseAnnualMileage: dealLeaseAnnualMileage,
             leaseTerm: dealLeaseTerm,
+            leaseCashDue: dealLeaseCashDue,
             discountType,
             tradeIn,
             dealQuoteIsLoading,

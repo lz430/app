@@ -8,18 +8,12 @@ import Value from '../../../../apps/pricing/components/Value';
 import Group from '../../../../apps/pricing/components/Group';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import Discount from './Discount';
-import Separator from '../../../../apps/pricing/components/Separator';
 
 export default class MSRPAndDiscount extends React.PureComponent {
     static propTypes = {
         onDiscountChange: PropTypes.func.isRequired,
-        onRebatesChange: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
         pricing: pricingType.isRequired,
-    };
-
-    state = {
-        leaseTermsSelectOpened: false,
     };
 
     render() {
@@ -34,10 +28,24 @@ export default class MSRPAndDiscount extends React.PureComponent {
                             <DollarsAndCents value={pricing.msrp()} />
                         </Value>
                     </Line>
-                    <Separator />
+                    <Line>
+                        <Label style={{ margin: 0 }}>Discounts & Rebates</Label>
+                        <Value isNegative={true}>
+                            <DollarsAndCents
+                                value={pricing.discountsAndRebatesValue()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line style={{ marginBottom: '1rem' }} isImportant>
+                        <Label style={{ margin: 0 }}>Your Price</Label>
+                        <Value isLoading={pricing.quoteIsLoading()}>
+                            <DollarsAndCents
+                                value={pricing.discountedAndRebatedPrice()}
+                            />
+                        </Value>
+                    </Line>
                     <Discount pricing={pricing} onChange={onDiscountChange} />
                 </Group>
-                <Separator />
             </div>
         );
     }

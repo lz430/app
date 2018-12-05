@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import classNames from 'classnames';
 
-class PaymentTypes extends React.PureComponent {
+class PaymentStrategySelect extends React.PureComponent {
     static propTypes = {
         onChange: PropTypes.func.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
@@ -65,4 +65,4 @@ class PaymentTypes extends React.PureComponent {
     }
 }
 
-export default PaymentTypes;
+export default PaymentStrategySelect;

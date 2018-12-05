@@ -3,16 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { sortBy, prop, map } from 'ramda';
 
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 import RebatesRole from './RebatesRole';
 
-import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Group from '../../../../apps/pricing/components/Group';
+import Header from '../../../../apps/pricing/components/Header';
 
 class Rebates extends React.Component {
     static propTypes = {
@@ -101,16 +97,6 @@ class Rebates extends React.Component {
         return sortBy(prop('title'), arrayRoles);
     }
 
-    shouldRenderConditionalSelection() {
-        const quote = this.props.pricing.quote();
-
-        if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
-            return false;
-        }
-
-        return true;
-    }
-
     renderConditionalRebates() {
         const quote = this.props.pricing.quote();
         const roles = this.getRoles(quote.selections.conditionalRoles);
@@ -181,45 +167,15 @@ class Rebates extends React.Component {
     render() {
         const pricing = this.props.pricing;
 
+        if (!pricing.hasPotentialConditionalRebates()) {
+            return false;
+        }
+
         return (
-            <div>
-                {/*
-                Conditional Rebates Selection
-                */}
-
-                {this.shouldRenderConditionalSelection() &&
-                    this.renderConditionalRebates()}
-
-                {/*
-                Total Rebates
-                */}
-                {pricing.hasRebatesApplied() || (
-                    <Line>
-                        <Label>No rebates applied</Label>
-                    </Line>
-                )}
-
-                {pricing.hasRebatesApplied() && (
-                    <Line isSectionTotal={true}>
-                        <Label>
-                            Total Rebates Applied{' '}
-                            <FontAwesomeIcon
-                                icon={faInfoCircle}
-                                className="cursor-pointer"
-                                id="rebates-explain"
-                                onClick={this.toggle.bind(this)}
-                            />
-                        </Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={pricing.quoteIsLoading()}
-                        >
-                            <DollarsAndCents value={pricing.rebates()} />
-                        </Value>
-                        {this.renderDescription()}
-                    </Line>
-                )}
-            </div>
+            <Group>
+                <Header>Rebates</Header>
+                {this.renderConditionalRebates()}
+            </Group>
         );
     }
 }

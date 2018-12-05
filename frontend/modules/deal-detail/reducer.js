@@ -6,6 +6,7 @@ import * as ActionTypes from './consts';
 const initialState = {
     deal: null,
     quote: null,
+    isQuoteLoading: false,
     finance: {
         downPayment: null,
         term: null,
@@ -31,7 +32,15 @@ const initialState = {
 const persistConfig = {
     ...basePersistConfig,
     key: 'dealDetail',
-    blacklist: ['deal', 'quote', 'discount', 'lease', 'finance', 'trade'],
+    blacklist: [
+        'deal',
+        'isQuoteLoading',
+        'quote',
+        'discount',
+        'lease',
+        'finance',
+        'trade',
+    ],
 };
 
 const reducer = function(state = initialState, action = {}) {
@@ -127,6 +136,13 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 quote: null,
             };
+
+        case ActionTypes.SET_QUOTE_LOADING:
+            return {
+                ...state,
+                isQuoteLoading: action.data,
+            };
+
         default:
             return state;
     }
