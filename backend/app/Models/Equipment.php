@@ -28,6 +28,7 @@ class Equipment extends Model
         'vehicle_id',
         'schema_id',
         'category_id',
+        'category',
         'name',
         'location',
         'availability',
@@ -38,5 +39,10 @@ class Equipment extends Model
     public function version(): BelongsTo
     {
         return $this->belongsTo(Version::class);
+    }
+
+    public function getAttributesAttribute($value)
+    {
+        return json_decode($value);
     }
 }

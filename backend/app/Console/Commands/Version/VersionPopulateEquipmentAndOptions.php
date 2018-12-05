@@ -4,6 +4,8 @@ namespace App\Console\Commands\Version;
 
 use Illuminate\Console\Command;
 use App\Models\JATO\Version;
+use App\Models\Equipment;
+use App\Models\Option;
 use Illuminate\Support\Facades\DB;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
@@ -79,13 +81,14 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'option_id' => $e->optionId,
                     'schema_id' => $e->schemaId,
                     'category_id' =>$e->categoryId,
+                    'category' => $e->category,
                     'name' => $e->name,
                     'location' => $e->location,
                     'availability' => $e->availability,
                     'value' => $e->value,
                     'attributes' => json_encode($e->attributes),
                 ];
-                \App\Models\Equipment::updateOrCreate($data);
+                Equipment::updateOrCreate($data);
             }
 
             foreach($foundOptions as $o) {
@@ -101,7 +104,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'option_state' => $o->optionState,
                     'option_description' => $o->optionDescription,
                 ];
-                \App\Models\Option::updateOrCreate($data);
+                Option::updateOrCreate($data);
             }
 
             $this->info("Populating equipment/options for " . $version->title());

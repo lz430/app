@@ -4,6 +4,7 @@ namespace App\Models\JATO;
 
 use App\Models\Deal;
 use App\Models\Equipment;
+use App\Models\Option;
 use DeliverMyRide\JATO\Map;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;

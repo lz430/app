@@ -22,6 +22,7 @@ class CreateNewEquipmentTable extends Migration
             $table->integer('option_id');
             $table->integer('schema_id');
             $table->integer('category_id');
+            $table->string('category');
             $table->string('name');
             $table->string('location')->nullable();
             $table->string('availability');
