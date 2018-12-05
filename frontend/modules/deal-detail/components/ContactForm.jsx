@@ -88,7 +88,7 @@ class ContactForm extends React.Component {
                             <Button
                                 type="submit"
                                 color="primary"
-                                size="md"
+                                size="lg"
                                 disabled={true}
                             >
                                 Loading{' '}
@@ -97,7 +97,7 @@ class ContactForm extends React.Component {
                         );
                     } else {
                         button = (
-                            <Button type="submit" color="primary" size="md">
+                            <Button type="submit" color="primary" size="lg">
                                 Send my question
                             </Button>
                         );

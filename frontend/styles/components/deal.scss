@@ -71,6 +71,31 @@
             }
         }
     }
+
+    &__faq__list {
+        margin: 0;
+        padding-left: 0;
+
+        .col {
+            border-bottom: 1px solid $color-darkgrey;
+            padding-left: 0px;
+            margin-bottom: 10px;
+
+            .title {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            .content {
+                padding-bottom: 15px;
+            }
+        }
+    }
+
     &__contact {
         input[type='text'],
         input[type='email'],
