@@ -25,6 +25,7 @@ import Value from '../../../apps/pricing/components/Value';
 import DollarsAndCents from '../../../components/money/DollarsAndCents';
 import Separator from '../../../apps/pricing/components/Separator';
 import Group from '../../../apps/pricing/components/Group';
+import { track } from '../../../core/services';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
@@ -80,6 +81,10 @@ export default class AddToCart extends React.PureComponent {
     }
 
     progressToNextStep() {
+        track('deal-detail:quote-form:step-completed', {
+            'Form Step': this.steps[this.state.step].label,
+        });
+
         //
         // Progress to the next step
         if (this.state.step < this.steps.length - 1) {
