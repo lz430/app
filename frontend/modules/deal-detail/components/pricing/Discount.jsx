@@ -6,7 +6,6 @@ import { faDotCircle, faCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import config from '../../../../core/config';
-import Line from '../../../../apps/pricing/components/Line';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {
