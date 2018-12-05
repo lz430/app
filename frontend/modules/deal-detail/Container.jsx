@@ -148,7 +148,6 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleRebatesChange = role => {
-        this.props.dealDetailResetDealQuote();
         let selectedRoles = this.props.selectedConditionalRoles;
         let index = selectedRoles.indexOf(role);
         if (index !== -1) {
