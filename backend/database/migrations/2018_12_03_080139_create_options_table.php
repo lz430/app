@@ -15,7 +15,10 @@ class CreateOptionsTable extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('version_id');
+
+            $table->integer('version_id')->unsigned()->index();
+            $table->foreign('version_id')->references('id')->on('versions');
+
             $table->integer('option_id');
             $table->string('option_code');
             $table->string('option_type');
