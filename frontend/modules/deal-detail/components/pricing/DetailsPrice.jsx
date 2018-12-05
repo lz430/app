@@ -92,7 +92,7 @@ export default class TaxesAndFees extends React.PureComponent {
 
         if (pricing.isEffectiveDiscountEmployee()) {
             totalLabel = 'Employee Price';
-            totalLabel = 'Employee Price Discount';
+            discountLabel = 'Employee Price Discount';
 
             discount = pricing.employeeDiscount();
             price = pricing.employeePrice();
