@@ -19,7 +19,7 @@
             h1 {
                 color: #fff;
                 font-weight: bold;
-                text-shadow: $box-shadow-sm;
+                text-shadow: 0.25rem 0.125rem 2rem rgba(0, 0, 0, 0.8);
                 @include media-breakpoint-up(md) {
                     font-size: 3rem;
                 }

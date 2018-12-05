@@ -148,8 +148,16 @@
         cursor: pointer;
     }
 
+    &__payment-summary {
+        position: relative;
+        .loading {
+            position: absolute;
+            right: 20px;
+            top: 16px;
+        }
+    }
+
     &__finance-down-payment {
-        text-align: center;
         input {
             font-size: 1.25rem;
             border-radius: 3px;

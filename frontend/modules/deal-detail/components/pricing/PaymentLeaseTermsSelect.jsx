@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import Dollars from '../../../../components/money/Dollars';
 import { pricingType } from '../../../../core/types';
 
-export default class LeaseTermsSelect extends React.PureComponent {
+export default class PaymentLeaseTermsSelect extends React.PureComponent {
     static propTypes = {
-        isOpen: PropTypes.bool.isRequired,
-        toggle: PropTypes.func.isRequired,
         onChange: PropTypes.func.isRequired,
         pricing: pricingType.isRequired,
     };
@@ -18,7 +15,7 @@ export default class LeaseTermsSelect extends React.PureComponent {
             <thead>
                 <tr>
                     <td className="cash-finance-lease-calculator__lease-table-cell--darker">
-                        Annual Miles
+                        Miles/Yr.
                     </td>
                     {pricing.termsAvailable().map((term, index) => {
                         return (
@@ -26,7 +23,7 @@ export default class LeaseTermsSelect extends React.PureComponent {
                                 className="cash-finance-lease-calculator__lease-table-cell--dark"
                                 key={index}
                             >
-                                {term} Months
+                                {term} MO
                             </td>
                         );
                     })}
@@ -36,10 +33,10 @@ export default class LeaseTermsSelect extends React.PureComponent {
     }
 
     renderTerm(pricing, term, termIndex, annualMileage) {
-        const value = pricing.paymentsForTermAndCashDue(term, annualMileage);
+        const value = pricing.paymentsForTermAndMileage(term, annualMileage);
 
         if (value) {
-            let className = pricing.isSelectedLeasePaymentForTermAndCashDue(
+            let className = pricing.isSelectedLeasePaymentForTermAndMileage(
                 term,
                 annualMileage
             )
@@ -50,7 +47,13 @@ export default class LeaseTermsSelect extends React.PureComponent {
                 <td
                     className={className}
                     key={termIndex}
-                    onClick={() => this.props.onChange(annualMileage, term, 0)}
+                    onClick={() =>
+                        this.props.onChange(
+                            annualMileage,
+                            term,
+                            pricing.cashDue().toRoundedUnit(0)
+                        )
+                    }
                 >
                     <Dollars value={value} />
                 </td>
@@ -105,24 +108,12 @@ export default class LeaseTermsSelect extends React.PureComponent {
         }
 
         return (
-            <Modal
-                size="content-fit"
-                centered
-                isOpen={this.props.isOpen || false}
-                toggle={this.props.toggle}
-            >
-                <ModalHeader toggle={this.props.toggle}>
-                    Select your lease terms
-                </ModalHeader>
-                <ModalBody>
-                    <div className="cash-finance-lease-calculator__lease-table-container">
-                        <table className="cash-finance-lease-calculator__lease-table">
-                            {this.renderTableHeader(pricing)}
-                            {this.renderTableBody(pricing)}
-                        </table>
-                    </div>
-                </ModalBody>
-            </Modal>
+            <div className="cash-finance-lease-calculator__lease-table-container">
+                <table className="cash-finance-lease-calculator__lease-table text-sm">
+                    {this.renderTableHeader(pricing)}
+                    {this.renderTableBody(pricing)}
+                </table>
+            </div>
         );
     }
 }

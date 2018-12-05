@@ -9,11 +9,9 @@ export default class Header extends React.PureComponent {
 
     render() {
         const style = {
-            display: 'flex',
-            alignItems: 'center',
             margin: '.5em 0 0',
             fontWeight: 'bold',
-            fontSize: '1.25em',
+            fontSize: '1rem',
             textTransform: 'uppercase',
             ...this.props.style,
         };

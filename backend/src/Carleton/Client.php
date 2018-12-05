@@ -120,7 +120,7 @@ class Client
             }
 
             $quote['fees']['cashDown'] = [
-                'Amount' => $cashDown,
+                'Amount' => -1 * abs($cashDown),
                 'Type' => 'Financed',
                 'Base' => 'Fixed',
                 'DescriptionType' => 'CashDown',
@@ -300,6 +300,7 @@ class Client
                 'cash_due' => (float) $input['fees']['cashDown']['Amount'],
                 'annual_mileage' => $input['annualMileage'],
                 'monthly_payment' => (float) sprintf('%.02f', $quote->RegularPayment),
+                'cash_down_ccr' => (float) sprintf('%.02f', $quote->CashDownCCR),
                 'total_amount_at_drive_off' => (float) sprintf('%.02f', $quote->TotalAmountAtDriveOff),
                 'monthly_use_tax' => (float) sprintf('%.02f', $quote->MonthlyUseTax),
                 'monthly_pre_tax_payment' => (float) sprintf('%.02f', $quote->TaxablePayment),

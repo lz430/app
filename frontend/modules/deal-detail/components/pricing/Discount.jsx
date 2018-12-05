@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
+
+import { faDotCircle, faCircle } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import config from '../../../../core/config';
-
-import Line from '../../../../apps/pricing/components/Line';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
-import classNames from 'classnames';
 
 export default class Discount extends React.PureComponent {
     static propTypes = {
@@ -14,75 +14,58 @@ export default class Discount extends React.PureComponent {
     };
 
     handleChange(role, make) {
-        this.props.onChange(role, make);
+        if (role === this.props.pricing.discountType() && role !== 'dmr') {
+            this.props.onChange('dmr', make);
+        } else if (role !== this.props.pricing.discountType()) {
+            this.props.onChange(role, make);
+        }
     }
 
-    renderProofOfEligibility = () => {
+    renderProofOfEligibility() {
         return (
-            <div
-                style={{
-                    fontStyle: 'italic',
-                    fontSize: '.75em',
-                    marginLeft: '.25em',
-                }}
-            >
+            <div className="text-sm text-center border-top border-medium p-1 text-danger font-weight-bold bg-light">
                 Proof of eligibility required.
             </div>
         );
-    };
+    }
 
     renderPrimaryRole(role) {
         const { pricing } = this.props;
 
-        let checked, discount, label, price;
+        let checked, label;
 
         if (role === 'employee') {
             label = 'Employee Price';
             checked = pricing.isEffectiveDiscountEmployee();
-            discount = pricing.employeeDiscount();
-            price = pricing.employeePrice();
         } else if (role === 'supplier') {
             label = 'Supplier / Friends & Family Price';
             checked = pricing.isEffectiveDiscountSupplier();
-            discount = pricing.supplierDiscount();
-            price = pricing.supplierPrice();
-        } else {
-            label = 'Deliver My Ride Customer Price';
-            checked = pricing.isEffectiveDiscountDmr();
-            discount = pricing.dmrDiscount();
-            price = pricing.defaultPrice();
         }
+
         return (
             <div
                 onClick={() => this.handleChange(role, pricing.make())}
                 className={classNames(
                     'cart__discount_role',
-                    'text-center',
-                    'bg-light',
-                    'p-2',
-                    'mb-2',
-                    'border',
+                    'd-flex',
                     { 'border-primary': checked },
+                    { 'font-weight-bold': checked },
                     { 'border-default': !checked }
                 )}
             >
+                <div>
+                    <FontAwesomeIcon icon={checked ? faDotCircle : faCircle} />
+                </div>
                 <div
-                    className={classNames('cart__discount_role_label', {
-                        'font-weight-bold': checked,
-                    })}
+                    className={classNames(
+                        'w-100',
+                        'text-sm',
+                        'pl-2',
+                        'cart__discount_role_label'
+                    )}
                 >
                     {label}
                 </div>
-                {checked && (
-                    <div className="cart__discount_role_price text-sm">
-                        <DollarsAndCents value={price} />
-                    </div>
-                )}
-                {!!(checked && discount.getAmount()) && (
-                    <div className="cart__discount_role_savings text-sm">
-                        Savings: -<DollarsAndCents value={discount} />
-                    </div>
-                )}
             </div>
         );
     }
@@ -96,36 +79,31 @@ export default class Discount extends React.PureComponent {
             pricing.make()
         );
 
+        if (!shouldRenderSupplierPricing && !shouldRenderEmployeePricing) {
+            return false;
+        }
+
+        const shouldRenderProof = !!(
+            pricing.isEffectiveDiscountSupplier() ||
+            pricing.isEffectiveDiscountEmployee()
+        );
+
         return (
-            <div>
-                <Line>{this.renderPrimaryRole('dmr')}</Line>
-                {(shouldRenderEmployeePricing ||
-                    shouldRenderSupplierPricing) && (
-                    <div>
-                        <div
-                            style={{
-                                fontSize: '.75em',
-                                marginLeft: '.25em',
-                            }}
-                        >
-                            Or select from the following:
+            <div className="border border-medium">
+                <div className="border-bottom border-medium pl-2 pr-2 pt-1 pb-1">
+                    Employee Pricing
+                </div>
+                <div className="p-2">
+                    {shouldRenderEmployeePricing && (
+                        <div className="mb-2">
+                            {this.renderPrimaryRole('employee')}
                         </div>
-                        {shouldRenderEmployeePricing && (
-                            <Line>
-                                {this.renderPrimaryRole('employee')}
-                                {pricing.isEffectiveDiscountEmployee() &&
-                                    this.renderProofOfEligibility()}
-                            </Line>
-                        )}
-                        {shouldRenderSupplierPricing && (
-                            <Line>
-                                {this.renderPrimaryRole('supplier')}
-                                {pricing.isEffectiveDiscountSupplier() &&
-                                    this.renderProofOfEligibility()}
-                            </Line>
-                        )}
-                    </div>
-                )}
+                    )}
+                    {shouldRenderSupplierPricing && (
+                        <div>{this.renderPrimaryRole('supplier')}</div>
+                    )}
+                </div>
+                {shouldRenderProof && this.renderProofOfEligibility()}
             </div>
         );
     }

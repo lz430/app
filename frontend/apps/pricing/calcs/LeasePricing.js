@@ -1,5 +1,5 @@
 import Pricing from './Pricing';
-import { fromDollarsAndCents, zero } from '../money';
+import { fromDollarsAndCents, fromWholeDollars, zero } from '../money';
 import { indexOf } from 'ramda';
 import { getClosestNumberInRange } from '../../../util/util';
 
@@ -11,12 +11,28 @@ const maxNumberOfAnnualMileageOptionsInMatrix = 4;
 const annualMileageOptionsMustBeMoreThan = 7500; // miles
 
 export default class LeasePricing extends Pricing {
+    basePrice = () =>
+        this.discountedPrice()
+            .add(this.docFee())
+            .add(this.cvrFee())
+            .add(this.tradeIn().owed)
+            .subtract(this.tradeIn().value);
+
+    sellingPrice = () => this.withTaxAdded(this.basePrice());
+
+    yourPrice = () => this.sellingPrice().subtract(this.rebates());
+
     docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
     cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
     taxOnRebates = () => this.taxesFor(this.rebates());
+    cashDownCCR = () => this.paymentDinero(payment => payment.cashDownCCR);
 
-    totalAmountAtDriveOff = () =>
-        this.paymentDinero(payment => payment.totalAmountAtDriveOff);
+    totalAmountAtDriveOff = () => {
+        return this.paymentDinero(payment => payment.totalAmountAtDriveOff).add(
+            this.cashDownCCR()
+        );
+    };
+
     monthlyPayment = () =>
         this.paymentDinero(payment => payment.monthlyPayment);
     monthlyPreTaxPayment = () =>
@@ -44,11 +60,29 @@ export default class LeasePricing extends Pricing {
         return this.data.leaseAnnualMileage;
     };
 
-    /**
-     * @deprecated
-     */
+    calculateCashDue = cashDuePercent => {
+        const calculatedDownPayment = this.yourPrice()
+            .multiply(cashDuePercent)
+            .toRoundedUnit(0);
+
+        return fromWholeDollars(calculatedDownPayment);
+    };
+
     cashDue = () => {
-        return 0;
+        if (!this.data.leaseCashDue) {
+            return zero;
+        }
+
+        return fromDollarsAndCents(this.data.leaseCashDue);
+    };
+
+    cashDuePercent = () => {
+        const downPayment = this.cashDue().toRoundedUnit(0);
+        if (!downPayment) {
+            return zero.toRoundedUnit(0);
+        }
+        const price = this.yourPrice().toRoundedUnit(0);
+        return Math.round((downPayment / price) * 100);
     };
 
     canPurchase = () => {
@@ -68,7 +102,7 @@ export default class LeasePricing extends Pricing {
             .filter((term, termIndex) => termIndex < maxNumberOfTermsInMatrix);
     };
 
-    paymentsForTermAndCashDue = (term, annualMileage) => {
+    paymentsForTermAndMileage = (term, annualMileage) => {
         const payments = this.payments();
 
         if (!payments) {
@@ -149,16 +183,12 @@ export default class LeasePricing extends Pricing {
             );
     };
 
-    isSelectedLeasePaymentForTermAndCashDue(term, annualMileage) {
+    isSelectedLeasePaymentForTermAndMileage(term, annualMileage) {
         if (term !== this.term()) {
             return false;
         }
 
-        if (annualMileage !== this.annualMileage()) {
-            return false;
-        }
-
-        return true;
+        return annualMileage === this.annualMileage();
     }
 
     calculateDefaultTerm = () => {

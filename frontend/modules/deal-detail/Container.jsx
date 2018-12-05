@@ -41,6 +41,7 @@ import {
     getDeal,
     getDealDetailQuote,
     getDiscountType,
+    getIsDealQuoteRefreshing,
     getTradeIn,
     pricingFromDealDetail,
 } from './selectors';
@@ -78,6 +79,7 @@ class DealDetailContainer extends React.PureComponent {
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
         searchQuery: PropTypes.object.isRequired,
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         dealPricingData: PropTypes.oneOfType([
             PropTypes.object,
@@ -105,6 +107,13 @@ class DealDetailContainer extends React.PureComponent {
                 prevProps.dealPricingData.tradeIn,
                 this.props.dealPricingData.tradeIn
             )
+        ) {
+            this.props.dealDetailRefreshDealQuote();
+        }
+
+        if (
+            prevProps.dealPricingData.leaseCashDue !==
+            this.props.dealPricingData.leaseCashDue
         ) {
             this.props.dealDetailRefreshDealQuote();
         }
@@ -143,7 +152,6 @@ class DealDetailContainer extends React.PureComponent {
     };
 
     handleRebatesChange = role => {
-        this.props.dealDetailResetDealQuote();
         let selectedRoles = this.props.selectedConditionalRoles;
         let index = selectedRoles.indexOf(role);
         if (index !== -1) {
@@ -243,7 +251,7 @@ class DealDetailContainer extends React.PureComponent {
                 <Container className="mb-5">
                     <Header deal={this.props.deal} />
                     <Row>
-                        <Col md="6" lg="8">
+                        <Col md="6" lg="7" xl="8">
                             <Media deal={this.props.deal} />
                             <DealFeatures deal={this.props.deal} />
                             <CompareButton
@@ -252,10 +260,13 @@ class DealDetailContainer extends React.PureComponent {
                                 onToggleCompare={this.props.toggleCompare}
                             />
                         </Col>
-                        <Col md="6" lg="4">
+                        <Col md="6" lg="5" xl="4">
                             <AddToCart
                                 deal={this.props.deal}
                                 purchaseStrategy={this.props.purchaseStrategy}
+                                isDealQuoteRefreshing={
+                                    this.props.isDealQuoteRefreshing
+                                }
                                 handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
                                     this
                                 )}
@@ -308,6 +319,7 @@ const mapStateToProps = (state, props) => {
         isLoading: getIsPageLoading(state),
         trade: getTradeIn(state),
         pricing: pricingFromDealDetail(state),
+        isDealQuoteRefreshing: getIsDealQuoteRefreshing(state),
         dealPricingData: dealPricingDataForDetail(state, props),
     };
 };

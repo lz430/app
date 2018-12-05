@@ -158,3 +158,10 @@ export function tradeSet(value, owed, estimate) {
         estimate: estimate,
     };
 }
+
+export function setQuoteIsLoading(isLoading) {
+    return {
+        type: ActionTypes.SET_QUOTE_LOADING,
+        data: isLoading,
+    };
+}
