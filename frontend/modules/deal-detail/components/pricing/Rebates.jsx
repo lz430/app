@@ -97,16 +97,6 @@ class Rebates extends React.Component {
         return sortBy(prop('title'), arrayRoles);
     }
 
-    shouldRenderConditionalSelection() {
-        const quote = this.props.pricing.quote();
-
-        return !(
-            !quote ||
-            !quote.selections ||
-            !quote.selections.conditionalRoles
-        );
-    }
-
     renderConditionalRebates() {
         const quote = this.props.pricing.quote();
         const roles = this.getRoles(quote.selections.conditionalRoles);
