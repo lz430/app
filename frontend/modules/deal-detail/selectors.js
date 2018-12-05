@@ -11,6 +11,10 @@ export const getDealDetailQuote = state => {
     return state.pages.dealDetails.quote;
 };
 
+export const getIsDealQuoteRefreshing = state => {
+    return state.pages.dealDetails.isQuoteLoading;
+};
+
 export const dealQuoteIsLoading = createSelector(
     [getDealDetailQuote],
     quote => {

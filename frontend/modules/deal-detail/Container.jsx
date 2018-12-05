@@ -41,6 +41,7 @@ import {
     getDeal,
     getDealDetailQuote,
     getDiscountType,
+    getIsDealQuoteRefreshing,
     getTradeIn,
     pricingFromDealDetail,
 } from './selectors';
@@ -76,6 +77,7 @@ class DealDetailContainer extends React.PureComponent {
         toggleCompare: PropTypes.func.isRequired,
         router: nextRouterType,
         searchQuery: PropTypes.object.isRequired,
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         pricing: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
         dealPricingData: PropTypes.oneOfType([
             PropTypes.object,
@@ -260,6 +262,9 @@ class DealDetailContainer extends React.PureComponent {
                             <AddToCart
                                 deal={this.props.deal}
                                 purchaseStrategy={this.props.purchaseStrategy}
+                                isDealQuoteRefreshing={
+                                    this.props.isDealQuoteRefreshing
+                                }
                                 handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
                                     this
                                 )}
@@ -304,6 +309,7 @@ const mapStateToProps = (state, props) => {
         isLoading: getIsPageLoading(state),
         trade: getTradeIn(state),
         pricing: pricingFromDealDetail(state),
+        isDealQuoteRefreshing: getIsDealQuoteRefreshing(state),
         dealPricingData: dealPricingDataForDetail(state, props),
     };
 };

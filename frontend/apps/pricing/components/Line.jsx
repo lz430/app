@@ -28,6 +28,7 @@ export default class Line extends React.PureComponent {
             style.borderTop = '1px solid #ccc';
             style.borderBottom = '1px solid #ccc';
             style.fontSize = '1.1rem';
+            style.fontWeight = 'bold';
         }
 
         return (
