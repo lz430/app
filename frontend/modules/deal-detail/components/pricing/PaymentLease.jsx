@@ -76,7 +76,7 @@ export default class PaymentLease extends React.PureComponent {
                 <Group>
                     <div>
                         <Line>
-                            <div>Select Lease Terms</div>
+                            <div className="text-sm">Select Lease Terms</div>
                             <PaymentLeaseTermsSelect
                                 pricing={pricing}
                                 onChange={this.handleLeaseTermsChange.bind(
