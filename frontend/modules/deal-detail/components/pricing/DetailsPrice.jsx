@@ -97,8 +97,8 @@ export default class TaxesAndFees extends React.PureComponent {
             discount = pricing.employeeDiscount();
             price = pricing.employeePrice();
         } else if (pricing.isEffectiveDiscountSupplier()) {
-            totalLabel = 'Supplier / Friends & Family Price';
-            discountLabel = 'Supplier / Friends & Family Discount';
+            totalLabel = 'Friends & Family Price';
+            discountLabel = 'Friends & Family Discount';
 
             discount = pricing.supplierDiscount();
             price = pricing.supplierPrice();
