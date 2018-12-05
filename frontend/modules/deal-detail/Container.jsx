@@ -248,7 +248,7 @@ class DealDetailContainer extends React.PureComponent {
                 <Container className="mb-5">
                     <Header deal={this.props.deal} />
                     <Row>
-                        <Col md="6" lg="8">
+                        <Col md="6" lg="7" xl="8">
                             <Media deal={this.props.deal} />
                             <DealFeatures deal={this.props.deal} />
                             <CompareButton
@@ -257,7 +257,7 @@ class DealDetailContainer extends React.PureComponent {
                                 onToggleCompare={this.props.toggleCompare}
                             />
                         </Col>
-                        <Col md="6" lg="4">
+                        <Col md="6" lg="5" xl="4">
                             <AddToCart
                                 deal={this.props.deal}
                                 purchaseStrategy={this.props.purchaseStrategy}

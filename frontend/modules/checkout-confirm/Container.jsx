@@ -101,7 +101,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                         <DealImage deal={deal} link={false} />
                                     </MediumAndUp>
                                 </div>
-                                <div className="title pl-4">
+                                <div className="title pl-4 w-100">
                                     <div className="year-and-make font-weight-bold">
                                         {strings.dealYearMake(deal)}
                                     </div>
@@ -116,7 +116,7 @@ class CheckoutConfirmContainer extends React.PureComponent {
                                     </div>
                                 </div>
                             </div>
-                            <div className="summary bg-white p-4 border border-medium mb-4">
+                            <div className="summary bg-white pl-4 pr-4 pb-4 pt-2 border border-medium mb-4">
                                 {pricing.isCash() && (
                                     <CashSummary pricing={pricing} />
                                 )}

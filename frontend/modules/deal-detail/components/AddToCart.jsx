@@ -256,7 +256,7 @@ export default class AddToCart extends React.PureComponent {
                     onChange={this.props.handleLeaseChange}
                 />
 
-                {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
+                {config['REACT_APP_ENVIRONMENT'] === 'local' && (
                     <TradeIn
                         onCompleteTradeIn={this.props.tradeSet}
                         zipcode={this.props.userLocation.zipcode}
