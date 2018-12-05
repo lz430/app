@@ -1,7 +1,6 @@
 import React from 'react';
 import { Container, Col, Row, NavItem, NavLink } from 'reactstrap';
 import Link from 'next/link';
-import Logo from '../../static/images/logo.svg';
 
 import {
     faFacebook,
