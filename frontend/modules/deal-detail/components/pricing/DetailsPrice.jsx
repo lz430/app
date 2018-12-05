@@ -37,7 +37,7 @@ export default class TaxesAndFees extends React.PureComponent {
                 toggle={this.toggle.bind(this)}
             >
                 <PopoverHeader>Rebate Breakdown</PopoverHeader>
-                <PopoverBody className="text-sm cart__rebate_description">
+                <PopoverBody className="text-xs cart__rebate_description">
                     {quote.rebates.conditional &&
                         Object.keys(quote.rebates.conditional.programs).map(
                             key => {

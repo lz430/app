@@ -10,6 +10,10 @@ import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import PaymentLeaseTermsSelect from './PaymentLeaseTermsSelect';
 import { Input, FormGroup, Label } from 'reactstrap';
+import Value from '../../../../apps/pricing/components/Value';
+import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 
 export default class PaymentLease extends React.PureComponent {
     static propTypes = {
@@ -17,6 +21,74 @@ export default class PaymentLease extends React.PureComponent {
         pricing: pricingType.isRequired,
         onChange: PropTypes.func.isRequired,
     };
+
+    state = {
+        popoverOpen: false,
+    };
+
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen,
+        });
+    }
+
+    renderDescription() {
+        const pricing = this.props.pricing;
+        return (
+            <Popover
+                placement="left"
+                isOpen={this.state.popoverOpen}
+                target="lease-due-explain"
+                toggle={this.toggle.bind(this)}
+            >
+                <PopoverHeader>Due at Delivery</PopoverHeader>
+                <PopoverBody className="text-xs cart__rebate_description">
+                    <Line>
+                        <Label>First Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.firstPayment()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Doc Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.docFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Electronic Filing Fee</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.cvrFeeWithTaxes()}
+                            />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Tax on Rebates</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.taxOnRebates()} />
+                        </Value>
+                    </Line>
+                    <Line>
+                        <Label>Down Payment</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.cashDownCCR()} />
+                        </Value>
+                    </Line>
+                    <Line isSemiImportant>
+                        <Label>Total Due</Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.totalAmountAtDriveOff()}
+                            />
+                        </Value>
+                    </Line>
+                </PopoverBody>
+            </Popover>
+        );
+    }
 
     handleLeaseTermsChange = (annualMileage, term, cashDue) => {
         this.props.onChange(annualMileage, term, cashDue);
@@ -59,11 +131,11 @@ export default class PaymentLease extends React.PureComponent {
                     {this.props.isDealQuoteRefreshing && <Loading size={2} />}
                 </div>
                 <Separator />
-                <div className="d-flex">
+                <div>
                     <div className="pr-1">
                         <FormGroup>
                             <Label for="down-payment" className="text-sm">
-                                Down Payment
+                                Additional Down Payment
                             </Label>
                             <Input
                                 type="text"
@@ -73,6 +145,23 @@ export default class PaymentLease extends React.PureComponent {
                             />
                         </FormGroup>
                     </div>
+                    <Line isSectionTotal>
+                        <Label>
+                            Due at Delivery{' '}
+                            <FontAwesomeIcon
+                                icon={faInfoCircle}
+                                className="cursor-pointer"
+                                id="lease-due-explain"
+                                onClick={this.toggle.bind(this)}
+                            />
+                            {this.renderDescription()}
+                        </Label>
+                        <Value>
+                            <DollarsAndCents
+                                value={pricing.totalAmountAtDriveOff()}
+                            />
+                        </Value>
+                    </Line>
                 </div>
                 <Separator />
                 <Group>
