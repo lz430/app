@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Col, Row, NavItem, NavLink } from 'reactstrap';
 import Link from 'next/link';
-import LogoFooter from '../../static/images/dmr-logo-footer.svg';
+import Logo from '../../static/images/logo.svg';
 
 import {
     faFacebook,
@@ -18,7 +18,6 @@ export default class Footer extends React.PureComponent {
                 <Container>
                     <Row>
                         <Col sm={8}>
-                            <LogoFooter alt="Deliver My Ride" />
                             <ul className="footer-nav">
                                 <NavItem>
                                     <Link
