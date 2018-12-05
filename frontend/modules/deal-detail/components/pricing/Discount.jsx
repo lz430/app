@@ -48,9 +48,6 @@ export default class Discount extends React.PureComponent {
                 onClick={() => this.handleChange(role, pricing.make())}
                 className={classNames(
                     'cart__discount_role',
-                    'bg-light',
-                    'p-2',
-                    'border',
                     'd-flex',
                     { 'border-primary': checked },
                     { 'font-weight-bold': checked },
