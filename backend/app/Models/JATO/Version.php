@@ -5,6 +5,7 @@ namespace App\Models\JATO;
 use App\Models\Deal;
 use App\Models\Equipment;
 use App\Models\Option;
+use App\Models\StandardText;
 use DeliverMyRide\JATO\Map;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -120,6 +121,14 @@ class Version extends Model
     public function options(): HasMany
     {
         return $this->hasMany(Option::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function standard_text(): HasMany
+    {
+        return $this->hasMany(StandardText::class);
     }
 
     /**

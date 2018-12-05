@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\JATO\Version;
 use App\Models\Equipment;
 use App\Models\Option;
+use App\Models\StandardText;
 use Illuminate\Support\Facades\DB;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
@@ -59,6 +60,7 @@ class VersionPopulateEquipmentAndOptions extends Command
             try {
                 $getEquipment = collect($this->client->equipment->get($version->jato_vehicle_id)->results);
                 $getOptions = collect($this->client->option->get($version->jato_vehicle_id)->options);
+                $getStandardText = collect($this->client->standard->get($version->jato_vehicle_id, '', '', '1', '5000')->results);
             } catch (ClientException | ServerException $e) {
                 if($e->getCode() === 400) {
                     continue;
@@ -105,6 +107,19 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'option_description' => $o->optionDescription,
                 ];
                 Option::updateOrCreate($data);
+            }
+
+            foreach($getStandardText as $s) {
+                $data = [
+                    'version_id' => $version->id,
+                    'schema_id' => $s->schemaId,
+                    'category_id' =>$s->categoryId,
+                    'category' => $s->category,
+                    'item_name' => $s->itemName,
+                    'content' => $s->content,
+
+                ];
+                StandardText::updateOrCreate($data);
             }
 
             $this->info("Populating equipment/options for " . $version->title());
