@@ -8,43 +8,43 @@ const sitemap = sm.createSitemap({
 
 const setup = ({ server, app }) => {
     sitemap.add({
-        url: '/brochure',
+        url: '/',
         changefreq: 'weekly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/how-it-works',
+        url: '/how-it-works',
         changefreq: 'weekly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/how-it-works',
+        url: '/how-it-works',
         changefreq: 'weekly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/about',
+        url: '/about',
         changefreq: 'weekly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/contact',
+        url: '/contact',
         changefreq: 'monthly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/terms-of-service',
+        url: '/terms-of-service',
         changefreq: 'monthly',
         priority: 1,
     });
 
     sitemap.add({
-        url: '/brochure/privacy-policy',
+        url: '/privacy-policy',
         changefreq: 'weekly',
         priority: 1,
     });

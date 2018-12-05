@@ -11,17 +11,12 @@ import DealImage from '../../components/Deals/DealImage';
 import { pricingFromCheckoutFactory } from '../../apps/checkout/selectors';
 import { checkoutContact } from '../../apps/checkout/actions';
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
-import Header from '../../apps/pricing/components/Header';
-import Group from '../../apps/pricing/components/Group';
 import { checkout } from '../../apps/checkout/selectors';
 import { init } from './actions';
 import DealStockNumber from '../../components/Deals/DealStockNumber';
 import FinanceSummary from '../../apps/checkout/components/FinanceSummary';
 import LeaseSummary from '../../apps/checkout/components/LeaseSummary';
 import CashSummary from '../../apps/checkout/components/CashSummary';
-import CashDetails from '../../apps/checkout/components/CashDetails';
-import FinanceDetails from '../../apps/checkout/components/FinanceDetails';
-import LeaseDetails from '../../apps/checkout/components/LeaseDetails';
 import InvalidCheckoutPage from '../../apps/checkout/components/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
@@ -75,84 +70,73 @@ class CheckoutConfirmContainer extends React.PureComponent {
                     checkout={this.props.checkout}
                     router={this.props.router}
                 />
-                <Container className="checkout-confirm">
+                <Container className="pt-4 pb-4">
                     <Row>
                         <Col>
-                            <h1>Say hello to your new car!</h1>
+                            <h2 className="mb-4">
+                                Get Started: Tell us a little about yourself
+                            </h2>
                         </Col>
                     </Row>
                     <Row>
-                        <Col xs="12" md="4" className="image">
-                            <SmallAndDown>
-                                <DealImage
-                                    deal={deal}
-                                    link={false}
-                                    size="full"
-                                />
-                            </SmallAndDown>
-                            <MediumAndUp>
-                                <DealImage deal={deal} link={false} />
-                            </MediumAndUp>
-                        </Col>
-                        <Col md="4" className="title">
-                            <Group>
-                                <div className="year-and-make">
-                                    {strings.dealYearMake(deal)}
-                                </div>
-                                <div className="model-and-trim">
-                                    {strings.dealModelTrim(deal)}
-                                </div>
-                                <div className="colors">
-                                    <DealColors deal={deal} />
-                                </div>
-                                <div className="stock-number">
-                                    <DealStockNumber deal={deal} />
-                                </div>
-                            </Group>
-                        </Col>
-                        <Col md="4" className="summary">
-                            {pricing.isCash() && (
-                                <CashSummary pricing={pricing} />
-                            )}
-                            {pricing.isFinance() && (
-                                <FinanceSummary pricing={pricing} />
-                            )}
-                            {pricing.isLease() && (
-                                <LeaseSummary pricing={pricing} />
-                            )}
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col className="details">
-                            {pricing.isCash() && (
-                                <CashDetails pricing={pricing} />
-                            )}
-                            {pricing.isFinance() && (
-                                <FinanceDetails pricing={pricing} />
-                            )}
-                            {pricing.isLease() && (
-                                <LeaseDetails pricing={pricing} />
-                            )}
-                        </Col>
-                        <Col className="confirm">
-                            <Group>
-                                <Header style={{ fontSize: '1.5em' }}>
-                                    Confirm your purchase
-                                </Header>
+                        <Col>
+                            <div className="bg-white border border-medium">
                                 <ContactForm
                                     checkout={this.props.checkout}
                                     onCheckoutContact={this.onSubmit.bind(this)}
                                 />
-                            </Group>
+                            </div>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col>
-                            <div style={{ margin: '1em 0' }}>
-                                * This is not a binding contract. Delivering
+                            <div className="d-flex bg-white p-4 border border-medium mb-4">
+                                <div className="image">
+                                    <SmallAndDown>
+                                        <DealImage
+                                            deal={deal}
+                                            link={false}
+                                            size="full"
+                                        />
+                                    </SmallAndDown>
+                                    <MediumAndUp>
+                                        <DealImage deal={deal} link={false} />
+                                    </MediumAndUp>
+                                </div>
+                                <div className="title pl-4">
+                                    <div className="year-and-make font-weight-bold">
+                                        {strings.dealYearMake(deal)}
+                                    </div>
+                                    <div className="model-and-trim mb-2 font-weight-bold">
+                                        {strings.dealModelTrim(deal)}
+                                    </div>
+                                    <div className="colors">
+                                        <DealColors deal={deal} />
+                                    </div>
+                                    <div className="stock-number">
+                                        <DealStockNumber deal={deal} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="summary bg-white p-4 border border-medium mb-4">
+                                {pricing.isCash() && (
+                                    <CashSummary pricing={pricing} />
+                                )}
+                                {pricing.isFinance() && (
+                                    <FinanceSummary pricing={pricing} />
+                                )}
+                                {pricing.isLease() && (
+                                    <LeaseSummary pricing={pricing} />
+                                )}
+                            </div>
+                            <div className="bg-white p-4 border border-danger text-sm">
+                                This is not a binding contract. Delivering
                                 dealer will verify vehicle availability, pricing
-                                details and incentive eligibility. Rates are
-                                subject to credit approval.
+                                details and incentive eligibility. <br />
+                                <br />
+                                Monthly payment amount applies to qualified
+                                credit or lease applicants having a minimum
+                                credit score of 740. Your monthly payment is
+                                established based on a full review of your
+                                credit application and credit report.
                             </div>
                         </Col>
                     </Row>

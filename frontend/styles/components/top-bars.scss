@@ -34,12 +34,12 @@
     }
 }
 
-.steps {
+.checkout-steps {
     display: flex;
     margin-top: 5px;
 }
 
-.step {
+.checkout-step {
     align-items: center;
     color: $color-darkgrey;
     display: flex;
@@ -68,13 +68,13 @@
     }
 
     &--active {
-        .step__icon {
+        .checkout-step__icon {
             background: #fff;
             color: $color-sidebar-background-primary;
             padding-top: 0;
         }
 
-        .step__label {
+        .checkout-step__label {
             color: #fff;
         }
     }

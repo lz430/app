@@ -2,11 +2,8 @@
 @import 'variables';
 
 @import 'mixins/button';
-@import 'mixins/constrained';
 @import 'mixins/input';
-@import 'mixins/link';
 @import 'mixins/selector-icon';
-@import 'mixins/vertical-form';
 
 //
 // Libraries
@@ -77,6 +74,7 @@
 @import 'components/disclaimer';
 @import 'components/button-group';
 @import 'components/breadcrumb';
+@import 'components/steps';
 
 @import 'components/brochure/page-hero';
 

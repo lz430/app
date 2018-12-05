@@ -52,7 +52,7 @@ export default class extends React.Component {
                             }
                         >
                             <img
-                                style={{ height: '80px', width: '80px' }}
+                                style={{ height: '120px', width: '120px' }}
                                 src={filteredMakes[s].logo}
                                 alt={filteredMakes[s].title + ' logo'}
                             />
@@ -65,7 +65,7 @@ export default class extends React.Component {
 
     render() {
         return (
-            <div className="container-fluid callout__brands pt-5 pb-3">
+            <div className="container-fluid callout__brands bg-focus pt-5 pb-3">
                 <Container>
                     <Row>{this.renderMakes(true)}</Row>
                     <Collapse className="row" isOpen={this.state.collapse}>

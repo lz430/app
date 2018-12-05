@@ -22,28 +22,20 @@ export default class Footer extends React.PureComponent {
                             <ul className="footer-nav">
                                 <NavItem>
                                     <Link
-                                        href="/brochure/how-it-works"
-                                        as="/brochure/how-it-works"
+                                        href="/how-it-works"
+                                        as="/how-it-works"
                                         passHref
                                     >
                                         <NavLink>How It Works</NavLink>
                                     </Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link
-                                        href="/brochure/about"
-                                        as="/brochure/about"
-                                        passHref
-                                    >
+                                    <Link href="/about" as="/about" passHref>
                                         <NavLink>About</NavLink>
                                     </Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link
-                                        href="/brochure/faq"
-                                        as="/brochure/faq"
-                                        passHref
-                                    >
+                                    <Link href="/faq" as="/faq" passHref>
                                         <NavLink>FAQ</NavLink>
                                     </Link>
                                 </NavItem>
@@ -86,8 +78,8 @@ export default class Footer extends React.PureComponent {
                             <ul>
                                 <NavItem>
                                     <Link
-                                        href="/brochure/terms-of-service"
-                                        as="/brochure/terms-of-service"
+                                        href="/terms-of-service"
+                                        as="/terms-of-service"
                                         passHref
                                     >
                                         <NavLink>Terms of Use</NavLink>
@@ -95,8 +87,8 @@ export default class Footer extends React.PureComponent {
                                 </NavItem>
                                 <NavItem>
                                     <Link
-                                        href="/brochure/privacy-policy"
-                                        as="/brochure/privacy-policy"
+                                        href="/privacy-policy"
+                                        as="/privacy-policy"
                                         passHref
                                     >
                                         <NavLink>Privacy Policy</NavLink>

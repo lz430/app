@@ -33,11 +33,7 @@ export default class Value extends React.PureComponent {
 
         return (
             <div style={style}>
-                {this.props.isLoading && (
-                    <div data-loading-size="regular">
-                        <Loading style={{ height: '.5em' }} />
-                    </div>
-                )}
+                {this.props.isLoading && <Loading size={1} />}
                 {this.props.isLoading || (
                     <div>
                         {this.props.isNegative ? '-' : ''}

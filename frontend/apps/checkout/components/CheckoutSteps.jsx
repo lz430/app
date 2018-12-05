@@ -63,7 +63,13 @@ class CheckoutSteps extends React.PureComponent {
 
     renderStep(step, data) {
         return (
-            <div className={data.active ? 'step  step--active' : 'step'}>
+            <div
+                className={
+                    data.active
+                        ? 'checkout-step  checkout-step--active'
+                        : 'checkout-step'
+                }
+            >
                 <div className="step__icon">
                     {data.active ? (
                         <FontAwesomeIcon icon={faCheck} />
@@ -87,7 +93,7 @@ class CheckoutSteps extends React.PureComponent {
                             router={this.props.router}
                         />
                     </div>
-                    <div className="steps">
+                    <div className="checkout-steps">
                         {Object.keys(this.steps()).map(key => (
                             <div key={key}>
                                 {this.renderStep(key, steps[key])}

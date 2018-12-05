@@ -1,51 +1,29 @@
-.app-content .alice-carousel {
-    @include media-breakpoint-up(md) {
-        width: 99.7%;
-    }
-    &__prev-btn,
-    &__next-btn {
-        background: $color-text-white;
-        border: 1px solid $color-text-white;
-        box-shadow: $shadow-subtle;
-        border-radius: 50px;
-        color: $color-text-blue;
-        font-size: 1.5rem;
-        padding: 0px 25px 0px 10px !important;
+.carousel {
+    position: relative;
+    .fancy-carousel-control {
         position: absolute;
-        text-align: left;
-        top: 39%;
-        max-width: 25px;
-        width: 25px;
-        max-height: 37px;
-        height: 37px;
+        top: 40%;
+        cursor: pointer;
+        color: $primary;
+        background: #fff;
+        padding: 0.25rem 0.75rem;
+        font-size: 1.5rem;
+        border: $gray-300;
+        box-shadow: $box-shadow;
+        text-align: center;
+        z-index: 3;
+        border-radius: 50px;
 
-        @include media-breakpoint-down(md) {
-            display: none;
+        &-prev {
+            left: -30px;
         }
 
-        p {
-            padding: 0;
-            margin: 0;
-        }
-    }
-
-    &__prev-btn {
-        left: -30px;
-
-        [data-area]::after {
-            content: '<' !important;
-            font-size: 2rem;
-            line-height: 1px;
+        &-next {
+            right: -30px;
         }
     }
+}
 
-    &__next-btn {
-        right: -25px;
-
-        [data-area]::after {
-            content: '>' !important;
-            font-size: 2rem;
-            line-height: 1px;
-        }
-    }
+.alice-carousel__stage-item {
+    height: 184px;
 }

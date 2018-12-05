@@ -71,7 +71,7 @@ class Page extends Component {
                     subtitle="A modern way to buy or lease your next vehicle"
                     button="Find your new car"
                 />
-                <Container className="faq">
+                <Container className="faq mb-5">
                     <Row>
                         <Col sm="3" className="faq__nav">
                             {this.renderNav()}
