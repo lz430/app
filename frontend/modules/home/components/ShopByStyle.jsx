@@ -88,7 +88,7 @@ export default class extends React.Component {
                             ref={el => (this.Carousel = el)}
                             duration={400}
                             autoPlay={false}
-                            startIndex={1}
+                            startIndex={0}
                             fadeOutAnimation={true}
                             mouseDragEnabled={false}
                             playButtonEnabled={false}
@@ -100,6 +100,7 @@ export default class extends React.Component {
                             onSlideChanged={this.onSlideChanged}
                             dotsDisabled={true}
                             buttonsDisabled={true}
+                            infinite={false}
                         >
                             {styles.map(style => this.renderStyle(style))}
                         </AliceCarousel>
