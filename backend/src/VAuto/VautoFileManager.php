@@ -2,12 +2,11 @@
 
 namespace DeliverMyRide\VAuto;
 
-use Illuminate\Support\Facades\Storage;
 use League\Flysystem\MountManager;
+use Illuminate\Support\Facades\Storage;
 
 class VautoFileManager
 {
-
     /**
      * @return \Illuminate\Contracts\Filesystem\Filesystem|\Illuminate\Filesystem\FilesystemAdapter
      */
@@ -38,16 +37,16 @@ class VautoFileManager
         $files = [];
 
         foreach ($vautoFiles as $key => $file) {
-            $newName = str_random(10) . ".csv";
+            $newName = str_random(10).'.csv';
             $mountManager->copy(
-                'vauto://' . $file,
-                'temp://' . $newName
+                'vauto://'.$file,
+                'temp://'.$newName
             );
 
             $files[] = [
                 'name' => $newName,
-                'path' => sys_get_temp_dir() . '/' . $newName,
-                'hash' => md5_file(sys_get_temp_dir() . '/' . $newName),
+                'path' => sys_get_temp_dir().'/'.$newName,
+                'hash' => md5_file(sys_get_temp_dir().'/'.$newName),
             ];
         }
 
@@ -66,10 +65,10 @@ class VautoFileManager
                 'temp' => \Storage::disk('temp')->getDriver(),
             ]);
             foreach ($sources as $key => $source) {
-                $newName = 'vAuto_DMR-' . date('m-d-Y') . '-' . $key . '.csv';
+                $newName = 'vAuto_DMR-'.date('m-d-Y').'-'.$key.'.csv';
                 $mountManager->copy(
-                    'vauto://' . $source['name'],
-                    's3://logs/vauto/' . $newName,
+                    'vauto://'.$source['name'],
+                    's3://logs/vauto/'.$newName,
                     [
                         'ContentType' => 'text/csv',
                         'ContentDisposition' => 'attachment',

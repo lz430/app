@@ -11,15 +11,12 @@ use League\Csv\Statement;
 use App\Models\JATO\Version;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
-use League\Flysystem\MountManager;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
-use DeliverMyRide\VAuto\VautoFileManager;
 
 class Importer
 {
