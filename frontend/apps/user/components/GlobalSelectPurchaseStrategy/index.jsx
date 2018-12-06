@@ -46,7 +46,12 @@ class GlobalSelectPurchaseStrategy extends React.Component {
         }
 
         if (this.props.purchaseStrategy === 'lease') {
-            return <span>Based on 10,000 miles and 36 months.</span>;
+            return (
+                <span>
+                    Based on 10,000 miles, 36 months term and an additional
+                    $1,500 down.
+                </span>
+            );
         }
     }
 

@@ -51,4 +51,15 @@ export default {
         cadillacloyalty: 'cadloyal',
         gmloyalty: 'gmloyalty',
     },
+
+    PRICING: {
+        lease: {
+            defaultTerm: 36,
+            defaultAnnualMileage: 10000,
+            defaultLeaseDown: 1500,
+            maxNumberOfTermsInMatrix: 4,
+            maxNumberOfAnnualMileageOptionsInMatrix: 4,
+            annualMileageOptionsMustBeMoreThan: 7500, // miles
+        },
+    },
 };

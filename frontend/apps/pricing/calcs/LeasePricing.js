@@ -3,12 +3,7 @@ import { fromDollarsAndCents, fromWholeDollars, zero } from '../money';
 import { indexOf } from 'ramda';
 import { getClosestNumberInRange } from '../../../util/util';
 
-const defaultTerm = 36;
-const defaultAnnualMileage = 10000;
-
-const maxNumberOfTermsInMatrix = 4;
-const maxNumberOfAnnualMileageOptionsInMatrix = 4;
-const annualMileageOptionsMustBeMoreThan = 7500; // miles
+import config from '../../../core/config';
 
 export default class LeasePricing extends Pricing {
     basePrice = () =>
@@ -60,29 +55,12 @@ export default class LeasePricing extends Pricing {
         return this.data.leaseAnnualMileage;
     };
 
-    calculateCashDue = cashDuePercent => {
-        const calculatedDownPayment = this.yourPrice()
-            .multiply(cashDuePercent)
-            .toRoundedUnit(0);
-
-        return fromWholeDollars(calculatedDownPayment);
-    };
-
     cashDue = () => {
-        if (!this.data.leaseCashDue) {
-            return zero;
+        if (this.data.leaseCashDue === null) {
+            return fromWholeDollars(config.PRICING.lease.defaultLeaseDown);
         }
 
         return fromDollarsAndCents(this.data.leaseCashDue);
-    };
-
-    cashDuePercent = () => {
-        const downPayment = this.cashDue().toRoundedUnit(0);
-        if (!downPayment) {
-            return zero.toRoundedUnit(0);
-        }
-        const price = this.yourPrice().toRoundedUnit(0);
-        return Math.round((downPayment / price) * 100);
     };
 
     canPurchase = () => {
@@ -99,7 +77,10 @@ export default class LeasePricing extends Pricing {
         return Object.keys(payments)
             .map(item => parseInt(item, 10))
             .sort((a, b) => a - b)
-            .filter((term, termIndex) => termIndex < maxNumberOfTermsInMatrix);
+            .filter(
+                (term, termIndex) =>
+                    termIndex < config.PRICING.lease.maxNumberOfTermsInMatrix
+            );
     };
 
     paymentsForTermAndMileage = (term, annualMileage) => {
@@ -175,11 +156,14 @@ export default class LeasePricing extends Pricing {
             .map(item => parseInt(item, 10))
             .sort((a, b) => a - b)
             .filter(
-                annualMiles => annualMiles > annualMileageOptionsMustBeMoreThan
+                annualMiles =>
+                    annualMiles >
+                    config.PRICING.lease.annualMileageOptionsMustBeMoreThan
             )
             .filter(
                 (annualMiles, annualMilesIndex) =>
-                    annualMilesIndex < maxNumberOfAnnualMileageOptionsInMatrix
+                    annualMilesIndex <
+                    config.PRICING.lease.maxNumberOfAnnualMileageOptionsInMatrix
             );
     };
 
@@ -193,16 +177,17 @@ export default class LeasePricing extends Pricing {
 
     calculateDefaultTerm = () => {
         const termsAvailable = this.termsAvailable();
+        const lookForTerm = config.PRICING.lease.defaultTerm;
 
         if (!termsAvailable || termsAvailable.length === 0) {
             return null;
         }
 
-        if (termsAvailable.includes(defaultTerm)) {
-            return defaultTerm;
+        if (termsAvailable.includes(lookForTerm)) {
+            return lookForTerm;
         }
 
-        return getClosestNumberInRange(36, termsAvailable);
+        return getClosestNumberInRange(lookForTerm, termsAvailable);
     };
 
     calculateDefaultAnnualMileage = () => {
@@ -212,8 +197,12 @@ export default class LeasePricing extends Pricing {
             return null;
         }
 
-        if (annualMileageAvailable.includes(defaultAnnualMileage)) {
-            return defaultAnnualMileage;
+        if (
+            annualMileageAvailable.includes(
+                config.PRICING.lease.defaultAnnualMileage
+            )
+        ) {
+            return config.PRICING.lease.defaultAnnualMileage;
         }
 
         // Return the first lease annual mileage available.

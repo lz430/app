@@ -101,7 +101,11 @@ class AuditDealPayments extends Command
                 $deal,
                 '48116',
                 $strategy,
-                ['default']
+                ['default'],
+                false,
+                1500,
+                0,
+                0
             );
 
             $quoteData = [];
