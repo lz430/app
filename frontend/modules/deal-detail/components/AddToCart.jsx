@@ -27,6 +27,9 @@ import Separator from '../../../apps/pricing/components/Separator';
 import Group from '../../../apps/pricing/components/Group';
 import { track } from '../../../core/services';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
+
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
@@ -235,17 +238,27 @@ export default class AddToCart extends React.PureComponent {
         return (
             <div className="steps border border-medium border-bottom-0">
                 {this.steps.map((step, index) => {
+                    const isCompleted = this.state.step > index;
                     return (
                         <div
                             key={'step' + index}
                             onClick={() => this.selectStep(index)}
                             className={classNames(
                                 'step',
-                                { complete: this.state.step > index },
+                                { complete: isCompleted },
                                 { disabled: this.state.step < index },
                                 { active: this.state.step === index }
                             )}
                         >
+                            {!isCompleted && (
+                                <span className="mr-1">{index + 1})</span>
+                            )}
+                            {isCompleted && (
+                                <FontAwesomeIcon
+                                    icon={faCheckCircle}
+                                    className="mr-1"
+                                />
+                            )}
                             {step.label}
                         </div>
                     );
