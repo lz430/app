@@ -13,7 +13,7 @@ class CreateStandardTextTable extends Migration
      */
     public function up()
     {
-        Schema::create('standard_text', function (Blueprint $table) {
+        Schema::create('standard_texts', function (Blueprint $table) {
             $table->increments('id');
 
             $table->integer('version_id')->unsigned()->index();
@@ -23,7 +23,7 @@ class CreateStandardTextTable extends Migration
             $table->integer('category_id');
             $table->string('category');
             $table->string('item_name');
-            $table->string('content');
+            $table->text('content');
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ class CreateStandardTextTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('standard_text');
+        Schema::dropIfExists('standard_texts');
     }
 }
