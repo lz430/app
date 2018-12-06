@@ -43,6 +43,7 @@ return [
 
     'vauto' => [
         'uploads_path' => env('VAUTO_UPLOADS_PATH'),
+        'load_from' => env('VAUTO_LOAD_FROM', 'local'),
     ],
 
     'fuel' => [

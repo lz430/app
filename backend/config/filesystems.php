@@ -47,6 +47,11 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'temp' => [
+            'driver' => 'local',
+            'root' => sys_get_temp_dir(),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -66,6 +71,14 @@ return [
             'driver' => 'local',
             'root' => env('VAUTO_UPLOADS_PATH'),
         ],
+
+        'vauto_remote' => [
+            'driver' => 'sftp',
+            'host' => env('VAUTO_SFTP_HOST'),
+            'username' => env('VAUTO_SFTP_USERNAME'),
+            'password' => env('VAUTO_SFTP_PASSWORD'),
+        ],
+
     ],
 
 ];
