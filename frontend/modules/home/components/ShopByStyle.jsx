@@ -100,7 +100,6 @@ export default class extends React.Component {
                             onSlideChanged={this.onSlideChanged}
                             dotsDisabled={true}
                             buttonsDisabled={true}
-                            infinite={false}
                         >
                             {styles.map(style => this.renderStyle(style))}
                         </AliceCarousel>
