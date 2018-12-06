@@ -10,6 +10,7 @@ use DeliverMyRide\Carleton\Manager\DealLeasePaymentsManager;
 class DealBuildBasicPayments
 {
     private $carletonClient;
+    private const LEASE_DOWN_PAYMENT = 1500;
 
     private const LEASE_NO_PAYMENTS = [
         'term' => null,
@@ -19,6 +20,7 @@ class DealBuildBasicPayments
         'residual' => null,
         'miles' => null,
         'down' => null,
+        'down_payment' => null,
         'payment' => null,
     ];
 
@@ -30,6 +32,7 @@ class DealBuildBasicPayments
         'residual' => 0,
         'miles' => 0,
         'down' => 0,
+        'down_payment' => 0,
         'payment' => 5000,
     ];
 
@@ -118,7 +121,7 @@ class DealBuildBasicPayments
             $rates['type'] = 'factor';
         }
         $manager = new DealLeasePaymentsManager($deal, $this->carletonClient);
-        $payment = $manager->get([$rates], $quote->rebate, 0, 'default');
+        $payment = $manager->get([$rates], $quote->rebate, self::LEASE_DOWN_PAYMENT, 'default');
         if (count($payment)) {
             $payload = new \stdClass();
             $payload->term = (int) $quote->term;
@@ -128,6 +131,7 @@ class DealBuildBasicPayments
             $payload->residual = (int) $quote->residual;
             $payload->miles = (int) $quote->miles;
             $payload->down = round($payment[0]['total_amount_at_drive_off'], 2);
+            $payload->down_payment = self::LEASE_DOWN_PAYMENT;
             $payload->payment = round($payment[0]['monthly_payment'], 2);
 
             return $payload;

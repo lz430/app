@@ -23,7 +23,8 @@ class PaymentWidget extends React.PureComponent {
         {
             key: 'lease',
             label: 'Lease',
-            explanation: 'Based on 10,000 miles and 36 months.',
+            explanation:
+                'Based on 10,000 miles, 36 months and an additional $1,500 down',
         },
     ];
 
