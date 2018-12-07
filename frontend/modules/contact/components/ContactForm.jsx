@@ -42,9 +42,13 @@ class ContactForm extends React.Component {
 
     handleOnSubmit(values, actions) {
         this.setState({ values: values });
+        const payload = {
+            form: 'brochure',
+            ...values,
+        };
 
         ApiClient.brochure
-            .contact(values)
+            .contact(payload)
             .then(() => {
                 track('brochure-contact:form:submitted', {
                     'Form Submission Success': 'success',
