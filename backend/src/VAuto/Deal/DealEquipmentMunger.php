@@ -186,7 +186,7 @@ class DealEquipmentMunger
      */
     private function fetchVersionEquipment(): \Illuminate\Support\Collection
     {
-        $data = Version::with('equipment')->get();
+        $data = Version::with('equipment')->where('id', $this->deal->version_id)->get();
         return collect($data);
     }
 
@@ -198,7 +198,7 @@ class DealEquipmentMunger
     {
         $data = Version::with(['options' => function($query) {
             $query->where('option_type', 'P');
-        }])->get();
+        }])->where('id', $this->deal->version_id)->get();
         return collect($data);
     }
 
@@ -210,7 +210,7 @@ class DealEquipmentMunger
     {
         $data = Version::with(['options' => function($query) {
             $query->where('option_type', 'O');
-        }])->get();
+        }])->where('id', $this->deal->version_id)->get();
         return collect($data);
     }
 
