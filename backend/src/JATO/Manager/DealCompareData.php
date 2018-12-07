@@ -6,7 +6,6 @@ use App\Models\Deal;
 use App\Models\Feature;
 use App\Models\JATO\Version;
 use GuzzleHttp\Exception\ClientException;
-use DeliverMyRide\JATO\JatoClient;
 
 class DealCompareData
 {
@@ -32,35 +31,28 @@ class DealCompareData
         'General',
     ];
 
-    /* @var \DeliverMyRide\JATO\JatoClient */
-    private $client;
-
     /* @var \App\Models\Deal */
     private $deal;
 
     private $standardEquipmentText;
     private $equipmentOnDeal;
 
-    public function __construct(JatoClient $client, Deal $deal)
+    public function __construct(Deal $deal)
     {
-        $this->client = $client;
         $this->deal = $deal;
     }
 
     private function buildStandardEquipmentText()
     {
-        try {
-            return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '5000')->results;
-        } catch (ClientException $e) {
-            return [];
-        }
+        $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
+        return $data;
     }
 
     private function findStandardDealEquipment()
     {
         $data = Version::with(['equipment' => function($query) {
             $query->where('availability', 'standard');
-        }])->get();
+        }])->where('id', $this->deal->version_id)->get();
         return $data;
     }
 
@@ -75,7 +67,7 @@ class DealCompareData
             $query->where('availability', 'optional');
         }])->with(['options' => function($query) use($codes) {
             $query->whereIn('option_code', $codes);
-        }])->get();
+        }])->where('id', $this->deal->version_id)->get();
         return $data;
     }
 
@@ -90,7 +82,9 @@ class DealCompareData
         // Build standard text
         $text = [];
         foreach ($this->buildStandardEquipmentText() as $item) {
-            $text[$item->schemaId] = $item;
+            foreach ($item->standard_text as $st) {
+                $text[$st->schema_id] = $st;
+            }
         }
 
         $this->standardEquipmentText = $text;
@@ -105,9 +99,9 @@ class DealCompareData
         $equipments = $this->findStandardDealEquipment();
 
         foreach ($equipments as $equipment) {
-           foreach ($equipment->equipment as $equip) {
-               $data[$equip->schema_id] = $equip;
-           }
+            foreach ($equipment->equipment as $equip) {
+                $data[$equip->schema_id] = $equip;
+            }
         }
         $this->equipmentOnDeal = $data;
 
@@ -211,11 +205,11 @@ class DealCompareData
                 if ($feature) {
                     $labels[$equipments->schema_id] = $feature->title;
                 } else {
-                    if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->optionId) {
-                        if ($this->standardEquipmentText[$equipments->schema_id]->itemName == $this->standardEquipmentText[$equipments->schema_id]->content) {
+                    if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
+                        if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
                             $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
                         } else {
-                            $labels[$equipments->schema_id] = "{$this->standardEquipmentText[$equipments->schema_id]->itemName}: {$this->standardEquipmentText[$equipments->schema_id]->content}";
+                            $labels[$equipments->schema_id] = "{$this->standardEquipmentText[$equipments->schema_id]->item_name}: {$this->standardEquipmentText[$equipments->schema_id]->content}";
                         }
                     } else {
                         $labels[$equipments->schema_id] = $equipments->name;

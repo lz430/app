@@ -112,7 +112,7 @@ class Version extends Model
      */
     public function equipment(): HasMany
     {
-        return $this->hasMany(Equipment::class);
+        return $this->hasMany(Equipment::class, 'version_id', 'id');
     }
 
     /**
@@ -120,7 +120,7 @@ class Version extends Model
      */
     public function options(): HasMany
     {
-        return $this->hasMany(Option::class);
+        return $this->hasMany(Option::class, 'version_id', 'id');
     }
 
     /**
@@ -128,7 +128,7 @@ class Version extends Model
      */
     public function standard_text(): HasMany
     {
-        return $this->hasMany(StandardText::class);
+        return $this->hasMany(StandardText::class, 'version_id', 'id');
     }
 
     /**
