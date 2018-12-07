@@ -13,7 +13,6 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
-import { requestDealQuote } from '../../apps/pricing/sagas';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
