@@ -332,6 +332,22 @@ class Deal extends Model
         return $this->belongsToMany(Feature::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function equipment(): BelongsToMany
+    {
+        return $this->belongsToMany(Equipment::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function options(): BelongsToMany
+    {
+        return $this->belongsToMany(Option::class);
+    }
+
     private function getRealPhotos()
     {
         $photos = $this->photos()->get();

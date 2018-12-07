@@ -41,6 +41,11 @@ class Equipment extends Model
         return $this->belongsTo(Version::class);
     }
 
+    public function deals() : BelongsToMany
+    {
+        return $this->belongsToMany(Deal::class);
+    }
+
     public function getAttributesAttribute($value)
     {
         return json_decode($value);

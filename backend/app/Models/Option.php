@@ -35,4 +35,9 @@ class Option extends Model
     {
         return $this->belongsTo(Version::class);
     }
+
+    public function deals() : BelongsToMany
+    {
+        return $this->belongsToMany(Deal::class);
+    }
 }

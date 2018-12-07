@@ -5,16 +5,15 @@ namespace DeliverMyRide\VAuto\Deal;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Feature;
+use App\Models\JATO\Version;
 use App\Models\Category;
 use DeliverMyRide\VAuto\Map;
-use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
 class DealEquipmentMunger
 {
     private $debug;
-    private $client;
     private $deal;
     private $version;
     private $option_codes;
@@ -32,14 +31,6 @@ class DealEquipmentMunger
     private $options;
 
     private $discovered_features;
-
-    /**
-     * @param JatoClient $client
-     */
-    public function __construct(JatoClient $client)
-    {
-        $this->client = $client;
-    }
 
     /**
      * @param Deal $deal
@@ -195,11 +186,8 @@ class DealEquipmentMunger
      */
     private function fetchVersionEquipment(): \Illuminate\Support\Collection
     {
-        try {
-            return collect($this->client->equipment->get($this->version->jato_vehicle_id)->results);
-        } catch (ServerException | ClientException $e) {
-            return collect([]);
-        }
+        $data = Version::with('equipment')->get();
+        return collect($data);
     }
 
     /**
@@ -208,11 +196,10 @@ class DealEquipmentMunger
      */
     private function fetchVersionPackages(): \Illuminate\Support\Collection
     {
-        try {
-            return collect($this->client->option->get($this->version->jato_vehicle_id, 'P')->options);
-        } catch (ServerException | ClientException $e) {
-            return collect([]);
-        }
+        $data = Version::with(['options' => function($query) {
+            $query->where('option_type', 'P');
+        }])->get();
+        return collect($data);
     }
 
     /**
@@ -221,11 +208,10 @@ class DealEquipmentMunger
      */
     private function fetchVersionOptions(): \Illuminate\Support\Collection
     {
-        try {
-            return collect($this->client->option->get($this->version->jato_vehicle_id, 'O')->options);
-        } catch (ServerException | ClientException $e) {
-            return collect([]);
-        }
+        $data = Version::with(['options' => function($query) {
+            $query->where('option_type', 'O');
+        }])->get();
+        return collect($data);
     }
 
     public function buildOptionsAndPackages()
