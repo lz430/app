@@ -8,7 +8,6 @@ use SevenShores\Hubspot\Exceptions\BadRequest;
 
 class BrochureController extends BaseAPIController
 {
-
     /**
      * @param Request $request
      * @param HubspotClient $client
@@ -64,8 +63,7 @@ class BrochureController extends BaseAPIController
             if ($request->form === 'brochure') {
                 $ticketData['subject'] = 'Brochure Site Contact Form';
             } else {
-                $ticketData['subject'] = 'Question Regarding Deal #' . $request->deal_id;
-
+                $ticketData['subject'] = 'Question Regarding Deal #'.$request->deal_id;
             }
 
             try {
