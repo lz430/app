@@ -13,7 +13,6 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
-import { requestDealQuote } from '../../apps/pricing/sagas';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
@@ -57,21 +56,6 @@ function* dealDetailRequestDealQuote() {
 
     let roles = [role, ...conditionalRoles];
     let results = null;
-
-    if (
-        tradeIn.value === 0 &&
-        tradeIn.owed === 0 &&
-        (purchaseStrategy !== 'lease' ||
-            lease.cashDue === config.PRICING.lease.defaultLeaseDown)
-    ) {
-        results = yield* requestDealQuote({
-            deal: deal,
-            zipcode: location.zipcode,
-            paymentType: purchaseStrategy,
-            role: role,
-            conditionalRoles: conditionalRoles,
-        });
-    }
 
     if (!results) {
         try {
