@@ -10,7 +10,7 @@ services:
       - "*"
 
   nginx:
-    build: compose/nginx/
+    build: compose/nginx/prod
     port: 80
     domain: ${HOST}
     health: /vw-status
