@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      path: .
+      manifest: ./backend/compose/php-fpm
+    port: 5000
+    health: /
+    internal: true
+    environment:
+      - "*"
+
+  nginx:
+    build: compose/nginx/
+    port: 80
+    domain: ${HOST}
+    health: /vw-status
+    links:
+      - backend
