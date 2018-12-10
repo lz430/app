@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Manufacturer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Manufacturer whereUrlName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Manufacturer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Manufacturer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Manufacturer query()
  */
 class Manufacturer extends Model
 {

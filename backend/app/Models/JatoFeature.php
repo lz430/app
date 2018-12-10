@@ -22,6 +22,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JatoFeature query()
  */
 class JatoFeature extends Model
 {

@@ -36,6 +36,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withJatoSchemaId($schemaId)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withVautoFeature($feature)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature query()
  */
 class Feature extends Model
 {

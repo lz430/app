@@ -3,9 +3,6 @@
 namespace App\Models\JATO;
 
 use App\Models\Deal;
-use App\Models\Equipment;
-use App\Models\Option;
-use App\Models\StandardText;
 use DeliverMyRide\JATO\Map;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -66,6 +63,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereYear($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Equipment[] $equipment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Option[] $options
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\StandardText[] $standard_text
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version query()
  */
 class Version extends Model
 {

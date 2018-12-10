@@ -8,6 +8,9 @@ use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use App\Models\Order\Purchase;
+use App\Models\JATO\Equipment;
+use App\Models\JATO\Option;
+use App\Models\JATO\StandardText;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
@@ -109,6 +112,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereVin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereYear($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $photos_updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Equipment[] $equipment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Option[] $options
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\StandardText[] $standard_text
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal wherePhotosUpdatedAt($value)
  */
 class Deal extends Model
 {
