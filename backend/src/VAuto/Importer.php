@@ -362,7 +362,6 @@ class Importer
             'title' => 'vAuto Importer',
             'message' => "Import Finished - {$importEnd}",
             'fields' => [
-                'Import File Created' => date('F d Y g:ia', filemtime($source['path'])),
                 'Environment' => config('app.env'),
                 'Deals Created' => $this->debug['dealsCreated'],
                 'Deals Updated' => $this->debug['dealsUpdated'],
