@@ -10,7 +10,7 @@ class BrochureService {
      * @returns {*}
      */
     contact(data) {
-        return httpclient.post('/api/brochure/contact', data);
+        return httpclient.post('/api/brochure/ticket', data);
     }
 }
 

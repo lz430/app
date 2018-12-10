@@ -33,7 +33,7 @@ Route::get('location', 'UserLocationController@show')->name('location.show');
 /*
  * Brochure
  */
-Route::post('brochure/contact', 'BrochureController@contact')->name('brochure.contact');
+Route::post('brochure/ticket', 'BrochureController@contact')->name('brochure.contact');
 
 /*
  * Third-party
