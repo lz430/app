@@ -348,6 +348,14 @@ class Deal extends Model
         return $this->belongsToMany(Option::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function standard_text(): BelongsToMany
+    {
+        return $this->belongsToMany(StandardText::class);
+    }
+
     private function getRealPhotos()
     {
         $photos = $this->photos()->get();
