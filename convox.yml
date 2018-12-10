@@ -1,18 +1,31 @@
 services:
   backend:
     build:
-      path: .
-      manifest: ./backend/compose/php-fpm
+      path: ./backend
+      manifest: compose/prod/php-fpm/Dockerfile
     port: 5000
     health: /
     internal: true
     environment:
       - "*"
 
+  frontend:
+    build:
+      path: ./frontend
+      manifest: compose/prod/frontend/Dockerfile
+    port: 3000
+    health: /
+    internal: true
+    environment:
+      - "*"
+
   nginx:
-    build: compose/nginx/prod
+    build:
+      path: ./backend
+      manifest: compose/prod/nginx/Dockerfile
     port: 80
     domain: ${HOST}
     health: /vw-status
     links:
       - backend
+      - frontend

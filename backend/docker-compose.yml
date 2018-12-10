@@ -11,7 +11,7 @@ services:
   # DBs, Caches, ETC Services
   ###
   mysql:
-    build: ./compose/mysql
+    build: ./compose/local/mysql
     volumes:
       - local_mysql_data:/var/lib/mysql
       - local_mysql_data_backups:/backups
@@ -32,7 +32,7 @@ services:
   ###
   elasticsearch:
     build:
-      context: ./compose/elasticsearch/
+      context: ./compose/local/elasticsearch/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
@@ -50,7 +50,7 @@ services:
 
   kibana:
     build:
-      context: ./compose/kibana/
+      context: ./compose/local/kibana/
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
@@ -68,7 +68,7 @@ services:
   # Actual Application
   ###
   app:
-    build: ./compose/php-fpm
+    build: ./compose/local/php-fpm
     ports:
         - "9000:9000"
     volumes:
@@ -78,7 +78,7 @@ services:
         - elasticsearch
         - redis
   nginx:
-    build: ./compose/nginx/local
+    build: ./compose/local/nginx
     ports:
         - "5000:80"
     links:

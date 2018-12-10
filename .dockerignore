@@ -1,0 +1,9 @@
+#
+# This file is used by convox, and all things deployed by convox are
+# built inside the containers
+.git
+node_modules
+frontend/node_modules
+frontend/.next
+backend/vendor
+backend/bootstrap/cache
