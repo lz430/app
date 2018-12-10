@@ -18,6 +18,7 @@ const validationSchema = object().shape({
     lastname: string().required(),
     email: string().required(),
     phone: string().required(),
+    communication_method: string().required(),
     g_recaptcha_response: string().required(),
 });
 
@@ -27,6 +28,7 @@ const initialFormValues = {
     lastname: '',
     email: '',
     phone: '',
+    communication_method: '',
     g_recaptcha_response: '',
 };
 
