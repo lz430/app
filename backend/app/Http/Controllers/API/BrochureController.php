@@ -11,21 +11,30 @@ class BrochureController extends BaseAPIController
     /**
      * @param Request $request
      * @param HubspotClient $client
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|void
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function contact(Request $request, HubspotClient $client)
     {
         $this->validate(
             $request,
             [
+                'form' => 'required|string',
+                'g_recaptcha_response' => 'required|recaptcha',
+
+                // All forms
                 'firstname' => 'required|string',
                 'lastname' => 'required|string',
                 'email' => 'required|email',
                 'phone' => 'required|string',
-                'city' => 'required|string',
-                'state' => 'required|string',
                 'message' => 'required|string',
-                'g_recaptcha_response' => 'required|recaptcha',
+
+                // Brochure site contact
+                'city' => 'required_if:form,brochure|string',
+                'state' => 'required_if:form,brochure|string',
+
+                // deal detail
+                'deal_id' => 'required_if:form,deal|string',
             ],
             [
                 'g_recaptcha_response' => 'This token is invalid, please try again',
@@ -44,13 +53,18 @@ class BrochureController extends BaseAPIController
             $contact = $contact->toArray();
 
             $ticketData = [
-                'subject' => 'Brochure Site Contact Form',
                 'content' => $request->message,
                 'source_type' => 'FORM',
                 'created_by' => $contact['vid'],
                 'hs_pipeline' => '0',
                 'hs_pipeline_stage' => '1',
             ];
+
+            if ($request->form === 'brochure') {
+                $ticketData['subject'] = 'Brochure Site Contact Form';
+            } else {
+                $ticketData['subject'] = 'Question Regarding Deal #'.$request->deal_id;
+            }
 
             try {
                 $ticket = $client->tickets()->create($client->mungePayloadData($ticketData, 'name'));
