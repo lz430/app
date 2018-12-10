@@ -55,6 +55,14 @@ class VersionPopulateEquipmentAndOptions extends Command
         })
         ->get();
 
+
+        // Checks to see if table is not empty before deleting records to re import
+        if(Equipment::count() > 0 && Option::count() > 0 && StandardText::count() > 0) {
+            DB::table('equipment')->delete();
+            DB::table('options')->delete();
+            DB::table('standard_texts')->delete();
+        }
+
         foreach($versions as $version) {
             // Removes the command failure if jato return 400 error
             try {

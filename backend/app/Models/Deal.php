@@ -839,6 +839,28 @@ class Deal extends Model
 
         $record['dealer'] = $this->dealer->toIndexData();
 
+        // Options && Packages
+        $record['options'] = [];
+        foreach($this->version->options()->where('option_type', 'O')->get() as $option) {
+            $record['options'][] = [
+                'option_name' => $option->option_name,
+                'option_code' => $option->option_code,
+                'msrp' => $option->msrp,
+                'invoice_price' => $option->invoice_price,
+            ];
+        }
+
+        $record['packages'] = [];
+        foreach($this->version->options()->where('option_type', 'P')->get() as $package) {
+            $record['packages'][] = [
+                'option_name' => $package->option_name,
+                'option_code' => $package->option_code,
+                'msrp' => $package->msrp,
+                'invoice_price' => $package->invoice_price,
+            ];
+        }
+
+
         //
         // Catchall
         if ($this->vauto_features) {
