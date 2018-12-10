@@ -28,7 +28,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'sentry'],
+            'channels' => ['errorlog', 'sentry'],
         ],
         'single' => [
             'driver' => 'single',
