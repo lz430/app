@@ -42,14 +42,14 @@ class ContactForm extends React.Component {
         ApiClient.brochure
             .contact(values)
             .then(() => {
-                track('brochure-contact:form:submitted', {
+                track('deal-detail:contact-form:submitted', {
                     'Form Submission Success': 'success',
                 });
 
                 this.setState({ success: true });
             })
             .catch(error => {
-                track('brochure-contact:form:submitted', {
+                track('deal-detail:contact-form:submitted', {
                     'Form Submission Success': 'error',
                 });
 
