@@ -15,6 +15,7 @@ class Page extends Component {
         collapse: false,
         active: false,
         category: 'General Questions',
+        notCat: 'Deal FAQ',
     };
 
     componentDidMount() {
@@ -39,7 +40,7 @@ class Page extends Component {
 
     renderNav() {
         const cats = [...new Set(Faqs.map(q => q.category))];
-        const catsR = cats.map((name, i) => {
+        const catsR = cats.filter(c => c !== 'Deal FAQ').map((name, i) => {
             return (
                 <li
                     key={i}

@@ -71,6 +71,66 @@
             }
         }
     }
+
+    &__faq__list {
+        margin: 0;
+        padding-left: 0;
+
+        .col {
+            border-bottom: 1px solid $color-darkgrey;
+            padding-left: 0px;
+            margin-bottom: 10px;
+
+            .title {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+            .content {
+                padding-bottom: 15px;
+            }
+        }
+    }
+
+    &__contact {
+        input[type='text'],
+        textarea,
+        input[type='email'],
+        input[type='tel'],
+        select {
+            background-color: transparent;
+            border-top: 0 none;
+            border-left: 0 none;
+            border-right: 0 none;
+            border-bottom: 1px solid $color-grey;
+            border-radius: 0;
+            color: $color-black;
+
+            &::placeholder {
+                color: $color-darkgrey;
+            }
+
+            &:active,
+            &:focus {
+                background-color: transparent;
+            }
+        }
+        textarea {
+            height: 44px;
+        }
+
+        &__phone {
+            margin-top: 20px;
+            width: 100%;
+        }
+        &__cta {
+            margin-top: 20px;
+        }
+    }
 }
 
 .thumbnail-container {
