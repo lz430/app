@@ -56,8 +56,9 @@ import Media from './components/Media';
 import DealFeatures from './components/DealFeatures';
 import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
-import ContactForm from './components/ContactForm';
 import Faq from './components/faq';
+import ContactForm from './components/ContactForm';
+import OurPromise from './components/Promise';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -248,7 +249,7 @@ class DealDetailContainer extends React.PureComponent {
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
-                <Container className="mb-5">
+                <Container className="mb-5 deal-details">
                     <Header deal={this.props.deal} />
                     <Row>
                         <Col md="6" lg="7" xl="8">
@@ -292,12 +293,15 @@ class DealDetailContainer extends React.PureComponent {
                             />
                         </Col>
                     </Row>
-                    <Row>
+                    <Row className="deal__row">
+                        <OurPromise />
+                    </Row>
+                    <Row className="deal__row">
                         <Col md="6">
                             <Faq />
                         </Col>
                         <Col md="6">
-                            <ContactForm />
+                            <ContactForm deal={this.props.deal} />
                         </Col>
                     </Row>
                 </Container>

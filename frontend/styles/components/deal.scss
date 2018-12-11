@@ -1,4 +1,15 @@
 .deal {
+    &__row {
+        &.deal__row {
+            margin-top: 50px;
+        }
+        @include media-breakpoint-down(sm) {
+            & > .col-md-6 {
+                margin-top: 50px;
+            }
+        }
+    }
+
     &__basic-info {
         margin-bottom: 0.5rem;
     }
@@ -98,6 +109,7 @@
 
     &__contact {
         input[type='text'],
+        textarea,
         input[type='email'],
         input[type='tel'],
         select {
@@ -106,6 +118,7 @@
             border-left: 0 none;
             border-right: 0 none;
             border-bottom: 1px solid $color-grey;
+            border-radius: 0;
             color: $color-black;
 
             &::placeholder {
@@ -115,6 +128,68 @@
             &:active,
             &:focus {
                 background-color: transparent;
+            }
+        }
+        textarea {
+            height: 44px;
+        }
+
+        button[type='submit'] {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        &__phone {
+            margin-top: 20px;
+            width: 100%;
+        }
+    }
+
+    &__promise {
+        @include media-breakpoint-down(sm) {
+            margin: 0 auto;
+            width: 95%;
+        }
+        h2 {
+            margin-bottom: 20px;
+
+            &:after {
+                border-bottom: 2px solid $color-darkgrey;
+                content: '';
+                display: block;
+                height: 5px;
+                margin: 0 auto;
+                width: 10%;
+            }
+        }
+
+        &__columns {
+            border: 1px solid $color-darkgrey;
+            padding: 30px;
+
+            @include media-breakpoint-down(sm) {
+                .col-md-4 + .col-md-4 {
+                    margin: 20px 0;
+                }
+            }
+
+            @include media-breakpoint-up(sm) {
+                .col-md-1 {
+                    max-width: 45px;
+                    padding-right: 5px;
+                }
+            }
+
+            img {
+                max-width: 40px;
+                max-height: 40px;
+                @include media-breakpoint-down(sm) {
+                    margin-right: 10px;
+                }
+            }
+
+            h5 {
+                font-size: 1.2rem;
             }
         }
     }
