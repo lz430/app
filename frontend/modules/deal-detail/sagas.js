@@ -13,7 +13,6 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
-import { requestDealQuote } from '../../apps/pricing/sagas';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
@@ -31,6 +30,7 @@ import {
     setQuoteIsLoading,
 } from './actions';
 import { cancelRequest } from '../../store/httpclient';
+import config from '../../core/config';
 
 /*******************************************************************
  * Request Deal Quote
@@ -57,16 +57,6 @@ function* dealDetailRequestDealQuote() {
     let roles = [role, ...conditionalRoles];
     let results = null;
 
-    if (tradeIn.value === 0 && tradeIn.owed === 0) {
-        results = yield* requestDealQuote({
-            deal: deal,
-            zipcode: location.zipcode,
-            paymentType: purchaseStrategy,
-            role: role,
-            conditionalRoles: conditionalRoles,
-        });
-    }
-
     if (!results) {
         try {
             results = yield call(
@@ -78,7 +68,7 @@ function* dealDetailRequestDealQuote() {
                 source.token,
                 purchaseStrategy === 'lease' && lease.cashDue
                     ? lease.cashDue
-                    : 0,
+                    : config.PRICING.lease.defaultLeaseDown,
                 tradeIn.value,
                 tradeIn.owed
             );

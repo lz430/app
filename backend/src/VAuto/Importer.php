@@ -11,10 +11,8 @@ use League\Csv\Statement;
 use App\Models\JATO\Version;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
-use League\Flysystem\MountManager;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Storage;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use App\Notifications\NotifyToSlackChannel;
@@ -71,15 +69,20 @@ class Importer
 
     private const PROCESS_BATCH_SIZE = 100;
 
+    /* @var JatoClient */
     private $jatoClient;
 
     private $error;
     private $info;
     private $debug;
 
+    /* @var VautoFileManager */
+    private $fileManager;
+
     public function __construct(JatoClient $jatoClient)
     {
         $this->jatoClient = $jatoClient;
+        $this->fileManager = new VautoFileManager();
 
         $this->debug = [
             'start' => microtime(true),
@@ -125,23 +128,7 @@ class Importer
      */
     private function buildSourceData(): array
     {
-        $vautoStorage = Storage::disk('vauto');
-        $files = $vautoStorage->files();
-        $prefix = $vautoStorage->getDriver()->getAdapter()->getPathPrefix();
-        $files = collect($files)
-            ->filter(function ($item) {
-                return pathinfo($item, PATHINFO_EXTENSION) === 'csv';
-            })->map(function ($item) use ($prefix) {
-                $path = $prefix.$item;
-
-                return [
-                    'name' => $item,
-                    'path' => $path,
-                    'hash' => md5_file($path),
-                ];
-            });
-
-        return array_values($files->all());
+        return $this->fileManager->downloadAllFiles();
     }
 
     /**
@@ -391,26 +378,11 @@ class Importer
                 'Total Execution Time' => $this->formatTimePeriod($this->debug['stop'], $this->debug['start']),
             ],
         ];
+
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
 
-        if (config('filesystems.disks.s3.region')) {
-            $mountManager = new MountManager([
-                's3' => \Storage::disk('s3')->getDriver(),
-                'vauto' => \Storage::disk('vauto')->getDriver(),
-            ]);
-            foreach ($sources as $key => $source) {
-                $newName = 'vAuto_DMR-'.date('m-d-Y').'-'.$key.'.csv';
-                $mountManager->copy(
-                    'vauto://'.$source['name'],
-                    's3://logs/vauto/'.$newName,
-                    [
-                        'ContentType' => 'text/csv',
-                        'ContentDisposition' => 'attachment',
-                    ]
-                );
-            }
-        }
+        $this->fileManager->archiveFiles($sources);
     }
 
     /**

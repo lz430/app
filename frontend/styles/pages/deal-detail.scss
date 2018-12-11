@@ -146,6 +146,9 @@
 
     &__discount_role {
         cursor: pointer;
+        > div {
+            display: inline-block;
+        }
     }
 
     &__payment-summary {

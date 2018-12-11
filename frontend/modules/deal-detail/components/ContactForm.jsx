@@ -1,6 +1,7 @@
 import React from 'react';
 import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
 import FormikFieldWithreCaptcha from '../../../components/Forms/FormikFieldWithreCaptcha';
+import { dealType } from '../../../core/types';
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
 
@@ -13,20 +14,22 @@ import { track } from '../../../core/services';
 import ApiClient from '../../../store/api';
 
 const validationSchema = object().shape({
-    subject: string().required(),
+    message: string().required(),
     firstname: string().required(),
     lastname: string().required(),
     email: string().required(),
     phone: string().required(),
+    communication_method: string().required(),
     g_recaptcha_response: string().required(),
 });
 
 const initialFormValues = {
-    subject: '',
+    message: '',
     firstname: '',
     lastname: '',
     email: '',
     phone: '',
+    communication_method: '',
     g_recaptcha_response: '',
 };
 
@@ -35,21 +38,30 @@ class ContactForm extends React.Component {
         success: false,
         values: null,
     };
+    static propTypes = {
+        deal: dealType,
+    };
 
     handleOnSubmit(values, actions) {
         this.setState({ values: values });
+        const payload = {
+            form: 'deal',
+            deal_id: this.props.deal.id.toString(),
+            deal_vin: this.props.deal.vin,
+            ...values,
+        };
 
         ApiClient.brochure
-            .contact(values)
+            .contact(payload)
             .then(() => {
-                track('brochure-contact:form:submitted', {
+                track('deal-detail:contact-form:submitted', {
                     'Form Submission Success': 'success',
                 });
 
                 this.setState({ success: true });
             })
             .catch(error => {
-                track('brochure-contact:form:submitted', {
+                track('deal-detail:contact-form:submitted', {
                     'Form Submission Success': 'error',
                 });
 
@@ -105,13 +117,14 @@ class ContactForm extends React.Component {
 
                     return (
                         <Form className="deal__contact">
+                            <h5>Ask a Question About This Car </h5>
                             <Row>
                                 <Col>
                                     <FormGroup>
                                         <FormikFieldWithBootstrapInput
-                                            type="text"
-                                            name="subject"
-                                            id="subject"
+                                            type="textarea"
+                                            name="message"
+                                            id="message"
                                             placeholder="I'd like to know"
                                         />
                                     </FormGroup>
@@ -173,7 +186,9 @@ class ContactForm extends React.Component {
                                     type="select"
                                     name="communication_method"
                                     id="communication_method"
+                                    value={this.state.value}
                                 >
+                                    <option value="" label="Select one" />
                                     <option value="Email" label="Email" />
                                     <option value="Phone" label="Phone" />
                                 </FormikFieldWithBootstrapInput>
@@ -184,8 +199,16 @@ class ContactForm extends React.Component {
                                     <FormikFieldWithreCaptcha name="g_recaptcha_response" />
                                 </Col>
                             </Row>
-
-                            <div className="text-right">{button}</div>
+                            <Row className="deal__contact__cta">
+                                <Col>
+                                    <div className="text-center">{button}</div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <h6 className="deal__contact__phone text-center">
+                                    Or Call: (855)675-7301
+                                </h6>
+                            </Row>
                         </Form>
                     );
                 }}

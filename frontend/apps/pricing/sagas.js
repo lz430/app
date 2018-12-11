@@ -18,6 +18,7 @@ import {
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
 import { dealQuoteKey } from './helpers';
+import config from '../../core/config';
 
 /*******************************************************************
  * Request Deal Quote
@@ -29,7 +30,10 @@ export function* requestDealQuote(action) {
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
     const role = action.role;
-    const down = action.down || 0;
+    const down =
+        action.down !== null
+            ? action.down
+            : config.PRICING.lease.defaultLeaseDown;
     const tradeValue = action.tradeValue || 0;
     const tradeOwed = action.tradeOwed || 0;
     const conditionalRoles = action.conditionalRoles || [];

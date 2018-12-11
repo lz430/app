@@ -7,33 +7,25 @@ import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 class ListGroupCollapse extends React.Component {
     static propTypes = {
         item: PropTypes.object,
+        isOpen: PropTypes.bool.isRequired,
+        onToggle: PropTypes.func.isRequired,
     };
-    state = {
-        collapse: false,
-        active: false,
-    };
-
-    toggle = () =>
-        this.setState({
-            collapse: !this.state.collapse,
-            active: !this.state.active,
-        });
 
     render() {
-        const item = this.props.item;
+        const { item, isOpen, onToggle } = this.props;
         return (
             <Col key={item.title}>
                 <div
-                    className={this.state.active ? 'title active' : 'title'}
-                    onClick={this.toggle}
+                    className={isOpen ? 'title active' : 'title'}
+                    onClick={() => onToggle(item.title)}
                     id={item.key}
                 >
                     {item.title}
                     <FontAwesomeIcon
-                        icon={this.state.active ? faChevronUp : faChevronDown}
+                        icon={isOpen ? faChevronUp : faChevronDown}
                     />
                 </div>
-                <Collapse isOpen={this.state.collapse}>
+                <Collapse isOpen={isOpen}>
                     <div className="content">
                         <span
                             dangerouslySetInnerHTML={{
