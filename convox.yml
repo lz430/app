@@ -4,8 +4,8 @@ services:
       path: ./backend
       manifest: compose/prod/php-fpm/Dockerfile
     port: 5000
-    health: /
-    internal: true
+    health: /admin/login
+    internal: false
     environment:
       - "*"
 
@@ -15,7 +15,7 @@ services:
       manifest: compose/prod/frontend/Dockerfile
     port: 3000
     health: /
-    internal: true
+    internal: false
     environment:
       - "*"
 
