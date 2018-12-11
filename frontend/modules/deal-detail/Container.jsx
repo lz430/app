@@ -56,6 +56,8 @@ import Media from './components/Media';
 import DealFeatures from './components/DealFeatures';
 import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
+import Faq from './components/faq';
+import ContactForm from './components/ContactForm';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -288,6 +290,14 @@ class DealDetailContainer extends React.PureComponent {
                                 userLocation={this.props.userLocation}
                                 tradeSet={this.props.tradeSet}
                             />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md="6">
+                            <Faq />
+                        </Col>
+                        <Col md="6">
+                            <ContactForm deal={this.props.deal} />
                         </Col>
                     </Row>
                 </Container>
