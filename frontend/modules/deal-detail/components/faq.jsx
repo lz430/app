@@ -29,7 +29,7 @@ class ListGroupCollapse extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <h3> Frequently Asked Questions </h3>
+                <h5> Frequently Asked Questions </h5>
                 <ul className="deal__faq__list">
                     {this.getFaqContent().map(item => (
                         <FaqGroup

@@ -56,8 +56,8 @@ import Media from './components/Media';
 import DealFeatures from './components/DealFeatures';
 import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
-import ContactForm from './components/ContactForm';
 import Faq from './components/faq';
+import ContactForm from './components/ContactForm';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -297,7 +297,7 @@ class DealDetailContainer extends React.PureComponent {
                             <Faq />
                         </Col>
                         <Col md="6">
-                            <ContactForm />
+                            <ContactForm deal={this.props.deal} />
                         </Col>
                     </Row>
                 </Container>
