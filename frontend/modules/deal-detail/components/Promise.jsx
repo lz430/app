@@ -27,12 +27,13 @@ export default class extends React.PureComponent {
                                         We are not a lead generating site for
                                         dealerships. If anyone asks for your
                                         contact information without promising
-                                        that you won't be spammed – you'll be
-                                        spammed. At Deliver My Ride you control
-                                        the process of purchasing your new
-                                        vehicle 100% online, and your
-                                        information stays private, meaning no
-                                        annoying sales calls – ever!
+                                        that you won&apos;t be spammed &dash;
+                                        you&apos;ll be spammed. At Deliver My
+                                        Ride you control the process of
+                                        purchasing your new vehicle 100&percnt;
+                                        online, and your information stays
+                                        private, meaning no annoying sales calls
+                                        &dash; ever&excl;
                                     </p>
                                 </Col>
                             </Row>
@@ -53,12 +54,13 @@ export default class extends React.PureComponent {
                                         We are not a lead generating site for
                                         dealerships. If anyone asks for your
                                         contact information without promising
-                                        that you won't be spammed – you'll be
-                                        spammed. At Deliver My Ride you control
-                                        the process of purchasing your new
-                                        vehicle 100% online, and your
-                                        information stays private, meaning no
-                                        annoying sales calls – ever!
+                                        that you won&apos;t be spammed &dash;
+                                        you&apos;ll be spammed. At Deliver My
+                                        Ride you control the process of
+                                        purchasing your new vehicle 100&percnt;
+                                        online, and your information stays
+                                        private, meaning no annoying sales calls
+                                        &dash; ever&excl;
                                     </p>
                                 </Col>
                             </Row>
@@ -81,14 +83,14 @@ export default class extends React.PureComponent {
                                     <p>
                                         Are you a helicopter pilot, ski-patrol
                                         surgeon and recent college graduate that
-                                        happens to be an astronaut? Yeah,
-                                        neither are we. That's why you'll never
-                                        see a full-sized luxury SUV for $79/mo
-                                        on our site. Advertised prices are too
-                                        good to be true – because they often
-                                        are. Don't be fooled, at Deliver My Ride
-                                        the price you see is the price you'll
-                                        pay.
+                                        happens to be an astronaut&quest; Yeah,
+                                        neither are we. That&apos;s why you'll
+                                        never see a full-sized luxury SUV for
+                                        $79/mo on our site. Advertised prices
+                                        are too good to be true &dash; because
+                                        they often are. Don't be fooled, at
+                                        Deliver My Ride the price you see is the
+                                        price you&apos;ll pay.
                                     </p>
                                 </Col>
                             </Row>
@@ -108,14 +110,15 @@ export default class extends React.PureComponent {
                                     <p>
                                         Are you a helicopter pilot, ski-patrol
                                         surgeon and recent college graduate that
-                                        happens to be an astronaut? Yeah,
-                                        neither are we. That's why you'll never
-                                        see a full-sized luxury SUV for $79/mo
-                                        on our site. Advertised prices are too
-                                        good to be true – because they often
-                                        are. Don't be fooled, at Deliver My Ride
-                                        the price you see is the price you'll
-                                        pay.
+                                        happens to be an astronaut&quest; Yeah,
+                                        neither are we. That&apos;s why
+                                        you&apos;ll never see a full-sized
+                                        luxury SUV for $79/mo on our site.
+                                        Advertised prices are too good to be
+                                        true &dash; because they often are.
+                                        Don&apos;t be fooled, at Deliver My Ride
+                                        the price you see is the price
+                                        you&apos;ll pay.
                                     </p>
                                 </Col>
                             </Row>
@@ -133,18 +136,18 @@ export default class extends React.PureComponent {
                                 </Col>
                                 <Col md="10">
                                     <h5 className="text-uppercase">
-                                        100% dealer inventory{' '}
+                                        100&percnt; dealer inventory{' '}
                                     </h5>
                                     <p>
                                         Deliver My Ride is the modern way to buy
                                         or lease a new vehicle. We only show you
                                         real cars that are in local dealer
-                                        inventory – right now. Our pricing,
-                                        rebates and financing options, aren't
-                                        estimates they are the real price you
-                                        will pay all without having to leave
-                                        your home. We even deliver (for free!)
-                                        to your home or office.
+                                        inventory &dash; right now. Our pricing,
+                                        rebates and financing options,
+                                        aren&apos;t estimates they are the real
+                                        price you will pay all without having to
+                                        leave your home. We even deliver (for
+                                        free&excl;) to your home or office.
                                     </p>
                                 </Col>
                             </Row>
@@ -156,7 +159,7 @@ export default class extends React.PureComponent {
                                     alt="Our promise comp"
                                 />
                                 <h5 className="text-uppercase">
-                                    100% dealer inventory{' '}
+                                    100&percnt; dealer inventory{' '}
                                 </h5>
                             </Row>
                             <Row>
@@ -165,12 +168,12 @@ export default class extends React.PureComponent {
                                         Deliver My Ride is the modern way to buy
                                         or lease a new vehicle. We only show you
                                         real cars that are in local dealer
-                                        inventory – right now. Our pricing,
-                                        rebates and financing options, aren't
-                                        estimates they are the real price you
-                                        will pay all without having to leave
-                                        your home. We even deliver (for free!)
-                                        to your home or office.
+                                        inventory &dash; right now. Our pricing,
+                                        rebates and financing options,
+                                        aren&apos;t estimates they are the real
+                                        price you will pay all without having to
+                                        leave your home. We even deliver (for
+                                        free&excl;) to your home or office.
                                     </p>
                                 </Col>
                             </Row>
