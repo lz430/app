@@ -8,4 +8,8 @@ frontend/.next
 frontend/.env
 backend/.env
 backend/vendor
-backend/bootstrap/cache
+backend/bootstrap/cache/*
+backend/storage/vauto
+backend/storage/logs/*
+backend/storage/sessions/*
+backend/storage/views/*

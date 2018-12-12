@@ -9,18 +9,23 @@ const Dotenv = require('dotenv-webpack');
 module.exports = withCSS(
     withSass({
         useFileSystemPublicRoutes: false,
-        webpack: config => {
+        webpack: (config, { buildId, dev, isServer, defaultLoaders }) => {
             config.plugins = config.plugins || [];
+            let env;
 
-            config.plugins = [
-                ...config.plugins,
-
-                // Read the .env file
-                new Dotenv({
+            if (dev) {
+                env = new Dotenv({
                     path: path.join(__dirname, '.env'),
+                    silent: true,
+                });
+            } else {
+                env = new Dotenv({
                     systemvars: true,
-                }),
-            ];
+                    silent: true,
+                });
+            }
+
+            config.plugins = [...config.plugins, env];
 
             const originalEntry = config.entry;
             config.entry = async () => {

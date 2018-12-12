@@ -1,5 +1,5 @@
 services:
-  backend:
+  app:
     build:
       path: ./backend
       manifest: compose/prod/php-fpm/Dockerfile
@@ -8,6 +8,23 @@ services:
     internal: false
     environment:
       - "*"
+      - CONTAINER_ROLE: app
+
+  scheduler:
+    build:
+      path: ./backend
+      manifest: compose/prod/php-fpm/Dockerfile
+    environment:
+      - "*"
+      - CONTAINER_ROLE: scheduler
+
+  worker:
+    build:
+      path: ./backend
+      manifest: compose/prod/php-fpm/Dockerfile
+    environment:
+      - "*"
+      - CONTAINER_ROLE: queue
 
   frontend:
     build:
@@ -15,7 +32,7 @@ services:
       manifest: compose/prod/frontend/Dockerfile
     port: 3000
     health: /
-    internal: false
+    internal: true
     environment:
       - "*"
 
@@ -27,5 +44,5 @@ services:
     domain: ${HOST}
     health: /vw-status
     links:
-      - backend
+      - app
       - frontend
