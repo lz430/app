@@ -46,3 +46,13 @@ services:
     links:
       - app
       - frontend
+
+  redirect:
+    build:
+      path: ./backend
+      manifest: compose/prod/redirect/Dockerfile
+    port: 80
+    domain: "*.delivermyride.com"
+    health: /vw-status
+    environment:
+      - HOST
