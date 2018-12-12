@@ -84,13 +84,14 @@ export default class extends React.PureComponent {
                                         Are you a helicopter pilot, ski-patrol
                                         surgeon and recent college graduate that
                                         happens to be an astronaut&quest; Yeah,
-                                        neither are we. That&apos;s why you'll
-                                        never see a full-sized luxury SUV for
-                                        $79/mo on our site. Advertised prices
-                                        are too good to be true &dash; because
-                                        they often are. Don't be fooled, at
-                                        Deliver My Ride the price you see is the
-                                        price you&apos;ll pay.
+                                        neither are we. That&apos;s why
+                                        you&apos;ll never see a full-sized
+                                        luxury SUV for $79/mo on our site.
+                                        Advertised prices are too good to be
+                                        true &dash; because they often are.
+                                        Don&apos;t be fooled, at Deliver My Ride
+                                        the price you see is the price
+                                        you&apos;ll pay.
                                     </p>
                                 </Col>
                             </Row>
