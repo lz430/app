@@ -9,7 +9,7 @@ const Dotenv = require('dotenv-webpack');
 module.exports = withCSS(
     withSass({
         useFileSystemPublicRoutes: false,
-        webpack: (config, { buildId, dev, isServer, defaultLoaders }) => {
+        webpack: (config, { dev }) => {
             config.plugins = config.plugins || [];
             let env;
 
