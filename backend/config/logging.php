@@ -28,11 +28,13 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['errorlog', 'sentry'],
+            'channels' => ['syslog', 'sentry'],
         ],
         'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
+          #  'driver' => 'single',
+          #  'path' => storage_path('logs/laravel.log'),
+          'driver' => 'syslog',
+
             'level' => 'notice',
         ],
         'jato' => [

@@ -14,7 +14,13 @@ RUN apt-get update \
 		zlib1g-dev \
 		libicu-dev \
 		g++ \
+		nginx \
     && rm -rf /var/lib/apt/lists/*
+
+###########################################################################
+# Nginx
+###########################################################################
+COPY ./compose/prod/php-fpm/conf/nginx-site.conf /etc/nginx/sites-enabled/default
 
 
 ###########################################################################
@@ -37,6 +43,7 @@ RUN docker-php-ext-configure intl \
 ###########################################################################
 
 COPY ./compose/prod/php-fpm/conf/app.ini /usr/local/etc/php/conf.d
+COPY ./compose/prod/php-fpm/conf/app-php-fpm.conf /usr/local/etc/php-fpm.d
 
 
 RUN usermod -u 1000 www-data
@@ -50,4 +57,8 @@ COPY . /app
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-CMD php-fpm -F
+COPY ./compose/prod/php-fpm/entrypoint.sh /etc/entrypoint.sh
+RUN chmod u+x /etc/entrypoint.sh
+
+EXPOSE 80
+ENTRYPOINT ["sh", "/etc/entrypoint.sh"]

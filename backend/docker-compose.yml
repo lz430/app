@@ -37,7 +37,7 @@ services:
         ELK_VERSION: $ELK_VERSION
     volumes:
       - local_es_data:/usr/share/elasticsearch/data:delegated
-      - ./compose/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./compose/local/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
     - "9200:9200"
     - "9300:9300"
@@ -54,7 +54,7 @@ services:
       args:
         ELK_VERSION: $ELK_VERSION
     volumes:
-      - ./compose/kibana/config/:/usr/share/kibana/config:ro
+      - ./compose/local/kibana/config/:/usr/share/kibana/config:ro
     ulimits:
       memlock:
         soft: -1

@@ -3,8 +3,8 @@ services:
     build:
       path: ./backend
       manifest: compose/prod/php-fpm/Dockerfile
-    port: 5000
-    health: /admin/login
+    port: 80
+    health: /ping
     internal: false
     environment:
       - "*"
