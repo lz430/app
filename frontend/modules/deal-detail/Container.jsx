@@ -296,15 +296,19 @@ class DealDetailContainer extends React.PureComponent {
                     <Row className="deal__row">
                         <OurPromise />
                     </Row>
-                    <Row className="deal__row">
-                        <Col md="6">
-                            <Faq />
-                        </Col>
-                        <Col md="6">
-                            <ContactForm deal={this.props.deal} />
-                        </Col>
-                    </Row>
                 </Container>
+                <div className="bg-white pb-5 pt-5">
+                    <Container>
+                        <Row>
+                            <Col md="6">
+                                <Faq />
+                            </Col>
+                            <Col md="6">
+                                <ContactForm deal={this.props.deal} />
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
             </React.Fragment>
         );
     }

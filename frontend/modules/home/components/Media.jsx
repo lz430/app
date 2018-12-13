@@ -3,6 +3,7 @@ import React from 'react';
 import { Container, Row, Col } from 'reactstrap';
 
 import featuredMedia from '../../../content/media';
+import StaticImage from '../../../components/StaticImage';
 
 export default class extends React.Component {
     renderMedia(media) {
@@ -13,7 +14,7 @@ export default class extends React.Component {
                     rel="noopener noreferrer nofollow"
                     target="_blank"
                 >
-                    <img src={media.logo} alt={media.name} />
+                    <StaticImage path={media.logo} alt={media.name} />
                 </a>
             </Col>
         );

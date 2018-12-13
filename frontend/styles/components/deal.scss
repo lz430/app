@@ -89,12 +89,13 @@
 
         .col {
             border-bottom: 1px solid $color-darkgrey;
-            padding-left: 0px;
-            margin-bottom: 10px;
+            padding-left: 0;
+            margin-bottom: 0;
 
             .title {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 padding: 10px 0;
 
                 &:hover {

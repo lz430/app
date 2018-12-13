@@ -1,5 +1,6 @@
 const express = require('express');
 const next = require('next');
+const compression = require('compression');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -10,6 +11,9 @@ const staticRoutes = require('./staticRoutes');
 app.prepare()
     .then(() => {
         const server = express();
+        if (!dev) {
+            server.use(compression());
+        }
 
         staticRoutes({ server, app });
 
@@ -45,7 +49,6 @@ app.prepare()
 
         //
         // Brochure Site
-        // Note: Temp prefix with /brochure... will rename all the routes when we go live.
         server.get('/', (req, res) => {
             app.render(req, res, '/home', req.query);
         });

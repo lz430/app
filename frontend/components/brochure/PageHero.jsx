@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
+import { buildURL } from 'react-imgix';
+import { buildStaticImageUrl } from '../../util/util';
 
 export default class PageHero extends React.PureComponent {
     static propTypes = {
@@ -18,7 +20,13 @@ export default class PageHero extends React.PureComponent {
     render() {
         let style = {};
         if (this.props.backgroundImage) {
-            style.backgroundImage = 'url(' + this.props.backgroundImage + ')';
+            style.backgroundImage =
+                'url(' +
+                buildURL(buildStaticImageUrl(this.props.backgroundImage), {
+                    auto: ['format', 'compress'],
+                    sizes: '100vw',
+                }) +
+                ')';
         }
         return (
             <div className="page-hero" style={style}>
