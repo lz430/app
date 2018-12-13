@@ -58,6 +58,7 @@ import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
+import OurPromise from './components/Promise';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -248,7 +249,7 @@ class DealDetailContainer extends React.PureComponent {
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
-                <Container className="mb-5">
+                <Container className="mb-5 deal-details">
                     <Header deal={this.props.deal} />
                     <Row>
                         <Col md="6" lg="7" xl="8">
@@ -291,6 +292,9 @@ class DealDetailContainer extends React.PureComponent {
                                 tradeSet={this.props.tradeSet}
                             />
                         </Col>
+                    </Row>
+                    <Row className="deal__row">
+                        <OurPromise />
                     </Row>
                 </Container>
                 <div className="bg-white pb-5 pt-5">
