@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
 
 export default class extends React.PureComponent {
