@@ -68,7 +68,7 @@ class DealPrice extends React.Component {
 
     showWhenPricingIsLoaded() {
         if (this.props.pricing.quoteIsLoading()) {
-            return <Loading />;
+            return <Loading size={2} />;
         }
 
         if (!this.props.pricing.canPurchase()) {

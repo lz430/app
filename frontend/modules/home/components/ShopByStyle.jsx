@@ -12,6 +12,8 @@ import { track } from '../../../core/services';
 
 import { faArrowLeft, faArrowRight } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { buildURL } from 'react-imgix';
+import { buildStaticImageUrl } from '../../../util/util';
 
 export default class extends React.Component {
     static propTypes = {
@@ -55,7 +57,14 @@ export default class extends React.Component {
                 <a
                     onClick={() => this.trackLinkClick(style, query)}
                     className="style__item text-center"
-                    style={{ backgroundImage: 'url(' + style.icon + ')' }}
+                    style={{
+                        backgroundImage:
+                            'url(' +
+                            buildURL(buildStaticImageUrl(style.icon), {
+                                auto: ['format', 'compress'],
+                            }) +
+                            ')',
+                    }}
                 >
                     <h5>{style.title}</h5>
 
