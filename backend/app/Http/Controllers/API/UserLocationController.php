@@ -119,7 +119,10 @@ class UserLocationController extends Controller
         } elseif (request('search')) {
             $location = $this->getLocationForAddress($geocoder, request('search'));
         } else {
-            $ip = request()->ip();
+            $ip = request()->header('X-Real-IP');
+            if (!$ip) {
+                $ip = request()->ip();
+            }
 
             // Fix for local development
             if (config('app.env') == 'local') {
