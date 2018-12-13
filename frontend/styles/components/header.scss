@@ -63,7 +63,6 @@
         padding: 0;
 
         @include media-breakpoint-down(md) {
-            padding-left: 25px;
             align-items: center;
             display: flex;
         }
