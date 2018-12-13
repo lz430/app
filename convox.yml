@@ -26,6 +26,14 @@ services:
       - "*"
       - CONTAINER_ROLE: queue
 
+  cli:
+    build:
+      path: ./backend
+      manifest: compose/prod/php-fpm/Dockerfile
+    environment:
+      - "*"
+      - CONTAINER_ROLE: cli
+
   frontend:
     build:
       path: ./frontend

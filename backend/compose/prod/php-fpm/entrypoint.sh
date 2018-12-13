@@ -4,6 +4,8 @@ set -e
 
 role=${CONTAINER_ROLE:-app}
 
+echo ${role}
+
 if [ "$role" = "app" ]; then
     service nginx start
     php-fpm
@@ -16,6 +18,5 @@ elif [ "$role" = "scheduler" ]; then
       sleep 60
     done
 else
-    echo "Could not match the container role \"$role\""
-    exit 1
+    exec "$@"
 fi
