@@ -57,8 +57,10 @@ COPY . /app
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 RUN chown www-data:www-data /app -R
 
-COPY ./compose/prod/php-fpm/entrypoint.sh /etc/entrypoint.sh
-RUN chmod u+x /etc/entrypoint.sh
+COPY ./compose/prod/php-fpm/entrypoint.sh /entrypoint.sh
+COPY ./compose/prod/php-fpm/bin/*.sh /
+
+RUN chmod u+x /*.sh
 
 EXPOSE 80
-ENTRYPOINT ["sh", "/etc/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]

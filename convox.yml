@@ -5,34 +5,26 @@ services:
       manifest: compose/prod/php-fpm/Dockerfile
     port: 80
     health: /ping
-    internal: false
+    internal: true
+    command: /app.sh
     environment:
       - "*"
-      - CONTAINER_ROLE: app
 
   scheduler:
     build:
       path: ./backend
       manifest: compose/prod/php-fpm/Dockerfile
+    command: /scheduler.sh
     environment:
       - "*"
-      - CONTAINER_ROLE: scheduler
 
   worker:
     build:
       path: ./backend
       manifest: compose/prod/php-fpm/Dockerfile
+    command: /worker.sh
     environment:
       - "*"
-      - CONTAINER_ROLE: queue
-
-  cli:
-    build:
-      path: ./backend
-      manifest: compose/prod/php-fpm/Dockerfile
-    environment:
-      - "*"
-      - CONTAINER_ROLE: cli
 
   frontend:
     build:

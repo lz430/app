@@ -23,7 +23,6 @@ services:
       - MYSQL_PASSWORD=delivermyride
       - MYSQL_ROOT_PASSWORD=delivermyride
 
-
   redis:
     image: redis:latest
 
@@ -77,6 +76,7 @@ services:
         - mysql
         - elasticsearch
         - redis
+        
   nginx:
     build: ./compose/local/nginx
     ports:
