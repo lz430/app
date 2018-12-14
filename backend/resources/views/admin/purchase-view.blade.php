@@ -20,11 +20,11 @@
                 @slot('title')
                     General Information
                 @endslot
-                    <ul class="list-group no-padding no-margin">
-                        <li class="list-group-item">
-                            <b>Created At</b>: {{$purchase->deal->created_at}}
-                        </li>
-                    </ul>
+                <ul class="list-group no-padding no-margin">
+                    <li class="list-group-item">
+                        <b>Created At</b>: {{$purchase->deal->created_at}}
+                    </li>
+                </ul>
             @endcomponent
         </div>
         <div class="col-md-4">
@@ -59,46 +59,52 @@
             @endcomponent
         </div>
         <div class="col-md-4">
-            @component('components.box')
-                @slot('title')
-                    Customer Information
-                @endslot
-                <ul class="list-group no-padding no-margin">
-                    <li class="list-group-item">
-                        <b>First Name</b>: {{$purchase->buyer->first_name}}
-                    </li>
-                    <li class="list-group-item">
-                        <b>Last Name</b>: {{$purchase->buyer->last_name}}
-                    </li>
-                    <li class="list-group-item">
-                        <b>Email</b>: {{$purchase->buyer->email}}
-                    </li>
-                    <li class="list-group-item">
-                        <b>Phone</b>: {{$purchase->buyer->phone_number}}
-                    </li>
+            @if ($purchase->buyer)
+                @component('components.box')
+                    @slot('title')
+                        Customer Information
+                    @endslot
+                    <ul class="list-group no-padding no-margin">
+                        <li class="list-group-item">
+                            <b>First Name</b>: {{$purchase->buyer->first_name}}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Last Name</b>: {{$purchase->buyer->last_name}}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Email</b>: {{$purchase->buyer->email}}
+                        </li>
+                        <li class="list-group-item">
+                            <b>Phone</b>: {{$purchase->buyer->phone_number}}
+                        </li>
 
-                </ul>
-            @endcomponent
+                    </ul>
+                @endcomponent
+            @endif
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            @component('components.box')
-                @slot('title')
-                    Developer - (Rebates)
-                @endslot
-                <pre>{{ json_encode($purchase->rebates, JSON_PRETTY_PRINT) }}</pre>
-            @endcomponent
+            @if ($purchase->rebates)
+                @component('components.box')
+                    @slot('title')
+                        Developer - (Rebates)
+                    @endslot
+                    <pre>{{ json_encode($purchase->rebates, JSON_PRETTY_PRINT) }}</pre>
+                @endcomponent
+            @endif
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            @component('components.box')
-                @slot('title')
-                    Developer - (Trade)
-                @endslot
-                <pre>{{ json_encode($purchase->trade, JSON_PRETTY_PRINT) }}</pre>
-            @endcomponent
+            @if ($purchase->rebates)
+                @component('components.box')
+                    @slot('title')
+                        Developer - (Trade)
+                    @endslot
+                    <pre>{{ json_encode($purchase->trade, JSON_PRETTY_PRINT) }}</pre>
+                @endcomponent
+            @endif
         </div>
     </div>
 @endsection
