@@ -30,10 +30,12 @@ export function* requestDealQuote(action) {
     const zipcode = action.zipcode;
     const paymentType = action.paymentType;
     const role = action.role;
+
     const down =
-        action.down !== null
-            ? action.down
-            : config.PRICING.lease.defaultLeaseDown;
+        action.down === null || action.down === undefined
+            ? config.PRICING.lease.defaultLeaseDown
+            : action.down;
+
     const tradeValue = action.tradeValue || 0;
     const tradeOwed = action.tradeOwed || 0;
     const conditionalRoles = action.conditionalRoles || [];
