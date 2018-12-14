@@ -42,6 +42,7 @@
         border-radius: 5px;
         margin: 0 auto -47px auto;
         padding: 20px;
+        position: relative;
 
         @include media-breakpoint-down(sm) {
             max-width: 95%;
@@ -188,6 +189,15 @@
 
                 @include media-breakpoint-down(md) {
                     flex: 2 0 33%;
+                }
+
+                img {
+                    max-width: 80px;
+                    max-height: 80px;
+                    @include media-breakpoint-up(md) {
+                        max-width: 120px;
+                        max-height: 120px;
+                    }
                 }
             }
 

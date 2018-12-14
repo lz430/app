@@ -98,6 +98,7 @@ export default class extends React.Component {
                             duration={400}
                             autoPlay={false}
                             startIndex={0}
+                            infinite={true}
                             fadeOutAnimation={true}
                             mouseDragEnabled={false}
                             playButtonEnabled={false}
