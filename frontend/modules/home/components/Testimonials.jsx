@@ -6,7 +6,7 @@ import testimonials from '../../../content/testimonials';
 export default class extends React.Component {
     renderTestimonials(test) {
         return (
-            <Col md={3} className="individual">
+            <Col md={4} className="individual">
                 <p>
                     &quot;
                     {test.content}
