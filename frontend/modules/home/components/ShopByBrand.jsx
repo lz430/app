@@ -40,7 +40,7 @@ export default class extends React.Component {
             };
 
             return (
-                <div className="brand mb-3" key={filteredMakes[s].title}>
+                <div className="brand mb-md-3" key={filteredMakes[s].title}>
                     <Link
                         key={filteredMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}

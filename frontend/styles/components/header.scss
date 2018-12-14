@@ -8,7 +8,7 @@
     }
 
     &--brochure {
-        padding: 0.7rem 0 !important;
+        padding: 0.7rem 0.5rem !important;
 
         @include media-breakpoint-down(md) {
             .container {

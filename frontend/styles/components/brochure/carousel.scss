@@ -15,11 +15,17 @@
         border-radius: 50px;
 
         &-prev {
-            left: -30px;
+            left: -10px;
+            @include media-breakpoint-up(md) {
+                left: -30px;
+            }
         }
 
         &-next {
-            right: -30px;
+            right: -10px;
+            @include media-breakpoint-up(md) {
+                right: -30px;
+            }
         }
     }
 }
