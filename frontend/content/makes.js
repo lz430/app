@@ -65,12 +65,12 @@ export default [
         query: ['make:Ford'],
         featured: true,
     },
-    {
+    /* {
         title: 'Genesis',
         logo: '/static/images/makes/genesis.png',
         query: ['make:Genesis'],
         featured: false,
-    },
+    }, */
     {
         title: 'GMC',
         logo: '/static/images/makes/gmc.jpg',
