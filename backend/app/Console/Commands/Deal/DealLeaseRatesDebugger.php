@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Deal;
 
+use App\Models\Deal;
+use Illuminate\Console\Command;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
-use Illuminate\Console\Command;
-use App\Models\Deal;
 
 class DealLeaseRatesDebugger extends Command
 {
@@ -43,8 +43,7 @@ class DealLeaseRatesDebugger extends Command
     {
         $deals = Deal::all();
 
-        foreach($deals as $deal) {
-
+        foreach ($deals as $deal) {
             $manager = new DealRatesAndRebatesManager($deal, '48116', $this->client);
             $manager->setFinanceStrategy('lease');
             $manager->setConsumerRole('default');
@@ -53,14 +52,13 @@ class DealLeaseRatesDebugger extends Command
 
             $data = $manager->getData();
 
-            if($data !== null){
+            if ($data !== null) {
                 $this->info("Vin: {$deal->vin}");
-                $this->info("Has Lease Rates: YES");
+                $this->info('Has Lease Rates: YES');
             } else {
                 $this->info("Vin: {$deal->vin}");
-                $this->info("Has Lease Rates: NO");
+                $this->info('Has Lease Rates: NO');
             }
-
         }
     }
 }

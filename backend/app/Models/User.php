@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Backpack\CRUD\CrudTrait;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * App\Models\User
+ * App\Models\User.
  *
  * @property int $id
  * @property string|null $first_name
@@ -53,7 +52,6 @@ class User extends Authenticatable implements JWTSubject
     use CrudTrait;
     use HasRoles;
 
-
     /**
      * @var array
      */
@@ -83,9 +81,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Purchase::class);
     }
 
-    /**
-     *
-     */
     protected static function boot()
     {
         parent::boot();

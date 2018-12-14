@@ -2,7 +2,6 @@
 
 namespace App\Transformers;
 
-use App\Models\Deal;
 use League\Fractal\TransformerAbstract;
 
 class DealQuoteTransformer extends TransformerAbstract
@@ -14,6 +13,7 @@ class DealQuoteTransformer extends TransformerAbstract
     {
         $data = collect($params);
         $data = $data['results'];
+
         return $data;
     }
 
@@ -27,7 +27,7 @@ class DealQuoteTransformer extends TransformerAbstract
                 'rate' => isset($term->Rate) ? $term->Rate : null,
                 'residualPercent' => $this->getInitialResidualPercent($term->QualifyingTermEnd),
                 'termLength' => $term->QualifyingTermEnd,
-                'residuals' => $this->getResiduals($term->QualifyingTermEnd)
+                'residuals' => $this->getResiduals($term->QualifyingTermEnd),
             ];
 
             if (isset($term->Factor)) {
@@ -44,12 +44,12 @@ class DealQuoteTransformer extends TransformerAbstract
         //
         // If we have more than 4... start removing
         if (count($months) > 4) {
-            foreach($months as $key => $month) {
+            foreach ($months as $key => $month) {
                 if ($month['termLength'] % 12 !== 0) {
                     unset($months[$key]);
                 }
 
-                if (count($months) <= 4 ) {
+                if (count($months) <= 4) {
                     break;
                 }
             }
@@ -77,9 +77,8 @@ class DealQuoteTransformer extends TransformerAbstract
 
             $residuals[] = [
                 'annualMileage' => $mile,
-                'residualPercent' => $rates
+                'residualPercent' => $rates,
             ];
-
         }
 
         return array_values(array_sort($residuals));
@@ -94,6 +93,7 @@ class DealQuoteTransformer extends TransformerAbstract
     {
         $data = $this->getData($params);
         $cashRebates = $data->cashRebates;
+
         return $cashRebates->totalValue;
     }
 
@@ -107,6 +107,7 @@ class DealQuoteTransformer extends TransformerAbstract
         $data = $this->getData($params);
         if (isset($data->leaseTerms[0])) {
             $leaseCash = $data->leaseTerms[0];
+
             return $leaseCash->CCR;
         }
 
@@ -116,12 +117,10 @@ class DealQuoteTransformer extends TransformerAbstract
     public function getInitialResidualPercent($timeFrame)
     {
         $initialPercent = $this->getResiduals($timeFrame);
+
         return (isset($initialPercent[0]) && $initialPercent[0]['residualPercent']) ? $initialPercent[0]['residualPercent'] : null;
     }
 
-    /**
-     *
-     */
     private function rates()
     {
         $data = null;
@@ -145,14 +144,13 @@ class DealQuoteTransformer extends TransformerAbstract
         $this->meta = $meta;
 
         $data = [];
-        $data['meta'] = (array)$this->meta;
+        $data['meta'] = (array) $this->meta;
         $data['rebates'] = $ratesAndRebates ? $ratesAndRebates->rebates : false;
         $data['rates'] = $ratesAndRebates ? $this->rates() : false;
         $data['selections'] = [
-            'conditionalRoles' => $potentialConditionalRoles
+            'conditionalRoles' => (object) $potentialConditionalRoles,
         ];
 
         return $data;
     }
 }
-

@@ -5,9 +5,7 @@ namespace DeliverMyRide\RIS;
 use DeliverMyRide\Common\ApiClient;
 
 /**
- * Class RISClient
- * @package DeliverMyRide\Cox
-
+ * Class RISClient.
  * @see https://incentives.homenetiol.com/v2.5/metadata
  *  For information about endpoints
  */
@@ -40,14 +38,14 @@ class RISClient extends ApiClient
 
         // Configure
         $this->apiKey = $apiKey;
-        $this->baseUrl = "https://incentives.homenetiol.com/v2.5/json/reply";
+        $this->baseUrl = 'https://incentives.homenetiol.com/v2.5/json/reply';
     }
 
-    protected function getRequestHeaders() {
+    protected function getRequestHeaders()
+    {
         return [
             'Accept' => 'application/json',
             'AIS-ApiKey' => $this->apiKey,
         ];
     }
-
 }

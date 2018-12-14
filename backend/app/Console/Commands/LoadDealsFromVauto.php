@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use DB;
-use DeliverMyRide\VAuto\Importer;
 use Illuminate\Console\Command;
+use DeliverMyRide\VAuto\Importer;
 
 class LoadDealsFromVauto extends Command
 {
@@ -29,8 +29,8 @@ class LoadDealsFromVauto extends Command
 
     public function handle()
     {
-        if($this->option('force')){
-            $this->info("truncated deals table, deal_features table, deal_photos table and running importer");
+        if ($this->option('force')) {
+            $this->info('truncated deals table, deal_features table, deal_photos table and running importer');
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
             DB::table('deals')->truncate();
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');

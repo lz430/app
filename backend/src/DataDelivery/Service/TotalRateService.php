@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\DataDelivery\Service;
 
-
 class TotalRateService extends BaseService
 {
     /**
@@ -11,11 +10,11 @@ class TotalRateService extends BaseService
      */
     private function parseResponse(\SimpleXMLElement $element): \stdClass
     {
-
         $response = new \stdClass();
-        $response->status = (string)$element->status->attributes()['returnCode'];
+        $response->status = (string) $element->status->attributes()['returnCode'];
         if (isset($element->status->attributes()['errorMsg'])) {
-            $response->error = (string)$element->status->attributes()['errorMsg'];
+            $response->error = (string) $element->status->attributes()['errorMsg'];
+
             return $response;
         }
 
@@ -24,7 +23,7 @@ class TotalRateService extends BaseService
             $scenario = [];
             $this->client->mungeAttributesIntoArray($scenario, $scenarioData);
             $this->client->mungeChildrenIntoArray($scenario, $scenarioData);
-            $response->scenarios[] = (object)$scenario;
+            $response->scenarios[] = (object) $scenario;
         }
 
         $response->residuals = [];
@@ -44,6 +43,7 @@ class TotalRateService extends BaseService
             $this->client->mungeChildrenIntoArray($data, $companyData);
             $response->standardRates[] = (object) $data;
         }
+
         return $response;
     }
 
@@ -55,7 +55,6 @@ class TotalRateService extends BaseService
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @see http://xmlasvr.aisrebates.com/ais_xml/test.html (request 2)
-     *
      */
     public function get(string $vehicleId, string $customerZip, string $dealerZip, array $searchData = [])
     {
@@ -68,11 +67,9 @@ class TotalRateService extends BaseService
 
         $data = array_merge($data, $searchData);
 
-        $response = $this->client->post("", $data);
+        $response = $this->client->post('', $data);
         if ($response) {
             return $this->parseResponse($response);
         }
-
-        return null;
     }
 }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-
 use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
-use Illuminate\Http\Request;
 
 class UserCrudController extends CrudController
 {
@@ -19,7 +18,7 @@ class UserCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\User');
-        $this->crud->setRoute(config('backpack.base.route_prefix') . '/user');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/user');
         $this->crud->setEntityNameStrings('user', 'users');
 
         /*
@@ -67,7 +66,6 @@ class UserCrudController extends CrudController
                 'model'     => config('permission.models.role'), // foreign key model
             ],
         ]);
-
 
         // Fields
         $this->crud->addFields([
@@ -141,6 +139,7 @@ class UserCrudController extends CrudController
 
         return parent::storeCrud($request);
     }
+
     /**
      * Update the specified resource in the database.
      *
@@ -154,7 +153,6 @@ class UserCrudController extends CrudController
 
         return parent::updateCrud($request);
     }
-
 
     /**
      * Handle password input fields.
@@ -172,5 +170,4 @@ class UserCrudController extends CrudController
             $request->request->remove('password');
         }
     }
-
 }

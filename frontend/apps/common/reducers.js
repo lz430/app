@@ -4,7 +4,6 @@ import { persistReducer } from 'redux-persist';
 
 const initialState = {
     compareList: [],
-    employeeBrand: false,
 };
 
 const persistConfig = {

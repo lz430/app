@@ -2,14 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Backpack\CRUD\CrudTrait;
+use Illuminate\Database\Eloquent\Model;
 
 class DealerContact extends Model
 {
-
     use CrudTrait;
 
     /**
@@ -22,6 +19,6 @@ class DealerContact extends Model
         'name',
         'title',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 }

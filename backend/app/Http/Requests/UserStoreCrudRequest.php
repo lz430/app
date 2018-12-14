@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Http\Requests;
 
 use Backpack\PermissionManager\app\Http\Requests\UserStoreCrudRequest as ParentRequest;
 
 class UserStoreCrudRequest extends ParentRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *

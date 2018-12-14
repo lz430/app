@@ -1,22 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { SmallAndDown } from '../../../components/Responsive';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
 import StyleIcon from '../../../components/Deals/StyleIcon';
-import { nextRouterType } from '../../../core/types';
 
-import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
+import { faSearch, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 class SearchWidget extends React.PureComponent {
     static propTypes = {
+        purchaseStrategy: PropTypes.string,
+        autocompleteResults: PropTypes.object,
         onRequestSearch: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
-        autocompleteResults: PropTypes.object,
-        router: nextRouterType,
+        push: PropTypes.func.isRequired,
     };
 
     state = {
@@ -76,6 +75,7 @@ class SearchWidget extends React.PureComponent {
 
     onSelectItem(category, item) {
         let newSearchQuery = { ...item.query };
+        newSearchQuery.purchaseStrategy = this.props.purchaseStrategy;
 
         if (item.query.make) {
             this.props.onSetSelectedMake(item.query.make);
@@ -87,7 +87,7 @@ class SearchWidget extends React.PureComponent {
             SearchMessage: false,
         });
         this.props.onClearSearchResults();
-        this.props.router.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
+        this.props.push(`/deal-list?${urlQuery}`, `/filter?${urlQuery}`);
         this.toggleSearchMobile();
     }
 
@@ -226,54 +226,24 @@ class SearchWidget extends React.PureComponent {
      * @returns {*}
      */
     render() {
-        let mobileButton;
-
-        if (!this.state.SearchMobile) {
-            mobileButton = (
-                <FontAwesomeIcon
-                    icon={faSearch}
-                    className={classNames({
-                        active: !this.state.SearchMobile,
-                    })}
-                    onClick={() => {
-                        this.toggleSearchMobile();
-                        this.setState({ SearchMessage: true });
-                    }}
-                />
-            );
-        } else {
-            mobileButton = (
-                <FontAwesomeIcon
-                    icon={faTimes}
-                    className={classNames({
-                        active: this.state.SearchMobile,
-                    })}
-                    onClick={() => {
-                        this.toggleSearchMobile();
-                    }}
-                />
-            );
-        }
-
         return (
-            <div className="home__search" ref={node => (this.node = node)}>
-                <h2>Search new cars from local dealers</h2>
-                <div className="search__input">
-                    <SmallAndDown>
-                        <div className="search__mobile">{mobileButton}</div>
-                    </SmallAndDown>
-                    {this.renderSearchIcon()}
-                    <input
-                        type="text"
-                        onChange={e => {
-                            this.handleSearchRequest(e.target.value);
-                        }}
-                        value={this.state.query}
-                        placeholder="Search by Brand or Model"
-                        required
-                    />
+            <div className="home__search-container">
+                <div className="home__search" ref={node => (this.node = node)}>
+                    <h2>Search new cars from local dealers</h2>
+                    <div className="search__input">
+                        {this.renderSearchIcon()}
+                        <input
+                            type="text"
+                            onChange={e => {
+                                this.handleSearchRequest(e.target.value);
+                            }}
+                            value={this.state.query}
+                            placeholder="Search by Brand or Model"
+                            required
+                        />
+                    </div>
+                    {this.state.query && this.renderSearchResults()}
                 </div>
-                {this.state.query && this.renderSearchResults()}
             </div>
         );
     }

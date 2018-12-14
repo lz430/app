@@ -3,10 +3,8 @@
 namespace App\Console\Commands\Jato;
 
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
-use League\Csv\Writer;
-
 use Illuminate\Console\Command;
+use DeliverMyRide\JATO\JatoClient;
 
 class JatoFindMissingVersions extends Command
 {
@@ -46,14 +44,12 @@ class JatoFindMissingVersions extends Command
     {
         $deals = Deal::all();
 
-
         foreach ($deals as $deal) {
             $decoded = $this->client->vin->decode($deal->vin);
-            if (!count($decoded->versions)) {
+            if (! count($decoded->versions)) {
                 $this->info($deal->vin);
                 print_r($decoded);
             }
         }
-
     }
 }

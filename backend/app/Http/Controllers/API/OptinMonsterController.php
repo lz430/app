@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Events\UserDataChanged;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Events\UserDataChanged;
 
 class OptinMonsterController extends BaseAPIController
 {
@@ -16,8 +16,10 @@ class OptinMonsterController extends BaseAPIController
                 'email' => request('email'),
                 'from' => 'optin',
             ]));
+
             return response(['status' => 'ok'], Response::HTTP_OK);
         }
+
         return response(['status' => 'invalid'], Response::HTTP_BAD_REQUEST);
     }
 }

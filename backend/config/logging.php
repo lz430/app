@@ -1,4 +1,5 @@
 <?php
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -11,6 +12,7 @@ return [
     |
     */
     'default' => env('LOG_CHANNEL', 'stack'),
+
     /*
     |--------------------------------------------------------------------------
     | Log Channels
@@ -27,12 +29,13 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'sentry'],
+            'channels' => ['stderr', 'sentry'],
         ],
         'single' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/laravel.log'),
-            'level' => 'notice',
+          'driver' => 'single',
+          'path' => storage_path('logs/laravel.log'),
+          'driver' => 'syslog',
+          'level' => 'notice',
         ],
         'jato' => [
             'driver' => 'single',
@@ -45,13 +48,20 @@ return [
             'level' => 'notice',
             'days' => 7,
         ],
+        'stderr' => [
+            'driver' => 'monolog',
+            'handler' => StreamHandler::class,
+            'with' => [
+                'stream' => 'php://stderr',
+            ],
+        ],
         'syslog' => [
             'driver' => 'syslog',
-            'level' => 'notice',
+            'level' => 'debug',
         ],
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => 'notice',
+            'level' => 'debug',
         ],
         'sentry' => [
             'driver' => 'sentry',

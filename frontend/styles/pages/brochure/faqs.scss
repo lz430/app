@@ -11,6 +11,7 @@
 
             li {
                 padding: 12px 0;
+                font-size: 0.94rem;
 
                 &:hover {
                     cursor: pointer;
@@ -53,13 +54,12 @@
             .title {
                 display: flex;
                 justify-content: space-between;
-
+                align-items: center;
                 &:hover {
                     cursor: pointer;
                 }
                 &.active {
                     color: $color-text-blue;
-                    // margin-bottom: 10px;
                 }
             }
             .content {

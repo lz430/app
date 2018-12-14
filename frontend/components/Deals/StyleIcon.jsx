@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Convertible from '../../icons/body-styles/convertible.svg';
-import Coupe from '../../icons/body-styles/coupe.svg';
-import Hatchback from '../../icons/body-styles/hatchback.svg';
-import Minivan from '../../icons/body-styles/minivan.svg';
-import Pickup from '../../icons/body-styles/pickup.svg';
-import Sedan from '../../icons/body-styles/sedan.svg';
-import Suv from '../../icons/body-styles/suv.svg';
-import Wagon from '../../icons/body-styles/wagon.svg';
+import Convertible from '../../static/icons/body-styles/convertible.svg';
+import Coupe from '../../static/icons/body-styles/coupe.svg';
+import Hatchback from '../../static/icons/body-styles/hatchback.svg';
+import Minivan from '../../static/icons/body-styles/minivan.svg';
+import Pickup from '../../static/icons/body-styles/pickup.svg';
+import Sedan from '../../static/icons/body-styles/sedan.svg';
+import Suv from '../../static/icons/body-styles/suv.svg';
+import Wagon from '../../static/icons/body-styles/wagon.svg';
 
 class StyleIcon extends React.PureComponent {
     static propTypes = {

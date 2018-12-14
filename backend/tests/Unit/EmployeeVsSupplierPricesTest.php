@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
+use Tests\TestCase;
 use App\Models\Deal;
 use App\Transformers\DealTransformer;
-use Tests\TestCase;
 
 class EmployeeVsSupplierPricesTest extends TestCase
 {

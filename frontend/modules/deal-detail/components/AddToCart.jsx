@@ -1,18 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pricingType, dealType } from '../../../core/types';
+import classNames from 'classnames';
+import { Button } from 'reactstrap';
 
-import Line from '../../../apps/pricing/components/Line';
-import CashPricingPane from './pricing/CashPane';
-import FinancePricingPane from './pricing/FinancePane';
-import LeasePricingPane from './pricing/LeasePane';
-import PaymentTypes from './pricing/PaymentTypes';
+import config from '../../../core/config';
 import Loading from '../../../components/Loading';
+
+import MSRPAndDiscount from './pricing/MSRPAndDiscount';
+import TradeIn from './pricing/TradeIn';
+
+import PaymentCash from './pricing/PaymentCash';
+import PaymentFinance from './pricing/PaymentFinance';
+import PaymentLease from './pricing/PaymentLease';
+import PaymentStrategySelect from './pricing/PaymentStrategySelect';
+import Rebates from './pricing/Rebates';
+import TaxesAndFees from './pricing/TaxesAndFees';
+import DetailsLeaseDueAtDeliveryFees from './pricing/DetailsLeaseDueAtDeliveryFees';
+import DetailsSummary from './pricing/DetailsSummary';
+import DetailsPrice from './pricing/DetailsPrice';
+import Line from '../../../apps/pricing/components/Line';
+import Label from '../../../apps/pricing/components/Label';
+import Value from '../../../apps/pricing/components/Value';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
+import Separator from '../../../apps/pricing/components/Separator';
+import Group from '../../../apps/pricing/components/Group';
+import { track } from '../../../core/services';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
+        isDealQuoteRefreshing: PropTypes.bool.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
         handleDiscountChange: PropTypes.func.isRequired,
         handleRebatesChange: PropTypes.func.isRequired,
@@ -20,19 +42,68 @@ export default class AddToCart extends React.PureComponent {
         handleFinanceTermChange: PropTypes.func.isRequired,
         handleLeaseChange: PropTypes.func.isRequired,
         handleBuyNow: PropTypes.func.isRequired,
-        onToggleCompare: PropTypes.func.isRequired,
-        compareList: PropTypes.array,
+        tradeSet: PropTypes.func.isRequired,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
     };
 
     state = {
+        step: 0, // price || payment || detail
         submitted: false,
     };
+
+    steps = [
+        {
+            label: 'Price',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Configure Payments
+                </span>
+            ),
+        },
+        {
+            label: 'Payments',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Review Details
+                </span>
+            ),
+        },
+        {
+            label: 'Details',
+            cta: (
+                <span>
+                    <strong>Next:</strong> Start Purchase
+                </span>
+            ),
+        },
+    ];
 
     handleSubmit() {
         this.setState({ submitted: true });
         this.props.handleBuyNow();
+    }
+
+    progressToNextStep() {
+        track('deal-detail:quote-form:step-completed', {
+            'Form Step': this.steps[this.state.step].label,
+        });
+
+        //
+        // Progress to the next step
+        if (this.state.step < this.steps.length - 1) {
+            this.setState({ step: this.state.step + 1 });
+        } else {
+            this.handleSubmit();
+        }
+    }
+
+    selectStep(step) {
+        if (step >= this.state.step) {
+            return false;
+        }
+
+        this.setState({ step: step });
     }
 
     /**
@@ -40,22 +111,26 @@ export default class AddToCart extends React.PureComponent {
      * @returns {*}
      */
     renderCtaButton() {
+        if (!this.props.pricing) {
+            return false;
+        }
+
         if (this.state.submitted) {
             return (
-                <button className="btn btn-success" disabled={true}>
-                    <Loading /> Loading, please wait.
-                </button>
+                <Button color="success" block disabled={true}>
+                    <Loading size={1} /> Loading, please wait.
+                </Button>
             );
         }
 
         return (
-            <button
-                className="btn btn-success"
-                onClick={() => this.handleSubmit()}
-                disabled={!this.props.pricing.canPurchase()}
+            <Button
+                color="success"
+                block
+                onClick={() => this.progressToNextStep()}
             >
-                Select Deal
-            </button>
+                {this.steps[this.state.step].cta}
+            </Button>
         );
     }
 
@@ -77,18 +152,7 @@ export default class AddToCart extends React.PureComponent {
 
         return (
             <React.Fragment>
-                <div className="deal__buttons">{this.renderCtaButton()}</div>
-                <Line>
-                    <div
-                        style={{
-                            fontStyle: 'italic',
-                            fontSize: '1em',
-                            marginLeft: '.25em',
-                        }}
-                    >
-                        * includes all taxes and dealer fees
-                    </div>
-                </Line>
+                <div className="cart__cta">{this.renderCtaButton()}</div>
             </React.Fragment>
         );
     }
@@ -96,10 +160,19 @@ export default class AddToCart extends React.PureComponent {
     renderPane() {
         const { purchaseStrategy, pricing } = this.props;
 
+        if (pricing.quoteIsLoading()) {
+            return (
+                <div className="m-2">
+                    <Loading size={4} />
+                </div>
+            );
+        }
+
         if (purchaseStrategy === 'cash') {
             return (
-                <CashPricingPane
+                <PaymentCash
                     pricing={pricing}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
                 />
@@ -108,8 +181,9 @@ export default class AddToCart extends React.PureComponent {
 
         if (purchaseStrategy === 'finance') {
             return (
-                <FinancePricingPane
+                <PaymentFinance
                     pricing={pricing}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                     onDiscountChange={this.props.handleDiscountChange}
                     onRebatesChange={this.props.handleRebatesChange}
                     onDownPaymentChange={
@@ -129,7 +203,7 @@ export default class AddToCart extends React.PureComponent {
                 !pricing.annualMileageAvailable().length)
         ) {
             return (
-                <React.Fragment>
+                <div className="pb-4">
                     <div className="mb-2 mt-2 text-center">
                         We&apos;re sorry, there are no incentivized lease rates
                         for this vehicle.
@@ -144,25 +218,182 @@ export default class AddToCart extends React.PureComponent {
                         <a href="tel:855-675-7301">(855) 675-7301</a> for more
                         information.
                     </div>
-                </React.Fragment>
+                </div>
             );
         }
 
         // Lease
         if (purchaseStrategy === 'lease') {
             return (
-                <LeasePricingPane
+                <PaymentLease
                     pricing={pricing}
-                    onDiscountChange={this.props.handleDiscountChange}
-                    onRebatesChange={this.props.handleRebatesChange}
                     onChange={this.props.handleLeaseChange}
+                    isDealQuoteRefreshing={this.props.isDealQuoteRefreshing}
                 />
             );
         }
     }
 
+    renderProgress() {
+        return (
+            <div className="steps border border-medium border-bottom-0">
+                {this.steps.map((step, index) => {
+                    const isCompleted = this.state.step > index;
+                    return (
+                        <div
+                            key={'step' + index}
+                            onClick={() => this.selectStep(index)}
+                            className={classNames(
+                                'step',
+                                { complete: isCompleted },
+                                { disabled: this.state.step < index },
+                                { active: this.state.step === index }
+                            )}
+                        >
+                            {!isCompleted && (
+                                <span className="mr-1">{index + 1})</span>
+                            )}
+                            {isCompleted && (
+                                <FontAwesomeIcon
+                                    icon={faCheckCircle}
+                                    className="mr-1"
+                                />
+                            )}
+                            {step.label}
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
+    renderPriceStep() {
+        const { pricing } = this.props;
+
+        return (
+            <React.Fragment>
+                <MSRPAndDiscount
+                    pricing={pricing}
+                    onDiscountChange={this.props.handleDiscountChange}
+                    onChange={this.props.handleLeaseChange}
+                />
+
+                {config['REACT_APP_ENVIRONMENT'] === 'local' && (
+                    <TradeIn
+                        onCompleteTradeIn={this.props.tradeSet}
+                        zipcode={this.props.userLocation.zipcode}
+                        pricing={pricing}
+                    />
+                )}
+            </React.Fragment>
+        );
+    }
+
+    renderPaymentStep() {
+        const { pricing, purchaseStrategy } = this.props;
+
+        return (
+            <React.Fragment>
+                <PaymentStrategySelect
+                    {...{ purchaseStrategy }}
+                    onChange={this.props.handlePaymentTypeChange}
+                />
+                {this.renderPane()}
+                <Separator showIf={pricing.hasPotentialConditionalRebates()} />
+                <Rebates
+                    pricing={pricing}
+                    onChange={this.props.handleRebatesChange}
+                />
+            </React.Fragment>
+        );
+    }
+
+    renderDetailsStep() {
+        const { pricing, purchaseStrategy } = this.props;
+
+        if (purchaseStrategy === 'cash') {
+            return (
+                <React.Fragment>
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+
+                    <TaxesAndFees pricing={pricing} />
+                    <Line isImportant>
+                        <Label>Total Selling Price</Label>
+                        <Value>
+                            <DollarsAndCents value={pricing.totalPrice()} />
+                        </Value>
+                    </Line>
+                </React.Fragment>
+            );
+        }
+
+        if (purchaseStrategy === 'finance') {
+            return (
+                <React.Fragment>
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <TaxesAndFees pricing={pricing} />
+                    <Group>
+                        <Line>
+                            <Label>Final Price</Label>
+                            <Value>
+                                <DollarsAndCents value={pricing.yourPrice()} />
+                            </Value>
+                        </Line>
+                        <Line>
+                            <Label>Down Payment</Label>
+                            <Value>
+                                <DollarsAndCents
+                                    value={pricing.downPayment()}
+                                />
+                            </Value>
+                        </Line>
+                        <Line isImportant>
+                            <Label>Total Financed Amount</Label>
+                            <Value>
+                                <DollarsAndCents
+                                    value={pricing.amountFinanced()}
+                                />
+                            </Value>
+                        </Line>
+                    </Group>
+                </React.Fragment>
+            );
+        }
+
+        if (purchaseStrategy === 'lease') {
+            return (
+                <React.Fragment>
+                    <DetailsSummary
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsPrice
+                        pricing={pricing}
+                        purchaseStrategy={purchaseStrategy}
+                    />
+                    <DetailsLeaseDueAtDeliveryFees pricing={pricing} />
+                </React.Fragment>
+            );
+        }
+        return false;
+    }
+
     render() {
-        const { purchaseStrategy, deal } = this.props;
+        const { deal, pricing } = this.props;
 
         if (deal.status === 'sold') {
             return (
@@ -201,13 +432,25 @@ export default class AddToCart extends React.PureComponent {
             );
         }
 
+        if (!pricing) {
+            return (
+                <div className="cart">
+                    <div className="p-4 bg-white border border-medium border-top-0">
+                        <Loading />
+                    </div>
+                </div>
+            );
+        }
+
         return (
-            <div className="deal-details__pricing bg-white border border-medium p-4">
-                <PaymentTypes
-                    {...{ purchaseStrategy }}
-                    onChange={this.props.handlePaymentTypeChange}
-                />
-                {this.renderPane()}
+            <div className="cart">
+                {this.renderProgress()}
+
+                <div className="p-4 bg-white border border-medium border-top-0">
+                    {this.state.step === 0 && this.renderPriceStep()}
+                    {this.state.step === 1 && this.renderPaymentStep()}
+                    {this.state.step === 2 && this.renderDetailsStep()}
+                </div>
                 {this.renderCta()}
             </div>
         );

@@ -2,18 +2,17 @@
 
 namespace DeliverMyRide\Fuel\Service;
 
-
-class ProductService extends BaseService {
-
+class ProductService extends BaseService
+{
     /**
      * @see http://fuelapi.com/support/documentation#product-data
      * @param bool $showShotCodes
      * @param bool $showProductFormats
      * @return mixed
      * @throws \GuzzleHttp\Exception\GuzzleException
-     *
      */
-    public function list(bool $showShotCodes = false, bool $showProductFormats = false) {
+    public function list(bool $showShotCodes = false, bool $showProductFormats = false)
+    {
         $query = [];
 
         if ($showShotCodes) {
@@ -24,7 +23,6 @@ class ProductService extends BaseService {
             $query['showProductFormats'] = 1;
         }
 
-        return $this->client->get("products", $query);
+        return $this->client->get('products', $query);
     }
-
 }

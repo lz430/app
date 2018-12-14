@@ -9,9 +9,12 @@ export default class Value extends React.PureComponent {
         isLoading: PropTypes.bool.isRequired,
         isNegative: PropTypes.bool.isRequired,
         children: PropTypes.node.isRequired,
+        style: PropTypes.object,
     };
 
     static defaultProps = {
+        style: { float: 'right' },
+
         showIf: true,
         isNegative: false,
         isLoading: false,
@@ -19,10 +22,10 @@ export default class Value extends React.PureComponent {
 
     render() {
         if (!this.props.showIf) {
-            return <div />;
+            return false;
         }
 
-        const style = { float: 'right' };
+        const style = { ...this.props.style };
 
         if (this.props.isNegative) {
             style.color = '#41b1ac';
@@ -30,11 +33,7 @@ export default class Value extends React.PureComponent {
 
         return (
             <div style={style}>
-                {this.props.isLoading && (
-                    <div data-loading-size="regular">
-                        <Loading style={{ height: '.5em' }} />
-                    </div>
-                )}
+                {this.props.isLoading && <Loading size={1} />}
                 {this.props.isLoading || (
                     <div>
                         {this.props.isNegative ? '-' : ''}

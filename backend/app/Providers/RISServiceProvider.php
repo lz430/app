@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use DeliverMyRide\RIS\RISClient;
-
 use Illuminate\Support\ServiceProvider;
 
 class RISServiceProvider extends ServiceProvider

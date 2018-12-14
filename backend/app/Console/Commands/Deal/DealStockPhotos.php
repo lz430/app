@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands\Deal;
 
-use App\Models\Feature;
 use App\Models\Deal;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
-use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
 use Illuminate\Console\Command;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 class DealStockPhotos extends Command
 {
@@ -45,13 +42,13 @@ class DealStockPhotos extends Command
 
         $deal = Deal::find($dealId);
 
-        if (!$deal) {
-            $this->info("NO DEAL!");
+        if (! $deal) {
+            $this->info('NO DEAL!');
+
             return;
         }
         $assets = $this->manager->assets($deal->version);
 
         dd($assets);
-
     }
 }

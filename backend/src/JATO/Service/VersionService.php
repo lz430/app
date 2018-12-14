@@ -4,9 +4,8 @@ namespace DeliverMyRide\JATO\Service;
 
 class VersionService extends BaseService
 {
-
     /**
-     * List
+     * List.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55a9646d74be090dc82f15f5?
      * @param string $name
      * @param string $style
@@ -14,7 +13,7 @@ class VersionService extends BaseService
      * @param string $cab
      * @param int $page
      * @param int $page_size
-     * @param boolean $current_only
+     * @param bool $current_only
      * @param string $modified_date
      * @param bool $async
      * @return mixed
@@ -27,11 +26,10 @@ class VersionService extends BaseService
                          string $cab = '',
                          int $page = 1,
                          int $page_size = 20,
-                         bool $current_only = TRUE,
+                         bool $current_only = true,
                          string $modified_date = '',
-                         bool $async = FALSE)
+                         bool $async = false)
     {
-
         $name = $this->client->makeFancyNameUrlFriendly($name);
 
         $query = [];
@@ -50,7 +48,7 @@ class VersionService extends BaseService
                 'pageSize' => $page_size,
                 'currentOnly' => ($current_only ? 1 : 0),
             ];
-            $path = "versions";
+            $path = 'versions';
         } else {
             $query = [
                 'page' => $page,
@@ -65,7 +63,7 @@ class VersionService extends BaseService
     }
 
     /**
-     * GET
+     * GET.
      * @see https://www.jatoflex.com/docs/services/55a6878974be090c745812a3/operations/55aff39774be0902ecb19157?
      * @param string $vehicleId
      * @return \stdClass

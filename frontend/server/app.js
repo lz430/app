@@ -1,5 +1,6 @@
 const express = require('express');
 const next = require('next');
+const compression = require('compression');
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -10,14 +11,11 @@ const staticRoutes = require('./staticRoutes');
 app.prepare()
     .then(() => {
         const server = express();
+        if (!dev) {
+            server.use(compression());
+        }
 
         staticRoutes({ server, app });
-
-        //
-        // Application Routes
-        server.get('/', (req, res) => {
-            app.render(req, res, '/index', req.query);
-        });
 
         server.get('/filter', (req, res) => {
             const queryParams = { ...req.query };
@@ -51,32 +49,31 @@ app.prepare()
 
         //
         // Brochure Site
-        // Note: Temp prefix with /brochure... will rename all the routes when we go live.
-        server.get('/brochure', (req, res) => {
+        server.get('/', (req, res) => {
             app.render(req, res, '/home', req.query);
         });
 
-        server.get('/brochure/how-it-works', (req, res) => {
+        server.get('/how-it-works', (req, res) => {
             app.render(req, res, '/brochure/how-it-works', req.query);
         });
 
-        server.get('/brochure/faq', (req, res) => {
+        server.get('/faq', (req, res) => {
             app.render(req, res, '/brochure/faq', req.query);
         });
 
-        server.get('/brochure/about', (req, res) => {
+        server.get('/about', (req, res) => {
             app.render(req, res, '/brochure/about', req.query);
         });
 
-        server.get('/brochure/contact', (req, res) => {
+        server.get('/contact', (req, res) => {
             app.render(req, res, '/brochure/contact', req.query);
         });
 
-        server.get('/brochure/privacy-policy', (req, res) => {
+        server.get('/privacy-policy', (req, res) => {
             app.render(req, res, '/brochure/privacy-policy', req.query);
         });
 
-        server.get('/brochure/terms-of-service', (req, res) => {
+        server.get('/terms-of-service', (req, res) => {
             app.render(req, res, '/brochure/terms-of-service', req.query);
         });
 

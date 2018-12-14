@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Deal;
 
-use Illuminate\Console\Command;
 use App\Models\Deal;
+use Illuminate\Console\Command;
 
 class DealCalculatePayments extends Command
 {
@@ -14,7 +14,6 @@ class DealCalculatePayments extends Command
      */
     protected $signature = 'dmr:deal:payments {deal?}';
     private $details = false;
-
 
     private function calculatePayments(Deal $deal)
     {
@@ -30,12 +29,12 @@ class DealCalculatePayments extends Command
                     foreach ($info as $key => $value) {
                         $rows[] = [
                             $key,
-                            $value
+                            $value,
                         ];
                     }
                     $this->table([], $rows);
                 } else {
-                    $this->info(" -- No results");
+                    $this->info(' -- No results');
                 }
             }
         }
@@ -54,19 +53,19 @@ class DealCalculatePayments extends Command
         if ($dealId) {
             $this->details = true;
             $deal = Deal::where('id', $dealId)->first();
-            if($deal->status == 'available') {
+            if ($deal->status == 'available') {
                 $this->calculatePayments($deal);
             }
-
         } else {
             Deal::chunk(500, function ($deals) {
                 foreach ($deals as $deal) {
-                    if($deal->status == 'available') {
+                    if ($deal->status == 'available') {
                         $this->calculatePayments($deal);
                     }
                 }
             });
         }
+
         return true;
     }
 }

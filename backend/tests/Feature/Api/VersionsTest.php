@@ -2,11 +2,11 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\JATO\Make;
-use App\Models\JATO\VehicleModel;
-use App\Models\JATO\Version;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\JATO\Make;
+use App\Models\JATO\Version;
+use App\Models\JATO\VehicleModel;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class VersionsTest extends TestCase
 {
@@ -22,14 +22,14 @@ class VersionsTest extends TestCase
         $version = $vehicleModel->versions()->save(factory(Version::class)->make([
             'body_style' => 'Cargo Van',
         ]));
-        
+
         $response = $this->getJson(route('versions.index', [
             'make_ids' => [$make->id, 2, 3],
             'body_styles' => ['cargo van', 'pickup'],
         ]));
-        
+
         $response->assertStatus(200);
-        
+
         $this->assertEquals($version->id, $response->decodeResponseJson()['data'][0]['id']);
     }
 }

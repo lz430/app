@@ -2,11 +2,10 @@
 
 namespace DeliverMyRide\RIS\Service;
 
-
-class VinService extends BaseService {
-
+class VinService extends BaseService
+{
     /**
-     * VIN decoder
+     * VIN decoder.
      * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=DecodeVIN
      * @param string $vin
      * @param array $hints
@@ -15,11 +14,11 @@ class VinService extends BaseService {
      *
      * {"vin":"String","vehicleHints":{"String":"String"}}
      */
-    public function decode(string $vin, array $hints = []) {
-        return $this->client->post("decodevin", [
+    public function decode(string $vin, array $hints = [])
+    {
+        return $this->client->post('decodevin', [
             'vin' => $vin,
-            'vehicleHints' => $hints
+            'vehicleHints' => $hints,
         ]);
     }
-
 }

@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\Deal;
 use Carbon\Carbon;
+use App\Models\Deal;
 use Illuminate\Support\Facades\Cache;
 
 class DealObserver
@@ -56,7 +56,7 @@ class DealObserver
 
         // Only update if is not new, and payments is different.
         if ($originalPricing !== null && $originalPricing != $payments && isset($deal->id) && $deal->id) {
-            Cache::tags('deal-' . $deal->id)->flush();
+            Cache::tags('deal-'.$deal->id)->flush();
         }
     }
 }

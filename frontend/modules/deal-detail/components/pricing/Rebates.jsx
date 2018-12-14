@@ -3,18 +3,27 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { sortBy, prop, map } from 'ramda';
 
-import Line from '../../../../apps/pricing/components/Line';
-import Label from '../../../../apps/pricing/components/Label';
-import Value from '../../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../../components/money/DollarsAndCents';
+import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 
 import RebatesRole from './RebatesRole';
+
+import Group from '../../../../apps/pricing/components/Group';
+import Header from '../../../../apps/pricing/components/Header';
 
 class Rebates extends React.Component {
     static propTypes = {
         onChange: PropTypes.func,
         pricing: PropTypes.object.isRequired,
         selectedConditionalRoles: PropTypes.array,
+    };
+
+    static defaultProps = {
+        onChange: () => {},
+    };
+
+    state = {
+        popoverOpen: false,
+        conditionalProgramsOpened: false,
     };
 
     roleLabels = {
@@ -60,13 +69,11 @@ class Rebates extends React.Component {
         },
     };
 
-    static defaultProps = {
-        onChange: () => {},
-    };
-
-    state = {
-        conditionalProgramsOpened: false,
-    };
+    toggle() {
+        this.setState({
+            popoverOpen: !this.state.popoverOpen,
+        });
+    }
 
     handleChange(role) {
         this.props.onChange(role['role']);
@@ -88,16 +95,6 @@ class Rebates extends React.Component {
             return item;
         }, Object.values(roles));
         return sortBy(prop('title'), arrayRoles);
-    }
-
-    shouldRenderConditionalSelection() {
-        const quote = this.props.pricing.quote();
-
-        if (!quote || !quote.selections || !quote.selections.conditionalRoles) {
-            return false;
-        }
-
-        return true;
     }
 
     renderConditionalRebates() {
@@ -124,39 +121,61 @@ class Rebates extends React.Component {
         );
     }
 
+    renderDescription() {
+        const quote = this.props.pricing.quote();
+        return (
+            <Popover
+                placement="left"
+                isOpen={this.state.popoverOpen}
+                target="rebates-explain"
+                toggle={this.toggle.bind(this)}
+            >
+                <PopoverHeader>Rebate Breakdown</PopoverHeader>
+                <PopoverBody className="text-sm cart__rebate_description">
+                    {quote.rebates.conditional &&
+                        Object.keys(quote.rebates.conditional.programs).map(
+                            key => {
+                                const program =
+                                    quote.rebates.conditional.programs[key];
+                                return (
+                                    <div key={key}>
+                                        {program.program.ProgramName} - ($
+                                        {program.value})
+                                    </div>
+                                );
+                            }
+                        )}
+
+                    {quote.rebates.everyone &&
+                        Object.keys(quote.rebates.everyone.programs).map(
+                            key => {
+                                const program =
+                                    quote.rebates.everyone.programs[key];
+                                return (
+                                    <div key={key}>
+                                        {program.program.ProgramName} - ($
+                                        {program.value})
+                                    </div>
+                                );
+                            }
+                        )}
+                </PopoverBody>
+            </Popover>
+        );
+    }
+
     render() {
         const pricing = this.props.pricing;
 
+        if (!pricing.hasPotentialConditionalRebates()) {
+            return false;
+        }
+
         return (
-            <div>
-                {/*
-                Conditional Rebates Selection
-                */}
-
-                {this.shouldRenderConditionalSelection() &&
-                    this.renderConditionalRebates()}
-
-                {/*
-                Total Rebates
-                */}
-                {pricing.hasRebatesApplied() || (
-                    <Line>
-                        <Label>No rebates applied</Label>
-                    </Line>
-                )}
-
-                {pricing.hasRebatesApplied() && (
-                    <Line>
-                        <Label>Applied</Label>
-                        <Value
-                            isNegative={true}
-                            isLoading={pricing.quoteIsLoading()}
-                        >
-                            <DollarsAndCents value={pricing.rebates()} />
-                        </Value>
-                    </Line>
-                )}
-            </div>
+            <Group>
+                <Header>Rebates</Header>
+                {this.renderConditionalRebates()}
+            </Group>
         );
     }
 }
@@ -164,7 +183,7 @@ class Rebates extends React.Component {
 const mapStateToProps = state => {
     return {
         selectedConditionalRoles:
-            state.pages.dealDetails.selectDiscount.conditionalRoles,
+            state.pages.dealDetails.discount.conditionalRoles,
     };
 };
 

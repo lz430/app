@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Tests;
 
-use DeliverMyRide\RIS\RISClient;
 use Illuminate\Console\Command;
+use DeliverMyRide\RIS\RISClient;
 
 class TestCoxAPI extends Command
 {
@@ -26,7 +26,7 @@ class TestCoxAPI extends Command
 
     /**
      * Create a new command instance.
- * @param RISClient $client
+     * @param RISClient $client
      * @return void
      */
     public function __construct(RISClient $client)

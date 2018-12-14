@@ -12,7 +12,7 @@ class ReplaceVersionOptionWithOptionGroupAndOptions extends Migration
         Schema::dropIfExists('version_deal_options');
         Schema::dropIfExists('version_options');
 
-        /**
+        /*
          * Equipment
         "vehicleId": 61539620000131,
         "optionId": 4,
@@ -42,7 +42,7 @@ class ReplaceVersionOptionWithOptionGroupAndOptions extends Migration
             $table->timestamps();
         });
 
-        /** Equipment
+        /* Equipment
         "optionId": 0,
         "links": [
         {

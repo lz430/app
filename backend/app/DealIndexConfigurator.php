@@ -2,8 +2,8 @@
 
 namespace App;
 
-use ScoutElastic\IndexConfigurator;
 use ScoutElastic\Migratable;
+use ScoutElastic\IndexConfigurator;
 
 class DealIndexConfigurator extends IndexConfigurator
 {
@@ -13,24 +13,24 @@ class DealIndexConfigurator extends IndexConfigurator
      * @var array
      */
     protected $settings = [
-        "analysis" => [
-            "filter" => [
-                "ngram_filter" => [
-                    "type" => "ngram",
-                    "min_gram" => 3,
-                    "max_gram" => 20
-                ]
+        'analysis' => [
+            'filter' => [
+                'ngram_filter' => [
+                    'type' => 'ngram',
+                    'min_gram' => 3,
+                    'max_gram' => 20,
+                ],
             ],
-            "analyzer" => [
-                "ngram_analyzer" => [
-                    "type" => "custom",
-                    "tokenizer" => "standard",
-                    "filter" => [
-                        "lowercase",
-                        "ngram_filter"
-                    ]
-                ]
-            ]
-        ]
+            'analyzer' => [
+                'ngram_analyzer' => [
+                    'type' => 'custom',
+                    'tokenizer' => 'standard',
+                    'filter' => [
+                        'lowercase',
+                        'ngram_filter',
+                    ],
+                ],
+            ],
+        ],
     ];
 }

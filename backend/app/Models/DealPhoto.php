@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\DealPhoto
+ * App\Models\DealPhoto.
  *
  * @property int $id
  * @property int $deal_id
@@ -38,6 +38,7 @@ class DealPhoto extends Model
         unset($data['id']);
         unset($data['created_at']);
         unset($data['updated_at']);
+
         return $data;
     }
 }

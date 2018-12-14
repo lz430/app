@@ -2,14 +2,12 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Models\JATO\Make;
 use DeliverMyRide\JATO\Map;
-
+use League\Fractal\TransformerAbstract;
 
 class SearchSuggestTransformer extends TransformerAbstract
 {
-
     public function transform($response)
     {
         $return = [
@@ -27,9 +25,9 @@ class SearchSuggestTransformer extends TransformerAbstract
                 'query' => [
                     'entity' => 'model',
                     'filters' => [
-                        'make:' . $item['key'],
+                        'make:'.$item['key'],
                     ],
-                ]
+                ],
             ];
             $return['make'][] = $data;
         }
@@ -42,9 +40,9 @@ class SearchSuggestTransformer extends TransformerAbstract
                 'query' => [
                     'entity' => 'model',
                     'filters' => [
-                        'style:' . $item['key'],
+                        'style:'.$item['key'],
                     ],
-                ]
+                ],
             ];
             $data = array_merge($item, Map::BODY_STYLES[$data['label']], $data);
             unset($data['style']);
@@ -62,10 +60,10 @@ class SearchSuggestTransformer extends TransformerAbstract
                     // Hacky fix for frontend issues.
                     'make' => $item['make']['make']['buckets'][0]['key'],
                     'filters' => [
-                        'model:' . $item['model']['model']['buckets'][0]['key'],
-                        'make:' . $item['make']['make']['buckets'][0]['key'],
+                        'model:'.$item['model']['model']['buckets'][0]['key'],
+                        'make:'.$item['make']['make']['buckets'][0]['key'],
                     ],
-                ]
+                ],
             ];
             $return['model'][] = $data;
         }

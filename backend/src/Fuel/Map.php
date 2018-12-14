@@ -352,6 +352,6 @@ class Map
     ];
 
     public const BODY_STYLE_MAP = [
-        'sport utility vehicle' => "SUV",
+        'sport utility vehicle' => 'SUV',
     ];
 }

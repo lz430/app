@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware\Admin;
 
-use Closure;
 use Auth;
+use Closure;
 
 class CheckIfAdminRole
 {
@@ -22,7 +22,7 @@ class CheckIfAdminRole
         }
 
         //check permission
-        if (config('app.env') != 'local' && !$request->user()->can("use administration area")) {
+        if (config('app.env') != 'local' && ! $request->user()->can('use administration area')) {
             abort(403);
         }
 

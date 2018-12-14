@@ -3,13 +3,10 @@
 namespace App\Console\Commands\Version;
 
 use App\Models\Deal;
+use App\Models\JATO\Version;
+use Illuminate\Console\Command;
 use App\Models\JATO\VersionQuote;
 use DeliverMyRide\RIS\Manager\VersionToVehicle;
-use DeliverMyRide\RIS\RISClient;
-use App\Models\JATO\Version;
-
-use Illuminate\Console\Command;
-
 
 class VersionGenerateQuotes extends Command
 {
@@ -47,6 +44,7 @@ class VersionGenerateQuotes extends Command
     private function getSingleVersion($dealId)
     {
         $deal = Deal::where('id', $dealId)->first();
+
         return collect([$deal->version]);
     }
 
@@ -58,9 +56,6 @@ class VersionGenerateQuotes extends Command
         return [Version::has('deals')->orderBy('year', 'desc')];
     }
 
-    /**
-     *
-     */
     private function getOutdatedVersions()
     {
         $hashcodes = $this->manager->fetchMakeHashcodes(true);
@@ -101,7 +96,7 @@ class VersionGenerateQuotes extends Command
 
     private function getVersions($filter)
     {
-        if (!$filter) {
+        if (! $filter) {
             return $this->getOutdatedVersions();
         }
 
@@ -109,7 +104,7 @@ class VersionGenerateQuotes extends Command
             return $this->getAllVersions();
         }
 
-        $filter = explode(":", $filter);
+        $filter = explode(':', $filter);
         if (count($filter) === 2 && in_array($filter[0], ['deal', 'make'])) {
             switch ($filter[0]) {
                 case 'deal':
@@ -129,6 +124,8 @@ class VersionGenerateQuotes extends Command
      */
     public function handle()
     {
+        \DB::connection()->disableQueryLog();
+
         $manager = $this->manager;
         $filter = $this->argument('filter');
         foreach ($this->getVersions($filter) as $versionQuery) {
@@ -147,18 +144,18 @@ class VersionGenerateQuotes extends Command
                                     if ($key != 'data') {
                                         $rows[] = [
                                             $key,
-                                            $value
+                                            $value,
                                         ];
                                     }
                                 }
                                 $this->table([], $rows);
                             } else {
-                                $this->info(" -- No results");
+                                $this->info(' -- No results');
                             }
                         }
                     }
                     foreach ($quoteData as $strategy => $data) {
-                        if (!$data) {
+                        if (! $data || ($strategy != 'cash' && !isset($data->rate))) {
                             $version->quotes()->where('strategy', $strategy)->delete();
                         } else {
                             VersionQuote::updateOrCreate([
@@ -167,11 +164,11 @@ class VersionGenerateQuotes extends Command
                             ], [
                                 'hashcode' => $data->hashcode,
                                 'make_hashcode' => $data->makeHashcode,
-                                'rate' => (float)$data->rate,
-                                'term' => (int)$data->term,
-                                'rebate' => (int)$data->rebate,
-                                'residual' => (int)$data->residual,
-                                'miles' => (int)$data->miles,
+                                'rate' => (float) $data->rate,
+                                'term' => (int) $data->term,
+                                'rebate' => (int) $data->rebate,
+                                'residual' => (int) $data->residual,
+                                'miles' => (int) $data->miles,
                                 'rate_type' => $data->rateType,
                                 'data' => $data->data,
                             ]);

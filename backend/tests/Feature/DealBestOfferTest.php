@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
 use App\Models\Deal;
 use App\Models\JATO\Version;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Tests\TestCase;
 
 class DealBestOfferTest extends TestCase
 {
@@ -32,7 +32,7 @@ class DealBestOfferTest extends TestCase
         $deal = factory(Deal::class)->create();
         $deal->version()->associate(factory(Version::class)->create())->save();
 
-        $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => [25,26], 'zipcode' => '99999']);
+        $response = $this->json('GET', route('deals.best-offer', $deal->id), ['payment_type' => 'cash', 'targets' => [25, 26], 'zipcode' => '99999']);
         $response->assertJsonFragment(['totalValue' => 0]);
     }
 }

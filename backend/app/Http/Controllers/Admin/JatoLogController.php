@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class JatoLogController extends Controller
 {
@@ -31,11 +31,11 @@ class JatoLogController extends Controller
     public function index()
     {
         $dates = collect($this->file)->filter(function ($line) {
-            return substr($line, 0, 5) == "[2018";
+            return substr($line, 0, 5) == '[2018';
         })->map(function ($line) {
             return substr($line, 1, 10);
         })->unique()->each(function ($date) {
-            echo '<a href="/admin/jato-logs/' . $date . '">' . $date . '</a><br>';
+            echo '<a href="/admin/jato-logs/'.$date.'">'.$date.'</a><br>';
         });
     }
 
@@ -48,7 +48,7 @@ class JatoLogController extends Controller
 
         foreach ($this->file as $f) {
             // Find start of an entry
-            if (substr($f, 0, 5) == "[2018") {
+            if (substr($f, 0, 5) == '[2018') {
                 // Take old entry; add it to the list
                 $entries[] = array_filter($currentEntry);
                 // Start new entry
@@ -70,11 +70,13 @@ class JatoLogController extends Controller
         })->mapToGroups(function ($entry) {
             // Remove specific strings from log lines
             $filteredEntry = collect($entry)->map(function ($line) {
-                if (str_contains($line, "ERROR: ")) {
+                if (str_contains($line, 'ERROR: ')) {
                     $line = strstr($line, 'ERROR: ');
                 }
+
                 return str_replace(['ERROR: ', 'Importer error: ', 'Server error: ', 'Client error: '], ['', '', '', ''], $line);
             })->toArray();
+
             return [$this->getGroupName($entry) => $filteredEntry];
         })->sortBy(function ($group, $groupName) use ($groupSort) {
             return array_search($groupName, $groupSort);
@@ -89,24 +91,24 @@ class JatoLogController extends Controller
 
             // Render each group
             $groupKey = Str::slug($groupName);
-            echo '<h2 id="expand-button-' . $groupKey . '" onClick="expand(\'' . $groupKey . '\', false); return false;" style="cursor:pointer; margin-top: 2em; margin-bottom: 0;">' . $groupName . ' (' . count($group) . ' errors)</h2>';
-            echo '<p style="margin-bottom: 2em; margin-top: 0.25em">' . $this->groupSort[$groupName] . '</p>';
+            echo '<h2 id="expand-button-'.$groupKey.'" onClick="expand(\''.$groupKey.'\', false); return false;" style="cursor:pointer; margin-top: 2em; margin-bottom: 0;">'.$groupName.' ('.count($group).' errors)</h2>';
+            echo '<p style="margin-bottom: 2em; margin-top: 0.25em">'.$this->groupSort[$groupName].'</p>';
             echo "<div id='expand-{$groupKey}' class='hide' style='margin-left: 1em;'>";
             collect($group)->each(function ($entry, $i) use ($groupName) {
-                $this->renderEntry($entry, md5($groupName) . '-' . $i);
+                $this->renderEntry($entry, md5($groupName).'-'.$i);
             });
-            echo "</div>";
+            echo '</div>';
         });
     }
 
     private function renderEntry($entry, $i)
     {
         $firstLine = array_shift($entry);
-        echo '<pre>' . htmlentities($firstLine) . '</pre>';
+        echo '<pre>'.htmlentities($firstLine).'</pre>';
 
         if (count($entry) > 0) {
-            echo '<a id="expand-button-' . $i . '" href="#" onClick="expand(\'' . $i . '\'); return false;">[expand]</a>';
-            echo '<pre id="expand-' . $i . '" class="hide">';
+            echo '<a id="expand-button-'.$i.'" href="#" onClick="expand(\''.$i.'\'); return false;">[expand]</a>';
+            echo '<pre id="expand-'.$i.'" class="hide">';
             echo htmlentities(implode("\n", $entry));
             echo '</pre>';
         }

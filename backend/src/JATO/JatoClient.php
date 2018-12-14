@@ -2,22 +2,17 @@
 
 namespace DeliverMyRide\JATO;
 
-use DeliverMyRide\Common\ApiClient;
-use Facades\App\JATO\Log;
 use GuzzleHttp\Client;
+use DeliverMyRide\Common\ApiClient;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Class JatoClient
- * @package DeliverMyRide\JATO
- *
- * An API wrapper around the entire JATO api.
+ * Class JatoClient.
  *
  * @see https://www.jatoflex.com/docs/services/
  */
 class JatoClient extends ApiClient
 {
-
     const TOKEN_KEY = 'JATO_AUTH_TOKEN';
 
     public $token;
@@ -44,7 +39,6 @@ class JatoClient extends ApiClient
     public $feature;
     public $incentive;
     public $standard;
-
 
     /**
      * JatoClient constructor.
@@ -73,7 +67,7 @@ class JatoClient extends ApiClient
         $this->password = $password;
         $this->token = $this->getAuthorizationToken();
 
-        $this->baseUrl = "https://api.jatoflex.com/api/en-us";
+        $this->baseUrl = 'https://api.jatoflex.com/api/en-us';
     }
 
     /**
@@ -88,19 +82,20 @@ class JatoClient extends ApiClient
         // token on every request in order to ensure it doesn't expire in the middle.
 
         // refresh token if it will expire within the next 10 seconds.
-        if (!$this->token || strtotime($this->token->expires_on) < (time() + 10)) {
+        if (! $this->token || strtotime($this->token->expires_on) < (time() + 10)) {
             $this->refreshAuthorizationToken();
         }
 
         $headers = [
-            'Authorization' => $this->token->token_type . ' ' . $this->token->access_token,
+            'Authorization' => $this->token->token_type.' '.$this->token->access_token,
             'Subscription-Key' => config('services.jato.subscription_key'),
         ];
+
         return $headers;
     }
 
     /**
-     * Process names into something jato likes
+     * Process names into something jato likes.
      *
      * @param string $modelName
      * @return string
@@ -111,15 +106,16 @@ class JatoClient extends ApiClient
     }
 
     /**
-     * Fetch token from cache
+     * Fetch token from cache.
      * @return mixed
      */
-    public function getAuthorizationToken() {
-        return Cache::get(self::TOKEN_KEY, FALSE);
+    public function getAuthorizationToken()
+    {
+        return Cache::get(self::TOKEN_KEY, false);
     }
 
     /**
-     * Refreshes the auth token using username and password. Stores the new token info in cache
+     * Refreshes the auth token using username and password. Stores the new token info in cache.
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function refreshAuthorizationToken()

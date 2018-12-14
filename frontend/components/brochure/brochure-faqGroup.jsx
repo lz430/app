@@ -30,12 +30,9 @@ class ListGroupCollapse extends React.Component {
                     >
                         {item.title}
                         <FontAwesomeIcon
-                            className={!this.state.active ? '' : 'hidden'}
-                            icon={faChevronDown}
-                        />
-                        <FontAwesomeIcon
-                            className={this.state.active ? '' : 'hidden'}
-                            icon={faChevronUp}
+                            icon={
+                                this.state.active ? faChevronUp : faChevronDown
+                            }
                         />
                     </div>
                     <Collapse isOpen={this.state.collapse}>

@@ -54,43 +54,47 @@ class Page extends React.Component {
                     <div className="about__story mt-5 mb-5">
                         <Container>
                             <Row noGutters>
-                                <Col sm="6">
-                                    <h3 className="">Our Story</h3>
-                                    <p>
-                                        After a 30 year career in and around the
-                                        car business, Deliver My Ride’s founder
-                                        Mike McInerney found himself on the
-                                        consumer’s side of the deal. “I wanted
-                                        to buy a car for my daughter a couple
-                                        years after leaving the retail car
-                                        business and experienced first hand how
-                                        difficult the car buying process could
-                                        be as a consumer. I searched the web
-                                        looking for a fast, easy and transparent
-                                        way to compare different vehicle brands,
-                                        prices and incentives. Every site either
-                                        directed me to a dealership or sold my
-                                        information, which led to weeks of
-                                        unwanted calls and emails…it was
-                                        frustrating. So I set out to fix the
-                                        problem through my knowledge of the car
-                                        business and utilizing modern
-                                        technology.”
-                                    </p>
-                                    <p>
-                                        Determined to change the way we buy
-                                        cars, he huddled with bright technology
-                                        minds, such as Compuware Founder Peter
-                                        Karmanos, developed a network of
-                                        innovative, like-minded dealerships, and
-                                        created Deliver My Ride as an
-                                        alternative to the traditional car
-                                        buying process.
-                                    </p>
+                                <Col>
+                                    <div className="about__story-content">
+                                        <h3 className="">Our Story</h3>
+                                        <p>
+                                            After a 30 year career in and around
+                                            the car business, Deliver My Ride’s
+                                            founder Mike McInerney found himself
+                                            on the consumer’s side of the deal.
+                                            “I wanted to buy a car for my
+                                            daughter a couple years after
+                                            leaving the retail car business and
+                                            experienced first hand how difficult
+                                            the car buying process could be as a
+                                            consumer. I searched the web looking
+                                            for a fast, easy and transparent way
+                                            to compare different vehicle brands,
+                                            prices and incentives. Every site
+                                            either directed me to a dealership
+                                            or sold my information, which led to
+                                            weeks of unwanted calls and
+                                            emails…it was frustrating. So I set
+                                            out to fix the problem through my
+                                            knowledge of the car business and
+                                            utilizing modern technology.”
+                                        </p>
+                                        <p>
+                                            Determined to change the way we buy
+                                            cars, he huddled with bright
+                                            technology minds, such as Compuware
+                                            Founder Peter Karmanos, developed a
+                                            network of innovative, like-minded
+                                            dealerships, and created Deliver My
+                                            Ride as an alternative to the
+                                            traditional car buying process.
+                                        </p>
+                                    </div>
                                 </Col>
+                                {/*
                                 <Col sm="6" className="p-0">
                                     <div className="about__story-image" />
-                                </Col>
+                                </Col> */}
                             </Row>
                         </Container>
                     </div>

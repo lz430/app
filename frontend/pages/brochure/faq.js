@@ -2,6 +2,7 @@ import '../../styles/app.scss';
 import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container, Row, Col } from 'reactstrap';
+import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
 import withTracker from '../../components/withTracker';
@@ -14,6 +15,7 @@ class Page extends Component {
         collapse: false,
         active: false,
         category: 'General Questions',
+        notCat: 'Deal FAQ',
     };
 
     componentDidMount() {
@@ -38,7 +40,7 @@ class Page extends Component {
 
     renderNav() {
         const cats = [...new Set(Faqs.map(q => q.category))];
-        const catsR = cats.map((name, i) => {
+        const catsR = cats.filter(c => c !== 'Deal FAQ').map((name, i) => {
             return (
                 <li
                     key={i}
@@ -70,20 +72,23 @@ class Page extends Component {
                     subtitle="A modern way to buy or lease your next vehicle"
                     button="Find your new car"
                 />
-                <Container className="faq">
+                <Container className="faq mb-5">
                     <Row>
                         <Col sm="3" className="faq__nav">
                             {this.renderNav()}
-                            <div className="faq__contact">
-                                <h4>
-                                    Not finding what you&apos;re looking for?
-                                </h4>
-                                <a href="tel:855-675-7301">855-675-7301</a>
-                                <a href="mailto:support@delivermyride.com">
-                                    support@delivermyride.com
-                                </a>
-                                <a href="#hs-chat-open">Live Chat</a>
-                            </div>
+                            <MediumAndUp>
+                                <div className="faq__contact">
+                                    <h4>
+                                        Not finding what you&apos;re looking
+                                        for?
+                                    </h4>
+                                    <a href="tel:855-675-7301">855-675-7301</a>
+                                    <a href="mailto:support@delivermyride.com">
+                                        support@delivermyride.com
+                                    </a>
+                                    <a href="#hs-chat-open">Live Chat</a>
+                                </div>
+                            </MediumAndUp>
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
@@ -91,6 +96,19 @@ class Page extends Component {
                                     <FaqGroup key={item.title} item={item} />
                                 ))}
                             </div>
+                            <SmallAndDown>
+                                <div className="faq__contact">
+                                    <h4>
+                                        Not finding what you&apos;re looking
+                                        for?
+                                    </h4>
+                                    <a href="tel:855-675-7301">855-675-7301</a>
+                                    <a href="mailto:support@delivermyride.com">
+                                        support@delivermyride.com
+                                    </a>
+                                    <a href="#hs-chat-open">Live Chat</a>
+                                </div>
+                            </SmallAndDown>
                         </Col>
                     </Row>
                 </Container>

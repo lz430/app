@@ -2,24 +2,22 @@
 
 namespace App\Providers;
 
-
-use App\Observers\DealObserver;
-use Illuminate\Contracts\Logging\Log;
-use  Illuminate\Support\Facades\URL;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
-use USDLRegex\Validator as LicenseValidator;
 use App\Models\Deal;
-use App\Models\Dealer;
+use  App\Models\Dealer;
 use App\Models\Feature;
-use App\Models\Order\Purchase;
 use App\Models\JATO\Version;
+use App\Models\Order\Purchase;
+use App\Observers\DealObserver;
 use App\Models\JATO\VersionQuote;
 use App\Observers\DealerObserver;
 use App\Observers\FeatureObserver;
 use App\Observers\VersionObserver;
-use App\Observers\VersionQuoteObserver;
 use App\Observers\PurchaseObserver;
+use Illuminate\Support\Facades\URL;
+use App\Observers\VersionQuoteObserver;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
+use USDLRegex\Validator as LicenseValidator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(in_array(config('app.env'), ['staging', 'production'])) {
+        if (in_array(config('app.env'), ['staging', 'production'])) {
             //Observers for model event listeners
             Dealer::observe(DealerObserver::class);
             Feature::observe(FeatureObserver::class);
@@ -53,7 +51,7 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        if(in_array(config('app.env'), ['staging', 'production'])) {
+        if (in_array(config('app.env'), ['staging', 'production'])) {
             URL::forceScheme('https');
         }
     }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Manager\VersionToFuel;
-
 use App\Models\JATO\Version;
+use DeliverMyRide\Fuel\FuelClient;
+use App\Http\Controllers\Controller;
+use DeliverMyRide\Fuel\Manager\VersionToFuel;
 
 class ReportVersionsMissingPhotosController extends Controller
 {
@@ -28,5 +27,4 @@ class ReportVersionsMissingPhotosController extends Controller
 
         return view('admin.reports.versions-missing-photos', ['versions' => $versions]);
     }
-
 }

@@ -2,10 +2,8 @@
 
 namespace DeliverMyRide\RIS\Service;
 
-
 class VehicleService extends BaseService
 {
-
     /**
      * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=GetVehicleGroupHashcodes
      * @return mixed
@@ -13,7 +11,7 @@ class VehicleService extends BaseService
      */
     public function hashcodes()
     {
-        return $this->client->get("getvehiclegrouphashcodes");
+        return $this->client->get('getvehiclegrouphashcodes');
     }
 
     /**
@@ -23,7 +21,7 @@ class VehicleService extends BaseService
      */
     public function hints()
     {
-        return $this->client->get("getvehiclehints");
+        return $this->client->get('getvehiclehints');
     }
 
     /**
@@ -51,7 +49,6 @@ class VehicleService extends BaseService
                                              array $dealScenarios = [],
                                              array $vehicleHints = [])
     {
-
         $data = [
             'regionID' => $regionId,
             'vin' => $vin,
@@ -65,8 +62,7 @@ class VehicleService extends BaseService
             $data['vehicleHints'] = $vehicleHints;
         }
 
-
-        return $this->client->post("findvehiclegroupsbyvehicleandregionid", $data);
+        return $this->client->post('findvehiclegroupsbyvehicleandregionid', $data);
     }
 
     /**
@@ -83,7 +79,6 @@ class VehicleService extends BaseService
                                                array $dealScenarios = [],
                                                array $vehicleHints = [])
     {
-
         $data = [
             'postalcode' => $postalCode,
             'vin' => $vin,
@@ -97,8 +92,7 @@ class VehicleService extends BaseService
             $data['vehicleHints'] = $vehicleHints;
         }
 
-
-        return $this->client->post("findvehiclegroupsbyvehicleandpostalcode", $data);
+        return $this->client->post('findvehiclegroupsbyvehicleandpostalcode', $data);
     }
 
     /**
@@ -113,7 +107,6 @@ class VehicleService extends BaseService
     public function findByListVehicleAndPostalcode(array $list,
                                                    array $dealScenarios = [])
     {
-
         $data = [
             'vehicleAndPostalcodeFilters' => $list,
         ];
@@ -122,7 +115,7 @@ class VehicleService extends BaseService
             $data['dealScenarios'] = $dealScenarios;
         }
 
-        return $this->client->post("findvehiclegroupsbylistofvehicleandpostalcode", $data);
+        return $this->client->post('findvehiclegroupsbylistofvehicleandpostalcode', $data);
     }
 
     /**
@@ -137,7 +130,6 @@ class VehicleService extends BaseService
     public function findByListVehicleAndRegionID(array $list,
                                                  array $dealScenarios = [])
     {
-
         $data = [
             'vehicleAndRegionIDFilters' => $list,
         ];
@@ -145,9 +137,9 @@ class VehicleService extends BaseService
         if (count($dealScenarios)) {
             $data['dealScenarios'] = $dealScenarios;
         }
-        return $this->client->post("findvehiclegroupsbylistofvehicleandregionid", $data);
-    }
 
+        return $this->client->post('findvehiclegroupsbylistofvehicleandregionid', $data);
+    }
 
     /**
      * @see https://incentives.homenetiol.com/v2.5/json/metadata?op=FindVehicleGroupsByMakeAndRegionID
@@ -161,18 +153,17 @@ class VehicleService extends BaseService
                                           string $regionId,
                                           array $dealScenarios = [])
     {
-
         $data = [
             'regionID' => $regionId,
             'makeName' => $make,
 
         ];
 
-        if (count($dealScenarios)){
+        if (count($dealScenarios)) {
             $data['dealScenarios'] = $dealScenarios;
         }
 
-        return $this->client->post("findvehiclegroupsbymakeandregionid", $data);
+        return $this->client->post('findvehiclegroupsbymakeandregionid', $data);
     }
 
     /**
@@ -187,19 +178,15 @@ class VehicleService extends BaseService
                                             string $postalCode,
                                             array $dealScenarios = [])
     {
-
         $data = [
             'postalcode' => $postalCode,
             'makeName' => $make,
         ];
 
-        if (count($dealScenarios)){
+        if (count($dealScenarios)) {
             $data['dealScenarios'] = $dealScenarios;
         }
 
-
-        return $this->client->post("findvehiclegroupsbymakeandpostalcode", $data);
+        return $this->client->post('findvehiclegroupsbymakeandpostalcode', $data);
     }
-
-
 }

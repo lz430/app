@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /*
@@ -42,6 +43,7 @@ return [
 
     'vauto' => [
         'uploads_path' => env('VAUTO_UPLOADS_PATH'),
+        'load_from' => env('VAUTO_LOAD_FROM', 'local'),
     ],
 
     'fuel' => [
@@ -72,7 +74,7 @@ return [
     ],
 
     'googleanalytics' => [
-        'ua' =>     env('GOOGLE_ANALYTICS_UA')
+        'ua' =>     env('GOOGLE_ANALYTICS_UA'),
     ],
 
     'mixpanel' => [

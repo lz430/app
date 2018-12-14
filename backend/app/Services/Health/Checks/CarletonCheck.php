@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Services\Health\Checks;
-use App\Services\Health\HealthCheck;
+
 use DeliverMyRide\Carleton\Client;
+use App\Services\Health\HealthCheck;
 use GuzzleHttp\Exception\ClientException;
 
-class CarletonCheck extends HealthCheck {
-
+class CarletonCheck extends HealthCheck
+{
     /**
-     * Client factory
+     * Client factory.
      * @return CarletonClient
      */
-    public function getClient() : Client {
+    public function getClient() : Client
+    {
         return new Client(
             config('services.carleton.url'),
             config('services.carleton.username'),
@@ -21,17 +23,17 @@ class CarletonCheck extends HealthCheck {
 
     public function run()
     {
-       try {
-           $client = $this->getClient();
-           $data = [
+        try {
+            $client = $this->getClient();
+            $data = [
                'username' => config('services.carleton.username'),
                'password' => config('services.carleton.password'),
                'quotes' => [],
            ];
-           $response = $client->buildRequest($data);
-           if($response){
-               return 'OKAY!';
-           }
+            $response = $client->buildRequest($data);
+            if ($response) {
+                return 'OKAY!';
+            }
         } catch (ClientException $e) {
             print_r($e->getMessage());
         }
@@ -39,4 +41,3 @@ class CarletonCheck extends HealthCheck {
         return 'FAIL';
     }
 }
-

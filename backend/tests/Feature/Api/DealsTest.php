@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\JatoFeature;
-use App\Models\JATO\Make;
-use App\Models\JATO\VehicleModel;
-use App\Models\JATO\Version;
-use App\Models\Deal;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Deal;
 use App\Models\Feature;
+use App\Models\JATO\Make;
+use App\Models\JatoFeature;
+use App\Models\JATO\Version;
+use App\Models\JATO\VehicleModel;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DealsTest extends TestCase
 {

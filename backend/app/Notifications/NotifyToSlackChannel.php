@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\SlackMessage;
 
 class NotifyToSlackChannel extends Notification
@@ -44,7 +43,7 @@ class NotifyToSlackChannel extends Notification
 
         return (new SlackMessage)
             ->content($stats['title'])
-            ->attachment(function($attachment) use ($stats){
+            ->attachment(function ($attachment) use ($stats) {
                 $attachment->title($stats['message'])
                    ->fields($stats['fields']);
             });

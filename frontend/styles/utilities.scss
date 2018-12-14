@@ -5,3 +5,25 @@
 .bg-pattern {
     background: url('/static/brochure/Turquoise-Bg.png');
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.shadow-sm {
+    box-shadow: $box-shadow-sm;
+}
+
+.bg-focus {
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.15);
+}
+
+.border-radius-0 {
+    border-radius: 0;
+}
+
+.text-xs {
+    font-size: 0.75rem;
+}

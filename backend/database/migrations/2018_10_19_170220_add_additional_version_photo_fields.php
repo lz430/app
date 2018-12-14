@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\JATO\VersionPhoto;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Models\JATO\VersionPhoto;
 
 class AddAdditionalVersionPhotoFields extends Migration
 {
@@ -39,7 +39,6 @@ class AddAdditionalVersionPhotoFields extends Migration
             $table->dropColumn('color_simple');
             $table->dropColumn('color_rgb');
             $table->string('color')->change();
-
         });
     }
 }

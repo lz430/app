@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands\Deal;
 
-use App\Models\Feature;
 use App\Models\Deal;
+use App\Models\Feature;
+use Illuminate\Console\Command;
 use DeliverMyRide\JATO\JatoClient;
 use DeliverMyRide\VAuto\Deal\DealEquipmentMunger;
-use Illuminate\Console\Command;
 
 class DealFeatureDebugger extends Command
 {
@@ -37,7 +37,6 @@ class DealFeatureDebugger extends Command
 
         $this->client = $client;
         $this->features = Feature::with('category')->get();
-
     }
 
     /**
@@ -49,8 +48,9 @@ class DealFeatureDebugger extends Command
 
         $deal = Deal::find($dealId);
 
-        if (!$deal) {
-            $this->info("NO DEAL!");
+        if (! $deal) {
+            $this->info('NO DEAL!');
+
             return;
         }
 
@@ -60,8 +60,8 @@ class DealFeatureDebugger extends Command
         $deal->fresh();
         $this->info($deal->id);
         $this->info($deal->title());
-        $this->info(" -- Option Codes: " . implode(", ", $deal->option_codes));
-        $this->info(" -- Package Codes: " . implode(", ", $deal->package_codes));
+        $this->info(' -- Option Codes: '.implode(', ', $deal->option_codes));
+        $this->info(' -- Package Codes: '.implode(', ', $deal->package_codes));
 
         $munger->printDiscoveredFeatures();
     }

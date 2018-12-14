@@ -2,11 +2,8 @@
 @import 'variables';
 
 @import 'mixins/button';
-@import 'mixins/constrained';
 @import 'mixins/input';
-@import 'mixins/link';
 @import 'mixins/selector-icon';
-@import 'mixins/vertical-form';
 
 //
 // Libraries
@@ -41,7 +38,7 @@
 @import '~bootstrap/scss/close';
 @import '~bootstrap/scss/modal';
 //@import "~bootstrap/scss/tooltip";
-//@import "~bootstrap/scss/popover";
+@import '~bootstrap/scss/popover';
 @import '~bootstrap/scss/carousel';
 @import '~bootstrap/scss/utilities';
 @import '~bootstrap/scss/print';
@@ -77,6 +74,7 @@
 @import 'components/disclaimer';
 @import 'components/button-group';
 @import 'components/breadcrumb';
+@import 'components/steps';
 
 @import 'components/brochure/page-hero';
 

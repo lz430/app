@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Collapse } from 'reactstrap';
+import { Container, Row, Collapse, Button } from 'reactstrap';
 import Link from 'next/link';
 
 import makes from '../../../content/makes';
@@ -8,6 +8,8 @@ import makes from '../../../content/makes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { track } from '../../../core/services';
+import StaticImage from '../../../components/StaticImage';
+
 export default class extends React.Component {
     state = {
         collapse: false,
@@ -50,9 +52,10 @@ export default class extends React.Component {
                                 this.trackLinkClick(filteredMakes[s], query)
                             }
                         >
-                            <img
-                                style={{ height: '80px', width: '80px' }}
-                                src={filteredMakes[s].logo}
+                            <StaticImage
+                                path={filteredMakes[s].logo}
+                                width={120}
+                                height={120}
                                 alt={filteredMakes[s].title + ' logo'}
                             />
                         </a>
@@ -64,7 +67,7 @@ export default class extends React.Component {
 
     render() {
         return (
-            <div className="container-fluid callout__brands pt-5 pb-3">
+            <div className="container-fluid callout__brands bg-focus pt-5 pb-3">
                 <Container>
                     <Row>{this.renderMakes(true)}</Row>
                     <Collapse className="row" isOpen={this.state.collapse}>
@@ -79,7 +82,11 @@ export default class extends React.Component {
                             }
                             onClick={this.toggle}
                         >
-                            <a className="btn btn-primary">
+                            <Button
+                                tag="a"
+                                color="primary"
+                                className="shadow-sm font-weight-bold"
+                            >
                                 <span>See all brands</span>
                                 <FontAwesomeIcon
                                     icon={
@@ -88,7 +95,7 @@ export default class extends React.Component {
                                             : faChevronDown
                                     }
                                 />
-                            </a>
+                            </Button>
                         </div>
                     </Row>
                 </Container>

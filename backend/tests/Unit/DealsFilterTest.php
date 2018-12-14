@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
+use Carbon\Carbon;
+use Tests\TestCase;
 use App\Models\Deal;
 use App\Models\Order\Purchase;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class DealsFilterTest extends TestCase
 {
@@ -16,7 +16,7 @@ class DealsFilterTest extends TestCase
     public function it_filters_deals_that_are_currently_being_held()
     {
         $deal = factory(Deal::class)->create();
-        
+
         factory(Purchase::class)->create([
             'type' => 'cash',
             'deal_id' => $deal->id,
@@ -26,9 +26,9 @@ class DealsFilterTest extends TestCase
         ]);
 
         $this->assertEquals(0, Deal::forSale()->count());
-    
+
         factory(Deal::class, 3)->create();
-    
+
         $this->assertEquals(3, Deal::forSale()->count());
     }
 }

@@ -3,10 +3,9 @@
 namespace App\Console\Commands\Jato;
 
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
 use League\Csv\Writer;
-
 use Illuminate\Console\Command;
+use DeliverMyRide\JATO\JatoClient;
 
 class JatoVersionReport extends Command
 {
@@ -45,7 +44,7 @@ class JatoVersionReport extends Command
     public function handle()
     {
         $path = $this->argument('path');
-        $csv = Writer::createFromPath("$path", "w");
+        $csv = Writer::createFromPath("$path", 'w');
 
         $header = [
             'Deal Id',
@@ -81,8 +80,6 @@ class JatoVersionReport extends Command
 
                 $csv->insertOne($data);
             }
-
         }
-
     }
 }

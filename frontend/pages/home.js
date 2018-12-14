@@ -23,11 +23,13 @@ import { withRouter } from 'next/router';
 import withTracker from '../components/withTracker';
 import { nextRouterType } from '../core/types';
 import Head from 'next/head';
+import { getUserPurchaseStrategy } from '../apps/user/selectors';
 
 class Page extends React.Component {
     static propTypes = {
         autocompleteResults: PropTypes.object,
         searchQuery: PropTypes.object,
+        purchaseStrategy: PropTypes.string,
         onRequestSearch: PropTypes.func.isRequired,
         onSetSelectedMake: PropTypes.func.isRequired,
         onClearSearchResults: PropTypes.func.isRequired,
@@ -46,7 +48,8 @@ class Page extends React.Component {
                 </Head>
                 <div>
                     <HomepageHero
-                        router={this.props.router}
+                        purchaseStrategy={this.props.purchaseStrategy}
+                        push={this.props.router.push}
                         autocompleteResults={this.props.autocompleteResults}
                         searchQuery={this.props.searchQuery}
                         onClearSearchResults={this.props.onClearSearchResults}
@@ -55,42 +58,21 @@ class Page extends React.Component {
                     />
                     <ShopByStyle />
                     <ShopByBrand />
-                    <div className="callout__info bg-light pt-5 pb-5">
+                    <div className="callout__video bg-light pt-5 pb-5">
                         <Container>
                             <Row>
-                                <Col md="6">
-                                    <img
-                                        className="img-fluid"
-                                        src="https://source.unsplash.com/random/600x300"
-                                        alt="placeholder"
-                                    />
-                                    <h3 className="mt-2">Test it out</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit. Facere eius
-                                        architecto, quo corporis perspiciatis
-                                        error. Lorem ipsum dolor sit amet,
-                                        consectetur adipisicing elit. Facere
-                                        eius architecto, quo corporis
-                                        perspiciatis error.
-                                    </p>
-                                </Col>
-                                <Col md="6">
-                                    <img
-                                        className="img-fluid"
-                                        src="https://source.unsplash.com/random/600x300"
-                                        alt="placeholder"
-                                    />
-                                    <h3 className="mt-2">Purchase</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur
-                                        adipisicing elit. Facere eius
-                                        architecto, quo corporis perspiciatis
-                                        error. Lorem ipsum dolor sit amet,
-                                        consectetur adipisicing elit. Facere
-                                        eius architecto, quo corporis
-                                        perspiciatis error.
-                                    </p>
+                                <Col className="text-center align-items-center justify-content-center">
+                                    <div className="embed-responsive embed-responsive-16by9 ml-auto mr-auto">
+                                        <iframe
+                                            className="embed-responsive-item"
+                                            src="//player.vimeo.com/video/235987207?title=0&amp;byline=0&amp;portrait=0"
+                                            width="600"
+                                            height="401"
+                                            frameBorder="0"
+                                            allowFullScreen="allowfullscreen"
+                                            data-fluidvids="loaded"
+                                        />
+                                    </div>
                                 </Col>
                             </Row>
                         </Container>
@@ -106,6 +88,7 @@ class Page extends React.Component {
 const mapStateToProps = state => {
     return {
         autocompleteResults: state.page.headerAutocompleteResults,
+        purchaseStrategy: getUserPurchaseStrategy(state),
     };
 };
 

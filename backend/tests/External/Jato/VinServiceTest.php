@@ -2,23 +2,21 @@
 
 namespace Tests\External\Jato;
 
-use GuzzleHttp\Exception\ClientException;
 use Tests\TestCase;
-
 use DeliverMyRide\JATO\JatoClient;
-
+use GuzzleHttp\Exception\ClientException;
 
 /**
- * Class testVinService
- * @package Tests\Service\Jato\Integration
+ * Class testVinService.
  */
-class testVinService extends TestCase
+class VinServiceTest extends TestCase
 {
     /**
-     * Client factory
+     * Client factory.
      * @return JatoClient
      */
-    public function getClient() : JatoClient {
+    public function getClient() : JatoClient
+    {
         return new JatoClient(
             config('services.jato.username'),
             config('services.jato.password')
@@ -26,7 +24,8 @@ class testVinService extends TestCase
     }
 
     /** @test **/
-    public function it_can_decode_vin() {
+    public function it_can_decode_vin()
+    {
         $vin = '1FM5K7B83JGA96934';
         $client = $this->getClient();
         $response = $client->vin->decode($vin);
@@ -34,7 +33,8 @@ class testVinService extends TestCase
     }
 
     /** @test **/
-    public function it_can_validate_valid_vin() {
+    public function it_can_validate_valid_vin()
+    {
         $vin = '1FM5K7B83JGA96934';
         $client = $this->getClient();
         $response = $client->vin->validate($vin);
@@ -42,23 +42,25 @@ class testVinService extends TestCase
     }
 
     /** @test **/
-    public function it_can_validate_invaliud_vin() {
+    public function it_can_validate_invaliud_vin()
+    {
         $vin = 'savvvffffasdf';
         $client = $this->getClient();
 
-        $exception = FALSE;
+        $exception = false;
         try {
             $client->vin->validate($vin);
-        } catch(ClientException $e) {
+        } catch (ClientException $e) {
             self::assertEquals($e->getCode(), 400);
-            $exception = TRUE;
+            $exception = true;
         }
 
         $this->assertTrue($exception);
     }
 
     /** @test **/
-    public function it_can_decode_bulk_vins() {
+    public function it_can_decode_bulk_vins()
+    {
         $vins = ['1FM5K7B83JGA96934', '1C4PJLDX1KD109258'];
         $client = $this->getClient();
         $response = $client->vin->decodeBulk($vins);
@@ -66,7 +68,8 @@ class testVinService extends TestCase
     }
 
     /** @test **/
-    public function it_can_decode_vin_features() {
+    public function it_can_decode_vin_features()
+    {
         $vinVersionId = '179091';
         $category = 'all';
         $client = $this->getClient();
@@ -74,6 +77,4 @@ class testVinService extends TestCase
 
         $this->assertTrue(isset($response->categories));
     }
-
-
 }

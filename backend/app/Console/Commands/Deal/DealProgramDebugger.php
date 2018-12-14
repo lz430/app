@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands\Deal;
 
+use App\Models\Deal;
+use Illuminate\Console\Command;
 use DeliverMyRide\DataDelivery\DataDeliveryClient;
 use DeliverMyRide\DataDelivery\Manager\DealRatesAndRebatesManager;
-use Illuminate\Console\Command;
-use App\Models\Deal;
 
 class DealProgramDebugger extends Command
 {

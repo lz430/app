@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container, Row, Col } from 'reactstrap';
+import { Container, Row, Col, Button } from 'reactstrap';
 import Link from 'next/link';
 
 import styles from '../../../content/styles';
@@ -10,15 +10,22 @@ import 'react-alice-carousel/lib/alice-carousel.css';
 import { nextRouterType } from '../../../core/types';
 import { track } from '../../../core/services';
 
+import { faArrowLeft, faArrowRight } from '@fortawesome/pro-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { buildURL } from 'react-imgix';
+import { buildStaticImageUrl } from '../../../util/util';
+
 export default class extends React.Component {
     static propTypes = {
         router: nextRouterType,
     };
 
     responsive = {
-        0: { items: 2 },
-        600: { items: 3 },
-        1024: { items: 4 },
+        0: { items: 1 },
+        576: { items: 1 },
+        768: { items: 2 },
+        992: { items: 2 },
+        1200: { items: 3 },
     };
 
     state = {
@@ -49,15 +56,18 @@ export default class extends React.Component {
             >
                 <a
                     onClick={() => this.trackLinkClick(style, query)}
-                    className="__category text-center"
+                    className="style__item text-center"
+                    style={{
+                        backgroundImage:
+                            'url(' +
+                            buildURL(buildStaticImageUrl(style.icon), {
+                                auto: ['format', 'compress'],
+                            }) +
+                            ')',
+                    }}
                 >
                     <h5>{style.title}</h5>
-                    <div className="icon">
-                        <img
-                            src="https://source.unsplash.com/220x125?car"
-                            className="img-fluid"
-                        />
-                    </div>
+
                     <div className="cta">
                         <span>See All</span>
                     </div>
@@ -65,34 +75,54 @@ export default class extends React.Component {
             </Link>
         );
     }
+
     render() {
         return (
             <div className="container-fluid callout__categories">
                 <Container>
-                    <AliceCarousel
-                        ref={el => (this.Carousel = el)}
-                        duration={400}
-                        autoPlay={false}
-                        startIndex={1}
-                        fadeOutAnimation={true}
-                        mouseDragEnabled={true}
-                        playButtonEnabled={false}
-                        autoPlayInterval={2000}
-                        autoPlayDirection="rtl"
-                        responsive={this.responsive}
-                        disableAutoPlayOnAction={true}
-                        onSlideChange={this.onSlideChange}
-                        onSlideChanged={this.onSlideChanged}
-                        dotsDisabled={true}
-                    >
-                        {styles.map(style => this.renderStyle(style))}
-                    </AliceCarousel>
+                    <div className="carousel">
+                        <div
+                            onClick={() => this.Carousel._slidePrev()}
+                            className="fancy-carousel-control fancy-carousel-control-prev"
+                        >
+                            <FontAwesomeIcon icon={faArrowLeft} />
+                        </div>
+                        <div
+                            onClick={() => this.Carousel._slideNext()}
+                            className="fancy-carousel-control fancy-carousel-control-next"
+                        >
+                            <FontAwesomeIcon icon={faArrowRight} />
+                        </div>
+                        <AliceCarousel
+                            ref={el => (this.Carousel = el)}
+                            duration={400}
+                            autoPlay={false}
+                            startIndex={0}
+                            fadeOutAnimation={true}
+                            mouseDragEnabled={false}
+                            playButtonEnabled={false}
+                            autoPlayInterval={2000}
+                            autoPlayDirection="rtl"
+                            responsive={this.responsive}
+                            disableAutoPlayOnAction={true}
+                            onSlideChange={this.onSlideChange}
+                            onSlideChanged={this.onSlideChanged}
+                            dotsDisabled={true}
+                            buttonsDisabled={true}
+                        >
+                            {styles.map(style => this.renderStyle(style))}
+                        </AliceCarousel>
+                    </div>
                     <Row>
                         <Col className="text-center mt-5">
                             <Link href="/deal-list" as="/filter" passHref>
-                                <a className="btn btn-primary">
+                                <Button
+                                    tag="a"
+                                    color="primary"
+                                    className="shadow-sm font-weight-bold"
+                                >
                                     Browse All Cars
-                                </a>
+                                </Button>
                             </Link>
                         </Col>
                     </Row>

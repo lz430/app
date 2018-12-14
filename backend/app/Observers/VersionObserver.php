@@ -14,7 +14,6 @@ class VersionObserver
      */
     public function created(Version $version)
     {
-
     }
 
     /**
@@ -25,7 +24,6 @@ class VersionObserver
      */
     public function updated(Version $version)
     {
-
     }
 
     /**

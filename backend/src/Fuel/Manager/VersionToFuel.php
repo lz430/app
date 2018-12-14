@@ -2,14 +2,11 @@
 
 namespace DeliverMyRide\Fuel\Manager;
 
+use DeliverMyRide\Fuel\Map;
 use App\Models\JATO\Version;
 use DeliverMyRide\Fuel\FuelClient;
-use DeliverMyRide\Fuel\Map;
 use GuzzleHttp\Exception\ClientException;
 
-/**
- *
- */
 class VersionToFuel
 {
     private $client;
@@ -28,7 +25,6 @@ class VersionToFuel
      */
     private function filterUnlessNone(array $data, $attribute, $value): array
     {
-
         $filtered = array_filter($data, function ($record) use ($attribute, $value) {
             if (isset($record->{$attribute}) && $record->{$attribute} == $value) {
                 return true;
@@ -89,7 +85,6 @@ class VersionToFuel
     }
 
     /**
-     *
      * @param $color
      * @return string
      */
@@ -109,7 +104,7 @@ class VersionToFuel
         $doors = $this->version->doors;
 
         if (in_array($this->version->body_style, [
-            'Sport Utility Vehicle'
+            'Sport Utility Vehicle',
         ])) {
             $doors = $doors - 1;
         }
@@ -122,7 +117,7 @@ class VersionToFuel
      */
     public function getSearchParams(): array
     {
-        if (!$this->version) {
+        if (! $this->version) {
             return [];
         }
 
@@ -132,7 +127,7 @@ class VersionToFuel
             'model' => $this->translateModelName(),
             'trim' => $this->translateTrimName(),
             'doors' => $this->translateNumberDoors(),
-            'body' => $this->translateBodyStyle()
+            'body' => $this->translateBodyStyle(),
         ];
 
         //
@@ -201,15 +196,14 @@ class VersionToFuel
             $product_format_id = [['2'], ['3'], ['4']];
         }
 
-
-        if (!$vehicleId) {
+        if (! $vehicleId) {
             $vehicle = $this->matchFuelVehicleToVersion($version);
             if ($vehicle) {
                 $vehicleId = $vehicle->id;
             }
         }
 
-        if (!$vehicleId) {
+        if (! $vehicleId) {
             return [];
         }
 
@@ -229,7 +223,7 @@ class VersionToFuel
             }
         }
 
-        if (!isset($media)) {
+        if (! isset($media)) {
             return [];
         }
 

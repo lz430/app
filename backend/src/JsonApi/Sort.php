@@ -12,6 +12,7 @@ class Sort
             $minus = strpos($item, '-') === 0;
             $column = $minus ? substr($item, 1) : $item;
             $columns[$column] = $minus ? 'desc' : 'asc';
+
             return $columns;
         }, []);
 
