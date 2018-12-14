@@ -487,9 +487,10 @@ class VersionMunger
         }
 
         //Refresh equipment/options/standard text for versions
-        DB::table('equipment')->where('version_id', $version->id)->delete();
-        DB::table('options')->where('version_id', $version->id)->delete();
-        DB::table('standard_texts')->where('version_id', $version->id)->delete();
+        $version->options()->delete();
+        $version->equipment()->delete();
+        $version->standard_text()->delete();
+
         $this->equipment($jatoVersion->vehicle_ID, $version->id);
         $this->options($jatoVersion->vehicle_ID, $version->id);
         $this->stardardText($jatoVersion->vehicle_ID, $version->id);

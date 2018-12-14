@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use DeliverMyRide\JATO\Manager\DealCompareData;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 /**
  * App\Models\Deal.
@@ -280,6 +282,54 @@ class Deal extends Model
             'seating_capacity' => [
                 'type' => 'integer',
             ],
+            'options' => [
+                'type' => 'nested',
+                'properties' => [
+                    'option_name' => [
+                        'type' => 'text',
+                    ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
+                    'msrp' => [
+                        'type' => 'double',
+                    ],
+                    'invoice_price' => [
+                        'type' => 'double',
+                    ],
+                ],
+            ],
+            'packages' => [
+                'type' => 'nested',
+                'properties' => [
+                    'option_name' => [
+                        'type' => 'text',
+                    ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
+                    'msrp' => [
+                        'type' => 'double',
+                    ],
+                    'invoice_price' => [
+                        'type' => 'double',
+                    ],
+                ],
+            ],
+            'equipment' => [
+                'type' => 'nested',
+                'properties' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -341,30 +391,6 @@ class Deal extends Model
     public function features(): BelongsToMany
     {
         return $this->belongsToMany(Feature::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function equipment(): BelongsToMany
-    {
-        return $this->belongsToMany(Equipment::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function options(): BelongsToMany
-    {
-        return $this->belongsToMany(Option::class);
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function standard_text(): BelongsToMany
-    {
-        return $this->belongsToMany(StandardText::class);
     }
 
     private function getRealPhotos()
@@ -879,6 +905,9 @@ class Deal extends Model
             ];
         }
 
+        // Equipment on car
+        $record['equipment'] = [];
+        $record['equipment'] = (new BuildEquipmentData($this))->build();
 
         //
         // Catchall
@@ -887,20 +916,6 @@ class Deal extends Model
             $misc = explode('|', $this->vauto_features);
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
-        }
-
-        //
-        // All the features in the current UI are just jammed together.
-        $record['legacy_features'] = [];
-        foreach ($this->features as $feature) {
-            $record['legacy_features'][] = $feature->title;
-        }
-
-        //
-        // Jato features
-        $record['jato_features'] = [];
-        foreach ($this->jatoFeatures as $feature) {
-            $record['jato_features'][] = $feature->toIndexData();
         }
 
         return $record;
