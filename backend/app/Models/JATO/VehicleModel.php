@@ -26,6 +26,9 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VehicleModel whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VehicleModel whereUrlName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VehicleModel newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VehicleModel newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VehicleModel query()
  */
 class VehicleModel extends Model
 {

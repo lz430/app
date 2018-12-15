@@ -7,7 +7,7 @@ use App\Models\Feature;
 use App\Models\JATO\Version;
 use GuzzleHttp\Exception\ClientException;
 
-class DealCompareData
+class BuildEquipmentData
 {
     private const EQUIPMENT_TO_SKIP = [
         'Internal dimensions',
@@ -74,11 +74,6 @@ class DealCompareData
     private function compileEquipmentData()
     {
         //
-        // Build Equipment
-        /*$equipment = $this->buildPotentialDealEquipment();
-        $this->potentialEquipment = collect($equipment);*/
-
-        //
         // Build standard text
         $text = [];
         foreach ($this->buildStandardEquipmentText() as $item) {
@@ -86,9 +81,7 @@ class DealCompareData
                 $text[$st->schema_id] = $st;
             }
         }
-
         $this->standardEquipmentText = $text;
-
     }
 
     private function dealEquipment()
@@ -194,7 +187,10 @@ class DealCompareData
                 }
                 break;
             case 'Engine':
-                $labels[$equipments->schema_id] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";
+                $liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
+                $cylinders = isset($attributes['number of cylinders']) ? $attributes['number of cylinders']->value : '';
+                $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
+                $labels[$equipments->schema_id] = "{$liters} v{$cylinders} {$configuration}";
                 break;
             case 'Fuel':
                 $labels[$equipments->schema_id] = "Fuel Type: {$attributes['Fuel type']->value}";
@@ -227,16 +223,11 @@ class DealCompareData
         $labeledEquipment = [];
 
         foreach ($this->equipmentOnDeal as $category => $equipments) {
-            if (! isset($labeledEquipment[$category])) {
-                $labeledEquipment[$category] = [];
-            }
-
             foreach ($equipments as $equipment) {
-
                 $labels = $this->getLabelsForJatoEquipment($equipment);
-
                 foreach ($labels as $schemaId => $label) {
-                    $labeledEquipment[$category][$schemaId] = $label;
+                    $data = preg_split('/:\s*/', $label, 2);
+                    $labeledEquipment[] = array('category' => $category, 'label' => isset($data[0]) ? $data[0] : $label, 'value' => isset($data[1]) ? $data[1] : $label);
                 }
             }
         }

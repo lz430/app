@@ -63,6 +63,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version whereYear($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Equipment[] $equipment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Option[] $options
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\StandardText[] $standard_text
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Version query()
  */
 class Version extends Model
 {
@@ -102,6 +108,30 @@ class Version extends Model
     public function deals()
     {
         return $this->hasMany(Deal::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function equipment(): HasMany
+    {
+        return $this->hasMany(Equipment::class, 'version_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function options(): HasMany
+    {
+        return $this->hasMany(Option::class, 'version_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function standard_text(): HasMany
+    {
+        return $this->hasMany(StandardText::class, 'version_id', 'id');
     }
 
     /**

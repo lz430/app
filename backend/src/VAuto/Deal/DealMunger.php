@@ -25,7 +25,7 @@ class DealMunger
     {
         $this->jatoClient = $jatoClient;
         $this->photoManager = new DealPhotosMunger();
-        $this->equipmentManager = new DealEquipmentMunger($this->jatoClient);
+        $this->equipmentManager = new DealEquipmentMunger();
         $this->featuresManager = new DealFeaturesMunger($this->jatoClient);
     }
 
