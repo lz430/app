@@ -22,8 +22,8 @@ class CreateOptionsTable extends Migration
             $table->integer('option_id');
             $table->string('option_code');
             $table->string('option_type');
-            $table->decimal('msrp', 8,2);
-            $table->decimal('invoice_price', 8,2);
+            $table->decimal('msrp', 8, 2);
+            $table->decimal('invoice_price', 8, 2);
             $table->string('option_name');
             $table->string('option_state_name');
             $table->string('option_state');

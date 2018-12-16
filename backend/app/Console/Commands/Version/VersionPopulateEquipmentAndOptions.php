@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands\Version;
 
-use Illuminate\Console\Command;
+use App\Models\JATO\Option;
 use App\Models\JATO\Version;
 use App\Models\JATO\Equipment;
-use App\Models\JATO\Option;
+use Illuminate\Console\Command;
 use App\Models\JATO\StandardText;
-use Illuminate\Support\Facades\DB;
 use DeliverMyRide\JATO\JatoClient;
+use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 
@@ -55,37 +55,36 @@ class VersionPopulateEquipmentAndOptions extends Command
         })
         ->get();
 
-
         // Checks to see if table is not empty before deleting records to re import
-        if(Equipment::count() > 0 && Option::count() > 0 && StandardText::count() > 0) {
+        if (Equipment::count() > 0 && Option::count() > 0 && StandardText::count() > 0) {
             DB::table('equipment')->delete();
             DB::table('options')->delete();
             DB::table('standard_texts')->delete();
         }
 
-        foreach($versions as $version) {
+        foreach ($versions as $version) {
             // Removes the command failure if jato return 400 error
             try {
                 $getEquipment = collect($this->client->equipment->get($version->jato_vehicle_id)->results);
                 $getOptions = collect($this->client->option->get($version->jato_vehicle_id)->options);
                 $getStandardText = collect($this->client->standard->get($version->jato_vehicle_id, '', '', '1', '5000')->results);
             } catch (ClientException | ServerException $e) {
-                if($e->getCode() === 400) {
+                if ($e->getCode() === 400) {
                     continue;
                 }
             }
 
             $foundEquipment = $getEquipment
-                ->reject(function ($equipment){
+                ->reject(function ($equipment) {
                     return ! in_array($equipment->availability, ['standard', 'optional']);
                 });
 
             $foundOptions = $getOptions
-                ->reject(function ($options){
+                ->reject(function ($options) {
                     return ! in_array($options->optionType, ['O', 'P']);
                 });
 
-            foreach($foundEquipment as $e) {
+            foreach ($foundEquipment as $e) {
                 $data = [
                     'version_id' => $version->id,
                     'option_id' => $e->optionId,
@@ -101,7 +100,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                 Equipment::updateOrCreate($data);
             }
 
-            foreach($foundOptions as $o) {
+            foreach ($foundOptions as $o) {
                 $data = [
                     'version_id' => $version->id,
                     'option_id' => $o->optionId,
@@ -117,7 +116,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                 Option::updateOrCreate($data);
             }
 
-            foreach($getStandardText as $s) {
+            foreach ($getStandardText as $s) {
                 $data = [
                     'version_id' => $version->id,
                     'schema_id' => $s->schemaId,
@@ -130,7 +129,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                 StandardText::updateOrCreate($data);
             }
 
-            $this->info("Populating equipment/options for " . $version->title());
+            $this->info('Populating equipment/options for '.$version->title());
         }
     }
 }

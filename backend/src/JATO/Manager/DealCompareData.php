@@ -5,7 +5,6 @@ namespace DeliverMyRide\JATO\Manager;
 use App\Models\Deal;
 use App\Models\Feature;
 use App\Models\JATO\Version;
-use GuzzleHttp\Exception\ClientException;
 
 class DealCompareData
 {
@@ -45,14 +44,16 @@ class DealCompareData
     private function buildStandardEquipmentText()
     {
         $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
     private function findStandardDealEquipment()
     {
-        $data = Version::with(['equipment' => function($query) {
+        $data = Version::with(['equipment' => function ($query) {
             $query->where('availability', 'standard');
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -63,11 +64,12 @@ class DealCompareData
             $this->deal->option_codes ? $this->deal->option_codes : []
         );
 
-        $data = Version::with(['equipment' => function($query) {
+        $data = Version::with(['equipment' => function ($query) {
             $query->where('availability', 'optional');
-        }])->with(['options' => function($query) use($codes) {
+        }])->with(['options' => function ($query) use ($codes) {
             $query->whereIn('option_code', $codes);
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -88,7 +90,6 @@ class DealCompareData
         }
 
         $this->standardEquipmentText = $text;
-
     }
 
     private function dealEquipment()
@@ -232,7 +233,6 @@ class DealCompareData
             }
 
             foreach ($equipments as $equipment) {
-
                 $labels = $this->getLabelsForJatoEquipment($equipment);
 
                 foreach ($labels as $schemaId => $label) {

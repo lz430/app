@@ -5,11 +5,9 @@ namespace DeliverMyRide\VAuto\Deal;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Feature;
-use App\Models\JATO\Version;
 use App\Models\Category;
+use App\Models\JATO\Version;
 use DeliverMyRide\VAuto\Map;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 
 class DealEquipmentMunger
 {
@@ -187,6 +185,7 @@ class DealEquipmentMunger
     private function fetchVersionEquipment(): \Illuminate\Support\Collection
     {
         $data = Version::with('equipment')->where('id', $this->deal->version_id)->get();
+
         return collect($data);
     }
 
@@ -196,9 +195,10 @@ class DealEquipmentMunger
      */
     private function fetchVersionPackages(): \Illuminate\Support\Collection
     {
-        $data = Version::with(['options' => function($query) {
+        $data = Version::with(['options' => function ($query) {
             $query->where('option_type', 'P');
         }])->where('id', $this->deal->version_id)->get();
+
         return collect($data);
     }
 
@@ -208,9 +208,10 @@ class DealEquipmentMunger
      */
     private function fetchVersionOptions(): \Illuminate\Support\Collection
     {
-        $data = Version::with(['options' => function($query) {
+        $data = Version::with(['options' => function ($query) {
             $query->where('option_type', 'O');
         }])->where('id', $this->deal->version_id)->get();
+
         return collect($data);
     }
 
