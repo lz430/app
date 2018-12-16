@@ -11,6 +11,7 @@
         "php": ">=7.1",
         "ext-simplexml": "*",
         "ext-libxml": "*",
+        "ext-json": "*",
         "adambullmer/usdl-regex": "^1.0",
         "babenkoivan/scout-elasticsearch-driver": "^3.8",
         "backpack/crud": "^3.4",

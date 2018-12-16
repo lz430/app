@@ -232,10 +232,11 @@ class VersionMunger
     /**
      * @param $vehicleId
      * @param $versionId
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function equipment($vehicleId, $versionId)
     {
-        $getEquipment = collect($this->client->equipment->get($vehicleId)->results);
+        $getEquipment = collect($this->jatoClient->equipment->get($vehicleId)->results);
         $equipment = $getEquipment
             ->reject(function ($equipment){
                 return ! in_array($equipment->availability, ['standard', 'optional']);
@@ -264,7 +265,7 @@ class VersionMunger
      */
     private function options($vehicleId, $versionId)
     {
-        $getOptions = collect($this->client->option->get($vehicleId)->options);
+        $getOptions = collect($this->jatoClient->option->get($vehicleId)->options);
         $options = $getOptions
             ->reject(function ($options){
                 return ! in_array($options->optionType, ['O', 'P']);
@@ -293,7 +294,7 @@ class VersionMunger
      */
     private function stardardText($vehicleId, $versionId)
     {
-        $getStandardText = collect($this->client->standard->get($vehicleId, '', '', '1', '5000')->results);
+        $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
         foreach($getStandardText as $standard) {
             $data = [
                 'version_id' => $versionId,
