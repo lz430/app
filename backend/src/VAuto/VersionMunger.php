@@ -8,6 +8,10 @@ use App\Models\JATO\Version;
 use App\Models\JATO\Manufacturer;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\VersionQuote;
+use App\Models\JATO\Equipment;
+use App\Models\JATO\Option;
+use App\Models\JATO\StandardText;
+use Illuminate\Support\Facades\DB;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 
@@ -227,6 +231,87 @@ class VersionMunger
 
     /**
      * @param $vehicleId
+     * @param $versionId
+     */
+    private function equipment($vehicleId, $versionId)
+    {
+        $getEquipment = collect($this->client->equipment->get($vehicleId)->results);
+        $equipment = $getEquipment
+            ->reject(function ($equipment){
+                return ! in_array($equipment->availability, ['standard', 'optional']);
+            });
+
+        foreach($equipment as $equip) {
+            $data = [
+                'version_id' => $versionId,
+                'option_id' => $equip->optionId,
+                'schema_id' => $equip->schemaId,
+                'category_id' =>$equip->categoryId,
+                'category' => $equip->category,
+                'name' => $equip->name,
+                'location' => $equip->location,
+                'availability' => $equip->availability,
+                'value' => $equip->value,
+                'attributes' => json_encode($equip->attributes),
+            ];
+            Equipment::updateOrCreate($data);
+        }
+    }
+
+    /**
+     * @param $vehicleId
+     * @param $versionId
+     */
+    private function options($vehicleId, $versionId)
+    {
+        $getOptions = collect($this->client->option->get($vehicleId)->options);
+        $options = $getOptions
+            ->reject(function ($options){
+                return ! in_array($options->optionType, ['O', 'P']);
+            });
+
+        foreach($options as $option) {
+            $data = [
+                'version_id' => $versionId,
+                'option_id' => $option->optionId,
+                'option_code' => $option->optionCode,
+                'option_type' => $option->optionType,
+                'msrp' => $option->msrp,
+                'invoice_price' => $option->invoicePrice,
+                'option_name' => $option->optionName,
+                'option_state_name' => $option->optionStateTranslation,
+                'option_state' => $option->optionState,
+                'option_description' => $option->optionDescription,
+            ];
+            Option::updateOrCreate($data);
+        }
+    }
+
+    /**
+     * @param $vehicleId
+     * @param $versionId
+     */
+    private function stardardText($vehicleId, $versionId)
+    {
+        $getStandardText = collect($this->client->standard->get($vehicleId, '', '', '1', '5000')->results);
+        foreach($getStandardText as $standard) {
+            $data = [
+                'version_id' => $versionId,
+                'schema_id' => $standard->schemaId,
+                'category_id' =>$standard->categoryId,
+                'category' => $standard->category,
+                'item_name' => $standard->itemName,
+                'content' => $standard->content,
+
+            ];
+            StandardText::updateOrCreate($data);
+        }
+    }
+
+
+
+    /**
+     * @param $vehicleId
      * @return null|\stdClass
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
@@ -287,6 +372,10 @@ class VersionMunger
             'delivery_price' => $data->delivery !== '' ? $data->delivery : null,
             'is_current' => $data->isCurrent,
         ]);
+
+        $this->equipment($data->vehicleId, $version->id);
+        $this->options($data->vehicleId, $version->id);
+        $this->stardardText($data->vehicleId, $version->id);
 
         return $version;
     }
@@ -396,6 +485,15 @@ class VersionMunger
                 $attachedDeal->jatoFeatures()->sync([]);
             }
         }
+
+        //Refresh equipment/options/standard text for versions
+        $version->options()->delete();
+        $version->equipment()->delete();
+        $version->standard_text()->delete();
+
+        $this->equipment($jatoVersion->vehicle_ID, $version->id);
+        $this->options($jatoVersion->vehicle_ID, $version->id);
+        $this->stardardText($jatoVersion->vehicle_ID, $version->id);
     }
 
     /**

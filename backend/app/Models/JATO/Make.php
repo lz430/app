@@ -25,6 +25,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make whereUrlName($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Make query()
  */
 class Make extends Model
 {

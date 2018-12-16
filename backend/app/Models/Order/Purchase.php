@@ -49,6 +49,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereUserId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Order\Purchase whereTrade($value)
  */
 class Purchase extends Model implements JWTSubject
 {

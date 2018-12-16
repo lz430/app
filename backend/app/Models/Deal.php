@@ -8,12 +8,17 @@ use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use App\Models\Order\Purchase;
+use App\Models\JATO\Equipment;
+use App\Models\JATO\Option;
+use App\Models\JATO\StandardText;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use DeliverMyRide\JATO\Manager\DealCompareData;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 /**
  * App\Models\Deal.
@@ -109,6 +114,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereVin($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal whereYear($value)
  * @mixin \Eloquent
+ * @property \Illuminate\Support\Carbon|null $photos_updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Equipment[] $equipment
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\Option[] $options
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\JATO\StandardText[] $standard_text
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Deal wherePhotosUpdatedAt($value)
  */
 class Deal extends Model
 {
@@ -268,6 +281,54 @@ class Deal extends Model
             ],
             'seating_capacity' => [
                 'type' => 'integer',
+            ],
+            'options' => [
+                'type' => 'nested',
+                'properties' => [
+                    'option_name' => [
+                        'type' => 'text',
+                    ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
+                    'msrp' => [
+                        'type' => 'double',
+                    ],
+                    'invoice_price' => [
+                        'type' => 'double',
+                    ],
+                ],
+            ],
+            'packages' => [
+                'type' => 'nested',
+                'properties' => [
+                    'option_name' => [
+                        'type' => 'text',
+                    ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
+                    'msrp' => [
+                        'type' => 'double',
+                    ],
+                    'invoice_price' => [
+                        'type' => 'double',
+                    ],
+                ],
+            ],
+            'equipment' => [
+                'type' => 'nested',
+                'properties' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
+                ],
             ],
         ],
     ];
@@ -823,6 +884,31 @@ class Deal extends Model
 
         $record['dealer'] = $this->dealer->toIndexData();
 
+        // Options && Packages
+        $record['options'] = [];
+        foreach($this->version->options()->where('option_type', 'O')->get() as $option) {
+            $record['options'][] = [
+                'option_name' => $option->option_name,
+                'option_code' => $option->option_code,
+                'msrp' => $option->msrp,
+                'invoice_price' => $option->invoice_price,
+            ];
+        }
+
+        $record['packages'] = [];
+        foreach($this->version->options()->where('option_type', 'P')->get() as $package) {
+            $record['packages'][] = [
+                'option_name' => $package->option_name,
+                'option_code' => $package->option_code,
+                'msrp' => $package->msrp,
+                'invoice_price' => $package->invoice_price,
+            ];
+        }
+
+        // Equipment on car
+        $record['equipment'] = [];
+        $record['equipment'] = (new BuildEquipmentData($this))->build();
+
         //
         // Catchall
         if ($this->vauto_features) {
@@ -830,20 +916,6 @@ class Deal extends Model
             $misc = explode('|', $this->vauto_features);
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
-        }
-
-        //
-        // All the features in the current UI are just jammed together.
-        $record['legacy_features'] = [];
-        foreach ($this->features as $feature) {
-            $record['legacy_features'][] = $feature->title;
-        }
-
-        //
-        // Jato features
-        $record['jato_features'] = [];
-        foreach ($this->jatoFeatures as $feature) {
-            $record['jato_features'][] = $feature->toIndexData();
         }
 
         return $record;

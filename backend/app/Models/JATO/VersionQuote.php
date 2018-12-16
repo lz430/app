@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote whereVersionId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionQuote query()
  */
 class VersionQuote extends Model
 {
