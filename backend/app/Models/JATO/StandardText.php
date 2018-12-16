@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\JATO\StandardText
+ * App\Models\JATO\StandardText.
  *
  * @property int $id
  * @property int $version_id

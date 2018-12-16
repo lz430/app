@@ -3,13 +3,10 @@
 namespace App\Models\JATO;
 
 use Illuminate\Database\Eloquent\Model;
-
-use App\Models\Deal;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\JATO\Option
+ * App\Models\JATO\Option.
  *
  * @property int $id
  * @property int $version_id
@@ -58,7 +55,7 @@ class Option extends Model
         'option_name',
         'option_state_name',
         'option_state',
-        'option_description'
+        'option_description',
     ];
 
     public function version(): BelongsTo

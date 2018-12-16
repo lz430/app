@@ -2,14 +2,13 @@
 
 namespace App\Models\JATO;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\Deal;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\JATO\Equipment
+ * App\Models\JATO\Equipment.
  *
  * @property int $id
  * @property int $version_id
