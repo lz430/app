@@ -5,7 +5,6 @@ namespace DeliverMyRide\JATO\Manager;
 use App\Models\Deal;
 use App\Models\Feature;
 use App\Models\JATO\Version;
-use GuzzleHttp\Exception\ClientException;
 
 class BuildEquipmentData
 {
@@ -45,14 +44,16 @@ class BuildEquipmentData
     private function buildStandardEquipmentText()
     {
         $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
     private function findStandardDealEquipment()
     {
-        $data = Version::with(['equipment' => function($query) {
+        $data = Version::with(['equipment' => function ($query) {
             $query->where('availability', 'standard');
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -63,11 +64,12 @@ class BuildEquipmentData
             $this->deal->option_codes ? $this->deal->option_codes : []
         );
 
-        $data = Version::with(['equipment' => function($query) {
+        $data = Version::with(['equipment' => function ($query) {
             $query->where('availability', 'optional');
-        }])->with(['options' => function($query) use($codes) {
+        }])->with(['options' => function ($query) use ($codes) {
             $query->whereIn('option_code', $codes);
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -227,7 +229,7 @@ class BuildEquipmentData
                 $labels = $this->getLabelsForJatoEquipment($equipment);
                 foreach ($labels as $schemaId => $label) {
                     $data = preg_split('/:\s*/', $label, 2);
-                    $labeledEquipment[] = array('category' => $category, 'label' => isset($data[0]) ? $data[0] : $label, 'value' => isset($data[1]) ? $data[1] : $label);
+                    $labeledEquipment[] = ['category' => $category, 'label' => isset($data[0]) ? $data[0] : $label, 'value' => isset($data[1]) ? $data[1] : $label];
                 }
             }
         }
