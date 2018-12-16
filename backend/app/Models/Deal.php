@@ -8,16 +8,12 @@ use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use App\Models\Order\Purchase;
-use App\Models\JATO\Equipment;
-use App\Models\JATO\Option;
-use App\Models\JATO\StandardText;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use DeliverMyRide\JATO\Manager\DealCompareData;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 /**

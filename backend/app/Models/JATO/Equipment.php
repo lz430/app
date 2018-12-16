@@ -4,14 +4,7 @@ namespace App\Models\JATO;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\JATO\Version;
 use App\Models\Deal;
-use Backpack\CRUD\CrudTrait;
-use ScoutElastic\Searchable;
-use App\DealIndexConfigurator;
-use DeliverMyRide\Fuel\Map as ColorMaps;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
