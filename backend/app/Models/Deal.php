@@ -8,17 +8,13 @@ use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
 use App\Models\Order\Purchase;
-use App\Models\JATO\Equipment;
-use App\Models\JATO\Option;
-use App\Models\JATO\StandardText;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use DeliverMyRide\JATO\Manager\DealCompareData;
-use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 /**
  * App\Models\Deal.
@@ -886,7 +882,7 @@ class Deal extends Model
 
         // Options && Packages
         $record['options'] = [];
-        foreach($this->version->options()->where('option_type', 'O')->get() as $option) {
+        foreach ($this->version->options()->where('option_type', 'O')->get() as $option) {
             $record['options'][] = [
                 'option_name' => $option->option_name,
                 'option_code' => $option->option_code,
@@ -896,7 +892,7 @@ class Deal extends Model
         }
 
         $record['packages'] = [];
-        foreach($this->version->options()->where('option_type', 'P')->get() as $package) {
+        foreach ($this->version->options()->where('option_type', 'P')->get() as $package) {
             $record['packages'][] = [
                 'option_name' => $package->option_name,
                 'option_code' => $package->option_code,

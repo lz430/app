@@ -5,6 +5,7 @@ namespace DeliverMyRide\DataDelivery;
 use GuzzleHttp\Psr7\Response;
 use DeliverMyRide\Common\ApiClient;
 use function GuzzleHttp\Psr7\stream_for;
+use DeliverMyRide\DataDelivery\Exceptions\FetchProgramDataException;
 
 /**
  * https://xmlasvr.aisrebates.com/ais_xml/test.html.
@@ -78,11 +79,11 @@ class DataDeliveryClient extends ApiClient
     }
 
     /**
-     * Sends POST request.
      * @param string $endpoint
-     * @param  $data
+     * @param $data
      * @param bool $async
-     * @return mixed
+     * @return mixed|\SimpleXMLElement
+     * @throws FetchProgramDataException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function post($endpoint, $data, bool $async = false)
@@ -101,7 +102,8 @@ class DataDeliveryClient extends ApiClient
 
     /**
      * @param Response $response
-     * @return mixed
+     * @return mixed|\SimpleXMLElement
+     * @throws FetchProgramDataException
      */
     public function handleResponse(Response $response)
     {

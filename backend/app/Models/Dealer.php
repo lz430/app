@@ -150,6 +150,8 @@ class Dealer extends Model
         unset($data['state']);
         unset($data['updated_at']);
         unset($data['zip']);
+        unset($data['money_factor']);
+        unset($data['notification_emails']);
 
         return $data;
     }

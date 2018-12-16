@@ -3,18 +3,10 @@
 namespace App\Models\JATO;
 
 use Illuminate\Database\Eloquent\Model;
-use Backpack\CRUD\CrudTrait;
-use App\Models\JATO\Version;
-use ScoutElastic\Searchable;
-use App\DealIndexConfigurator;
-use DeliverMyRide\Fuel\Map as ColorMaps;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
- * App\Models\JATO\StandardText
+ * App\Models\JATO\StandardText.
  *
  * @property int $id
  * @property int $version_id

@@ -4,14 +4,13 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Deal;
 use App\Models\JATO\Make;
+use App\Models\JATO\Option;
 use App\Models\JATO\Version;
+use App\Models\JATO\Equipment;
 use App\Models\JATO\Manufacturer;
+use App\Models\JATO\StandardText;
 use App\Models\JATO\VehicleModel;
 use App\Models\JATO\VersionQuote;
-use App\Models\JATO\Equipment;
-use App\Models\JATO\Option;
-use App\Models\JATO\StandardText;
-use Illuminate\Support\Facades\DB;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
 
@@ -232,16 +231,17 @@ class VersionMunger
     /**
      * @param $vehicleId
      * @param $versionId
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function equipment($vehicleId, $versionId)
     {
-        $getEquipment = collect($this->client->equipment->get($vehicleId)->results);
+        $getEquipment = collect($this->jatoClient->equipment->get($vehicleId)->results);
         $equipment = $getEquipment
-            ->reject(function ($equipment){
+            ->reject(function ($equipment) {
                 return ! in_array($equipment->availability, ['standard', 'optional']);
             });
 
-        foreach($equipment as $equip) {
+        foreach ($equipment as $equip) {
             $data = [
                 'version_id' => $versionId,
                 'option_id' => $equip->optionId,
@@ -264,13 +264,13 @@ class VersionMunger
      */
     private function options($vehicleId, $versionId)
     {
-        $getOptions = collect($this->client->option->get($vehicleId)->options);
+        $getOptions = collect($this->jatoClient->option->get($vehicleId)->options);
         $options = $getOptions
-            ->reject(function ($options){
+            ->reject(function ($options) {
                 return ! in_array($options->optionType, ['O', 'P']);
             });
 
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $data = [
                 'version_id' => $versionId,
                 'option_id' => $option->optionId,
@@ -293,8 +293,8 @@ class VersionMunger
      */
     private function stardardText($vehicleId, $versionId)
     {
-        $getStandardText = collect($this->client->standard->get($vehicleId, '', '', '1', '5000')->results);
-        foreach($getStandardText as $standard) {
+        $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
+        foreach ($getStandardText as $standard) {
             $data = [
                 'version_id' => $versionId,
                 'schema_id' => $standard->schemaId,
@@ -307,8 +307,6 @@ class VersionMunger
             StandardText::updateOrCreate($data);
         }
     }
-
-
 
     /**
      * @param $vehicleId
