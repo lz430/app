@@ -155,7 +155,7 @@ class VersionGenerateQuotes extends Command
                         }
                     }
                     foreach ($quoteData as $strategy => $data) {
-                        if (! $data || ($strategy != 'cash' && !isset($data->rate))) {
+                        if (! $data || ($strategy != 'cash' && ! isset($data->rate))) {
                             $version->quotes()->where('strategy', $strategy)->delete();
                         } else {
                             VersionQuote::updateOrCreate([

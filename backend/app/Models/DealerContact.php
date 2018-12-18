@@ -6,7 +6,7 @@ use Backpack\CRUD\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Models\DealerContact
+ * App\Models\DealerContact.
  *
  * @property int $id
  * @property string|null $dealer_id

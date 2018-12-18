@@ -42,6 +42,7 @@ class BuildEquipmentData
     private function buildStandardEquipmentText()
     {
         $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -50,6 +51,7 @@ class BuildEquipmentData
         $data = Version::with(['equipment' => function ($query) {
             $query->where('availability', 'standard');
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 
@@ -65,6 +67,7 @@ class BuildEquipmentData
         }])->with(['options' => function ($query) use ($codes) {
             $query->whereIn('option_code', $codes);
         }])->where('id', $this->deal->version_id)->get();
+
         return $data;
     }
 

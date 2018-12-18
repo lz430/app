@@ -66,7 +66,6 @@ class DealsCompareController extends BaseAPIController
 
     public function compare(Request $request)
     {
-
         $this->validate($request, [
             'deals' => 'required|array',
             'deals.*' => 'integer',
