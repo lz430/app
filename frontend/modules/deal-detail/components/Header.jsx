@@ -63,17 +63,17 @@ export default class Header extends React.PureComponent {
                                     marginTop: isSticky ? '62px' : '0px',
                                 }}
                             >
-                                <Col sm="6">
-                                    <div className="deal-details__new-header title-year-make">
-                                        {this.props.deal.year}{' '}
-                                        {this.props.deal.make}{' '}
-                                        {this.props.deal.model}
-                                    </div>
-                                    <div className="deal-details__new-header title-model-trim">
-                                        {this.props.deal.series}
-                                    </div>
-                                </Col>
                                 <Row>
+                                    <Col sm="6">
+                                        <div className="deal-details__new-header title-year-make">
+                                            {this.props.deal.year}{' '}
+                                            {this.props.deal.make}{' '}
+                                            {this.props.deal.model}
+                                        </div>
+                                        <div className="deal-details__new-header title-model-trim">
+                                            {this.props.deal.series}
+                                        </div>
+                                    </Col>
                                     <Col lg="auto" className="border-right">
                                         <span className="dollar-sign">$</span>
                                         <span className="payment">45,375</span>
