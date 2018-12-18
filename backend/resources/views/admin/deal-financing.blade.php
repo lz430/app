@@ -23,6 +23,9 @@
                 <a href="/admin/deal/{{$deal->id}}/financing">Financing</a>
             </li>
             <li role="presentation">
+                <a href="/admin/deal/{{$deal->id}}/jato">JATO Data</a>
+            </li>
+            <li role="presentation">
                 <a target="_blank" href="/deals/{{$deal->id}}">View In App</a>
             </li>
         </ul>

@@ -6,6 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Promise\Promise;
 use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  * Class ApiClient.
@@ -46,7 +48,7 @@ class ApiClient
      * @param $json
      * @param bool $async
      * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ServerException|ClientException
      */
     public function post($endpoint, $json, bool $async = false)
     {
@@ -71,7 +73,7 @@ class ApiClient
      * @param string $json
      * @param bool $async
      * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ServerException|ClientException
      */
     public function put($endpoint, $json, bool $async = false)
     {
@@ -95,7 +97,7 @@ class ApiClient
      * @param string $endpoint
      * @param bool $async
      * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ServerException|ClientException
      */
     public function delete($endpoint, bool $async = false)
     {
@@ -118,7 +120,7 @@ class ApiClient
      * @param array $query
      * @param bool $async
      * @return mixed
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws ServerException|ClientException
      */
     public function get($endpoint, $query = [], bool $async = false)
     {
@@ -139,7 +141,6 @@ class ApiClient
 
     /**
      * @param Response $response
-     * @param bool $async
      * @return mixed
      */
     public function handleResponse(Response $response)

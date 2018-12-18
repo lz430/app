@@ -3,7 +3,6 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
-use App\Models\Feature;
 use App\Models\JATO\Version;
 
 class BuildEquipmentData
@@ -33,13 +32,11 @@ class BuildEquipmentData
     /* @var \App\Models\Deal */
     private $deal;
 
+    /* @var bool */
+    private $debug;
+
     private $standardEquipmentText;
     private $equipmentOnDeal;
-
-    public function __construct(Deal $deal)
-    {
-        $this->deal = $deal;
-    }
 
     private function buildStandardEquipmentText()
     {
@@ -131,8 +128,22 @@ class BuildEquipmentData
         $this->equipmentOnDeal = $equipmentCategories;
     }
 
+    private function itemFactory($label, $value, $meta = [])
+    {
+        $emptyItem = [
+            'label' => $label,
+            'value' => $value,
+        ];
+
+        if ($this->debug) {
+            $emptyItem['meta'] = $meta;
+        }
+
+        return $emptyItem;
+    }
+
     /**
-     * @param $equipment
+     * @param $equipments
      * @return mixed
      */
     private function getLabelsForJatoEquipment($equipments)
@@ -149,27 +160,68 @@ class BuildEquipmentData
                     $overallLength = isset($attributes['overall length (in)']) ? $attributes['overall length (in)']->value : '';
                     $overallWidth = isset($attributes['overall width (in)']) ? $attributes['overall width (in)']->value : '';
                     $overallHeight = isset($attributes['overall height (in)']) ? $attributes['overall height (in)']->value : '';
-                    $labels[$attributes['overall length (in)']->schemaId] = "External: L: {$overallLength}\" - W: {$overallWidth}\" - H: {$overallHeight}\"";
+                    $labels[$attributes['overall length (in)']->schemaId] = $this->itemFactory(
+                        'External',
+                        "L: {$overallLength}\" - W: {$overallWidth}\" - H: {$overallHeight}\"",
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Fuel economy':
                 if (isset($attributes['urban (mpg)'])) {
-                    $labels[$attributes['urban (mpg)']->schemaId] = "{$attributes['urban (mpg)']->value} / {$attributes['country/highway (mpg)']->value}";
+                    $labels[$attributes['urban (mpg)']->schemaId] = $this->itemFactory(
+                        'City MPG',
+                        $attributes['urban (mpg)']->value,
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
+
+                if (isset($attributes['country/highway (mpg)'])) {
+                    $labels[$attributes['country/highway (mpg)']->schemaId] = $this->itemFactory(
+                        'Highway MPG',
+                        $attributes['country/highway (mpg)']->value,
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
+                }
+
                 break;
             case 'Wheels':
                 if (isset($attributes['rim diameter (in)'])) {
-                    $labels[$attributes['rim diameter (in)']->schemaId] = $attributes['rim diameter (in)']->value.'" rims';
+                    $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
+                        'Rim Size',
+                        $attributes['rim diameter (in)']->value,
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Drive':
                 if (isset($attributes['Driven wheels'])) {
-                    $labels[$attributes['Driven wheels']->schemaId] = $attributes['Driven wheels']->value;
+                    $labels[$attributes['Driven wheels']->schemaId] = $this->itemFactory(
+                        'Drive',
+                        $attributes['Driven wheels']->value,
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Transmission':
                 if (isset($attributes['Transmission type'])) {
-                    $labels[$attributes['Transmission type']->schemaId] = "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}";
+                    $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
+                        'Transmission',
+                        "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}",
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Weights':
@@ -180,38 +232,76 @@ class BuildEquipmentData
                 }
                 if (isset($val)) {
                     $formatted = number_format($val->value);
-                    $labels[$equipments->schema_id] = "Weight: {$formatted} (lbs)";
+                    $labels[$equipments->schema_id] = $this->itemFactory(
+                        'Weight',
+                        "{$formatted} (lbs)",
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Tires':
                 if (isset($attributes['type'])) {
-                    $labels[$attributes['type']->schemaId] = "tires: {$attributes['type']->value}";
+                    $labels[$attributes['type']->schemaId] = $this->itemFactory(
+                        'Tires',
+                        "{$attributes['type']->value}",
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Custom',
+                        ]);
                 }
                 break;
             case 'Engine':
                 $liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
                 $cylinders = isset($attributes['number of cylinders']) ? $attributes['number of cylinders']->value : '';
                 $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
-                $labels[$equipments->schema_id] = "{$liters} v{$cylinders} {$configuration}";
+                $labels[$equipments->schema_id] = $this->itemFactory(
+                    'Engine',
+                    "{$liters} v{$cylinders} {$configuration}",
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
                 break;
             case 'Fuel':
-                $labels[$equipments->schema_id] = "Fuel Type: {$attributes['Fuel type']->value}";
+                $labels[$equipments->schema_id] = $this->itemFactory(
+                    'Fuel Type',
+                    "{$attributes['Fuel type']->value}",
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
                 break;
-
+                break;
             default:
-                $feature = Feature::withJatoSchemaId($equipments->schema_id)->first();
-                if ($feature) {
-                    $labels[$equipments->schema_id] = $feature->title;
-                } else {
-                    if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
-                        if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
-                            $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
-                        } else {
-                            $labels[$equipments->schema_id] = "{$this->standardEquipmentText[$equipments->schema_id]->item_name}: {$this->standardEquipmentText[$equipments->schema_id]->content}";
-                        }
+                if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
+                    if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
+                        $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
+                        $labels[$equipments->schema_id] = $this->itemFactory(
+                            'Label',
+                            $this->standardEquipmentText[$equipments->schema_id]->content,
+                            [
+                                'equipment' => $equipments,
+                                'from' => 'Standard Text Content',
+                            ]);
                     } else {
-                        $labels[$equipments->schema_id] = $equipments->name;
+                        $labels[$equipments->schema_id] = $this->itemFactory(
+                            $this->standardEquipmentText[$equipments->schema_id]->item_name,
+                            "{$this->standardEquipmentText[$equipments->schema_id]->content}",
+                            [
+                                'equipment' => $equipments,
+                                'from' => 'Standard Text Item & Content',
+                            ]);
                     }
+                } else {
+                    $labels[$equipments->schema_id] = $this->itemFactory(
+                        'Label',
+                        $equipments->name,
+                        [
+                            'equipment' => $equipments,
+                            'from' => 'Equipment Name',
+                        ]);
                 }
                 break;
 
@@ -223,21 +313,37 @@ class BuildEquipmentData
     private function labelEquipmentOnDeal()
     {
         $labeledEquipment = [];
-
         foreach ($this->equipmentOnDeal as $category => $equipments) {
             foreach ($equipments as $equipment) {
                 $labels = $this->getLabelsForJatoEquipment($equipment);
                 foreach ($labels as $schemaId => $label) {
-                    $data = preg_split('/:\s*/', $label, 2);
-                    $labeledEquipment[] = ['category' => $category, 'label' => isset($data[0]) ? $data[0] : $label, 'value' => isset($data[1]) ? $data[1] : $label];
+                    $data = [
+                        'category' => $category,
+                        'label' => $label['label'],
+                        'value' => $label['value'],
+                    ];
+
+                    if (isset($label['meta'])) {
+                        $data['meta'] = $label['meta'];
+                    }
+
+                    $labeledEquipment[] = $data;
                 }
             }
         }
         $this->equipmentOnDeal = $labeledEquipment;
     }
 
-    public function build()
+    /**
+     * @param Deal $deal
+     * @param bool $debug
+     * @return mixed
+     */
+    public function build(Deal $deal, $debug = false)
     {
+        $this->deal = $deal;
+        $this->debug = $debug;
+
         $this->compileEquipmentData();
         $this->dealEquipment();
         $this->organizeEquipmentOnDeal();

@@ -28,6 +28,7 @@ Route::group([
     Route::get('deal/{deal}/debugger', 'DealDebuggerController@show');
     Route::get('deal/{deal}', 'DealDataController@show');
     Route::get('deal/{deal}/financing', 'DealFinancingController@show');
+    Route::get('deal/{deal}/jato', 'DealJatoDataController@show');
 
     //
     // Order tools
