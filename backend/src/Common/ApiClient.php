@@ -3,11 +3,11 @@
 namespace DeliverMyRide\Common;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Promise\Promise;
 use function GuzzleHttp\Psr7\stream_for;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 /**
  * Class ApiClient.

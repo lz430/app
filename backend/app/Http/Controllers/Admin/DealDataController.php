@@ -6,7 +6,6 @@ use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
-use DeliverMyRide\JATO\Manager\DealCompareData;
 
 class DealDataController extends Controller
 {
@@ -51,7 +50,7 @@ class DealDataController extends Controller
      * @param BuildEquipmentData $equipmentDataManager
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Deal $deal,  BuildEquipmentData $equipmentDataManager)
+    public function show(Deal $deal, BuildEquipmentData $equipmentDataManager)
     {
         $this->deal = $deal;
         $this->version = $deal->version;

@@ -3,7 +3,6 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
-use App\Models\Feature;
 use App\Models\JATO\Version;
 
 class BuildEquipmentData
@@ -120,7 +119,7 @@ class BuildEquipmentData
                 continue;
             }
 
-            if (!isset($equipmentCategories[$equipment->category])) {
+            if (! isset($equipmentCategories[$equipment->category])) {
                 $equipmentCategories[$equipment->category] = [];
             }
 
@@ -152,7 +151,6 @@ class BuildEquipmentData
         $labels = [];
         $attributes = [];
 
-
         foreach ($equipments->attributes as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
@@ -163,32 +161,32 @@ class BuildEquipmentData
                     $overallWidth = isset($attributes['overall width (in)']) ? $attributes['overall width (in)']->value : '';
                     $overallHeight = isset($attributes['overall height (in)']) ? $attributes['overall height (in)']->value : '';
                     $labels[$attributes['overall length (in)']->schemaId] = $this->itemFactory(
-                        "External",
+                        'External',
                         "L: {$overallLength}\" - W: {$overallWidth}\" - H: {$overallHeight}\"",
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
             case 'Fuel economy':
                 if (isset($attributes['urban (mpg)'])) {
                     $labels[$attributes['urban (mpg)']->schemaId] = $this->itemFactory(
-                        "City MPG",
+                        'City MPG',
                         $attributes['urban (mpg)']->value,
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
 
                 if (isset($attributes['country/highway (mpg)'])) {
                     $labels[$attributes['country/highway (mpg)']->schemaId] = $this->itemFactory(
-                        "Highway MPG",
+                        'Highway MPG',
                         $attributes['country/highway (mpg)']->value,
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
 
@@ -196,33 +194,33 @@ class BuildEquipmentData
             case 'Wheels':
                 if (isset($attributes['rim diameter (in)'])) {
                     $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
-                        "Rim Size",
+                        'Rim Size',
                         $attributes['rim diameter (in)']->value,
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
             case 'Drive':
                 if (isset($attributes['Driven wheels'])) {
                     $labels[$attributes['Driven wheels']->schemaId] = $this->itemFactory(
-                        "Drive",
+                        'Drive',
                         $attributes['Driven wheels']->value,
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
             case 'Transmission':
                 if (isset($attributes['Transmission type'])) {
                     $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
-                        "Transmission",
+                        'Transmission',
                         "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}",
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
@@ -235,22 +233,22 @@ class BuildEquipmentData
                 if (isset($val)) {
                     $formatted = number_format($val->value);
                     $labels[$equipments->schema_id] = $this->itemFactory(
-                        "Weight",
+                        'Weight',
                         "{$formatted} (lbs)",
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
             case 'Tires':
                 if (isset($attributes['type'])) {
                     $labels[$attributes['type']->schemaId] = $this->itemFactory(
-                        "Tires",
+                        'Tires',
                         "{$attributes['type']->value}",
                         [
                             'equipment' => $equipments,
-                            'from' => 'Custom'
+                            'from' => 'Custom',
                         ]);
                 }
                 break;
@@ -259,51 +257,50 @@ class BuildEquipmentData
                 $cylinders = isset($attributes['number of cylinders']) ? $attributes['number of cylinders']->value : '';
                 $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
                 $labels[$equipments->schema_id] = $this->itemFactory(
-                    "Engine",
+                    'Engine',
                     "{$liters} v{$cylinders} {$configuration}",
                     [
                         'equipment' => $equipments,
-                        'from' => 'Custom'
+                        'from' => 'Custom',
                     ]);
                 break;
             case 'Fuel':
                 $labels[$equipments->schema_id] = $this->itemFactory(
-                    "Fuel Type",
+                    'Fuel Type',
                     "{$attributes['Fuel type']->value}",
                     [
                         'equipment' => $equipments,
-                        'from' => 'Custom'
+                        'from' => 'Custom',
                     ]);
                 break;
                 break;
             default:
-                if (isset($this->standardEquipmentText[$equipments->schema_id]) && !$equipments->option_id) {
+                if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
                     if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
                         $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
                         $labels[$equipments->schema_id] = $this->itemFactory(
-                            "Label",
+                            'Label',
                             $this->standardEquipmentText[$equipments->schema_id]->content,
                             [
                                 'equipment' => $equipments,
-                                'from' => 'Standard Text Content'
+                                'from' => 'Standard Text Content',
                             ]);
-
                     } else {
                         $labels[$equipments->schema_id] = $this->itemFactory(
                             $this->standardEquipmentText[$equipments->schema_id]->item_name,
                             "{$this->standardEquipmentText[$equipments->schema_id]->content}",
                             [
                                 'equipment' => $equipments,
-                                'from' => 'Standard Text Item & Content'
+                                'from' => 'Standard Text Item & Content',
                             ]);
                     }
                 } else {
                     $labels[$equipments->schema_id] = $this->itemFactory(
-                        "Label",
+                        'Label',
                         $equipments->name,
                         [
                             'equipment' => $equipments,
-                            'from' => 'Equipment Name'
+                            'from' => 'Equipment Name',
                         ]);
                 }
                 break;
@@ -351,6 +348,7 @@ class BuildEquipmentData
         $this->dealEquipment();
         $this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
+
         return $this->equipmentOnDeal;
     }
 }

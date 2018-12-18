@@ -7,7 +7,6 @@ use DeliverMyRide\JATO\JatoClient;
 use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
-use DeliverMyRide\JATO\Manager\DealCompareData;
 
 class DealJatoDataController extends Controller
 {

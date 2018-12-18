@@ -94,7 +94,7 @@ class DealCrudController extends CrudController
             'available' => 'Available',
             'pending' => 'Pending',
             'processing' => 'Processing',
-            'sold' => 'Sold'
+            'sold' => 'Sold',
         ], function ($value) { // if the filter is active
             $this->crud->addClause('where', 'status', $value);
         });
