@@ -201,3 +201,64 @@
         max-width: 100%;
     }
 }
+
+// New deal detail header
+.deal-details__new-header {
+    &.title-year-make {
+        font-size: 1.6rem;
+        font-weight: 700;
+    }
+
+    &.title-model-trim {
+        font-size: 1.3rem;
+        font-weight: 400;
+    }
+
+    &.payment {
+        align-items: flex-end;
+        justify-content: space-between;
+        padding-bottom: 5px;
+
+        .monthly {
+            font-size: 2.5rem;
+            line-height: 1;
+
+            sub {
+                bottom: 0;
+                font-size: 50%;
+            }
+        }
+
+        .configure {
+            color: $color-darkgrey;
+
+            svg {
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+.deal-details__new-header {
+    &.fixed {
+        .title-year-make {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .title-model-trim {
+            font-size: 1.3rem;
+            font-weight: 400;
+        }
+
+        .monthly {
+            font-size: 2.5rem;
+            line-height: 1;
+
+            sub {
+                bottom: 0;
+                font-size: 50%;
+            }
+        }
+    }
+}

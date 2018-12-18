@@ -20,5 +20,8 @@
             "prettier --write",
             "git add"
         ]
+    },
+    "dependencies": {
+        "react-sticky": "^6.0.3"
     }
 }
