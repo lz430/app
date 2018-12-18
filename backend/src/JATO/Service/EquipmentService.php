@@ -10,7 +10,6 @@ class EquipmentService extends BaseService
      * @param string $vehicleId
      * @return mixed
      *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(string $vehicleId)
     {

@@ -903,7 +903,7 @@ class Deal extends Model
 
         // Equipment on car
         $record['equipment'] = [];
-        $record['equipment'] = (new BuildEquipmentData($this))->build();
+        $record['equipment'] = (new BuildEquipmentData())->build($this);
 
         //
         // Catchall
