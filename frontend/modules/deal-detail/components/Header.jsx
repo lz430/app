@@ -92,7 +92,8 @@ export default class Header extends React.PureComponent {
                                     >
                                         <p>
                                             <span className="monthly">
-                                                $637
+                                                <sub>$</sub>
+                                                637
                                                 <sup>/mo</sup>
                                             </span>
                                             <br />
@@ -100,14 +101,11 @@ export default class Header extends React.PureComponent {
                                                 icon={faCalculator}
                                             />
                                             Configure
-                                            <Button
-                                                className=""
-                                                color="primary"
-                                            >
-                                                <b>Next: </b> Begin Purchase
-                                            </Button>
                                         </p>
                                     </Col>
+                                    <Button className="" color="primary">
+                                        <b>Next: </b> Begin Purchase
+                                    </Button>
                                 </Row>
                             </div>
                         )}
