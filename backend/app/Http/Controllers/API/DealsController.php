@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Services\Search\DealSearch;
 use App\Services\Search\DealDetailSearch;
 use App\Transformers\DealSearchTransformer;
+use App\Transformers\DealListSearchTransformer;
 use App\Transformers\ESResponseTransformer;
 use League\Fractal\Serializer\ArraySerializer;
 
