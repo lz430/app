@@ -23,30 +23,6 @@ class DealDetailSearchTransformer extends TransformerAbstract
 
         $simpleColorSwatch = $simpleColor && isset(Map::HEX_MAP[$simpleColor]) ? Map::HEX_MAP[$simpleColor] : null;
 
-        // Options
-        $dealOptions = [];
-        foreach($version->options()->where('option_type', 'O')->get() as $option) {
-            $dealOptions[] = [
-                'option_name' => $option->option_name,
-                'option_code' => $option->option_code,
-                'msrp' => $option->msrp,
-                'invoice_price' => $option->invoice_price,
-            ];
-        }
-
-        // Packages
-        $dealPackages = [];
-        foreach($version->options()->where('option_type', 'P')->get() as $package) {
-            $dealPackages[] = [
-                'option_name' => $package->option_name,
-                'option_code' => $package->option_code,
-                'msrp' => $package->msrp,
-                'invoice_price' => $package->invoice_price,
-            ];
-        }
-
-
-
         return [
             'id' => $deal->id,
             'status' => $deal->status,
@@ -69,8 +45,9 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'version' => $version,
             'features' => (isset($deal->jato_features) ? $deal->jato_features : []),
 
-            'options' => $dealOptions,
-            'packages' => $dealPackages,
+            'options' => $deal->options,
+            'packages' => $deal->packages,
+            'equipment' => $deal->equipment,
 
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,

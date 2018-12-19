@@ -880,7 +880,7 @@ class Deal extends Model
 
         $record['dealer'] = $this->dealer->toIndexData();
 
-        Options && Packages
+        // Options && Packages
         $record['options'] = [];
         foreach ($this->version->options()->where('option_type', 'O')->whereIn('option_code', $this->option_codes)->get() as $option) {
             $record['options'][] = [
