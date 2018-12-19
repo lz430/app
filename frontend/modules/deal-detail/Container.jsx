@@ -54,8 +54,11 @@ import { getSearchQuery } from '../deal-list/selectors';
 import Header from './components/Header';
 import Media from './components/Media';
 import DealFeatures from './components/DealFeatures';
-import CompareButton from './components/CompareButton';
+//import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
+import Faq from './components/faq';
+import ContactForm from './components/ContactForm';
+import OurPromise from './components/Promise';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -246,17 +249,19 @@ class DealDetailContainer extends React.PureComponent {
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
-                <Container className="mb-5">
+                <Container className="mb-5 deal-details">
                     <Header deal={this.props.deal} />
                     <Row>
                         <Col md="6" lg="7" xl="8">
                             <Media deal={this.props.deal} />
                             <DealFeatures deal={this.props.deal} />
+                            {/*
                             <CompareButton
                                 deal={this.props.deal}
                                 compareList={this.props.compareList}
                                 onToggleCompare={this.props.toggleCompare}
                             />
+                             */}
                         </Col>
                         <Col md="6" lg="5" xl="4">
                             <AddToCart
@@ -290,7 +295,22 @@ class DealDetailContainer extends React.PureComponent {
                             />
                         </Col>
                     </Row>
+                    <Row className="deal__row">
+                        <OurPromise />
+                    </Row>
                 </Container>
+                <div className="bg-white pb-5 pt-5">
+                    <Container>
+                        <Row>
+                            <Col md="6">
+                                <Faq />
+                            </Col>
+                            <Col md="6">
+                                <ContactForm deal={this.props.deal} />
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
             </React.Fragment>
         );
     }

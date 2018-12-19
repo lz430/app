@@ -8,6 +8,7 @@ import makes from '../../../content/makes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { track } from '../../../core/services';
+import StaticImage from '../../../components/StaticImage';
 
 export default class extends React.Component {
     state = {
@@ -39,7 +40,7 @@ export default class extends React.Component {
             };
 
             return (
-                <div className="brand mb-3" key={filteredMakes[s].title}>
+                <div className="brand mb-md-3" key={filteredMakes[s].title}>
                     <Link
                         key={filteredMakes[s].title}
                         href={{ pathname: '/deal-list', query: query }}
@@ -51,9 +52,10 @@ export default class extends React.Component {
                                 this.trackLinkClick(filteredMakes[s], query)
                             }
                         >
-                            <img
-                                style={{ height: '120px', width: '120px' }}
-                                src={filteredMakes[s].logo}
+                            <StaticImage
+                                path={filteredMakes[s].logo}
+                                width={120}
+                                height={120}
                                 alt={filteredMakes[s].title + ' logo'}
                             />
                         </a>

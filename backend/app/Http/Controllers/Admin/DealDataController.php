@@ -5,119 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Deal;
 use DeliverMyRide\JATO\JatoClient;
 use App\Http\Controllers\Controller;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\ServerException;
-use DeliverMyRide\JATO\Manager\DealCompareData;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 class DealDataController extends Controller
 {
-    /* @var JatoClient */
-    private $client;
     private $version;
     private $deal;
-    private $equipment;
 
-    private function potentialVersionOptions()
-    {
-        try {
-            return $this->client->option->get($this->version->jato_vehicle_id, 'O')->options;
-        } catch (ServerException | ClientException $e) {
-            return [];
-        }
-    }
-
-    private function potentialVersionPackages()
-    {
-        try {
-            return $this->client->option->get($this->version->jato_vehicle_id, 'P')->options;
-        } catch (ServerException | ClientException $e) {
-            return [];
-        }
-    }
-
-    private function potentialVersionEquipment()
-    {
-        try {
-            return $this->client->equipment->get($this->version->jato_vehicle_id)->results;
-        } catch (ServerException | ClientException $e) {
-            return [];
-        }
-    }
-
-    private function potentialJatoVersionsForVin()
-    {
-        try {
-            return $this->client->vin->decode($this->deal->vin);
-        } catch (ServerException | ClientException $e) {
-            return;
-        }
-    }
-
-    private function buildJatoVersionOptions()
-    {
-        $versions = $this->potentialJatoVersionsForVin();
-
-        if (! $versions) {
-            return [];
-        }
-
-        $data = [];
-        $data['versions'] = $versions->versions;
-
-        unset($versions->links);
-        unset($versions->versions);
-
-        $data['decode'] = $versions;
-
-        return $data;
-    }
-
-    private function buildStandardEquipment()
-    {
-        return $this->equipment
-            ->reject(function ($equipment) {
-                return $equipment->availability !== 'standard';
-            })
-            ->groupBy('category')
-            ->all();
-    }
-
-    private function buildEquipmentForOptionCode($code)
-    {
-        return $this->equipment
-            ->reject(function ($equipment) {
-                return $equipment->availability !== 'optional';
-            })
-            ->reject(function ($equipment) use ($code) {
-                return $equipment->optionCode != $code;
-            })->all();
-    }
-
-    private function buildPackages()
-    {
-        return collect($this->potentialVersionPackages())
-            ->map(function ($option) {
-                return [
-                    'isOnDeal' => is_array($this->deal->package_codes) && in_array($option->optionCode, $this->deal->package_codes),
-                    'option' => $option,
-                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode),
-                ];
-            })->all();
-    }
-
-    private function buildOptions()
-    {
-        return collect($this->potentialVersionOptions())
-            ->map(function ($option) {
-                return [
-                    'isOnDeal' => is_array($this->deal->option_codes) && in_array($option->optionCode, $this->deal->option_codes),
-                    'option' => $option,
-                    'equipment' => $this->buildEquipmentForOptionCode($option->optionCode),
-                ];
-            })->all();
-    }
-
-    private function buildFeatures()
+    private function buildFilters()
     {
         $features = [];
         foreach ($this->deal->features as $feature) {
@@ -149,12 +44,16 @@ class DealDataController extends Controller
         return $groups;
     }
 
-    public function show(Deal $deal, JatoClient $client)
+    /**
+     * @param Deal $deal
+     * @param JatoClient $client
+     * @param BuildEquipmentData $equipmentDataManager
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Deal $deal, BuildEquipmentData $equipmentDataManager)
     {
-        $this->client = $client;
         $this->deal = $deal;
         $this->version = $deal->version;
-        $this->equipment = collect($this->potentialVersionEquipment());
 
         $debug_models = [];
         $debug_deal = $deal->toArray();
@@ -171,19 +70,12 @@ class DealDataController extends Controller
             'model' => $this->version->toArray(),
         ];
 
-        $compare = (new DealCompareData($client, $deal))->build();
-
-        foreach ($compare as &$labels) {
-            sort($labels);
-        }
+        $equipment = (new BuildEquipmentData())->build($deal, true);
+        $equipment = collect($equipment)->groupBy('category');
         $data = [
             'deal' => $deal,
-            'compare' => $compare,
-            'standardEquipment' => $this->buildStandardEquipment(),
-            'options' => $this->buildOptions(),
-            'versions' => $this->buildJatoVersionOptions(),
-            'packages' => $this->buildPackages(),
-            'features' => $this->buildFeatures(),
+            'equipment' => $equipment,
+            'filters' => $this->buildFilters(),
             'models' => $debug_models,
         ];
 

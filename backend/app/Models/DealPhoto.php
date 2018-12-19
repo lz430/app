@@ -19,6 +19,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\DealPhoto whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\DealPhoto whereUrl($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\DealPhoto newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\DealPhoto newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\DealPhoto query()
  */
 class DealPhoto extends Model
 {

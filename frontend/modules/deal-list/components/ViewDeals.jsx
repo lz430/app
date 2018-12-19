@@ -34,7 +34,7 @@ class ViewDeals extends React.PureComponent {
     renderShowMoreButton() {
         if (this.props.deals && this.props.shouldShowLoading) {
             // Deals are already loaded and we have already requested more deals
-            return <Loading />;
+            return <Loading size={4} />;
         }
 
         if (
@@ -65,6 +65,7 @@ class ViewDeals extends React.PureComponent {
                 onRequestDealQuote={this.props.onRequestDealQuote}
             >
                 <div className="deal__buttons">
+                    {/*
                     <button
                         className={this.compareButtonClass()}
                         onClick={this.props.onToggleCompare.bind(null, deal)}
@@ -73,6 +74,7 @@ class ViewDeals extends React.PureComponent {
                             ? 'Remove'
                             : 'Compare'}{' '}
                     </button>
+                     */}
                     <Link
                         href={`/deal-detail?id=${deal.id}`}
                         as={`/deals/${deal.id}`}

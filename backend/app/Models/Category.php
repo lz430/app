@@ -24,6 +24,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category query()
  */
 class Category extends Model
 {

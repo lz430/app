@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
 use Illuminate\Http\Request;
-use DeliverMyRide\JATO\JatoClient;
 use App\Transformers\DealTransformer;
 use League\Fractal\Serializer\ArraySerializer;
 use DeliverMyRide\JATO\Manager\DealCompareData;
@@ -65,10 +64,8 @@ class DealsCompareController extends BaseAPIController
         }
     }
 
-    public function compare(Request $request, JatoClient $client)
+    public function compare(Request $request)
     {
-        $this->client = $client;
-
         $this->validate($request, [
             'deals' => 'required|array',
             'deals.*' => 'integer',
@@ -80,7 +77,7 @@ class DealsCompareController extends BaseAPIController
         $deals = Deal::whereIn('id', $dealIds)->get();
         foreach ($deals as $deal) {
             $this->deals[$deal->id] = $deal;
-            $this->equipmentOnDeals[$deal->id] = (new DealCompareData($client, $deal))->build();
+            $this->equipmentOnDeals[$deal->id] = (new DealCompareData($deal))->build();
         }
 
         $this->processAndCompareEquipment();

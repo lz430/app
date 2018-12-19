@@ -85,6 +85,19 @@ class DealCrudController extends CrudController
         $this->crud->denyAccess(['create']);
 
         $this->crud->enableExportButtons();
+
+        $this->crud->addFilter([ // dropdown filter
+            'name' => 'status',
+            'type' => 'dropdown',
+            'label'=> 'Status',
+        ], [
+            'available' => 'Available',
+            'pending' => 'Pending',
+            'processing' => 'Processing',
+            'sold' => 'Sold',
+        ], function ($value) { // if the filter is active
+            $this->crud->addClause('where', 'status', $value);
+        });
     }
 
     public function store(StoreRequest $request)

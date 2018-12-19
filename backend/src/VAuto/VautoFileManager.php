@@ -67,7 +67,7 @@ class VautoFileManager
             foreach ($sources as $key => $source) {
                 $newName = 'vAuto_DMR-'.date('m-d-Y').'-'.$key.'.csv';
                 $mountManager->copy(
-                    'vauto://'.$source['name'],
+                    'temp://'.$source['name'],
                     's3://logs/vauto/'.$newName,
                     [
                         'ContentType' => 'text/csv',

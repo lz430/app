@@ -8,6 +8,7 @@ import {
     tail,
     reduce,
 } from 'ramda';
+import config from '../core/config';
 
 /**
  *
@@ -60,4 +61,17 @@ export const getClosestNumberInRange = (needle, haystack) => {
         needle,
         zipped
     );
+};
+
+export const buildStaticImageUrl = path => {
+    let prefix;
+    if (config.REACT_APP_ENVIRONMENT === 'production') {
+        prefix = 'https://dmr-prod-static.imgix.net';
+    } else if (config.REACT_APP_ENVIRONMENT === 'staging') {
+        prefix = 'https://dmr-staging-static.imgix.net';
+    } else {
+        prefix = '';
+    }
+
+    return prefix + path;
 };
