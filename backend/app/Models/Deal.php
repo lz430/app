@@ -882,7 +882,7 @@ class Deal extends Model
 
         // Options && Packages
         $record['options'] = [];
-        foreach ($this->version->options()->where('option_type', 'O')->get() as $option) {
+        foreach ($this->version->options()->where('option_type', 'O')->whereIn('option_code', $this->option_codes)->get() as $option) {
             $record['options'][] = [
                 'option_name' => $option->option_name,
                 'option_code' => $option->option_code,
@@ -892,7 +892,7 @@ class Deal extends Model
         }
 
         $record['packages'] = [];
-        foreach ($this->version->options()->where('option_type', 'P')->get() as $package) {
+        foreach ($this->version->options()->where('option_type', 'P')->whereIn('option_code', $this->package_codes)->get() as $package) {
             $record['packages'][] = [
                 'option_name' => $package->option_name,
                 'option_code' => $package->option_code,
