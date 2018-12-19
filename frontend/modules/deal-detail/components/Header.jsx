@@ -6,9 +6,6 @@ import { faCalculator, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-import strings from '../../../util/strings';
-import DealStockNumber from '../../../components/Deals/DealStockNumber';
-
 export default class Header extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
@@ -49,14 +46,7 @@ export default class Header extends React.PureComponent {
 
                 <StickyContainer className="deal-details__new-header fixed">
                     <Sticky topOffset={-62}>
-                        {({
-                            style,
-                            isSticky,
-                            wasSticky,
-                            distanceFromTop,
-                            distanceFromBottom,
-                            calculatedHeight,
-                        }) => (
+                        {({ style, isSticky }) => (
                             <div
                                 style={{
                                     ...style,
