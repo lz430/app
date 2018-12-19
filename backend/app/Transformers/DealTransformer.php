@@ -13,6 +13,7 @@ class DealTransformer extends TransformerAbstract
         // Always make sure we're using the same data structures.
         $data = $deal->toSearchableArray();
 
-        return (new DealSearchTransformer())->transform(['_source' => $data]);
+        //return (new DealSearchTransformer())->transform(['_source' => $data]);
+        return (new DealDetailSearchTransformer())->transform(['_source' => $data]);
     }
 }

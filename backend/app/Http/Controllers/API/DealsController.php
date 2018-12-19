@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
+use App\Transformers\DealListSearchTransformer;
 use Illuminate\Http\Request;
 use App\Services\Search\DealSearch;
 use App\Services\Search\DealDetailSearch;
 use App\Transformers\DealSearchTransformer;
+use App\Transformers\DealListSearchTransformer;
 use App\Transformers\ESResponseTransformer;
 use League\Fractal\Serializer\ArraySerializer;
 
@@ -83,7 +85,8 @@ class DealsController extends BaseAPIController
 
         $results = $query->get();
         if (isset($results['hits']['hits'][0])) {
-            $response = (new DealSearchTransformer())->transform($results['hits']['hits'][0]);
+            $response = (new DealListSearchTransformer())->transform($results['hits']['hits'][0]);
+            //$response = (new DealSearchTransformer())->transform($results['hits']['hits'][0]);
 
             return $response;
         }
