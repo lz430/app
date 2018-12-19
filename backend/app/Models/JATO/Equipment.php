@@ -47,9 +47,9 @@ class Equipment extends Model
 {
     protected $guarded = ['id'];
 
-    protected $casts = [
-        'attributes' => 'array',
-    ];
+    /*protected $casts = [
+        'attributes' => 'object',
+    ];*/
 
     protected $fillable = [
         'version_id',
@@ -75,8 +75,8 @@ class Equipment extends Model
         return $this->belongsToMany(Deal::class);
     }
 
-    /*public function getAttributesAttribute($value)
+    public function getAttributesAttribute($value)
     {
         return json_decode($value);
-    }*/
+    }
 }

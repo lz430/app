@@ -95,9 +95,9 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'location' => $e->location,
                     'availability' => $e->availability,
                     'value' => $e->value,
-                    'attributes' => $e->attributes,
+                    'attributes' => json_encode($e->attributes),
                 ];
-                Equipment::create($data);
+                Equipment::updateOrCreate($data);
             }
 
             foreach ($foundOptions as $o) {
@@ -113,7 +113,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'option_state' => $o->optionState,
                     'option_description' => $o->optionDescription,
                 ];
-                Option::create($data);
+                Option::updateOrCreate($data);
             }
 
             foreach ($getStandardText as $s) {
@@ -126,7 +126,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'content' => $s->content,
 
                 ];
-                StandardText::create($data);
+                StandardText::updateOrCreate($data);
             }
 
             $this->info('Populating equipment/options for '.$version->title());
