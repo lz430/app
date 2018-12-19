@@ -54,7 +54,7 @@ import { getSearchQuery } from '../deal-list/selectors';
 import Header from './components/Header';
 import Media from './components/Media';
 import DealFeatures from './components/DealFeatures';
-import CompareButton from './components/CompareButton';
+//import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
@@ -255,11 +255,13 @@ class DealDetailContainer extends React.PureComponent {
                         <Col md="6" lg="7" xl="8">
                             <Media deal={this.props.deal} />
                             <DealFeatures deal={this.props.deal} />
+                            {/*
                             <CompareButton
                                 deal={this.props.deal}
                                 compareList={this.props.compareList}
                                 onToggleCompare={this.props.toggleCompare}
                             />
+                             */}
                         </Col>
                         <Col md="6" lg="5" xl="4">
                             <AddToCart
