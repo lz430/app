@@ -215,9 +215,10 @@ class BuildEquipmentData
                 break;
             case 'Transmission':
                 if (isset($attributes['Transmission type'])) {
+                    $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
                     $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
                         'Transmission',
-                        "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}",
+                        "{$speeds} speed {$attributes['Transmission type']->value}",
                         [
                             'equipment' => $equipments,
                             'from' => 'Custom',
