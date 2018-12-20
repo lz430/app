@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property string|null $location
  * @property string $availability
  * @property string|null $value
- * @property mixed $attributes
+ * @property mixed $aspects
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
@@ -48,7 +48,7 @@ class Equipment extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'attributes' => 'array',
+        'aspects' => 'object',
     ];
 
     protected $fillable = [
@@ -62,7 +62,7 @@ class Equipment extends Model
         'location',
         'availability',
         'value',
-        'attributes',
+        'aspects',
     ];
 
     public function version(): BelongsTo
@@ -74,9 +74,4 @@ class Equipment extends Model
     {
         return $this->belongsToMany(Deal::class);
     }
-
-    /*public function getAttributesAttribute($value)
-    {
-        return json_decode($value);
-    }*/
 }

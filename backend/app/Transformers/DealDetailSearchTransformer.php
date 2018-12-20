@@ -43,6 +43,7 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'photos' => $deal->photos,
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
+
             'features' => (isset($deal->jato_features) ? $deal->jato_features : []),
 
             'options' => $deal->options,

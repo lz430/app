@@ -95,7 +95,7 @@ class VersionPopulateEquipmentAndOptions extends Command
                     'location' => $e->location,
                     'availability' => $e->availability,
                     'value' => $e->value,
-                    'attributes' => $e->attributes,
+                    'aspects' => $e->attributes,
                 ];
                 Equipment::create($data);
             }
