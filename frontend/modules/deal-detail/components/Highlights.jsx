@@ -75,16 +75,17 @@ export default class extends React.PureComponent {
                             }}
                         >
                             <Row>
-                                <Col sm="4" className="highlights__make-model">
-                                    <div className="d-flex align-items-center">
-                                        <h6>
-                                            {this.props.deal.make}{' '}
-                                            {this.props.deal.model}{' '}
-                                        </h6>
-                                    </div>
+                                <Col
+                                    sm="3"
+                                    className="highlights__make-model align-items-center"
+                                >
+                                    <h6>
+                                        {this.props.deal.make}{' '}
+                                        {this.props.deal.model}{' '}
+                                    </h6>
                                 </Col>
-                                <Col sm="8" className="highlights__anchors">
-                                    <ul className="d-flex align-items-center">
+                                <Col sm="9" className="highlights__anchors">
+                                    <ul className="d-flex align-items-center justify-content-between mb-0">
                                         <li className="list-inline-item">
                                             <a href="#overview">Overview</a>
                                         </li>

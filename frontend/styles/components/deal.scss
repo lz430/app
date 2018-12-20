@@ -284,16 +284,24 @@
     .highlights__make-model {
         background: #777;
         color: $color-text-white;
+        padding: 20px 0;
+        justify-items: center;
 
-        h4 {
+        h6 {
             align-self: center;
+            line-height: 1.6;
+            margin-bottom: 0;
+            text-align: center;
         }
     }
 
     .highlights__anchors {
         background: $color-darkestgrey;
+        padding: 20px 0;
 
         ul {
+            max-width: 60%;
+
             li {
                 a {
                     color: $color-text-white;
