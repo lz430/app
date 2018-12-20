@@ -257,8 +257,9 @@ class DealDetailContainer extends React.PureComponent {
                         <Row>
                             <Col md="6" lg="7" xl="8">
                                 <Media deal={this.props.deal} />
-                                <DealFeatures deal={this.props.deal} />
                                 {/*
+                                <DealFeatures deal={this.props.deal} />
+                                
                                 <CompareButton
                                     deal={this.props.deal}
                                     compareList={this.props.compareList}

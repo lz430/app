@@ -243,6 +243,7 @@
     &.fixed {
         background: $color-background-secondary;
         z-index: 999;
+        border-bottom: 1px solid $color-darkgrey;
 
         .title-year-make {
             font-size: 1.6rem;
@@ -268,5 +269,11 @@
         button {
             align-self: center;
         }
+    }
+}
+
+.deal__highlights {
+    .fixed {
+        display: flex;
     }
 }
