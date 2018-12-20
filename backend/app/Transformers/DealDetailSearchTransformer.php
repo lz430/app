@@ -44,11 +44,11 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
 
-            'features' => (isset($deal->jato_features) ? $deal->jato_features : []),
+            'features' => isset($deal->jato_features) ? $deal->jato_features : [],
 
-            'options' => $deal->options,
-            'packages' => $deal->packages,
-            'equipment' => $deal->equipment,
+            'options' => isset($deal->options) ? $deal->options : [],
+            'packages' => isset($deal->packages) ? $deal->packages : [],
+            'equipment' => isset($deal->equipment) ? $deal->equipment : [],
 
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,
