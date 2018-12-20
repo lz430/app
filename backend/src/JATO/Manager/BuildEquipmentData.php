@@ -151,7 +151,7 @@ class BuildEquipmentData
         $labels = [];
         $attributes = [];
 
-        foreach ($equipments->attributes as $attribute) {
+        foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
         switch ($equipments->name) {
