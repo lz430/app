@@ -4,9 +4,9 @@ import DealColors from '../../../components/Deals/DealColors';
 import StandardFeaturesModal from './StandardFeaturesModal';
 import AdditionalFeaturesModal from './AdditionalFeaturesModal';
 import { Row, Col } from 'reactstrap';
-import { Sticky } from 'react-sticky';
 
-import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCar } from '@fortawesome/free-solid-svg-icons';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -45,6 +45,8 @@ export default class extends React.PureComponent {
             };
 
             this.setState({ basicFeatures, fuelEconomy });
+
+            console.log(this.props.deal);
         }
     }
 
@@ -62,51 +64,114 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        // console.log(this.props);
+        const { deal } = this.props;
+
         return (
-            <div className="deal__highlights">
-                <Sticky topOffset={607}>
-                    {({ style, isSticky }) => (
-                        <div
-                            className="deal-highlights fixed"
-                            style={{
-                                ...style,
-                                marginTop: isSticky ? '138px' : '0px',
-                            }}
-                        >
-                            <Row>
-                                <Col
-                                    sm="3"
-                                    className="highlights__make-model align-items-center"
-                                >
-                                    <h6>
-                                        {this.props.deal.make}{' '}
-                                        {this.props.deal.model}{' '}
-                                    </h6>
-                                </Col>
-                                <Col sm="9" className="highlights__anchors">
-                                    <ul className="d-flex align-items-center justify-content-between mb-0">
-                                        <li className="list-inline-item">
-                                            <a href="#overview">Overview</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#highlights">Highlights</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#gallery">Gallery</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#specs">Specs</a>
-                                        </li>
-                                        <li className="list-inline-item">
-                                            <a href="#trims">Trims</a>
-                                        </li>
-                                    </ul>
-                                </Col>
-                            </Row>
+            <div className="row border deal-details__container p-10">
+                <Row
+                    className="deal-details__top-highlights border-bottom"
+                    id="overview"
+                >
+                    <Col>
+                        <h3 className="text-center">350 hp</h3>
+                        <h6 className="text-center">
+                            {this.props.deal.engine}
+                        </h6>
+                    </Col>
+                    <Col>
+                        <h3 className="text-center">6-speed</h3>
+                        <h6 className="text-center">
+                            {this.props.deal.transmission} transmission
+                        </h6>
+                    </Col>
+                    <Col>
+                        <h3 className="text-center">
+                            {this.props.deal.fuel_econ_city} |{' '}
+                            {this.props.deal.fuel_econ_hwy}
+                        </h3>
+                        <h6 className="text-center">
+                            city &nbsp; MPG &nbsp; hwy
+                        </h6>
+                    </Col>
+                    <Col>
+                        <h3 className="text-center">Up to 7</h3>
+                        <h6 className="text-center">passengers</h6>
+                    </Col>
+                </Row>
+
+                <Row className="deal-details__top-features justify-content-between">
+                    <Col md="6" className="d-flex align-items-center">
+                        <div className="deal-details__top-features-icon d-flex justify-content-center">
+                            <span
+                                className="color__swatch-color d-inline-block"
+                                style={{
+                                    backgroundColor: deal.exterior_color_swatch,
+                                }}
+                            />
                         </div>
-                    )}
-                </Sticky>
+
+                        <div className="deal-details__deal-content-color d-flex exterior border-bottom">
+                            <span className="d-inline-block">
+                                Exterior Color: &nbsp;{' '}
+                            </span>
+                            <span className="color__swatch-name d-inline-block">
+                                {this.props.deal.color}
+                            </span>
+                        </div>
+                    </Col>
+                    <Col md="6" className="d-flex align-items-center">
+                        <div className="deal-details__top-features-icon d-flex justify-content-center">
+                            <span
+                                className="color__swatch-color d-inline-block"
+                                style={{
+                                    backgroundColor: deal.exterior_color_swatch,
+                                }}
+                            />
+                        </div>
+
+                        <div className="deal-details__deal-content-color d-flex exterior border-bottom">
+                            <span className="d-inline-block">
+                                Exterior Color: &nbsp;{' '}
+                            </span>
+                            <span className="color__swatch-name d-inline-block">
+                                {this.props.deal.color}
+                            </span>
+                        </div>
+                    </Col>
+                </Row>
+
+                <Row className="deal-details__top-features justify-content-between">
+                    <Col md="6" className="d-flex align-items-center">
+                        <div className="deal-details__top-features-icon d-flex justify-content-center">
+                            <FontAwesomeIcon icon={faCar} />
+                        </div>
+
+                        <div className="deal-details__deal-content-color d-flex exterior border-bottom">
+                            <span className="d-inline-block">
+                                Exterior Color: &nbsp;{' '}
+                            </span>
+                            <span className="color__swatch-name d-inline-block">
+                                {this.props.deal.color}
+                            </span>
+                        </div>
+                    </Col>
+                    <Col md="6" className="d-flex align-items-center">
+                        <div className="deal-details__top-features-icon d-flex justify-content-center">
+                            <FontAwesomeIcon icon={faCar} />
+                        </div>
+
+                        <div className="deal-details__deal-content-color d-flex exterior border-bottom">
+                            <span className="d-inline-block">
+                                Exterior Color: &nbsp;{' '}
+                            </span>
+                            <span className="color__swatch-name d-inline-block">
+                                {this.props.deal.color}
+                            </span>
+                        </div>
+                    </Col>
+                </Row>
+
+                <Row className="deal-details__top-features justify-content-between" />
             </div>
         );
     }

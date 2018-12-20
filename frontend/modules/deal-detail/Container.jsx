@@ -60,6 +60,7 @@ import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
 import OurPromise from './components/Promise';
+import NavHighlights from './components/Nav-Highlights';
 import Highlights from './components/Highlights';
 
 class DealDetailContainer extends React.PureComponent {
@@ -302,6 +303,9 @@ class DealDetailContainer extends React.PureComponent {
                             </Col>
                         </Row>
                         <div className="deal__row">
+                            <NavHighlights deal={this.props.deal} />
+                        </div>
+                        <div className="deal__row m-0">
                             <Highlights deal={this.props.deal} />
                         </div>
                         <Row className="deal__row">

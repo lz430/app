@@ -63,9 +63,11 @@ export default class Header extends React.PureComponent {
                                         {this.props.deal.series}
                                     </div>
                                 </Col>
-                                <Col lg="auto" className="border-right">
-                                    <span className="dollar-sign">$</span>
-                                    <span className="payment">45,375</span>
+                                <Col lg="auto" className="border-right payment">
+                                    <span className="dmr-price">
+                                        <sub>$</sub>
+                                        45,375
+                                    </span>
                                     <br />
                                     <span className="tooltip">
                                         <FontAwesomeIcon icon={faInfoCircle} />
@@ -78,7 +80,7 @@ export default class Header extends React.PureComponent {
                                     className="deal-details__new-header payment"
                                 >
                                     <p>
-                                        <span className="monthly">
+                                        <span className="payment__monthly">
                                             <sub>$</sub>
                                             637
                                             <sup>/mo</sup>

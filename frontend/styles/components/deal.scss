@@ -259,13 +259,34 @@
             font-weight: 400;
         }
         .payment {
-            .monthly {
-                font-size: 1rem;
+            .dmr-price {
+                font-size: 2rem;
                 line-height: 1;
 
                 sub {
                     bottom: 0;
                     font-size: 50%;
+                }
+            }
+            &__monthly {
+                font-size: 2rem;
+                line-height: 1;
+
+                sub {
+                    bottom: 0;
+                    font-size: 50%;
+                }
+
+                sup {
+                    top: -0.7em;
+                    font-size: 50%;
+                }
+            }
+            .tooltip {
+                font-size: 0.9em;
+
+                svg {
+                    width: 0.9em;
                 }
             }
         }
@@ -282,7 +303,7 @@
     }
 
     .highlights__make-model {
-        background: #777;
+        background: $color-darkgrey;
         color: $color-text-white;
         padding: 20px 0;
         justify-items: center;
@@ -297,16 +318,63 @@
 
     .highlights__anchors {
         background: $color-darkestgrey;
-        padding: 20px 0;
+        padding: 20px;
 
         ul {
+            padding-left: 0;
             max-width: 60%;
 
             li {
                 a {
                     color: $color-text-white;
+                    padding: 0 25px;
                 }
             }
         }
+    }
+}
+
+.deal-details {
+    &__container {
+        & > .row {
+            margin: 0;
+            width: 100%;
+        }
+    }
+    &__top-highlights {
+        background: $color-lightgrey;
+        padding: 20px 0;
+
+        h6 {
+            font-size: 0.8rem;
+        }
+    }
+
+    &__top-features {
+        padding: 0 10px;
+
+        .col-md-6 {
+            padding: 20px 0;
+        }
+
+        &-icon {
+            margin-right: 10px;
+        }
+        .deal-details__deal-content-color {
+            margin-left: 0;
+            width: 90%;
+        }
+    }
+}
+
+// Color swatches
+.color {
+    &__swatch-color {
+        border: 3px solid $color-grey;
+        border-radius: 50px;
+        height: 20px;
+        width: 20px;
+    }
+    &__swatch-name {
     }
 }
