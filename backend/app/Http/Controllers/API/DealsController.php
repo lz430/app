@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Deal;
-use App\Transformers\DealDetailSearchTransformer;
 use Illuminate\Http\Request;
 use App\Services\Search\DealSearch;
 use App\Services\Search\DealDetailSearch;
 use App\Transformers\ESResponseTransformer;
 use League\Fractal\Serializer\ArraySerializer;
+use App\Transformers\DealDetailSearchTransformer;
 
 class DealsController extends BaseAPIController
 {

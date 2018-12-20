@@ -282,7 +282,7 @@ class BuildEquipmentData
                     if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
                         $labels[$equipments->schema_id] = $this->itemFactory(
                             $this->standardEquipmentText[$equipments->schema_id]->content,
-                            "Included",
+                            'Included',
                             [
                                 'equipment' => $equipments,
                                 'from' => 'Standard Text Content',
@@ -299,7 +299,7 @@ class BuildEquipmentData
                 } else {
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         $equipments->name,
-                       "Included",
+                       'Included',
                         [
                             'equipment' => $equipments,
                             'from' => 'Equipment Name',
