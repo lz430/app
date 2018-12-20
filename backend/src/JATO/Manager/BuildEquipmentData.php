@@ -274,7 +274,6 @@ class BuildEquipmentData
                         'from' => 'Custom',
                     ]);
                 break;
-                break;
             default:
                 //
                 // If the equipment isn't optional, and we have standard text.
