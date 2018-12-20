@@ -241,6 +241,9 @@
 
 .deal-details__new-header {
     &.fixed {
+        background: $color-background-secondary;
+        z-index: 999;
+
         .title-year-make {
             font-size: 1.6rem;
             font-weight: 700;
@@ -250,14 +253,15 @@
             font-size: 1.3rem;
             font-weight: 400;
         }
+        .payment {
+            .monthly {
+                font-size: 1rem;
+                line-height: 1;
 
-        .monthly {
-            font-size: 2.5rem;
-            line-height: 1;
-
-            sub {
-                bottom: 0;
-                font-size: 50%;
+                sub {
+                    bottom: 0;
+                    font-size: 50%;
+                }
             }
         }
 
