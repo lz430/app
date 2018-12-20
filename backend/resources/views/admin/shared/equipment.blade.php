@@ -21,7 +21,7 @@
             <td>{{$equipment->value}}</td>
         </tr>
 
-        @foreach($equipment->attributes as $attribute)
+        @foreach($equipment->aspects as $attribute)
             <tr>
                 <td>{{$attribute->name}}</td>
                 <td>{{$attribute->value}}</td>
