@@ -47,7 +47,8 @@ $primary: $brand-green;
 $success: $color-pink;
 
 // Typography
-$font-family-sans-serif: 'Open Sans', sans-serif;
+// $font-family-sans-serif: 'Open Sans', sans-serif;
+$font-family: 'Roboto', sans-serif;
 $line-height-base: 1.6;
 $text-color: #484d50;
 $text-color-dark: darken($text-color, 25);

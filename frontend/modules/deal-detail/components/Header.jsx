@@ -17,7 +17,7 @@ export default class Header extends React.PureComponent {
     render() {
         return (
             <div>
-                <Row className="deal-details__new-header stationary">
+                {/*<Row className="deal-details__new-header stationary">
                     <Col sm="8">
                         <div className="deal-details__new-header title-year-make">
                             {this.props.deal.year} {this.props.deal.make}{' '}
@@ -41,9 +41,9 @@ export default class Header extends React.PureComponent {
                             Configure Payment
                         </div>
                     </Col>
-                </Row>
+                </Row>*/}
 
-                <Sticky topOffset={8}>
+                <Sticky topOffset={-62}>
                     {({ style, isSticky }) => (
                         <div
                             className="deal-details__new-header fixed"
@@ -64,14 +64,10 @@ export default class Header extends React.PureComponent {
                                     </div>
                                 </Col>
                                 <Col lg="auto" className="border-right payment">
+                                    <p className="m-0">As low as</p>
                                     <span className="dmr-price">
                                         <sub>$</sub>
                                         45,375
-                                    </span>
-                                    <br />
-                                    <span className="tooltip">
-                                        <FontAwesomeIcon icon={faInfoCircle} />
-                                        DMR Price
                                     </span>
                                 </Col>
                                 <Col
@@ -79,15 +75,13 @@ export default class Header extends React.PureComponent {
                                     sm="6"
                                     className="deal-details__new-header payment"
                                 >
+                                    <p className="m-0">Lease from</p>
                                     <p>
                                         <span className="payment__monthly">
                                             <sub>$</sub>
                                             637
                                             <sup>/mo</sup>
                                         </span>
-                                        <br />
-                                        <FontAwesomeIcon icon={faCalculator} />
-                                        Configure
                                     </p>
                                 </Col>
                                 <Button className="" color="primary">
