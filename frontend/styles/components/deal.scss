@@ -259,28 +259,24 @@
             font-weight: 400;
         }
         .payment {
+            sup {
+                top: -0.7em;
+                font-size: 50%;
+            }
+
+            sub {
+                bottom: 0.7em;
+                font-size: 50%;
+            }
+
             .dmr-price {
                 font-size: 2rem;
                 line-height: 1;
-
-                sub {
-                    bottom: 0.7em;
-                    font-size: 50%;
-                }
+                padding-right: 20px;
             }
             &__monthly {
                 font-size: 2rem;
                 line-height: 1;
-
-                sub {
-                    bottom: 0.7em;
-                    font-size: 50%;
-                }
-
-                sup {
-                    top: -0.7em;
-                    font-size: 50%;
-                }
             }
             .tooltip {
                 font-size: 0.9em;
@@ -293,6 +289,7 @@
 
         button {
             align-self: center;
+            margin-left: auto;
         }
     }
 }

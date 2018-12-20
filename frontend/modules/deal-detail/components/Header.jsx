@@ -63,9 +63,9 @@ export default class Header extends React.PureComponent {
                                         {this.props.deal.series}
                                     </div>
                                 </Col>
-                                <Col lg="auto" className="border-right payment">
+                                <Col lg="auto" className="payment">
                                     <p className="m-0">As low as</p>
-                                    <span className="dmr-price">
+                                    <span className="dmr-price border-right">
                                         <sub>$</sub>
                                         45,375
                                     </span>
@@ -84,9 +84,14 @@ export default class Header extends React.PureComponent {
                                         </span>
                                     </p>
                                 </Col>
-                                <Button className="" color="primary">
-                                    <b>Next: </b> Begin Purchase
-                                </Button>
+                                <Col
+                                    lg="auto"
+                                    className="d-flex ml-auto align-items-center"
+                                >
+                                    <Button className="" color="primary">
+                                        <b>Next: </b> Begin Purchase
+                                    </Button>
+                                </Col>
                             </Row>
                         </div>
                     )}
