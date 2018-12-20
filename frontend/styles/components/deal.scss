@@ -245,6 +245,10 @@
         z-index: 999;
         border-bottom: 1px solid $color-darkgrey;
 
+        & > .row {
+            background: $color-background-secondary;
+        }
+
         .title-year-make {
             font-size: 1.6rem;
             font-weight: 700;
@@ -274,6 +278,27 @@
 
 .deal__highlights {
     .fixed {
-        display: flex;
+        z-index: 999;
+    }
+
+    .highlights__make-model {
+        background: #777;
+        color: $color-text-white;
+
+        h4 {
+            align-self: center;
+        }
+    }
+
+    .highlights__anchors {
+        background: $color-darkestgrey;
+
+        ul {
+            li {
+                a {
+                    color: $color-text-white;
+                }
+            }
+        }
     }
 }

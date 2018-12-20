@@ -62,27 +62,29 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <div className="deal__highlights">
-                <Sticky topOffset={560}>
+                <Sticky topOffset={607}>
                     {({ style, isSticky }) => (
                         <div
                             className="deal-highlights fixed"
                             style={{
                                 ...style,
-                                marginTop: isSticky ? '128px' : '0px',
+                                marginTop: isSticky ? '138px' : '0px',
                             }}
                         >
-                            <Row className="highlights__anchors">
-                                <Col>
-                                    <h3>
-                                        {this.props.deal.make}{' '}
-                                        {this.props.deal.model}{' '}
-                                    </h3>
+                            <Row>
+                                <Col sm="4" className="highlights__make-model">
+                                    <div className="d-flex align-items-center">
+                                        <h6>
+                                            {this.props.deal.make}{' '}
+                                            {this.props.deal.model}{' '}
+                                        </h6>
+                                    </div>
                                 </Col>
-                                <Col>
-                                    <ul>
+                                <Col sm="8" className="highlights__anchors">
+                                    <ul className="d-flex align-items-center">
                                         <li className="list-inline-item">
                                             <a href="#overview">Overview</a>
                                         </li>

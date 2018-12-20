@@ -301,9 +301,9 @@ class DealDetailContainer extends React.PureComponent {
                                 />
                             </Col>
                         </Row>
-                        <Row className="deal__row">
+                        <div className="deal__row">
                             <Highlights deal={this.props.deal} />
-                        </Row>
+                        </div>
                         <Row className="deal__row">
                             <OurPromise />
                         </Row>
