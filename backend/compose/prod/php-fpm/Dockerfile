@@ -55,6 +55,8 @@ WORKDIR /app
 ###########################################################################
 COPY . /app
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+RUN ln -s /app/vendor/backpack/crud/src/public /app/public/vendor/backpack
+RUN ln -s /app/vendor/almasaeed2010/adminlte /app/public/vendor/adminlte
 RUN chown www-data:www-data /app -R
 
 COPY ./compose/prod/php-fpm/entrypoint.sh /entrypoint.sh
