@@ -26,6 +26,7 @@ services:
   redis:
     image: redis:latest
 
+
   ###
   # ES Stuff
   ###
@@ -62,6 +63,15 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
+
+  ###
+  # Dev things
+  ###
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+    - "1025:1025"
+    - "8025:8025"
 
   ###
   # Actual Application
