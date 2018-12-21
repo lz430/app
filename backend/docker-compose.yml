@@ -86,7 +86,8 @@ services:
         - mysql
         - elasticsearch
         - redis
-        
+        - mailhog
+
   nginx:
     build: ./compose/local/nginx
     ports:
