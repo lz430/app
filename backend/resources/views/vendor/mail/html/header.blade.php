@@ -1,7 +1,7 @@
 <tr>
     <td class="header">
         <a href="{{ $url }}">
-            <img src="{{url('/images/logo.png')}}" alt="Deliver My Ride" />
+            <img width="250px" src="https://s3.amazonaws.com/dmr-emails/DMRLogo-01-01.png" alt="Deliver My Ride" />
         </a>
     </td>
 </tr>
