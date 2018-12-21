@@ -3,8 +3,8 @@
 namespace App\Console\Commands\Tests;
 
 use Illuminate\Console\Command;
-use App\Mail\ApplicationSubmittedDMR;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\ApplicationSubmittedDMR;
 
 class TestEmail extends Command
 {
@@ -22,13 +22,11 @@ class TestEmail extends Command
      */
     protected $description = 'Quick and dirty cox api test';
 
-
     /**
      * Execute the console command.
      */
     public function handle()
     {
         Mail::to('mattwisner@gmail.com')->send(new ApplicationSubmittedDMR());
-
     }
 }
