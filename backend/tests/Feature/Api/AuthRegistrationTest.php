@@ -1,6 +1,9 @@
 <?php
 namespace Tests\Feature\Api;
+use App\Mail\UserCreated;
 use Tests\TestCaseWithAuth;
+use Illuminate\Mail\Mailable;
+use Illuminate\Support\Facades\Mail;
 
 class AuthRegistrationTest extends TestCaseWithAuth
 {
@@ -8,6 +11,11 @@ class AuthRegistrationTest extends TestCaseWithAuth
     /** @test */
     public function it_works()
     {
+        Mail::fake();
+
+
+        //
+        // Create User
         $payload = [
             'first_name' => 'Matt',
             'last_name' => 'Wisner',
@@ -18,6 +26,12 @@ class AuthRegistrationTest extends TestCaseWithAuth
 
         $response = $this->json('POST', 'api/auth/registration', $payload);
         $response->assertStatus(201);
+
+        //
+        // Confirm welcome email
+        Mail::assertSent(UserCreated::class, function (Mailable $mailable) use ($payload) {
+            return $mailable->hasTo($payload['email']);
+        });
     }
 
 }
