@@ -1,17 +1,16 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
-use App\Mail\UserCreated;
-use App\Mail\UserPasswordResetRequest;
-use App\Mail\UserPasswordResetSuccess;
-use App\Models\UserPasswordReset;
+
+use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Illuminate\Mail\Mailable;
+use App\Models\UserPasswordReset;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
+use App\Mail\UserPasswordResetSuccess;
 
 class PasswordResetResetPasswordTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -44,7 +43,7 @@ class PasswordResetResetPasswordTest extends TestCaseWithAuth
         // Assert user can login with new password
         $loginPayload = [
             'email' => $user->email,
-            'password' => $payload['password']
+            'password' => $payload['password'],
         ];
 
         $response = $this->json('POST', 'api/auth/login', $loginPayload);
@@ -53,8 +52,7 @@ class PasswordResetResetPasswordTest extends TestCaseWithAuth
                 [
                     'access_token',
                     'token_type',
-                    'expires_at'
+                    'expires_at',
                 ])->assertStatus(200);
     }
-
 }

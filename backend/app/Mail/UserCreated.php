@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-
 class UserCreated extends Mailable
 {
     use Queueable, SerializesModels;
@@ -33,7 +32,7 @@ class UserCreated extends Mailable
     public function build()
     {
         return $this
-            ->subject($this->user->first_name . ", welcome to Deliver My Ride!")
+            ->subject($this->user->first_name.', welcome to Deliver My Ride!')
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->markdown(self::VIEW);
     }

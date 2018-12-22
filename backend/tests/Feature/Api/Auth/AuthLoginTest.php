@@ -1,12 +1,12 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use App\Models\User;
 use Tests\TestCaseWithAuth;
 
 class AuthLoginTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -14,7 +14,7 @@ class AuthLoginTest extends TestCaseWithAuth
         $user->save();
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'myfakepassword',
         ];
 
         $response = $this->json('POST', 'api/auth/login', $payload);
@@ -23,7 +23,7 @@ class AuthLoginTest extends TestCaseWithAuth
                 [
                     'access_token',
                     'token_type',
-                    'expires_at'
+                    'expires_at',
                 ])->assertStatus(200);
     }
 
@@ -34,11 +34,10 @@ class AuthLoginTest extends TestCaseWithAuth
         $user->save();
         $payload = [
             'email' => $user->email,
-            'password' => 'wrongpassword'
+            'password' => 'wrongpassword',
         ];
 
         $response = $this->json('POST', 'api/auth/login', $payload);
         $response->assertStatus(401);
     }
-
 }

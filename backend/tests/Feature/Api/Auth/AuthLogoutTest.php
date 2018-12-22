@@ -1,13 +1,13 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Laravel\Passport\Passport;
 
 class AuthLogoutTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -17,7 +17,7 @@ class AuthLogoutTest extends TestCaseWithAuth
 
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'myfakepassword',
         ];
 
         $response = $this->json('GET', 'api/auth/logout', $payload);
@@ -38,7 +38,7 @@ class AuthLogoutTest extends TestCaseWithAuth
 
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'myfakepassword',
         ];
 
         $response = $this->json('GET', 'api/auth/logout', $payload);

@@ -1,12 +1,13 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
+
 use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Laravel\Passport\Passport;
 
 class AuthGetUserTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -16,7 +17,7 @@ class AuthGetUserTest extends TestCaseWithAuth
 
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'myfakepassword',
         ];
 
         $response = $this->json('GET', 'api/auth/user', $payload);
@@ -39,7 +40,7 @@ class AuthGetUserTest extends TestCaseWithAuth
 
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'myfakepassword',
         ];
 
         $response = $this->json('GET', 'api/auth/user', $payload);

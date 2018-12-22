@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends BaseAPIController
 {
-
     /**
-     * Create user
+     * Create user.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -23,28 +22,28 @@ class AuthController extends BaseAPIController
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|confirmed'
+            'password' => 'required|string|confirmed',
         ]);
 
         $user = new User([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
         ]);
 
         $user->save();
 
         return response()->json(
             [
-                'message' => 'Successfully created user!'
+                'message' => 'Successfully created user!',
             ],
             201
         );
     }
 
     /**
-     * Login user and create token
+     * Login user and create token.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -54,21 +53,19 @@ class AuthController extends BaseAPIController
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
-            'remember_me' => 'boolean'
+            'remember_me' => 'boolean',
         ]);
 
         $credentials = request(['email', 'password']);
 
-
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             return response()->json(
                 [
-                    'message' => 'Unauthorized'
+                    'message' => 'Unauthorized',
                 ],
                 401
             );
         }
-
 
         $user = $request->user();
         $tokenResult = $user->createToken('Personal Access Token');
@@ -76,7 +73,6 @@ class AuthController extends BaseAPIController
         if ($request->remember_me) {
             $token->expires_at = Carbon::now()->addWeeks(1);
         }
-
 
         $token->save();
 
@@ -86,12 +82,12 @@ class AuthController extends BaseAPIController
                 'token_type' => 'Bearer',
                 'expires_at' => Carbon::parse(
                     $tokenResult->token->expires_at
-                )->toDateTimeString()
+                )->toDateTimeString(),
             ]);
     }
 
     /**
-     * Logout user (Revoke the token)
+     * Logout user (Revoke the token).
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -99,9 +95,10 @@ class AuthController extends BaseAPIController
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
+
         return response()->json(
             [
-                'message' => 'Successfully logged out'
+                'message' => 'Successfully logged out',
             ]
         );
     }

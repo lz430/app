@@ -1,15 +1,15 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
-use App\Mail\UserCreated;
-use App\Mail\UserPasswordResetRequest;
+
+use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
-use App\Models\User;
+use App\Mail\UserPasswordResetRequest;
 
 class PasswordResetRequestTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -35,5 +35,4 @@ class PasswordResetRequestTest extends TestCaseWithAuth
             return $mail->hasTo($payload['email']);
         });
     }
-
 }

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Backpack\CRUD\CrudTrait;
 use App\Models\Order\Purchase;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Passport\HasApiTokens;
 
 /**
  * App\Models\User.

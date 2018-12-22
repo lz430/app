@@ -1,5 +1,7 @@
 <?php
+
 namespace Tests\Feature\Api\Auth;
+
 use App\Mail\UserCreated;
 use Tests\TestCaseWithAuth;
 use Illuminate\Mail\Mailable;
@@ -7,7 +9,6 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthRegistrationTest extends TestCaseWithAuth
 {
-
     /** @test */
     public function it_works()
     {
@@ -32,5 +33,4 @@ class AuthRegistrationTest extends TestCaseWithAuth
             return $mail->hasTo($payload['email']);
         });
     }
-
 }

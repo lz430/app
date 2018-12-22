@@ -325,8 +325,9 @@ class Importer
 
         $sources = $this->buildSourceData();
 
-        if (!count($sources)) {
+        if (! count($sources)) {
             $this->info('No Files found to import!');
+
             return false;
         }
 
@@ -354,7 +355,7 @@ class Importer
         $queryUpdateSold->update(
             [
                 'status' => 'sold',
-                'sold_at' => Carbon::now()
+                'sold_at' => Carbon::now(),
             ]);
         $queryUpdateSold->searchable();
 
@@ -392,6 +393,7 @@ class Importer
             ->notify(new NotifyToSlackChannel($data));
 
         $this->fileManager->archiveFiles($sources);
+
         return true;
     }
 

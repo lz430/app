@@ -2,11 +2,10 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
-
 
 class UserPasswordResetRequest extends Mailable
 {
@@ -14,7 +13,7 @@ class UserPasswordResetRequest extends Mailable
 
     const VIEW = 'emails.user-created';
 
-    /** @var User  */
+    /** @var User */
     public $user;
 
     public $token;
