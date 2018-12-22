@@ -34,7 +34,6 @@
                 <div class="box-body">
                     <ul>
                         <li><a href="/admin/jato-logs/">JATO Logs</a></li>
-                        <li><a href="/admin/statistics/deals">Deals Statistics</a></li>
                     </ul>
                 </div>
             </div>

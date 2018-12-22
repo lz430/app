@@ -32,6 +32,7 @@ class UserPasswordResetSuccess extends Mailable
     public function build()
     {
         return $this
+            ->subject('Password Reset Success')
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->markdown(self::VIEW);
     }
