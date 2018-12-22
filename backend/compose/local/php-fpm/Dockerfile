@@ -35,19 +35,11 @@ RUN docker-php-ext-configure intl \
 ###########################################################################
 # xDebug:
 ###########################################################################
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+#RUN pecl install xdebug && \
+#    docker-php-ext-enable xdebug
 
 # Copy xdebug configuration for remote debugging
-COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
-###########################################################################
-# Phpuit:
-###########################################################################
-RUN wget https://phar.phpunit.de/phpunit-6.5.phar
-RUN chmod +x phpunit-6.5.phar
-RUN mv phpunit-6.5.phar /usr/local/bin/phpunit
-RUN phpunit --version
+#COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ###########################################################################
 # Final Thoughts:

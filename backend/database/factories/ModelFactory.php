@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Models\Feature;
 use App\Models\Category;
 use App\Models\JatoFeature;
+use Illuminate\Support\Facades\Hash;
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
@@ -23,7 +24,7 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'last_name' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
         'phone_number' => $faker->phoneNumber,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm',
+        'password' => Hash::make('myfakepassword'),
         'remember_token' => str_random(10),
         'drivers_license_number' => str_random(10),
         'drivers_license_state' => str_random(2),
@@ -130,7 +131,7 @@ $factory->define(App\Models\Dealer::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Purchase::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $faker) {
     return [
         'type' => 'cash',
         'deal_id' => factory(App\Models\Deal::class),
