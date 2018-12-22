@@ -57,6 +57,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer whereZip($value)
  * @mixin \Eloquent
+ * @property float|null $money_factor
+ * @property object|null $notification_emails
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DealerContact[] $contacts
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer whereMoneyFactor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Dealer whereNotificationEmails($value)
  */
 class Dealer extends Model
 {
@@ -142,6 +150,8 @@ class Dealer extends Model
         unset($data['state']);
         unset($data['updated_at']);
         unset($data['zip']);
+        unset($data['money_factor']);
+        unset($data['notification_emails']);
 
         return $data;
     }

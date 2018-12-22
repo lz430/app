@@ -10,7 +10,7 @@ const initialState = {
         zipcode: '',
         city: null,
         has_results: false,
-        is_valid: false,
+        is_valid: null,
     },
 
     purchasePreferences: {

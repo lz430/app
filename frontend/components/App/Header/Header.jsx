@@ -8,7 +8,7 @@ import { Navbar, NavbarBrand } from 'reactstrap';
 
 import UserLocationModal from './UserLocationModal';
 import UserContactModal from './UserContactModal';
-import CompareWidget from './CompareWidget';
+//import CompareWidget from './CompareWidget';
 import {
     getUserLocation,
     getUserPurchaseStrategy,
@@ -149,13 +149,13 @@ class Header extends React.PureComponent {
                         purchaseStrategy={this.props.purchaseStrategy}
                     />
                     {this.renderContactUsWidget()}
-                    <CompareWidget
+                    {/* <CompareWidget
                         currentPageIsInCheckout={
                             this.props.currentPageIsInCheckout
                         }
                         onToggleCompare={this.props.onToggleCompare}
                         compareList={this.props.compareList}
-                    />
+                    /> */}
                     {this.renderLocationWidget()}
                 </div>
 

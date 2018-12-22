@@ -31,6 +31,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereUrl($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereVersionId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereColorRgb($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereColorSimple($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\VersionPhoto whereType($value)
  */
 class VersionPhoto extends Model
 {

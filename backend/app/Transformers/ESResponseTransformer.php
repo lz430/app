@@ -130,7 +130,7 @@ class ESResponseTransformer extends TransformerAbstract
         $results = [];
 
         foreach ($this->response['hits']['hits'] as $data) {
-            $results[] = (new DealSearchTransformer())->transform($data);
+            $results[] = (new DealListSearchTransformer())->transform($data);
         }
 
         return $results;

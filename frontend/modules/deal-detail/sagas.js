@@ -57,6 +57,11 @@ function* dealDetailRequestDealQuote() {
     let roles = [role, ...conditionalRoles];
     let results = null;
 
+    const down =
+        lease.cashDue === null || lease.cashDue === undefined
+            ? config.PRICING.lease.defaultLeaseDown
+            : lease.cashDue;
+
     if (!results) {
         try {
             results = yield call(
@@ -66,9 +71,7 @@ function* dealDetailRequestDealQuote() {
                 location.zipcode,
                 roles,
                 source.token,
-                purchaseStrategy === 'lease' && lease.cashDue
-                    ? lease.cashDue
-                    : config.PRICING.lease.defaultLeaseDown,
+                down,
                 tradeIn.value,
                 tradeIn.owed
             );

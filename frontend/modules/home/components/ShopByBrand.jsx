@@ -36,7 +36,7 @@ export default class extends React.Component {
                 entity: 'model',
                 sort: 'payment',
                 filters: filteredMakes[s].query,
-                purchaseStrategy: 'finance',
+                purchaseStrategy: 'lease',
             };
 
             return (

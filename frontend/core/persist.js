@@ -1,10 +1,9 @@
 import storage from 'redux-persist/lib/storage';
-
-const APPLICATION_VERSION = 30;
+import config from './config';
 
 export const basePersistConfig = {
     storage,
-    version: APPLICATION_VERSION,
+    version: config.APPLICATION_VERSION,
     migrate: (state, currentVersion) => {
         if (
             state === undefined ||

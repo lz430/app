@@ -4,8 +4,7 @@ namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
 use App\Models\Feature;
-use DeliverMyRide\JATO\JatoClient;
-use GuzzleHttp\Exception\ClientException;
+use App\Models\JATO\Version;
 
 class DealCompareData
 {
@@ -31,46 +30,31 @@ class DealCompareData
         'General',
     ];
 
-    /* @var \DeliverMyRide\JATO\JatoClient */
-    private $client;
-
     /* @var \App\Models\Deal */
     private $deal;
 
-    private $potentialEquipment;
     private $standardEquipmentText;
     private $equipmentOnDeal;
 
-    public function __construct(JatoClient $client, Deal $deal)
+    public function __construct(Deal $deal)
     {
-        $this->client = $client;
         $this->deal = $deal;
-    }
-
-    private function buildPotentialDealEquipment()
-    {
-        try {
-            return $this->client->equipment->get($this->deal->version->jato_vehicle_id)->results;
-        } catch (ClientException $e) {
-            return [];
-        }
     }
 
     private function buildStandardEquipmentText()
     {
-        try {
-            return $this->client->standard->get($this->deal->version->jato_vehicle_id, '', '', '1', '5000')->results;
-        } catch (ClientException $e) {
-            return [];
-        }
+        $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
+
+        return $data;
     }
 
     private function findStandardDealEquipment()
     {
-        return $this->potentialEquipment
-            ->reject(function ($equipment) {
-                return $equipment->availability !== 'standard';
-            })->all();
+        $data = Version::with(['equipment' => function ($query) {
+            $query->where('availability', 'standard');
+        }])->where('id', $this->deal->version_id)->get();
+
+        return $data;
     }
 
     private function findOptionalDealEquipment()
@@ -80,27 +64,29 @@ class DealCompareData
             $this->deal->option_codes ? $this->deal->option_codes : []
         );
 
-        return $this->potentialEquipment
-            ->reject(function ($equipment) {
-                return $equipment->availability !== 'optional';
-            })
-            ->reject(function ($equipment) use ($codes) {
-                return ! in_array($equipment->optionCode, $codes);
-            })->all();
+        $data = Version::with(['equipment' => function ($query) {
+            $query->where('availability', 'optional');
+        }])->with(['options' => function ($query) use ($codes) {
+            $query->whereIn('option_code', $codes);
+        }])->where('id', $this->deal->version_id)->get();
+
+        return $data;
     }
 
     private function compileEquipmentData()
     {
         //
         // Build Equipment
-        $equipment = $this->buildPotentialDealEquipment();
-        $this->potentialEquipment = collect($equipment);
+        /*$equipment = $this->buildPotentialDealEquipment();
+        $this->potentialEquipment = collect($equipment);*/
 
         //
         // Build standard text
         $text = [];
         foreach ($this->buildStandardEquipmentText() as $item) {
-            $text[$item->schemaId] = $item;
+            foreach ($item->standard_text as $st) {
+                $text[$st->schema_id] = $st;
+            }
         }
 
         $this->standardEquipmentText = $text;
@@ -114,14 +100,18 @@ class DealCompareData
         $equipments = $this->findStandardDealEquipment();
 
         foreach ($equipments as $equipment) {
-            $data[$equipment->schemaId] = $equipment;
+            foreach ($equipment->equipment as $equip) {
+                $data[$equip->schema_id] = $equip;
+            }
         }
         $this->equipmentOnDeal = $data;
 
         //
         // Find optional equipment
         foreach ($this->findOptionalDealEquipment() as $equipment) {
-            $this->equipmentOnDeal[$equipment->schemaId] = $equipment;
+            foreach ($equipment->equipment as $equip) {
+                $this->equipmentOnDeal[$equip->schema_id] = $equip;
+            }
         }
     }
 
@@ -142,7 +132,7 @@ class DealCompareData
                 $equipmentCategories[$equipment->category] = [];
             }
 
-            $equipmentCategories[$equipment->category][$equipment->schemaId] = $equipment;
+            $equipmentCategories[$equipment->category][$equipment->schema_id] = $equipment;
         }
         $this->equipmentOnDeal = $equipmentCategories;
     }
@@ -151,14 +141,15 @@ class DealCompareData
      * @param $equipment
      * @return mixed
      */
-    private function getLabelsForJatoEquipment($equipment)
+    private function getLabelsForJatoEquipment($equipments)
     {
         $labels = [];
         $attributes = [];
-        foreach ($equipment->attributes as $attribute) {
+
+        foreach ($equipments->attributes as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
-        switch ($equipment->name) {
+        switch ($equipments->name) {
             case 'External dimensions':
                 if (isset($attributes['overall length (in)'])) {
                     $overallLength = isset($attributes['overall length (in)']) ? $attributes['overall length (in)']->value : '';
@@ -195,7 +186,7 @@ class DealCompareData
                 }
                 if (isset($val)) {
                     $formatted = number_format($val->value);
-                    $labels[$equipment->schemaId] = "Weight: {$formatted} (lbs)";
+                    $labels[$equipments->schema_id] = "Weight: {$formatted} (lbs)";
                 }
                 break;
             case 'Tires':
@@ -204,25 +195,25 @@ class DealCompareData
                 }
                 break;
             case 'Engine':
-                $labels[$equipment->schemaId] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";
+                $labels[$equipments->schema_id] = "{$attributes['Liters']->value} v{$attributes['number of cylinders']->value} {$attributes['configuration']->value}";
                 break;
             case 'Fuel':
-                $labels[$equipment->schemaId] = "Fuel Type: {$attributes['Fuel type']->value}";
+                $labels[$equipments->schema_id] = "Fuel Type: {$attributes['Fuel type']->value}";
                 break;
 
             default:
-                $feature = Feature::withJatoSchemaId($equipment->schemaId)->first();
+                $feature = Feature::withJatoSchemaId($equipments->schema_id)->first();
                 if ($feature) {
-                    $labels[$equipment->schemaId] = $feature->title;
+                    $labels[$equipments->schema_id] = $feature->title;
                 } else {
-                    if (isset($this->standardEquipmentText[$equipment->schemaId]) && ! $equipment->optionId) {
-                        if ($this->standardEquipmentText[$equipment->schemaId]->itemName == $this->standardEquipmentText[$equipment->schemaId]->content) {
-                            $labels[$equipment->schemaId] = $this->standardEquipmentText[$equipment->schemaId]->content;
+                    if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
+                        if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
+                            $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
                         } else {
-                            $labels[$equipment->schemaId] = "{$this->standardEquipmentText[$equipment->schemaId]->itemName}: {$this->standardEquipmentText[$equipment->schemaId]->content}";
+                            $labels[$equipments->schema_id] = "{$this->standardEquipmentText[$equipments->schema_id]->item_name}: {$this->standardEquipmentText[$equipments->schema_id]->content}";
                         }
                     } else {
-                        $labels[$equipment->schemaId] = $equipment->name;
+                        $labels[$equipments->schema_id] = $equipments->name;
                     }
                 }
                 break;
@@ -235,6 +226,7 @@ class DealCompareData
     private function labelEquipmentOnDeal()
     {
         $labeledEquipment = [];
+
         foreach ($this->equipmentOnDeal as $category => $equipments) {
             if (! isset($labeledEquipment[$category])) {
                 $labeledEquipment[$category] = [];

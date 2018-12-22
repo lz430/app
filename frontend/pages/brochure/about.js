@@ -26,8 +26,10 @@ class Page extends React.Component {
                         title="About Deliver My Ride"
                         cta={{
                             label: 'Find your new car',
-                            href: '/deal-list',
-                            as: '/filter',
+                            href:
+                                '/deal-list?entity=model&sort=payment&purchaseStrategy=lease',
+                            as:
+                                '/filter?entity=model&sort=payment&purchaseStrategy=lease',
                         }}
                     />
 

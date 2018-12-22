@@ -10,8 +10,6 @@ class OptionService extends BaseService
      * @param string $vehicleId
      * @param string $type
      * @return mixed
-     *
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function get(string $vehicleId, string $type = '')
     {

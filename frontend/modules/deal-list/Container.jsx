@@ -1,15 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { StickyContainer } from 'react-sticky';
-import PropTypes from 'prop-types';
+import { forceCheck } from 'react-lazyload';
+
 import { dealType, filterItemType, nextRouterType } from '../../core/types';
+
 import Loading from '../../components/Loading';
 import { equals } from 'ramda';
 import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
+
 import { getIsPageLoading } from '../../apps/page/selectors';
 
 import ResultsList from './components/ResultsList';
@@ -20,7 +25,6 @@ import FilterPanel from './components/FilterPanel';
 import NoDealsOutOfRange from './components/NoDealsOutOfRange';
 import ModalMakeSelector from './components/ModalMakeSelector';
 import { LargeAndUp, MediumAndDown } from '../../components/Responsive';
-import { forceCheck } from 'react-lazyload';
 
 import {
     initDealListData,
@@ -45,7 +49,7 @@ import {
 
 import { requestDealQuote } from '../../apps/pricing/actions';
 
-import { setPurchaseStrategy } from '../../apps/user/actions';
+import { setPurchaseStrategy, requestLocation } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
 import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
@@ -88,6 +92,7 @@ class Container extends React.Component {
         onSelectModelYear: PropTypes.func.isRequired,
         onClearAllSecondaryFilters: PropTypes.func.isRequired,
         onRequestDealQuote: PropTypes.func.isRequired,
+        onSearchForLocation: PropTypes.func.isRequired,
     };
 
     componentDidMount() {
@@ -233,7 +238,7 @@ class Container extends React.Component {
 
     render() {
         if (this.props.isLoading) {
-            return <Loading />;
+            return <Loading size={4} />;
         }
 
         if (this.props.modelYears === false || this.props.deals === false) {
@@ -243,13 +248,18 @@ class Container extends React.Component {
                 </h1>
             );
         }
-
         if (
             !this.props.userLocation ||
+            this.props.userLocation.is_valid === false ||
             (this.props.userLocation.latitude &&
                 !this.props.userLocation.has_results)
         ) {
-            return <NoDealsOutOfRange />;
+            return (
+                <NoDealsOutOfRange
+                    userLocation={this.props.userLocation}
+                    onSearchForLocation={this.props.onSearchForLocation}
+                />
+            );
         }
 
         return (
@@ -326,6 +336,9 @@ const mapDispatchToProps = dispatch => {
         },
         onRequestDealQuote: (deal, zipcode, paymentType) => {
             return dispatch(requestDealQuote(deal, zipcode, paymentType));
+        },
+        onSearchForLocation: search => {
+            return dispatch(requestLocation(search));
         },
     };
 };
