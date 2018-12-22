@@ -90,8 +90,8 @@ jobs:
       ##################
       - run:
           name: Run PHPunit Unit Tests
-          command:  vendor/bin/phpunit --testsuite unit
+          command:  cd backend && vendor/bin/phpunit --testsuite unit
 
       - run:
           name: Run PHPunit Unit Feature
-          command:  vendor/bin/phpunit --testsuite feature
+          command:  cd backend && vendor/bin/phpunit --testsuite feature
