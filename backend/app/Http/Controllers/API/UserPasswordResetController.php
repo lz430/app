@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\UserPasswordReset;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 
 class UserPasswordResetController extends BaseAPIController
@@ -34,6 +35,7 @@ class UserPasswordResetController extends BaseAPIController
                 404);
         }
 
+        /** @var UserPasswordReset $passwordReset */
         $passwordReset = UserPasswordReset::updateOrCreate(
             [
                 'email' => $user->email
@@ -45,9 +47,7 @@ class UserPasswordResetController extends BaseAPIController
         );
 
         if ($user && $passwordReset) {
-            $user->notify(
-                new UserPasswordResetRequest($user, $passwordReset->token)
-            );
+            Mail::to($user->email)->send((new UserPasswordResetRequest($user, $passwordReset->token)));
         }
 
         return response()->json([
@@ -127,8 +127,7 @@ class UserPasswordResetController extends BaseAPIController
         $user->save();
 
         $passwordReset->delete();
-        $user->notify(new UserPasswordResetSuccess($user));
-
+        Mail::to($user->email)->send((new UserPasswordResetSuccess($user)));
         return response()->json($user);
     }
 }

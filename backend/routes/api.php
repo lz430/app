@@ -45,6 +45,12 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::group(['prefix' => 'password'], function () {
+    Route::post('create', 'UserPasswordResetController@create');
+    Route::get('find/{token}', 'UserPasswordResetController@find');
+    Route::post('reset', 'UserPasswordResetController@reset');
+});
+
 /*
  * Brochure
  */

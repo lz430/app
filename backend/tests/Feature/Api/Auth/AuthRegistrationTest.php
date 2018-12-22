@@ -1,5 +1,5 @@
 <?php
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Auth;
 use App\Mail\UserCreated;
 use Tests\TestCaseWithAuth;
 use Illuminate\Mail\Mailable;
@@ -28,8 +28,8 @@ class AuthRegistrationTest extends TestCaseWithAuth
 
         //
         // Confirm welcome email
-        Mail::assertSent(UserCreated::class, function (Mailable $mailable) use ($payload) {
-            return $mailable->hasTo($payload['email']);
+        Mail::assertSent(UserCreated::class, function (Mailable $mail) use ($payload) {
+            return $mail->hasTo($payload['email']);
         });
     }
 

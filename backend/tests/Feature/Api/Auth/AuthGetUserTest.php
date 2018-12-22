@@ -1,11 +1,10 @@
 <?php
-namespace Tests\Feature\Api;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+namespace Tests\Feature\Api\Auth;
 use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Laravel\Passport\Passport;
 
-class AuthLogoutTest extends TestCaseWithAuth
+class AuthGetUserTest extends TestCaseWithAuth
 {
 
     /** @test */
@@ -20,11 +19,13 @@ class AuthLogoutTest extends TestCaseWithAuth
             'password' => 'myfakepassword'
         ];
 
-        $response = $this->json('GET', 'api/auth/logout', $payload);
+        $response = $this->json('GET', 'api/auth/user', $payload);
         $response
             ->assertJsonStructure(
                 [
-                    'message',
+                    'first_name',
+                    'last_name',
+                    'email',
                 ]
             )
             ->assertStatus(200);
@@ -41,7 +42,7 @@ class AuthLogoutTest extends TestCaseWithAuth
             'password' => 'myfakepassword'
         ];
 
-        $response = $this->json('GET', 'api/auth/logout', $payload);
+        $response = $this->json('GET', 'api/auth/user', $payload);
         $response
             ->assertStatus(401);
     }

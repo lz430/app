@@ -1,11 +1,10 @@
 <?php
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Auth;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\User;
 use Tests\TestCaseWithAuth;
-use Laravel\Passport\Passport;
 
-class AuthGetUserTest extends TestCaseWithAuth
+class AuthLoginTest extends TestCaseWithAuth
 {
 
     /** @test */
@@ -13,38 +12,33 @@ class AuthGetUserTest extends TestCaseWithAuth
     {
         $user = factory(User::class)->make();
         $user->save();
-        Passport::actingAs($user);
-
         $payload = [
             'email' => $user->email,
             'password' => 'myfakepassword'
         ];
 
-        $response = $this->json('GET', 'api/auth/user', $payload);
+        $response = $this->json('POST', 'api/auth/login', $payload);
         $response
             ->assertJsonStructure(
                 [
-                    'first_name',
-                    'last_name',
-                    'email',
-                ]
-            )
-            ->assertStatus(200);
+                    'access_token',
+                    'token_type',
+                    'expires_at'
+                ])->assertStatus(200);
     }
 
     /** @test */
-    public function it_does_not_allow_anon()
+    public function it_rejects_incorrect_password()
     {
         $user = factory(User::class)->make();
         $user->save();
-
         $payload = [
             'email' => $user->email,
-            'password' => 'myfakepassword'
+            'password' => 'wrongpassword'
         ];
 
-        $response = $this->json('GET', 'api/auth/user', $payload);
-        $response
-            ->assertStatus(401);
+        $response = $this->json('POST', 'api/auth/login', $payload);
+        $response->assertStatus(401);
     }
+
 }

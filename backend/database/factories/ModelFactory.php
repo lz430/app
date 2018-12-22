@@ -31,6 +31,13 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\UserPasswordReset::class, function (Faker\Generator $faker) {
+    return [
+        'email' => $faker->unique()->safeEmail,
+        'token' => str_random(10),
+    ];
+});
+
 $factory->define(App\Models\JATO\Manufacturer::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->unique()->company,
