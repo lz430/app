@@ -7,6 +7,8 @@ const app = next({ dev });
 const handle = app.getRequestHandler();
 
 const staticRoutes = require('./staticRoutes');
+const authRoutes = require('./authRoutes');
+const brochureRoutes = require('./brochureRoutes');
 
 app.prepare()
     .then(() => {
@@ -16,6 +18,8 @@ app.prepare()
         }
 
         staticRoutes({ server, app });
+        authRoutes({ server, app });
+        brochureRoutes({ server, app });
 
         server.get('/filter', (req, res) => {
             const queryParams = { ...req.query };
@@ -42,40 +46,12 @@ app.prepare()
             app.render(req, res, '/checkout-complete', queryParams);
         });
 
+        /*
         server.get('/compare', (req, res) => {
             const queryParams = { ...req.query };
             app.render(req, res, '/compare', queryParams);
         });
-
-        //
-        // Brochure Site
-        server.get('/', (req, res) => {
-            app.render(req, res, '/home', req.query);
-        });
-
-        server.get('/how-it-works', (req, res) => {
-            app.render(req, res, '/brochure/how-it-works', req.query);
-        });
-
-        server.get('/faq', (req, res) => {
-            app.render(req, res, '/brochure/faq', req.query);
-        });
-
-        server.get('/about', (req, res) => {
-            app.render(req, res, '/brochure/about', req.query);
-        });
-
-        server.get('/contact', (req, res) => {
-            app.render(req, res, '/brochure/contact', req.query);
-        });
-
-        server.get('/privacy-policy', (req, res) => {
-            app.render(req, res, '/brochure/privacy-policy', req.query);
-        });
-
-        server.get('/terms-of-service', (req, res) => {
-            app.render(req, res, '/brochure/terms-of-service', req.query);
-        });
+        */
 
         //
         // Experiment / Beta Pages
