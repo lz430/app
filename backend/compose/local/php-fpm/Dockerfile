@@ -41,6 +41,13 @@ RUN pecl install xdebug && \
 # Copy xdebug configuration for remote debugging
 COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
+###########################################################################
+# Phpuit:
+###########################################################################
+RUN wget https://phar.phpunit.de/phpunit-6.5.phar
+RUN chmod +x phpunit-6.5.phar
+RUN mv phpunit-6.5.phar /usr/local/bin/phpunit
+RUN phpunit --version
 
 ###########################################################################
 # Final Thoughts:

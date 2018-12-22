@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 /**
  * App\Models\User.
@@ -55,6 +56,7 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use CrudTrait;
     use HasRoles;
+    use HasApiTokens;
 
     /**
      * @var array
