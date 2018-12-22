@@ -252,7 +252,7 @@ class VersionMunger
                 'location' => $equip->location,
                 'availability' => $equip->availability,
                 'value' => $equip->value,
-                'aspects' => $equip->aspects,
+                'aspects' => isset($equip->aspects) ? $equip->aspects : [],
             ];
             Equipment::updateOrCreate($data);
         }
