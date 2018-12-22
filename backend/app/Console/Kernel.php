@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         Commands\ImportVautoMapData::class,
         Commands\Tests\TestCoxAPI::class,
         Commands\Tests\TestHubSpotForm::class,
+        Commands\Tests\TestEmail::class,
         Commands\Version\VersionFillMissingPhotos::class,
         Commands\Version\VersionGenerateQuotes::class,
         Commands\Version\VersionRefresh::class,
