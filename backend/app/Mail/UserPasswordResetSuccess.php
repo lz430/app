@@ -2,13 +2,12 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
-
-class UserCreated extends Mailable
+class UserPasswordResetSuccess extends Mailable
 {
     use Queueable, SerializesModels;
 

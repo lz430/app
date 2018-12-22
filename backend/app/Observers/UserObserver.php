@@ -18,6 +18,6 @@ class UserObserver
     {
         //
         // Send welcome email
-        Mail::to($user->email)->send(new UserCreated());
+        Mail::to($user->email)->send(new UserCreated($user));
     }
 }

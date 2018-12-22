@@ -2,32 +2,31 @@
 
 namespace App\Mail;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use App\Models\User;
 
 
-class UserCreated extends Mailable
+class UserPasswordResetRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
     const VIEW = 'emails.user-created';
 
-    /**
-     * The User instance.
-     *
-     * @var User
-     */
+    /** @var User  */
     public $user;
 
+    public $token;
+
     /**
-     * UserCreated constructor.
-     * @param User $User
+     * @param User $user
+     * @param string $token
      */
-    public function __construct(User $User)
+    public function __construct(User $user, string $token)
     {
-        $this->user = $User;
+        $this->user = $user;
+        $this->token = $token;
     }
 
     public function build()

@@ -13,7 +13,6 @@ class AuthRegistrationTest extends TestCaseWithAuth
     {
         Mail::fake();
 
-
         //
         // Create User
         $payload = [
