@@ -3,6 +3,11 @@ import React from 'react';
 import config from '../core/config';
 
 export default class MyDocument extends Document {
+    static async getInitialProps(ctx) {
+        const initialProps = await Document.getInitialProps(ctx);
+        return { ...initialProps };
+    }
+
     render() {
         return (
             <html>
