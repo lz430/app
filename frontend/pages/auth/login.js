@@ -9,15 +9,16 @@ import LoginForm from '../../modules/login/components/LoginForm';
 import Link from 'next/link';
 import { NextAuth } from 'next-auth/client';
 
-export default class Page extends React.Component {
-    static async getInitialProps(req) {
-        return {
-            session: await NextAuth.init({ req, force: true }),
-            //linkedAccounts: await NextAuth.linked({req}),
-            //providers: await NextAuth.providers({req})
-        };
+import Page from '../../components/Page';
+
+export default class Login extends Page {
+    static async getInitialProps({ req, res, query }) {
+        let props = await super.getInitialProps({ req });
+        props.session = await NextAuth.init({ force: true, req: req });
+        return props;
     }
 
+    /*
     async componentDidMount() {
         // Get latest session data after rendering on client then redirect.
         // The ensures client state is always updated after signing in or out.
@@ -29,6 +30,7 @@ export default class Page extends React.Component {
         }
         console.log(session);
     }
+    */
 
     render() {
         console.log(this.props);

@@ -15,12 +15,13 @@ import { PersistGate } from 'redux-persist/integration/react';
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
 class MyApp extends App {
-    static async getInitialProps({ Component, ctx }) {
+    static async getInitialProps({ Component, /*router, */ ctx }) {
         let pageProps = {};
+
         if (Component.getInitialProps) {
-            pageProps = await Component.getInitialProps({ ctx });
+            pageProps = await Component.getInitialProps(ctx);
         }
-        pageProps.test = 'TEST';
+
         return { pageProps };
     }
 
