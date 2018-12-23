@@ -20,6 +20,7 @@ class MyApp extends App {
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps({ ctx });
         }
+        pageProps.test = 'TEST';
         return { pageProps };
     }
 
@@ -75,6 +76,7 @@ class MyApp extends App {
     render() {
         const { Component, pageProps, store } = this.props;
         const pathname = this.props.router.pathname;
+
         //
         // Client
         if (store.__persistor) {

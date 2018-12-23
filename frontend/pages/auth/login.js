@@ -7,9 +7,31 @@ import { Container, Row, Col } from 'reactstrap';
 import LoginForm from '../../modules/login/components/LoginForm';
 
 import Link from 'next/link';
+import { NextAuth } from 'next-auth/client';
 
 export default class Page extends React.Component {
+    static async getInitialProps(req) {
+        return {
+            session: await NextAuth.init({ req, force: true }),
+            //linkedAccounts: await NextAuth.linked({req}),
+            //providers: await NextAuth.providers({req})
+        };
+    }
+
+    async componentDidMount() {
+        // Get latest session data after rendering on client then redirect.
+        // The ensures client state is always updated after signing in or out.
+        const session = await NextAuth.init({ force: true });
+        if (!session.views) {
+            session.views = 1;
+        } else {
+            session.views++;
+        }
+        console.log(session);
+    }
+
     render() {
+        console.log(this.props);
         return (
             <React.Fragment>
                 <Head>
