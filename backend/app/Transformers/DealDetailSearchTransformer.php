@@ -49,6 +49,7 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'options' => isset($deal->options) ? $deal->options : [],
             'packages' => isset($deal->packages) ? $deal->packages : [],
             'equipment' => isset($deal->equipment) ? $deal->equipment : [],
+            'overview' => isset($deal->overview) ? $deal->overview : [],
 
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,

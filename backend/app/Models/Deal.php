@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
+use DeliverMyRide\JATO\Manager\BuildOverviewData;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -319,6 +320,17 @@ class Deal extends Model
                         'type' => 'text',
                     ],
                     'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
+            'overview' => [
+                'type' => 'nested',
+                'properties' => [
+                    'name' => [
                         'type' => 'text',
                     ],
                     'value' => [
@@ -899,6 +911,10 @@ class Deal extends Model
                 'invoice_price' => $package->invoice_price,
             ];
         }
+
+        // Overview data for detail page
+        $record['overview'] = [];
+        $record['overview'][] = (new BuildOverviewData())->build($this);
 
         // Equipment on car
         $record['equipment'] = [];
