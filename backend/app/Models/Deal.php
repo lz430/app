@@ -881,24 +881,29 @@ class Deal extends Model
         $record['dealer'] = $this->dealer->toIndexData();
 
         $record['options'] = [];
-        foreach ($this->version->options()->where('option_type', 'O')->whereIn('option_code', $this->option_codes)->get() as $option) {
-            $record['options'][] = [
-                'option_name' => $option->option_name,
-                'option_code' => $option->option_code,
-                'msrp' => $option->msrp,
-                'invoice_price' => $option->invoice_price,
-            ];
+        if ($this->option_codes != null) {
+            foreach ($this->version->options()->where('option_type', 'O')->whereIn('option_code', $this->option_codes)->get() as $option) {
+                $record['options'][] = [
+                    'option_name' => $option->option_name,
+                    'option_code' => $option->option_code,
+                    'msrp' => $option->msrp,
+                    'invoice_price' => $option->invoice_price,
+                ];
+            }
         }
 
         $record['packages'] = [];
-        foreach ($this->version->options()->where('option_type', 'P')->whereIn('option_code', $this->package_codes)->get() as $package) {
-            $record['packages'][] = [
-                'option_name' => $package->option_name,
-                'option_code' => $package->option_code,
-                'msrp' => $package->msrp,
-                'invoice_price' => $package->invoice_price,
-            ];
+        if ($this->package_codes != null) {
+            foreach ($this->version->options()->where('option_type', 'P')->whereIn('option_code', $this->package_codes)->get() as $package) {
+                $record['packages'][] = [
+                    'option_name' => $package->option_name,
+                    'option_code' => $package->option_code,
+                    'msrp' => $package->msrp,
+                    'invoice_price' => $package->invoice_price,
+                ];
+            }
         }
+
 
         // Equipment on car
         $record['equipment'] = [];
