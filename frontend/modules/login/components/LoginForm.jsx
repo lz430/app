@@ -1,13 +1,16 @@
 import React from 'react';
 import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import { string, object } from 'yup';
 
-import { Button, FormGroup, Label } from 'reactstrap';
+import { Alert, Button, FormGroup, Label } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
+
+import ApiClient from '../../../store/api';
+import { track } from '../../../core/services';
 
 const validationSchema = object().shape({
     email: string().required(),
@@ -19,14 +22,35 @@ const initialFormValues = {
     password: '',
 };
 
+/**
+ * Formik doens't support global form errors.
+ * @see https://github.com/jaredpalmer/formik/issues/711
+ */
 class LoginForm extends React.Component {
     state = {
-        success: false,
-        values: null,
+        globalFormError: null,
     };
 
     handleOnSubmit(values, actions) {
-        actions.setSubmitting(false);
+        ApiClient.user
+            .login(values.email, values.password)
+            .then(() => {
+                console.log('WINNING');
+                this.setState({ success: true });
+            })
+            .catch(error => {
+                const formErrors = ApiClient.translateApiErrors(
+                    error.response.data
+                );
+                if (formErrors.form) {
+                    this.setState({ globalFormError: formErrors['form'] });
+                } else {
+                    actions.setErrors(ApiClient.translateApiErrors(formErrors));
+                }
+            })
+            .then(() => {
+                actions.setSubmitting(false);
+            });
     }
 
     render() {
@@ -69,7 +93,12 @@ class LoginForm extends React.Component {
 
                     return (
                         <Form>
-                            <div className="p-2">
+                            <div className="p-3">
+                                {this.state.globalFormError && (
+                                    <Alert className="text-sm text-center">
+                                        {this.state.globalFormError}
+                                    </Alert>
+                                )}
                                 <FormGroup>
                                     <Label for="email">Email Address</Label>
                                     <FormikFieldWithBootstrapInput
@@ -89,9 +118,9 @@ class LoginForm extends React.Component {
                                     />
                                 </FormGroup>
                             </div>
-                            <div className="text-center pt-1 pb-1">
+                            <div className="text-center pb-1 text-sm">
                                 <Link href="/auth/forgot" as="/forgot" passHref>
-                                    <a>Reset My Password</a>
+                                    <a>Reset my password</a>
                                 </Link>
                             </div>
                             <div className="p-2">{button}</div>

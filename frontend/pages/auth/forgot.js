@@ -16,16 +16,16 @@ export default class Page extends React.Component {
                 <Container>
                     <Row>
                         <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
-                            <div className="bg-white border border-light shadow-sm">
-                                <h4 className="m-0 p-2 bg-light">
-                                    Reset Password
+                            <div className="bg-white border border-light rounded shadow-sm">
+                                <h4 className="m-0 p-3">
+                                    Request Password Reset
                                 </h4>
                                 <ForgotForm />
                             </div>
 
                             <div className="text-center pt-1">
                                 <Link href="/auth/login" as="/login" passHref>
-                                    <a>Back to Login</a>
+                                    <a>Back to login</a>
                                 </Link>
                             </div>
                         </Col>

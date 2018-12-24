@@ -2,6 +2,8 @@ const express = require('express');
 const next = require('next');
 const compression = require('compression');
 const cookiesMiddleware = require('universal-cookie-express');
+const session = require('express-session');
+const MemoryStore = require('memorystore')(session);
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -16,12 +18,28 @@ const brochureRoutes = require('./brochureRoutes');
 
 app.prepare()
     .then(async () => {
+        /*
         // Load configuration and return config object
         const nextAuthOptions = await nextAuthConfig();
 
         // Pass Next.js App instance and NextAuth options to NextAuth
         const nextAuthApp = await nextAuth(app, nextAuthOptions);
         const server = nextAuthApp.expressApp;
+        */
+
+        const server = express();
+
+        server.use(
+            session({
+                secret: 'keyboard cat',
+                resave: false,
+                saveUninitialized: true,
+                //cookie: { secure: true },
+                store: new MemoryStore({
+                    checkPeriod: 86400000,
+                }),
+            })
+        );
 
         if (!dev) {
             server.use(compression());
@@ -80,6 +98,7 @@ app.prepare()
         });
 
         // Default catch-all handler to allow Next.js to handle all other routes
+        /*
         server.all('*', (req, res) => {
             let nextRequestHandler = app.getRequestHandler();
             return nextRequestHandler(req, res);
@@ -92,6 +111,18 @@ app.prepare()
             console.log(
                 '> Ready on http://localhost:' + 3000 + ' [' + 3000 + ']'
             );
+        });
+        */
+
+        server.get('*', (req, res) => {
+            return handle(req, res);
+        });
+
+        server.listen(3000, err => {
+            if (err) {
+                throw err;
+            }
+            console.log('> Ready on http://localhost:3000');
         });
     })
     .catch(ex => {

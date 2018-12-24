@@ -12,6 +12,7 @@ import { NextAuth } from 'next-auth/client';
 import Page from '../../components/Page';
 
 export default class Login extends Page {
+    /*
     static async getInitialProps({ req, res, query }) {
         let props = await super.getInitialProps({ req });
         props.session = await NextAuth.init({ req: req });
@@ -23,9 +24,9 @@ export default class Login extends Page {
         // Get latest session data after rendering on client then redirect.
         // The ensures client state is always updated after signing in or out.
         const session = await NextAuth.init({});
-        console.log(session);
+        console.log("componentDidMount", session);
     }
-
+    */
     render() {
         return (
             <React.Fragment>
@@ -35,13 +36,13 @@ export default class Login extends Page {
                 <Container>
                     <Row>
                         <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
-                            <div className="bg-white border border-light shadow-sm">
-                                <h4 className="m-0 p-2 bg-light">Login</h4>
+                            <div className="bg-white border border-light shadow-sm rounded">
+                                <h4 className="m-0 p-3">Login</h4>
                                 <LoginForm />
                             </div>
                             <div className="text-center pt-1">
                                 <Link href="/auth/signup" as="/signup" passHref>
-                                    <a>Create New Account</a>
+                                    <a>Create new account</a>
                                 </Link>
                             </div>
                         </Col>

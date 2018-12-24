@@ -74,7 +74,7 @@ class SignupForm extends React.Component {
 
                     return (
                         <Form>
-                            <div className="p-2">
+                            <div className="p-3">
                                 <FormGroup>
                                     <Label for="first_name">First Name</Label>
                                     <FormikFieldWithBootstrapInput

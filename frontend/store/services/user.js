@@ -5,6 +5,19 @@ import httpclient from '../httpclient';
  */
 class UserService {
     /**
+     *
+     * @param email
+     * @param password
+     * @returns {*}
+     */
+    login(email, password) {
+        return httpclient.post('/api/auth/login', {
+            email: email,
+            password: password,
+        });
+    }
+
+    /**
      * @param search
      * @param lat
      * @param lon

@@ -59,12 +59,7 @@ class AuthController extends BaseAPIController
         $credentials = request(['email', 'password']);
 
         if (! Auth::attempt($credentials)) {
-            return response()->json(
-                [
-                    'message' => 'Unauthorized',
-                ],
-                401
-            );
+            return $this->respondWithGlobalFormError("Email and password combination incorrect");
         }
 
         $user = $request->user();

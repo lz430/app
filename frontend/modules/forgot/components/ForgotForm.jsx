@@ -61,7 +61,7 @@ class ForgotForm extends React.Component {
 
                     return (
                         <Form>
-                            <div className="p-2">
+                            <div className="p-3">
                                 <FormGroup>
                                     <Label for="email">Email Address</Label>
                                     <FormikFieldWithBootstrapInput
