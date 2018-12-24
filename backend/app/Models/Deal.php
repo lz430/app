@@ -330,7 +330,10 @@ class Deal extends Model
             'overview' => [
                 'type' => 'nested',
                 'properties' => [
-                    'name' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
                         'type' => 'text',
                     ],
                     'value' => [
@@ -919,7 +922,7 @@ class Deal extends Model
 
         // Overview data for detail page
         $record['overview'] = [];
-        $record['overview'][] = (new BuildOverviewData())->build($this);
+        $record['overview'] = (new BuildOverviewData())->build($this);
 
         // Equipment on car
         $record['equipment'] = [];
