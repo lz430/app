@@ -20,20 +20,14 @@ const nextAuthFunctions = require('./next-auth.functions');
 // If we want to pass a custom session store then we also need to pass an
 // instance of Express Session along with it.
 const expressSession = require('express-session');
-const MongoStore = require('connect-mongo')(expressSession);
-
+const MemoryStore = require('memorystore')(expressSession);
 // If no store set, NextAuth defaults to using Express Sessions in-memory
 // session store (the fallback is intended as fallback for testing only).
 let sessionStore;
-if (process.env.MONGO_URI) {
-    sessionStore = new MongoStore({
-        url: process.env.MONGO_URI,
-        autoRemove: 'interval',
-        autoRemoveInterval: 10, // Removes expired sessions every 10 minutes
-        collection: 'sessions',
-        stringify: false,
-    });
-}
+
+sessionStore = new MemoryStore({
+    checkPeriod: 86400000, // prune expired entries every 24h
+});
 
 module.exports = () => {
     // We connect to the User DB before we define our functions.

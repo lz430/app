@@ -14,26 +14,19 @@ import Page from '../../components/Page';
 export default class Login extends Page {
     static async getInitialProps({ req, res, query }) {
         let props = await super.getInitialProps({ req });
-        props.session = await NextAuth.init({ force: true, req: req });
+        props.session = await NextAuth.init({ req: req });
+        console.log(props.session);
         return props;
     }
 
-    /*
     async componentDidMount() {
         // Get latest session data after rendering on client then redirect.
         // The ensures client state is always updated after signing in or out.
-        const session = await NextAuth.init({ force: true });
-        if (!session.views) {
-            session.views = 1;
-        } else {
-            session.views++;
-        }
+        const session = await NextAuth.init({});
         console.log(session);
     }
-    */
 
     render() {
-        console.log(this.props);
         return (
             <React.Fragment>
                 <Head>
