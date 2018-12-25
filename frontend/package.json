@@ -58,7 +58,7 @@
         "next": "^7.0.2",
         "next-auth": "^1.12.1",
         "next-redux-saga": "^3.0.0",
-        "next-redux-wrapper": "^2.0.0",
+        "next-redux-wrapper": "2.0.0",
         "node-sass": "^4.9.4",
         "nodemailer": "^4.7.0",
         "nodemailer-direct-transport": "^3.3.2",

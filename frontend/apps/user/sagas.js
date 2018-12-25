@@ -7,6 +7,7 @@ import { receiveLocation } from './actions';
 import { getCurrentPage } from '../../apps/page/selectors';
 import { requestSearch } from '../../modules/deal-list/actions';
 import { getUserLocation } from './selectors';
+import { storeSessionData } from '../../util/sessions';
 
 /*******************************************************************
  * Request IP Location
@@ -37,15 +38,29 @@ export function* requestIpLocation() {
  ********************************************************************/
 
 export function* requestLocation(data) {
-    let location = null;
+    let newData;
+    let location;
 
     try {
         location = yield call(api.user.getLocation, data.data);
         location = location.data;
+        newData = {
+            latitude: location.location.latitude,
+            longitude: location.location.longitude,
+            zipcode: location.location.zip,
+            city: location.location.city,
+            state: location.location.state,
+            has_results: location.location.has_results,
+            is_valid: true,
+        };
+        location = newData;
     } catch (e) {
-        console.log(e);
+        location = {
+            is_valid: false,
+            has_results: false,
+        };
     }
-
+    storeSessionData({ location: location }, data.session);
     yield put(receiveLocation(location));
 
     //

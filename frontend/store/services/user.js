@@ -1,4 +1,4 @@
-import httpclient from '../httpclient';
+import httpclient, { sessionClient } from '../httpclient';
 
 /**
  * User specific API calls.
@@ -15,6 +15,10 @@ class UserService {
             email: email,
             password: password,
         });
+    }
+
+    setSession(data) {
+        return sessionClient.post('/session', data);
     }
 
     /**

@@ -1,9 +1,9 @@
 export const getUserLocation = state => {
-    return state.user.location;
+    return state.session.location;
 };
 
 export const getUserZipcode = state => {
-    return state.user.location.zipcode;
+    return state.session.location.zipcode;
 };
 
 export const getUserPurchaseStrategy = state => {

@@ -34,4 +34,5 @@ export default combineReducers({
     checkout: appCheckoutReducer,
     page: appPageReducer,
     pages: persistReducer(pagesPersistConfig, pagesReducer),
+    session: (state = {}) => state,
 });

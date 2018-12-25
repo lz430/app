@@ -18,10 +18,11 @@ export function receiveLocation(data) {
     };
 }
 
-export function requestLocation(data) {
+export function requestLocation(data, session = null) {
     return {
         type: ActionTypes.REQUEST_LOCATION,
         data: data,
+        session: session,
     };
 }
 

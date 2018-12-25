@@ -9,7 +9,7 @@ import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import * as Sentry from '@sentry/browser';
 import config from '../core/config';
-import { requestLocation } from '../apps/user/actions';
+import { requestLocation, receiveLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
@@ -20,14 +20,28 @@ class MyApp extends App {
 
         const isServer = !!ctx.req;
 
-        console.log('GET INIT PROPS');
-
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx);
         }
 
         if (isServer) {
-            await ctx.store.dispatch(requestLocation());
+            //
+            // Location
+            if (!ctx.req.session.location) {
+                await ctx.store.dispatch(
+                    requestLocation(null, ctx.req.session)
+                );
+            } else {
+                console.log('SET');
+                console.log(ctx.req.session.location);
+                await receiveLocation({ location: ctx.req.session.location });
+            }
+
+            //
+            // User
+
+            //
+            // Token
         }
 
         return { pageProps };

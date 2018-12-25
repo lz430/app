@@ -15,6 +15,7 @@ const nextAuthConfig = require('../next-auth.config');
 const staticRoutes = require('./staticRoutes');
 const authRoutes = require('./authRoutes');
 const brochureRoutes = require('./brochureRoutes');
+const sessionRoutes = require('./sessionRoutes');
 
 app.prepare()
     .then(async () => {
@@ -28,7 +29,7 @@ app.prepare()
         */
 
         const server = express();
-
+        server.use(express.json());
         server.use(
             session({
                 secret: 'keyboard cat',
@@ -48,6 +49,7 @@ app.prepare()
         staticRoutes({ server, app });
         authRoutes({ server, app });
         brochureRoutes({ server, app });
+        sessionRoutes({ server, app });
 
         server.get('/filter', (req, res) => {
             const queryParams = { ...req.query };

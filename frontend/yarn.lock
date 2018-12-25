@@ -5998,10 +5998,10 @@ next-redux-saga@^3.0.0:
   resolved "https://registry.yarnpkg.com/next-redux-saga/-/next-redux-saga-3.0.0.tgz#8a934483fc48149ff1fd6f091fbbbf884fd2883b"
   integrity sha512-uc7CgbS03sZUQEdlkiUEP5J/ZGRMvq417BPYD5x7qqyowCyeus3Gtooo801vCM1PvSHlv/WU8BqoQX1cYzhCpg==
 
-next-redux-wrapper@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-2.1.0.tgz#ad5e0abbe3859ea5f9f4c981a76406374c13f64e"
-  integrity sha512-9Z/6bfVxVF+npBAhK5AgjanFe2pAP4UOP1hC/d1kXit0z0Lt84FopI1BxYIGgJLGXctLT4ein2F8pYms8QrnYg==
+next-redux-wrapper@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-2.0.0.tgz#74587381ff9c762cd85676d9739a51a3aeceed58"
+  integrity sha512-QcaEK7pUelShCk6Epajvp3MZrktt/0bVR0f2ssaZtQ270q80zLhKIKFkVZL8uwqXMnSJInZDSwcAhYhn8/Rpsw==
 
 next@^7.0.2:
   version "7.0.2"

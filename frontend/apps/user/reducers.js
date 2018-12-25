@@ -36,29 +36,10 @@ const reducer = function(state = initialState, action = {}) {
             };
 
         case ActionTypes.RECEIVE_LOCATION:
-            if (action.data && action.data.location) {
-                return {
-                    ...state,
-                    location: {
-                        ...state.location,
-                        latitude: action.data.location.latitude,
-                        longitude: action.data.location.longitude,
-                        zipcode: action.data.location.zip,
-                        city: action.data.location.city,
-                        state: action.data.location.state,
-                        has_results: action.data.has_results,
-                        is_valid: true,
-                    },
-                };
-            } else {
-                return {
-                    ...state,
-                    location: {
-                        is_valid: false,
-                        has_results: false,
-                    },
-                };
-            }
+            return {
+                ...state,
+                location: action.data,
+            };
 
         default:
             return state;

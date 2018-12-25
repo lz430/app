@@ -5,7 +5,9 @@ import config from '../core/config';
 export default class MyDocument extends Document {
     static async getInitialProps(ctx) {
         const initialProps = await Document.getInitialProps(ctx);
-        return { ...initialProps };
+        const session = ctx.req.session;
+
+        return { ...initialProps, session };
     }
 
     render() {
@@ -22,6 +24,14 @@ export default class MyDocument extends Document {
                     <link
                         href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
                         rel="stylesheet"
+                    />
+
+                    <script
+                        id="session"
+                        type="application/json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(this.props.session, null, 2),
+                        }}
                     />
 
                     {config['REACT_APP_ENVIRONMENT'] === 'production' && (
