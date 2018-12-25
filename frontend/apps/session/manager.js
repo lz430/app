@@ -1,5 +1,10 @@
-import api from '../store/api';
+import api from '../../store/api';
 
+/**
+ *
+ * @param data
+ * @param session
+ */
 export const storeSessionData = (data, session) => {
     if (session) {
         Object.keys(data).map(key => {

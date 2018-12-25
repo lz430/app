@@ -7,7 +7,8 @@ import { receiveLocation } from './actions';
 import { getCurrentPage } from '../../apps/page/selectors';
 import { requestSearch } from '../../modules/deal-list/actions';
 import { getUserLocation } from './selectors';
-import { storeSessionData } from '../../util/sessions';
+import { storeSessionData } from '../session/manager';
+import { softUpdateSessionData } from '../session/actions';
 
 /*******************************************************************
  * Request IP Location
@@ -61,7 +62,7 @@ export function* requestLocation(data) {
         };
     }
     storeSessionData({ location: location }, data.session);
-    yield put(receiveLocation(location));
+    yield put(softUpdateSessionData({ location: location }));
 
     //
     // TODO: This is going to get sketchy long term.
