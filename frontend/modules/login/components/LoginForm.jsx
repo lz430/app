@@ -1,6 +1,6 @@
 import React from 'react';
 import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
-import { Formik, Form, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
 
 import { Alert, Button, FormGroup, Label } from 'reactstrap';
@@ -10,7 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
 import ApiClient from '../../../store/api';
-import { track } from '../../../core/services';
+import PropTypes from 'prop-types';
+import { nextRouterType } from '../../../core/types';
 
 const validationSchema = object().shape({
     email: string().required(),
@@ -27,30 +28,21 @@ const initialFormValues = {
  * @see https://github.com/jaredpalmer/formik/issues/711
  */
 class LoginForm extends React.Component {
+    static propTypes = {
+        loginUser: PropTypes.func.isRequired,
+    };
+
     state = {
         globalFormError: null,
     };
 
+    handleGlobalFormErrors(errors) {
+        this.setState({ globalFormError: errors['form'] });
+    }
+
     handleOnSubmit(values, actions) {
-        ApiClient.user
-            .login(values.email, values.password)
-            .then(() => {
-                console.log('WINNING');
-                this.setState({ success: true });
-            })
-            .catch(error => {
-                const formErrors = ApiClient.translateApiErrors(
-                    error.response.data
-                );
-                if (formErrors.form) {
-                    this.setState({ globalFormError: formErrors['form'] });
-                } else {
-                    actions.setErrors(ApiClient.translateApiErrors(formErrors));
-                }
-            })
-            .then(() => {
-                actions.setSubmitting(false);
-            });
+        actions.handleGlobalFormErrors = this.handleGlobalFormErrors.bind(this);
+        this.props.loginUser(values, actions);
     }
 
     render() {

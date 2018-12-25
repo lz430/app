@@ -1,4 +1,7 @@
-const setup = ({ server, app }) => {
+const setup = ({ server /*app*/ }) => {
+    /**
+     * Used when the client needs to update the session
+     */
     server.post('/session', function(req, res) {
         Object.keys(req.body).map(key => {
             req.session[key] = req.body[key];

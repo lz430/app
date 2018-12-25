@@ -2,13 +2,21 @@ import { put, call, select, takeEvery } from 'redux-saga/effects';
 
 import api from '../../store/api';
 
-import { REQUEST_IP_LOCATION_INFO, REQUEST_LOCATION } from './consts';
+import {
+    REQUEST_IP_LOCATION_INFO,
+    REQUEST_LOCATION,
+    LOGIN_USER,
+} from './consts';
 import { receiveLocation } from './actions';
+import { getUserLocation } from './selectors';
+
 import { getCurrentPage } from '../../apps/page/selectors';
 import { requestSearch } from '../../modules/deal-list/actions';
-import { getUserLocation } from './selectors';
 import { storeSessionData } from '../session/manager';
 import { softUpdateSessionData } from '../session/actions';
+import { setCookie } from 'nookies';
+
+import Router from 'next/router';
 
 /*******************************************************************
  * Request IP Location
@@ -73,6 +81,75 @@ export function* requestLocation(data) {
 }
 
 /*******************************************************************
+ * Login
+ ********************************************************************/
+
+export function* loginUser(data) {
+    const values = data.values;
+    const formActions = data.actions;
+
+    let token, user;
+
+    //
+    // Log User In
+    try {
+        token = yield call(api.user.login, values.email, values.password);
+        token = token.data;
+    } catch (error) {
+        console.log(error);
+        const formErrors = api.translateApiErrors(error.response.data);
+
+        if (formErrors.form) {
+            formActions.handleGlobalFormErrors(formErrors);
+        } else {
+            formActions.setErrors(formErrors);
+        }
+
+        formActions.setSubmitting(false);
+    }
+
+    //
+    // Store the token in a cookie
+    if (token) {
+        setCookie(null, 'token', token['access_token'], {
+            maxAge: 30 * 24 * 60 * 60,
+            path: '/',
+        });
+    }
+
+    //
+    // Fetch User
+    try {
+        user = yield call(api.user.me);
+        user = user.data;
+    } catch (error) {
+        formActions.handleGlobalFormErrors({
+            globalFormError: 'Unable to fetch user',
+        });
+        formActions.setSubmitting(false);
+    }
+
+    //
+    // Store the user in the session
+    if (user) {
+        storeSessionData({ user: user });
+    }
+
+    //
+    // Soft update the session
+    if (user) {
+        yield put(softUpdateSessionData({ user: user }));
+    }
+
+    //
+    // Redirect to my account for testing
+    formActions.setSubmitting(false);
+    if (token && user) {
+        Router.push('/auth/my-account', 'my-account');
+    }
+}
+
+/*******************************************************************
  * Watchers
  ********************************************************************/
 export function* watchIPRequestLocationInfo() {
@@ -81,4 +158,8 @@ export function* watchIPRequestLocationInfo() {
 
 export function* watchRequestLocation() {
     yield takeEvery(REQUEST_LOCATION, requestLocation);
+}
+
+export function* watchLogin() {
+    yield takeEvery(LOGIN_USER, loginUser);
 }

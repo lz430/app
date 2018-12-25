@@ -4,6 +4,10 @@ import httpclient from '../httpclient';
  * Browse specific API calls.
  */
 class BrowseService {
+    constructor(client) {
+        this.client = client;
+    }
+
     /**
      * Searches for deals and model years.
      *

@@ -34,3 +34,17 @@ export function setPurchaseStrategy(data) {
         data: data,
     };
 }
+
+/**
+ *
+ * @param values
+ * @param actions
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function loginUser(values, actions) {
+    return {
+        type: ActionTypes.LOGIN_USER,
+        values: values,
+        actions: actions,
+    };
+}

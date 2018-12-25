@@ -4,6 +4,12 @@ import httpclient, { sessionClient } from '../httpclient';
  * User specific API calls.
  */
 class UserService {
+    client;
+
+    constructor(client) {
+        this.client = client;
+    }
+
     /**
      *
      * @param email
@@ -17,9 +23,12 @@ class UserService {
         });
     }
 
-    setSession(data) {
-        return sessionClient.post('/session', data);
-    }
+    me = () => {
+        const token = this.client.token();
+        return httpclient.get('/api/auth/user', {
+            headers: { Authorization: 'Bearer ' + token['token'] },
+        });
+    };
 
     /**
      * @param search
@@ -53,6 +62,15 @@ class UserService {
      */
     postNotifyWhenInRange(email) {
         return httpclient.post('/api/hubspot/not-in-area', { email });
+    }
+
+    /**
+     * Calls the express session storage url. Used for the client set info in the session.
+     * @param data
+     * @returns {*}
+     */
+    setSession(data) {
+        return sessionClient.post('/session', data);
     }
 }
 

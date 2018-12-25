@@ -11,6 +11,7 @@ import * as Sentry from '@sentry/browser';
 import config from '../core/config';
 import { requestLocation, receiveLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
+import { softUpdateSessionData } from '../apps/session/actions';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
@@ -32,14 +33,9 @@ class MyApp extends App {
                     requestLocation(null, ctx.req.session)
                 );
             } else {
-                await receiveLocation({ location: ctx.req.session.location });
+                //await softUpdateSessionData({ location: ctx.req.session.location });
             }
-
-            //
-            // User
-
-            //
-            // Token
+            await softUpdateSessionData(ctx.req.session);
         }
 
         return { pageProps };

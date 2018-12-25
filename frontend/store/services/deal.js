@@ -5,6 +5,10 @@ import httpclient from '../httpclient';
  * financing / etc.
  */
 class DealService {
+    constructor(client) {
+        this.client = client;
+    }
+
     /**
      *
      * @param dealId

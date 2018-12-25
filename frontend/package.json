@@ -55,6 +55,7 @@
         "next-redux-saga": "^3.0.0",
         "next-redux-wrapper": "2.0.0",
         "node-sass": "^4.9.4",
+        "nookies": "^1.2.0",
         "query-string": "5.1.1",
         "ramda": "^0.25.0",
         "react": "^16.6.0",

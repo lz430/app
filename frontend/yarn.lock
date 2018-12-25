@@ -2291,7 +2291,7 @@ cookie-signature@1.0.6:
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
   integrity sha1-4wOogrNCzD7oylE6eZmXNNqzriw=
 
-cookie@0.3.1:
+cookie@0.3.1, cookie@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
   integrity sha1-5+Ch+e9DtMi6klxcWpboBtFoc7s=
@@ -6009,6 +6009,13 @@ node-sass@^4.9.4:
     sass-graph "^2.2.4"
     stdout-stream "^1.4.0"
     "true-case-path" "^1.0.2"
+
+nookies@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/nookies/-/nookies-1.2.0.tgz#570c8be505b93fed391dc076814aa502f5bcce78"
+  integrity sha512-dcqrTLk0Ctl5oYGJS29eod6kzeaP2NG1NhjrzJWFlKd6fxKDPbouSwVYsynztVoWZP8aq9SOSZao1H+BCVkonQ==
+  dependencies:
+    cookie "^0.3.1"
 
 "nopt@2 || 3":
   version "3.0.6"

@@ -9,19 +9,15 @@ import Head from 'next/head';
 
 import { Container, Row, Col } from 'reactstrap';
 
-import LoginForm from '../../modules/login/components/LoginForm';
-
-import Link from 'next/link';
-
 import Page from '../../components/Page';
-import { loginUser } from '../../apps/user/actions';
 import { withRouter } from 'next/router';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
+import { getUser } from '../../apps/session/selectors';
 
 class Login extends Page {
     static propTypes = {
-        loginUser: PropTypes.func.isRequired,
+        user: PropTypes.object.isRequired,
         router: nextRouterType,
     };
 
@@ -29,19 +25,24 @@ class Login extends Page {
         return (
             <React.Fragment>
                 <Head>
-                    <title>Deliver My Ride | Login</title>
+                    <title>Deliver My Ride | My Account</title>
                 </Head>
-                <Container>
+                <Container className="mt-5 mb-5">
                     <Row>
-                        <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
+                        <Col>
+                            <h3>My Account</h3>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md={{ size: 6, offset: 3 }}>
                             <div className="bg-white border border-light shadow-sm rounded">
-                                <h4 className="m-0 p-3">Login</h4>
-                                <LoginForm loginUser={this.props.loginUser} />
-                            </div>
-                            <div className="text-center pt-1">
-                                <Link href="/auth/signup" as="/signup" passHref>
-                                    <a>Create new account</a>
-                                </Link>
+                                <h4 className="m-0 p-3">
+                                    {this.props.user.first_name}{' '}
+                                    {this.props.user.last_name}
+                                </h4>
+                                <div className="pl-3 pr-3 pb-3">
+                                    <div>{this.props.user.email}</div>
+                                </div>
                             </div>
                         </Col>
                     </Row>
@@ -51,16 +52,14 @@ class Login extends Page {
     }
 }
 
-const mapStateToProps = () => {
-    return {};
+const mapStateToProps = state => {
+    return {
+        user: getUser(state),
+    };
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        loginUser: (values, actions) => {
-            return dispatch(loginUser(values, actions));
-        },
-    };
+    return {};
 };
 
 export default compose(

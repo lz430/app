@@ -4,6 +4,10 @@ import httpclient from '../httpclient';
  * checkout specific API calls.
  */
 export default class CheckoutService {
+    constructor(client) {
+        this.client = client;
+    }
+
     /**
      * @param dealId
      * @param strategy

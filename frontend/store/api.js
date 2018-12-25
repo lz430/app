@@ -3,14 +3,16 @@ import DealService from './services/deal';
 import UserService from './services/user';
 import CheckoutService from './services/checkout';
 import BrochureService from './services/brochure';
+import { parseCookies, setCookie, destroyCookie } from 'nookies';
 
 class API {
-    constructor() {
-        this.browse = new BrowseService();
-        this.deal = new DealService();
-        this.user = new UserService();
-        this.checkout = new CheckoutService();
-        this.brochure = new BrochureService();
+    constructor(ctx = {}) {
+        this.ctx = ctx;
+        this.browse = new BrowseService(this);
+        this.deal = new DealService(this);
+        this.user = new UserService(this);
+        this.checkout = new CheckoutService(this);
+        this.brochure = new BrochureService(this);
     }
 
     /**
@@ -32,6 +34,12 @@ class API {
         }
         return errors;
     }
+
+    token = () => {
+        return parseCookies(this.ctx);
+    };
 }
 
 export default new API();
+
+export const ApiClient = API;

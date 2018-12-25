@@ -1,4 +1,8 @@
 const setup = ({ server, app }) => {
+    server.get('/my-account', (req, res) => {
+        app.render(req, res, '/auth/my-account', req.query);
+    });
+
     server.get('/login', (req, res) => {
         app.render(req, res, '/auth/login', req.query);
     });
