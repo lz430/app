@@ -35,7 +35,7 @@ class Login extends Page {
                     <Row>
                         <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
                             <div className="bg-white border border-light shadow-sm rounded">
-                                <h4 className="m-0 p-3">Login</h4>
+                                <h5 className="m-0 p-3 text-center">Login</h5>
                                 <LoginForm loginUser={this.props.loginUser} />
                             </div>
                             <div className="text-center pt-1">

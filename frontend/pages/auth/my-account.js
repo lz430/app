@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { compose } from 'redux';
+import { connect } from 'react-redux';
 
 import Head from 'next/head';
 
@@ -12,8 +13,9 @@ import Page from '../../components/Page';
 import { withRouter } from 'next/router';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
+import { getUser } from '../../apps/session/selectors';
 
-class Login extends Page {
+class MyAccount extends Page {
     static propTypes = {
         user: PropTypes.object.isRequired,
         router: nextRouterType,
@@ -50,7 +52,14 @@ class Login extends Page {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        user: getUser(state),
+    };
+};
+
 export default compose(
     withRouter,
-    withTracker
-)(Login);
+    withTracker,
+    connect(mapStateToProps)
+)(MyAccount);

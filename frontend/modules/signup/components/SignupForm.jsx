@@ -113,13 +113,13 @@ class SignupForm extends React.Component {
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="password_confirmation">
-                                        Password
+                                        Confirm Password
                                     </Label>
                                     <FormikFieldWithBootstrapInput
                                         type="password"
                                         name="password_confirmation"
                                         id="password_confirmation"
-                                        placeholder="Password"
+                                        placeholder="Confirm Password"
                                     />
                                 </FormGroup>
                             </div>

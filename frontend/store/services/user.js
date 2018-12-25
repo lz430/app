@@ -25,6 +25,7 @@ class UserService {
 
     me = () => {
         const token = this.client.token();
+        console.log(token);
         return httpclient.get('/api/auth/user', {
             headers: { Authorization: 'Bearer ' + token['token'] },
         });

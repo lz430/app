@@ -17,7 +17,7 @@ export default class Page extends React.Component {
                     <Row>
                         <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
                             <div className="bg-white border border-light rounded shadow-sm">
-                                <h4 className="m-0 p-3">Signup</h4>
+                                <h5 className="m-0 p-3 text-center">Signup</h5>
                                 <SignupForm />
                             </div>
 

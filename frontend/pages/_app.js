@@ -32,8 +32,6 @@ class MyApp extends App {
                 await ctx.store.dispatch(
                     requestLocation(null, ctx.req.session)
                 );
-            } else {
-                //await softUpdateSessionData({ location: ctx.req.session.location });
             }
             await softUpdateSessionData(ctx.req.session);
         }
