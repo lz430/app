@@ -45,6 +45,7 @@ export function* requestLocation(data) {
     try {
         location = yield call(api.user.getLocation, data.data);
         location = location.data;
+        console.log(newData);
         newData = {
             latitude: location.location.latitude,
             longitude: location.location.longitude,

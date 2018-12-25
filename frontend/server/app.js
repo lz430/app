@@ -1,16 +1,12 @@
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
-const cookiesMiddleware = require('universal-cookie-express');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
-
-const nextAuth = require('next-auth');
-const nextAuthConfig = require('../next-auth.config');
 
 const staticRoutes = require('./staticRoutes');
 const authRoutes = require('./authRoutes');
@@ -19,15 +15,6 @@ const sessionRoutes = require('./sessionRoutes');
 
 app.prepare()
     .then(async () => {
-        /*
-        // Load configuration and return config object
-        const nextAuthOptions = await nextAuthConfig();
-
-        // Pass Next.js App instance and NextAuth options to NextAuth
-        const nextAuthApp = await nextAuth(app, nextAuthOptions);
-        const server = nextAuthApp.expressApp;
-        */
-
         const server = express();
         server.use(express.json());
         server.use(
@@ -98,23 +85,6 @@ app.prepare()
         server.get('/experiments/concierge', (req, res) => {
             return app.render(req, res, '/experiments/concierge', req.query);
         });
-
-        // Default catch-all handler to allow Next.js to handle all other routes
-        /*
-        server.all('*', (req, res) => {
-            let nextRequestHandler = app.getRequestHandler();
-            return nextRequestHandler(req, res);
-        });
-
-        server.listen(3000, err => {
-            if (err) {
-                throw err;
-            }
-            console.log(
-                '> Ready on http://localhost:' + 3000 + ' [' + 3000 + ']'
-            );
-        });
-        */
 
         server.get('*', (req, res) => {
             return handle(req, res);
