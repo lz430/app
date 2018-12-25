@@ -3,7 +3,7 @@ import DealService from './services/deal';
 import UserService from './services/user';
 import CheckoutService from './services/checkout';
 import BrochureService from './services/brochure';
-import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import { parseCookies } from 'nookies';
 
 class API {
     constructor(ctx = {}) {

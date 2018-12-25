@@ -9,9 +9,7 @@ import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 
-import ApiClient from '../../../store/api';
 import PropTypes from 'prop-types';
-import { nextRouterType } from '../../../core/types';
 
 const validationSchema = object().shape({
     email: string().required(),
