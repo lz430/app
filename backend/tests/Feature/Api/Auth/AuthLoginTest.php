@@ -38,6 +38,6 @@ class AuthLoginTest extends TestCaseWithAuth
         ];
 
         $response = $this->json('POST', 'api/auth/login', $payload);
-        $response->assertStatus(401);
+        $response->assertStatus(422);
     }
 }
