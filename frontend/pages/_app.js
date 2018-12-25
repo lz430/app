@@ -32,8 +32,6 @@ class MyApp extends App {
                     requestLocation(null, ctx.req.session)
                 );
             } else {
-                console.log('SET');
-                console.log(ctx.req.session.location);
                 await receiveLocation({ location: ctx.req.session.location });
             }
 

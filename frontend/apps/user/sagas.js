@@ -45,14 +45,13 @@ export function* requestLocation(data) {
     try {
         location = yield call(api.user.getLocation, data.data);
         location = location.data;
-        console.log(newData);
         newData = {
             latitude: location.location.latitude,
             longitude: location.location.longitude,
             zipcode: location.location.zip,
             city: location.location.city,
             state: location.location.state,
-            has_results: location.location.has_results,
+            has_results: location.has_results,
             is_valid: true,
         };
         location = newData;

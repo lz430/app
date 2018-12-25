@@ -47,8 +47,6 @@ export default (initialState = initialAppState, options) => {
     if (options.isServer) {
         initialState = initialState || { fromServer: 'foo' };
         initialState.session = sessionState;
-        console.log('INITIAL SESSION STATE');
-        console.log(initialState);
         return makeConfiguredStore(rootReducer, initialState);
     } else {
         const { persistStore, persistReducer } = require('redux-persist');
@@ -69,12 +67,8 @@ export default (initialState = initialAppState, options) => {
         initialState.session = JSON.parse(
             document.getElementById('session').textContent
         );
-        console.log(initialState);
-
         const store = makeConfiguredStore(persistedReducer, initialState);
-
         store.__persistor = persistStore(store); // Nasty hack
-
         return store;
     }
 };
