@@ -26,7 +26,7 @@ class BuildOverviewData
 
     private const CATEGORIES_TO_SKIP = [
         'Pricing',
-        'General',
+        //'General',
     ];
 
     /* @var \App\Models\Deal */
@@ -208,6 +208,46 @@ class BuildOverviewData
                 $labels[$attributes['distance (miles)']->schemaId] = $this->itemFactory(
                     'Warranty Distance in miles',
                     $attributes['distance (miles)']->value,
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+        }
+        if($equipments->name == 'Body style') {
+            if(isset($attributes['Number of doors'])) {
+                $labels[$attributes['Number of doors']->schemaId] = $this->itemFactory(
+                    'Number of Doors',
+                    $attributes['Number of doors']->value,
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+            if(isset($attributes['Body type'])) {
+                $labels[$attributes['Body type']->schemaId] = $this->itemFactory(
+                    'Body Type',
+                    $attributes['Body type']->value,
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+        }
+        if($equipments->name == 'Wheels') {
+            if(isset($attributes['rim type'])) {
+                $labels[$attributes['rim type']->schemaId] = $this->itemFactory(
+                    'Rim Type',
+                    $attributes['rim type']->value,
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+            if(isset($attributes['rim diameter (in)'])) {
+                $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
+                    'Rim Diameter',
+                    $attributes['rim diameter (in)']->value,
                     [
                         'equipment' => $equipments,
                         'from' => 'Custom',

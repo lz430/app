@@ -42,6 +42,7 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
             'fuel_type' => $deal->fuel_type,
             'seating_capacity' => $deal->seating_capacity,
+            'drive_train' => $deal->drive_train,
             'photos' => $deal->photos,
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
