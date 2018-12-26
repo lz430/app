@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Models\User;
 use App\Policies\UserPolicy;
 use App\Models\Order\Purchase;
-use Laravel\Passport\Passport;
 use App\Policies\PurchasePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -29,6 +28,5 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Passport::routes();
     }
 }

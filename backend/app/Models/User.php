@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Backpack\CRUD\CrudTrait;
 use App\Models\Order\Purchase;
-use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -58,7 +57,6 @@ class User extends Authenticatable implements JWTSubject
     use Notifiable;
     use CrudTrait;
     use HasRoles;
-    use HasApiTokens;
 
     /**
      * @var array

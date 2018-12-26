@@ -36,12 +36,13 @@ Route::get('application-status', 'ApplicationStatusController@checkCompleted')->
 Route::get('location', 'UserLocationController@show')->name('location.show');
 
 Route::group(['prefix' => 'auth'], function () {
-    Route::post('login', 'AuthController@login');
-    Route::post('registration', 'AuthController@registration');
+    Route::post('login', 'UserAuthController@login');
+    Route::post('registration', 'UserAuthController@registration');
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'AuthController@logout');
-        Route::get('user', 'AuthController@user');
+        Route::get('logout', 'UserAuthController@logout');
+        Route::get('user', 'UserAuthController@user');
+        Route::post('password', 'UserPasswordChangeController@change');
     });
 });
 

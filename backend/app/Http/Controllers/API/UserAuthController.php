@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends BaseAPIController
+
+class UserAuthController extends BaseAPIController
 {
     /**
      * Create user.
@@ -57,28 +58,13 @@ class AuthController extends BaseAPIController
         ]);
 
         $credentials = request(['email', 'password']);
+        $token = Auth::attempt($credentials);
 
-        if (! Auth::attempt($credentials)) {
+        if (! $token) {
             return $this->respondWithGlobalFormError('Email and password combination incorrect');
         }
 
-        $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
-        if ($request->remember_me) {
-            $token->expires_at = Carbon::now()->addWeeks(1);
-        }
-
-        $token->save();
-
-        return response()->json(
-            [
-                'access_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'expires_at' => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )->toDateTimeString(),
-            ]);
+        return response()->json($this->buildTokenResponse($token));
     }
 
     /**
@@ -89,7 +75,8 @@ class AuthController extends BaseAPIController
      */
     public function logout(Request $request)
     {
-        $request->user()->token()->revoke();
+        //$request->user()->token()->revoke();
+        Auth::logout();
 
         return response()->json(
             [
@@ -105,5 +92,19 @@ class AuthController extends BaseAPIController
     public function user(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    /**
+     * Get the token array structure.
+     * @param $token
+     * @return array
+     */
+    protected function buildTokenResponse($token)
+    {
+        return [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth('api')->factory()->getTTL() * 60,
+        ];
     }
 }

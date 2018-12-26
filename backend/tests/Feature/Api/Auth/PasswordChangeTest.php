@@ -5,11 +5,10 @@ namespace Tests\Feature\Api\Auth;
 use App\Models\User;
 use Tests\TestCaseWithAuth;
 use Illuminate\Mail\Mailable;
-use App\Models\UserPasswordReset;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserPasswordResetSuccess;
 
-class PasswordResetResetPasswordTest extends TestCaseWithAuth
+class PasswordChangeTest extends TestCaseWithAuth
 {
     /** @test */
     public function it_works()
@@ -17,26 +16,23 @@ class PasswordResetResetPasswordTest extends TestCaseWithAuth
         Mail::fake();
 
         $user = factory(User::class)->create();
-        $passwordResetRequest = factory(UserPasswordReset::class)->create(['email' => $user->email]);
 
         $payload = [
-            'email' => $user->email,
-            'token' => $passwordResetRequest->token,
             'password' => 'newpassword',
             'password_confirmation' => 'newpassword',
         ];
 
         //
         // Reset Password
-        $response = $this->json('POST', 'api/password/reset', $payload);
+        $response = $this->actingAs($user)->json('POST', 'api/auth/password', $payload);
         $response
-            ->assertJsonStructure(['email', 'id', 'first_name', 'last_name'])
+            ->assertJsonStructure(['message'])
             ->assertStatus(200);
 
         //
         // Password Reset Confirm
-        Mail::assertSent(UserPasswordResetSuccess::class, function (Mailable $mail) use ($payload) {
-            return $mail->hasTo($payload['email']);
+        Mail::assertSent(UserPasswordResetSuccess::class, function (Mailable $mail) use ($user) {
+            return $mail->hasTo($user->email);
         });
 
         //
@@ -47,6 +43,7 @@ class PasswordResetResetPasswordTest extends TestCaseWithAuth
         ];
 
         $response = $this->json('POST', 'api/auth/login', $loginPayload);
+
         $response
             ->assertJsonStructure(
                 [

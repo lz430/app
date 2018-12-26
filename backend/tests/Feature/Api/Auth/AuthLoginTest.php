@@ -23,7 +23,7 @@ class AuthLoginTest extends TestCaseWithAuth
                 [
                     'access_token',
                     'token_type',
-                    'expires_at',
+                    'expires_in',
                 ])->assertStatus(200);
     }
 

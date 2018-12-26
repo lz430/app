@@ -4,7 +4,6 @@ namespace Tests\Feature\Api\Auth;
 
 use App\Models\User;
 use Tests\TestCaseWithAuth;
-use Laravel\Passport\Passport;
 
 class AuthLogoutTest extends TestCaseWithAuth
 {
@@ -13,8 +12,7 @@ class AuthLogoutTest extends TestCaseWithAuth
     {
         $user = factory(User::class)->make();
         $user->save();
-        Passport::actingAs($user);
-        $response = $this->json('GET', 'api/auth/logout');
+        $response = $this->actingAs($user)->json('GET', 'api/auth/logout');
         $response
             ->assertJsonStructure(
                 [
