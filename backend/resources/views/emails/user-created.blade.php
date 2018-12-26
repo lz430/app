@@ -1,5 +1,5 @@
 @component('mail::message')
-    # Welcome
+# Welcome
 
-    Welcome to Deliver My Ride!
+Welcome to Deliver My Ride!
 @endcomponent

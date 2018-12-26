@@ -56,6 +56,33 @@ class UserService {
         });
     };
 
+    passwordForgotRequest = email => {
+        return httpclient.post(
+            '/api/password/create',
+            {
+                email: email,
+            },
+            {
+                headers: this.client.headers(),
+            }
+        );
+    };
+
+    passwordForgotChange = (token, email, password, password_confirmation) => {
+        return httpclient.post(
+            '/api/password/create',
+            {
+                token: token,
+                email: email,
+                password: password,
+                password_confirmation: password_confirmation,
+            },
+            {
+                headers: this.client.headers(),
+            }
+        );
+    };
+
     /**
      * @param search
      * @param lat

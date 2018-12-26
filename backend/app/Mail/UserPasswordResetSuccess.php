@@ -11,7 +11,7 @@ class UserPasswordResetSuccess extends Mailable
 {
     use Queueable, SerializesModels;
 
-    const VIEW = 'emails.user-created';
+    const VIEW = 'emails.user-password-reset-completed';
 
     /**
      * The User instance.

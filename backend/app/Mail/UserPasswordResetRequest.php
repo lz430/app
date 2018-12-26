@@ -11,12 +11,12 @@ class UserPasswordResetRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
-    const VIEW = 'emails.user-created';
+    const VIEW = 'emails.user-password-reset-request';
 
     /** @var User */
     public $user;
-
     public $token;
+    public $url;
 
     /**
      * @param User $user
@@ -26,6 +26,7 @@ class UserPasswordResetRequest extends Mailable
     {
         $this->user = $user;
         $this->token = $token;
+        $this->url = config('app.marketing_url') . "/forgot/change?" . build_query_string(['token' => $token, 'email' => $user->email]);
     }
 
     public function build()

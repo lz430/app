@@ -7,6 +7,8 @@ import { Button, FormGroup, Label } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import api from '../../../store/api';
+import PropTypes from 'prop-types';
 
 const validationSchema = object().shape({
     email: string().required(),
@@ -17,8 +19,36 @@ const initialFormValues = {
 };
 
 class ForgotForm extends React.Component {
+    static propTypes = {
+        handleOnSuccess: PropTypes.func.isRequired,
+    };
+
+    state = {
+        globalFormError: null,
+    };
+
+    handleGlobalFormErrors(errors) {
+        this.setState({ globalFormError: errors['form'] });
+    }
+
     handleOnSubmit(values, actions) {
-        actions.setSubmitting(false);
+        api.user
+            .passwordForgotRequest(values.email)
+            .then(() => {
+                this.props.handleOnSuccess();
+            })
+            .catch(error => {
+                console.log(error);
+                const formErrors = api.translateApiErrors(error.response.data);
+                if (formErrors.form) {
+                    this.handleGlobalFormErrors(formErrors);
+                } else {
+                    actions.setErrors(formErrors);
+                }
+            })
+            .then(() => {
+                actions.setSubmitting(false);
+            });
     }
 
     render() {
