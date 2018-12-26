@@ -40,6 +40,8 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'interior_color' => $deal->interior_color,
             'fuel_econ_city' => $deal->fuel_econ_city,
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
+            'fuel_type' => $deal->fuel_type,
+            'seating_capacity' => $deal->seating_capacity,
             'photos' => $deal->photos,
             'thumbnail' => $deal->thumbnail,
             'version' => $version,
