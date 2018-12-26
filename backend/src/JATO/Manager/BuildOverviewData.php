@@ -194,11 +194,20 @@ class BuildOverviewData
                     ]);
             }
         }
-        if($equipments->name == 'Seating') {
-            if(isset($attributes['Seating capacity'])) {
-                $labels[$attributes['Seating capacity']->schemaId] = $this->itemFactory(
-                    'Seating Capacity',
-                    $attributes['Seating capacity']->value,
+        if($equipments->name == 'Warranty whole vehicle - Total') {
+            if(isset($attributes['duration (months)'])) {
+                $labels[$attributes['duration (months)']->schemaId] = $this->itemFactory(
+                    'Warranty Duration in months',
+                    $attributes['duration (months)']->value,
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+            if(isset($attributes['distance (miles)'])) {
+                $labels[$attributes['distance (miles)']->schemaId] = $this->itemFactory(
+                    'Warranty Distance in miles',
+                    $attributes['distance (miles)']->value,
                     [
                         'equipment' => $equipments,
                         'from' => 'Custom',
