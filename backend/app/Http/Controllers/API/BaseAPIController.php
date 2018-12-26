@@ -7,12 +7,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class BaseAPIController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $status_code = Response::HTTP_OK;
+
+    public function __construct()
+    {
+        Auth::setDefaultDriver('api');
+    }
+
+
 
     public function setStatusCode($code)
     {
