@@ -7,6 +7,9 @@ import { Button, FormGroup, Label } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Alert } from 'reactstrap';
+import api from '../../../store/api';
+import Link from 'next/link';
 
 const validationSchema = object().shape({
     first_name: string().required(),
@@ -26,15 +29,45 @@ const initialFormValues = {
 
 class SignupForm extends React.Component {
     state = {
-        success: false,
-        values: null,
+        globalFormError: null,
+        wasSuccess: false,
     };
 
+    handleGlobalFormErrors(errors) {
+        this.setState({ globalFormError: errors['form'] });
+    }
+
     handleOnSubmit(values, actions) {
-        actions.setSubmitting(false);
+        api.user
+            .signup(values)
+            .then(() => {
+                this.setState({ wasSuccess: true });
+            })
+            .catch(error => {
+                const formErrors = api.translateApiErrors(error.response.data);
+                if (formErrors.form) {
+                    this.handleGlobalFormErrors(formErrors);
+                } else {
+                    actions.setErrors(formErrors);
+                }
+            })
+            .then(() => {
+                actions.setSubmitting(false);
+            });
     }
 
     render() {
+        if (this.state.wasSuccess) {
+            return (
+                <div>
+                    Thanks for creating an account <br />
+                    <Link href="/auth/login" as="/login" passHref>
+                        <a>Click here to login</a>
+                    </Link>
+                </div>
+            );
+        }
+
         return (
             <Formik
                 initialValues={initialFormValues}
@@ -75,6 +108,12 @@ class SignupForm extends React.Component {
                     return (
                         <Form>
                             <div className="p-3">
+                                {this.state.globalFormError && (
+                                    <Alert className="text-sm text-center">
+                                        {this.state.globalFormError}
+                                    </Alert>
+                                )}
+
                                 <FormGroup>
                                     <Label for="first_name">First Name</Label>
                                     <FormikFieldWithBootstrapInput

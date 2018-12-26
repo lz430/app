@@ -46,6 +46,17 @@ class UserService {
     };
 
     /**
+     *
+     * @param values
+     * @returns {*}
+     */
+    signup = values => {
+        return httpclient.post('/api/auth/register', values, {
+            headers: this.client.headers(),
+        });
+    };
+
+    /**
      * @param search
      * @param lat
      * @param lon

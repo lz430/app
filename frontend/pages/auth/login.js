@@ -22,7 +22,7 @@ import { getUser } from '../../apps/session/selectors';
 
 class Login extends Page {
     static propTypes = {
-        user: PropTypes.object.isRequired,
+        user: PropTypes.object,
         loginUser: PropTypes.func.isRequired,
         router: nextRouterType,
     };
