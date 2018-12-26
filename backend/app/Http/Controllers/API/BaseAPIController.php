@@ -66,7 +66,8 @@ class BaseAPIController extends BaseController
             ->respondWithError($message);
     }
 
-    public function respondWithGlobalFormError($error) {
+    public function respondWithGlobalFormError($error)
+    {
         return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->respond(['errors' => ['form' => $error]]);
     }
