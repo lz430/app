@@ -9,9 +9,7 @@ import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Alert } from 'reactstrap';
 import api from '../../../store/api';
-import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { nextRouterType } from '../../../core/types';
 
 const validationSchema = object().shape({
     first_name: string().required(),
