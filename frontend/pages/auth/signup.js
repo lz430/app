@@ -22,6 +22,14 @@ class Signup extends Page {
         router: nextRouterType,
     };
 
+    state = {
+        wasSuccess: false,
+    };
+
+    handleOnSuccess() {
+        this.setState({ wasSuccess: true });
+    }
+
     renderAuthError() {
         return (
             <Row>
@@ -34,13 +42,30 @@ class Signup extends Page {
         );
     }
 
+    renderSuccessMessage() {
+        return (
+            <Row>
+                <Col>
+                    <div>
+                        Thanks for creating an account <br />
+                        <Link href="/auth/login" as="/login" passHref>
+                            <a>Click here to login</a>
+                        </Link>
+                    </div>
+                </Col>
+            </Row>
+        );
+    }
+
     renderPageContent() {
         return (
             <Row>
                 <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
                     <div className="bg-white border border-light rounded shadow-sm">
                         <h5 className="m-0 p-3 text-center">Signup</h5>
-                        <SignupForm />
+                        <SignupForm
+                            handleOnSuccess={this.handleOnSuccess.bind(this)}
+                        />
                     </div>
 
                     <div className="text-center pt-1">
@@ -61,7 +86,10 @@ class Signup extends Page {
                 </Head>
                 <Container>
                     {this.props.user && this.renderAuthError()}
-                    {!this.props.user && this.renderPageContent()}
+                    {!this.props.user &&
+                        !this.state.wasSuccess &&
+                        this.renderPageContent()}
+                    {this.state.wasSuccess && this.renderSuccessMessage()}
                 </Container>
             </React.Fragment>
         );

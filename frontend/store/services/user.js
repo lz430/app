@@ -51,7 +51,7 @@ class UserService {
      * @returns {*}
      */
     signup = values => {
-        return httpclient.post('/api/auth/register', values, {
+        return httpclient.post('/api/auth/registration', values, {
             headers: this.client.headers(),
         });
     };

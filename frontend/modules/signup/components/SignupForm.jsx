@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Alert } from 'reactstrap';
 import api from '../../../store/api';
 import Link from 'next/link';
+import PropTypes from 'prop-types';
+import { nextRouterType } from '../../../core/types';
 
 const validationSchema = object().shape({
     first_name: string().required(),
@@ -28,9 +30,12 @@ const initialFormValues = {
 };
 
 class SignupForm extends React.Component {
+    static propTypes = {
+        handleOnSuccess: PropTypes.func.isRequired,
+    };
+
     state = {
         globalFormError: null,
-        wasSuccess: false,
     };
 
     handleGlobalFormErrors(errors) {
@@ -41,9 +46,10 @@ class SignupForm extends React.Component {
         api.user
             .signup(values)
             .then(() => {
-                this.setState({ wasSuccess: true });
+                this.props.handleOnSuccess();
             })
             .catch(error => {
+                console.log(error);
                 const formErrors = api.translateApiErrors(error.response.data);
                 if (formErrors.form) {
                     this.handleGlobalFormErrors(formErrors);
@@ -57,17 +63,6 @@ class SignupForm extends React.Component {
     }
 
     render() {
-        if (this.state.wasSuccess) {
-            return (
-                <div>
-                    Thanks for creating an account <br />
-                    <Link href="/auth/login" as="/login" passHref>
-                        <a>Click here to login</a>
-                    </Link>
-                </div>
-            );
-        }
-
         return (
             <Formik
                 initialValues={initialFormValues}

@@ -111,7 +111,7 @@ export function* loginUser(data) {
 
     //
     // Store the token in a cookie
-    if (token) {
+    if (token && token['access_token']) {
         setCookie(null, 'token', token['access_token'], {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
@@ -120,16 +120,17 @@ export function* loginUser(data) {
 
     //
     // Fetch User
-    try {
-        user = yield call(api.user.me);
-        user = user.data;
-    } catch (error) {
-        formActions.handleGlobalFormErrors({
-            globalFormError: 'Unable to fetch user',
-        });
-        formActions.setSubmitting(false);
+    if (token && token['access_token']) {
+        try {
+            user = yield call(api.user.me);
+            user = user.data;
+        } catch (error) {
+            formActions.handleGlobalFormErrors({
+                globalFormError: 'Unable to fetch user',
+            });
+            formActions.setSubmitting(false);
+        }
     }
-
     //
     // Store the user in the session
     if (user) {
