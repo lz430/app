@@ -25,6 +25,7 @@ export default function* root() {
         fork(AppUserSagas.watchIPRequestLocationInfo),
         fork(AppUserSagas.watchRequestLocation),
         fork(AppUserSagas.watchLogin),
+        fork(AppUserSagas.watchLogout),
         fork(AppPricingSagas.watchRequestDealQuote),
         fork(AppPricingSagas.watchBatchRequestDealQuote),
         fork(AppCheckoutSagas.watchCheckoutStart),

@@ -16,7 +16,7 @@ export default class CheckoutService {
      * @param trade
      * @returns {*}
      */
-    start(dealId, strategy, quote, amounts, trade) {
+    start = (dealId, strategy, quote, amounts, trade) => {
         let payload = {
             deal_id: dealId,
             strategy: strategy,
@@ -25,8 +25,10 @@ export default class CheckoutService {
             trade: trade,
         };
 
-        return httpclient.post('/api/checkout/start', payload);
-    }
+        return httpclient.post('/api/checkout/start', payload, {
+            headers: this.client.headers(),
+        });
+    };
 
     /**
      *
@@ -41,7 +43,7 @@ export default class CheckoutService {
      * @param g_recaptcha_response
      * @returns {*}
      */
-    contact(
+    contact = (
         purchaseId,
         token,
         email,
@@ -51,7 +53,7 @@ export default class CheckoutService {
         last_name,
         phone_number,
         g_recaptcha_response
-    ) {
+    ) => {
         let payload = {
             order_token: token,
             email,
@@ -63,34 +65,34 @@ export default class CheckoutService {
             g_recaptcha_response,
         };
 
-        return httpclient.post(`/api/checkout/${purchaseId}/contact`, payload);
-    }
-
-    /**
-     *
-     * @param purchaseId
-     * @param token
-     * @returns {*}
-     */
-    getFinancing(purchaseId, token) {
-        return httpclient.get(`/api/checkout/${purchaseId}/financing`, {
-            headers: { Authorization: 'Bearer ' + token['access_token'] },
+        return httpclient.post(`/api/checkout/${purchaseId}/contact`, payload, {
+            headers: this.client.headers(),
         });
-    }
+    };
 
     /**
      *
      * @param purchaseId
-     * @param token
      * @returns {*}
      */
-    financingComplete(purchaseId, token) {
+    getFinancing = purchaseId => {
+        return httpclient.get(`/api/checkout/${purchaseId}/financing`, {
+            headers: this.client.headers(),
+        });
+    };
+
+    /**
+     *
+     * @param purchaseId
+     * @returns {*}
+     */
+    financingComplete = purchaseId => {
         return httpclient.post(
             `/api/checkout/${purchaseId}/financing`,
             {},
             {
-                headers: { Authorization: 'Bearer ' + token['access_token'] },
+                headers: this.client.headers(),
             }
         );
-    }
+    };
 }

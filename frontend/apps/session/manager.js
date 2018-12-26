@@ -14,3 +14,14 @@ export const storeSessionData = (data, session) => {
         api.user.setSession(data);
     }
 };
+
+/**
+ * @param session
+ */
+export const clearSessionData = session => {
+    if (session) {
+        session.destroy();
+    } else {
+        api.user.destroySession();
+    }
+};

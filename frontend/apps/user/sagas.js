@@ -6,15 +6,16 @@ import {
     REQUEST_IP_LOCATION_INFO,
     REQUEST_LOCATION,
     LOGIN_USER,
+    LOGOUT_USER,
 } from './consts';
 import { receiveLocation } from './actions';
 import { getUserLocation } from './selectors';
 
 import { getCurrentPage } from '../../apps/page/selectors';
 import { requestSearch } from '../../modules/deal-list/actions';
-import { storeSessionData } from '../session/manager';
-import { softUpdateSessionData } from '../session/actions';
-import { setCookie } from 'nookies';
+import { storeSessionData, clearSessionData } from '../session/manager';
+import { softUpdateSessionData, softDestroySession } from '../session/actions';
+import { setCookie, destroyCookie } from 'nookies';
 
 import Router from 'next/router';
 
@@ -149,6 +150,32 @@ export function* loginUser(data) {
     }
 }
 
+export function* logoutUser() {
+    //
+    // Delete tokens from API
+    try {
+        yield call(api.user.logout);
+    } catch (error) {
+        console.log(error);
+    }
+
+    //
+    // Delete cookie
+    destroyCookie({}, 'token');
+
+    //
+    // Delete session
+    clearSessionData();
+
+    //
+    // Soft delete session
+    softDestroySession();
+
+    //
+    // Redirect to homepage or something
+    Router.push('/auth/login', 'login');
+}
+
 /*******************************************************************
  * Watchers
  ********************************************************************/
@@ -162,4 +189,8 @@ export function* watchRequestLocation() {
 
 export function* watchLogin() {
     yield takeEvery(LOGIN_USER, loginUser);
+}
+
+export function* watchLogout() {
+    yield takeEvery(LOGOUT_USER, logoutUser);
 }

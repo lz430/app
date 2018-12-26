@@ -48,3 +48,13 @@ export function loginUser(values, actions) {
         actions: actions,
     };
 }
+
+/**
+ *
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function logoutUser() {
+    return {
+        type: ActionTypes.LOGOUT_USER,
+    };
+}

@@ -10,3 +10,9 @@ export function softUpdateSessionData(data) {
         data: data,
     };
 }
+
+export function softDestroySession() {
+    return {
+        type: ActionTypes.SOFT_DESTROY_SESSION,
+    };
+}

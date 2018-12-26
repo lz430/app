@@ -14,13 +14,7 @@ class AuthLogoutTest extends TestCaseWithAuth
         $user = factory(User::class)->make();
         $user->save();
         Passport::actingAs($user);
-
-        $payload = [
-            'email' => $user->email,
-            'password' => 'myfakepassword',
-        ];
-
-        $response = $this->json('GET', 'api/auth/logout', $payload);
+        $response = $this->json('GET', 'api/auth/logout');
         $response
             ->assertJsonStructure(
                 [

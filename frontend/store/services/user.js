@@ -16,18 +16,32 @@ class UserService {
      * @param password
      * @returns {*}
      */
-    login(email, password) {
-        return httpclient.post('/api/auth/login', {
-            email: email,
-            password: password,
-        });
-    }
+    login = (email, password) => {
+        return httpclient.post(
+            '/api/auth/login',
+            {
+                email: email,
+                password: password,
+            },
+            {
+                headers: this.client.headers(),
+            }
+        );
+    };
 
+    logout = () => {
+        return httpclient.get('/api/auth/logout', {
+            headers: this.client.headers(),
+        });
+    };
+
+    /**
+     * Get currently logged in user.
+     * @returns {*}
+     */
     me = () => {
-        const token = this.client.token();
-        console.log(token);
         return httpclient.get('/api/auth/user', {
-            headers: { Authorization: 'Bearer ' + token['token'] },
+            headers: this.client.headers(),
         });
     };
 
@@ -37,7 +51,7 @@ class UserService {
      * @param lon
      * @returns {*}
      */
-    getLocation(search = null, lat = null, lon = null) {
+    getLocation = (search = null, lat = null, lon = null) => {
         let params = {};
         if (search) {
             params.search = search;
@@ -53,17 +67,26 @@ class UserService {
 
         return httpclient.get('/api/location', {
             params: params,
+            headers: this.client.headers(),
         });
-    }
+    };
 
     /**
      *
      * @param email
      * @returns {*}
      */
-    postNotifyWhenInRange(email) {
-        return httpclient.post('/api/hubspot/not-in-area', { email });
-    }
+    postNotifyWhenInRange = email => {
+        return httpclient.post(
+            '/api/hubspot/not-in-area',
+            {
+                email: email,
+            },
+            {
+                headers: this.client.headers(),
+            }
+        );
+    };
 
     /**
      * Calls the express session storage url. Used for the client set info in the session.
@@ -72,6 +95,14 @@ class UserService {
      */
     setSession(data) {
         return sessionClient.post('/session', data);
+    }
+
+    /**
+     * Delete session
+     * @returns {*}
+     */
+    destroySession() {
+        return sessionClient.post('/session/destroy', {});
     }
 }
 

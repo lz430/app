@@ -38,6 +38,18 @@ class API {
     token = () => {
         return parseCookies(this.ctx);
     };
+
+    headers = () => {
+        let headers = {};
+
+        let token = this.token();
+
+        if (token['token']) {
+            headers['Authorization'] = 'Bearer ' + token['token'];
+        }
+
+        return headers;
+    };
 }
 
 export default new API();
