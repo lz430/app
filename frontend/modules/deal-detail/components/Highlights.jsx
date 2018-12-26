@@ -46,7 +46,7 @@ export default class extends React.PureComponent {
 
             this.setState({ basicFeatures, fuelEconomy });
 
-            console.log(this.props.deal);
+            // console.log(this.props.deal);
         }
     }
 

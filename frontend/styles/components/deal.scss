@@ -151,18 +151,6 @@
             margin: 0 auto;
             width: 95%;
         }
-        h2 {
-            margin-bottom: 20px;
-
-            &:after {
-                border-bottom: 2px solid $color-darkgrey;
-                content: '';
-                display: block;
-                height: 5px;
-                margin: 0 auto;
-                width: 10%;
-            }
-        }
 
         &__columns {
             border: 1px solid $color-darkgrey;
@@ -332,6 +320,19 @@
 }
 
 .deal-details {
+    h2 {
+        margin-bottom: 20px;
+
+        &:after {
+            border-bottom: 2px solid $color-grey;
+            content: '';
+            display: block;
+            height: 5px;
+            margin: 0 auto;
+            width: 10%;
+        }
+    }
+
     &__container {
         & > .row {
             margin: 0;
@@ -360,6 +361,28 @@
         .deal-details__deal-content-color {
             margin-left: 0;
             width: 90%;
+        }
+    }
+
+    &__specs {
+        .headings {
+            &__item {
+                background: $color-grey;
+                color: $color-text-white;
+                padding: 15px;
+                text-transform: uppercase;
+
+                &.active {
+                    background: $color-darkestgrey;
+
+                    h6 {
+                        border-bottom: 1px solid $color-text-white;
+                    }
+                }
+                h6 {
+                    font-size: 0.8rem;
+                }
+            }
         }
     }
 }

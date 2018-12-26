@@ -62,6 +62,7 @@ import ContactForm from './components/ContactForm';
 import OurPromise from './components/Promise';
 import NavHighlights from './components/Nav-Highlights';
 import Highlights from './components/Highlights';
+import Specs from './components/Specs';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -307,6 +308,9 @@ class DealDetailContainer extends React.PureComponent {
                         </div>
                         <div className="deal__row m-0">
                             <Highlights deal={this.props.deal} />
+                        </div>
+                        <div className="deal__row">
+                            <Specs deal={this.props.deal} />
                         </div>
                         <Row className="deal__row">
                             <OurPromise />
