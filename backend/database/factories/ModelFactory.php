@@ -91,7 +91,13 @@ $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $fake
 $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
-        'dealer_id' => factory(App\Models\Dealer::class)->create()->dealer_id,
+        'dealer_id' => function () {
+            return factory(App\Models\Dealer::class)->create()->dealer_id;
+        },
+        'version_id' => function () {
+            return factory(App\Models\JATO\Version::class)->create()->id;
+        },
+        'status' => 'available',
         'stock_number' => 'AH2844A',
         'vin' => '3C4NJDBB4HT628358',
         'new' => true,
@@ -118,6 +124,10 @@ $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
         'fuel_econ_hwy' => null,
         'dealer_name' => 'Suburban Chrysler Jeep Dodge of Troy',
         'days_old' => 11,
+        'option_codes' => [],
+        'package_codes' => [],
+        'source_price' => (object) [],
+        'payments' => (object) [],
     ];
 });
 
@@ -146,6 +156,8 @@ $factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $fa
         'dmr_price' => 30000,
         'monthly_payment' => 500,
         'msrp' => 28000,
+        'rebates' => (object) [],
+        'trade' => (object) [],
     ];
 });
 
