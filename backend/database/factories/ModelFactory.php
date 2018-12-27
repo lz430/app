@@ -12,6 +12,7 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
 use Carbon\Carbon;
 use App\Models\Feature;
 use App\Models\Category;
@@ -126,8 +127,8 @@ $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
         'days_old' => 11,
         'option_codes' => [],
         'package_codes' => [],
-        'source_price' => (object) [],
-        'payments' => (object) [],
+        'source_price' => (object)[],
+        'payments' => (object)[],
     ];
 });
 
@@ -156,25 +157,25 @@ $factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $fa
         'dmr_price' => 30000,
         'monthly_payment' => 500,
         'msrp' => 28000,
-        'rebates' => (object) [],
-        'trade' => (object) [],
+        'rebates' => (new \App\Services\Quote\Factories\fakeQuote())->get()->rebates,
+        'trade' => (object)[],
     ];
 });
 
 $factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
     return [
-        'title'                     => $faker->unique()->company,
-        'slug'                      => $faker->unique()->slug,
-        'display_order'             => rand(1, 200),
+        'title' => $faker->unique()->company,
+        'slug' => $faker->unique()->slug,
+        'display_order' => rand(1, 200),
     ];
 });
 
 $factory->define(Feature::class, function (Faker\Generator $faker) {
     return [
-        'title'             => 'First Feature',
-        'slug'              => 'first-feature',
-        'category_id'       => factory(Category::class)->create(),
-        'display_order'     => 1,
-        'jato_schema_ids'   => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
+        'title' => 'First Feature',
+        'slug' => 'first-feature',
+        'category_id' => factory(Category::class)->create(),
+        'display_order' => 1,
+        'jato_schema_ids' => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
     ];
 });

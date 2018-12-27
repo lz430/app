@@ -59,5 +59,6 @@
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="DB_CONNECTION" value="testing"/>
         <env name="MAIL_DRIVER" value="log"/>
+        <env name="SCOUT_DRIVER" value="null"/>
     </php>
 </phpunit>
