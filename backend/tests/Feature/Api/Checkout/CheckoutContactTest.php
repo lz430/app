@@ -2,10 +2,9 @@
 
 namespace Tests\Feature\Api\Checkout;
 
+use Tests\TestCaseWithAuth;
 use App\Models\Order\Purchase;
 use Buzz\LaravelGoogleCaptcha\CaptchaFacade;
-use Tests\TestCaseWithAuth;
-
 
 class CheckoutContactTest extends TestCaseWithAuth
 {
@@ -16,7 +15,7 @@ class CheckoutContactTest extends TestCaseWithAuth
             ->andReturn(true);
 
         $purchase = factory(Purchase::class)->make();
-        $purchase->status = "cart";
+        $purchase->status = 'cart';
         $purchase->save();
         $jwt = resolve('Tymon\JWTAuth\JWT');
         $token = $jwt->fromSubject($purchase);
@@ -24,17 +23,17 @@ class CheckoutContactTest extends TestCaseWithAuth
         $payload = [
             'purchaseId' => $purchase->id,
             'order_token' => $token,
-            'email' => "mattwisner1@gmail.com",
-            'first_name' => "Matt",
-            'last_name' => "Wisner",
-            'phone_number' => "2312251102",
-            'g_recaptcha_response' => "asdf",
-            'drivers_license_state' => "MI",
-            'drivers_license_number' => "S530781383338",
+            'email' => 'mattwisner1@gmail.com',
+            'first_name' => 'Matt',
+            'last_name' => 'Wisner',
+            'phone_number' => '2312251102',
+            'g_recaptcha_response' => 'asdf',
+            'drivers_license_state' => 'MI',
+            'drivers_license_number' => 'S530781383338',
         ];
 
         $response = $this
-            ->json('POST', 'api/checkout/' . $purchase->id . '/contact', $payload);
+            ->json('POST', 'api/checkout/'.$purchase->id.'/contact', $payload);
 
         $response
             ->assertStatus(200)
@@ -46,7 +45,4 @@ class CheckoutContactTest extends TestCaseWithAuth
                 ]
             );
     }
-
 }
-
-

@@ -12,7 +12,6 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-
 use Carbon\Carbon;
 use App\Models\Feature;
 use App\Models\Category;
@@ -127,8 +126,8 @@ $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
         'days_old' => 11,
         'option_codes' => [],
         'package_codes' => [],
-        'source_price' => (object)[],
-        'payments' => (object)[],
+        'source_price' => (object) [],
+        'payments' => (object) [],
     ];
 });
 
@@ -158,7 +157,7 @@ $factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $fa
         'monthly_payment' => 500,
         'msrp' => 28000,
         'rebates' => (new \App\Services\Quote\Factories\fakeQuote())->get()->rebates,
-        'trade' => (object)[],
+        'trade' => (object) [],
     ];
 });
 
