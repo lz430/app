@@ -28,6 +28,7 @@ const initialFormValues = {
 class LoginForm extends React.Component {
     static propTypes = {
         loginUser: PropTypes.func.isRequired,
+        handleOnSuccess: PropTypes.func.isRequired,
     };
 
     state = {
@@ -40,6 +41,7 @@ class LoginForm extends React.Component {
 
     handleOnSubmit(values, actions) {
         actions.handleGlobalFormErrors = this.handleGlobalFormErrors.bind(this);
+        actions.handleOnSuccess = this.props.handleOnSuccess;
         this.props.loginUser(values, actions);
     }
 
@@ -113,7 +115,7 @@ class LoginForm extends React.Component {
                                     <a>Reset my password</a>
                                 </Link>
                             </div>
-                            <div className="p-2">{button}</div>
+                            <div className="p-3">{button}</div>
                         </Form>
                     );
                 }}

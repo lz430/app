@@ -10,8 +10,11 @@ const reducer = function(state = initialState, action = {}) {
                 ...action.data,
             };
 
-        case ActionTypes.SOFT_DESTROY_SESSION:
-            return {};
+        case ActionTypes.SOFT_REMOVE_USER_FROM_SESSION:
+            return {
+                ...state,
+                user: null,
+            };
 
         default:
             return state;

@@ -19,6 +19,7 @@ import { withRouter } from 'next/router';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { getUser } from '../../apps/session/selectors';
+import LoadingIcon from '../../components/Loading';
 
 class Login extends Page {
     static propTypes = {
@@ -27,45 +28,74 @@ class Login extends Page {
         router: nextRouterType,
     };
 
+    state = {
+        wasSuccess: false,
+    };
+
+    handleOnSuccess() {
+        this.setState({ wasSuccess: true });
+    }
+
+    renderSuccessMessage() {
+        return (
+            <div className="bg-white border border-light shadow-sm rounded p-5 text-center">
+                <LoadingIcon size={4} />
+                <br />
+                Logging In...
+            </div>
+        );
+    }
+
     renderAuthError() {
         return (
-            <Row>
-                <Col>
-                    <h5 className="text-center mb-5 mt-5">
-                        You are already logged in.
-                    </h5>
-                </Col>
-            </Row>
+            <div className="bg-white border border-light shadow-sm rounded">
+                <h5 className="text-center mb-5 mt-5">
+                    You are already logged in.
+                </h5>
+            </div>
         );
     }
 
     renderPageContent() {
         return (
-            <Row>
-                <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
-                    <div className="bg-white border border-light shadow-sm rounded">
-                        <h5 className="m-0 p-3 text-center">Login</h5>
-                        <LoginForm loginUser={this.props.loginUser} />
-                    </div>
-                    <div className="text-center pt-1">
-                        <Link href="/auth/signup" as="/signup" passHref>
-                            <a>Create new account</a>
-                        </Link>
-                    </div>
-                </Col>
-            </Row>
+            <React.Fragment>
+                <div className="bg-white border border-light shadow-sm rounded">
+                    <h5 className="m-0 p-3 text-center">Login</h5>
+                    <LoginForm
+                        handleOnSuccess={this.handleOnSuccess.bind(this)}
+                        loginUser={this.props.loginUser}
+                    />
+                </div>
+                <div className="text-center pt-1">
+                    <Link href="/auth/signup" as="/signup" passHref>
+                        <a>Create new account</a>
+                    </Link>
+                </div>
+            </React.Fragment>
         );
     }
 
     render() {
+        let content;
+        if (this.state.wasSuccess) {
+            content = this.renderSuccessMessage();
+        } else if (this.props.user) {
+            content = this.renderAuthError();
+        } else {
+            content = this.renderPageContent();
+        }
+
         return (
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride | Login</title>
                 </Head>
                 <Container>
-                    {this.props.user && this.renderAuthError()}
-                    {!this.props.user && this.renderPageContent()}
+                    <Row>
+                        <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
+                            {content}
+                        </Col>
+                    </Row>
                 </Container>
             </React.Fragment>
         );

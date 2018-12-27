@@ -11,8 +11,8 @@ export function softUpdateSessionData(data) {
     };
 }
 
-export function softDestroySession() {
+export function softRemoveUserFromSession() {
     return {
-        type: ActionTypes.SOFT_DESTROY_SESSION,
+        type: ActionTypes.SOFT_REMOVE_USER_FROM_SESSION,
     };
 }

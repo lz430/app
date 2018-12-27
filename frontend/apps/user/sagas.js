@@ -14,7 +14,10 @@ import { getUserLocation } from './selectors';
 import { getCurrentPage } from '../../apps/page/selectors';
 import { requestSearch } from '../../modules/deal-list/actions';
 import { storeSessionData, clearSessionData } from '../session/manager';
-import { softUpdateSessionData, softDestroySession } from '../session/actions';
+import {
+    softUpdateSessionData,
+    softRemoveUserFromSession,
+} from '../session/actions';
 import { setCookie, destroyCookie } from 'nookies';
 
 import Router from 'next/router';
@@ -131,6 +134,11 @@ export function* loginUser(data) {
             formActions.setSubmitting(false);
         }
     }
+
+    if (user && token) {
+        formActions.handleOnSuccess();
+    }
+
     //
     // Store the user in the session
     if (user) {
@@ -170,7 +178,7 @@ export function* logoutUser() {
 
     //
     // Soft delete session
-    softDestroySession();
+    yield put(softRemoveUserFromSession());
 
     //
     // Redirect to homepage or something

@@ -12,7 +12,6 @@ import { getUser } from '../../apps/session/selectors';
 import { withRouter } from 'next/dist/lib/router';
 import withTracker from '../../components/withTracker';
 import PropTypes from 'prop-types';
-import { nextRouterType } from '../../core/types';
 
 class Page extends React.Component {
     static propTypes = {
@@ -26,6 +25,7 @@ class Page extends React.Component {
     handleOnSuccess() {
         this.setState({ wasSuccess: true });
     }
+
     renderAuthError() {
         return (
             <Row>
@@ -70,18 +70,22 @@ class Page extends React.Component {
     }
 
     render() {
+        let content;
+
+        if (this.state.wasSuccess) {
+            content = this.renderSuccessMessage();
+        } else if (this.props.user) {
+            content = this.renderAuthError();
+        } else {
+            content = this.renderPageContent();
+        }
+
         return (
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride | Forgot Password</title>
                 </Head>
-                <Container>
-                    {this.props.user && this.renderAuthError()}
-                    {!this.props.user &&
-                        !this.state.wasSuccess &&
-                        this.renderPageContent()}
-                    {this.state.wasSuccess && this.renderSuccessMessage()}
-                </Container>
+                <Container>{content}</Container>
             </React.Fragment>
         );
     }

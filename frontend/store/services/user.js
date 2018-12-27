@@ -68,9 +68,17 @@ class UserService {
         );
     };
 
+    /**
+     *
+     * @param token
+     * @param email
+     * @param password
+     * @param password_confirmation
+     * @returns {*}
+     */
     passwordForgotChange = (token, email, password, password_confirmation) => {
         return httpclient.post(
-            '/api/password/create',
+            '/api/password/reset',
             {
                 token: token,
                 email: email,

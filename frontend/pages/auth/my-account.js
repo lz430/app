@@ -18,7 +18,7 @@ import { logoutUser } from '../../apps/user/actions';
 
 class MyAccount extends Page {
     static propTypes = {
-        user: PropTypes.object.isRequired,
+        user: PropTypes.object,
         logoutUser: PropTypes.func.isRequired,
         router: nextRouterType,
     };

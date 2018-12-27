@@ -1,12 +1,14 @@
 import React from 'react';
-import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
+import PropTypes from 'prop-types';
+
 import { Formik, Form } from 'formik';
 import { string, object } from 'yup';
-
+import FormikFieldWithBootstrapInput from '../../../components/Forms/FormikFieldWithBootstrapInput';
 import { Button, FormGroup, Label } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import api from '../../../store/api';
 
 const validationSchema = object().shape({
     password: string().required(),
@@ -19,8 +21,43 @@ const initialFormValues = {
 };
 
 class ForgotChangeForm extends React.Component {
+    static propTypes = {
+        token: PropTypes.string.isRequired,
+        email: PropTypes.string.isRequired,
+        handleOnSuccess: PropTypes.func.isRequired,
+    };
+
+    state = {
+        globalFormError: null,
+    };
+
+    handleGlobalFormErrors(errors) {
+        this.setState({ globalFormError: errors['form'] });
+    }
+
     handleOnSubmit(values, actions) {
-        actions.setSubmitting(false);
+        api.user
+            .passwordForgotChange(
+                this.props.token,
+                this.props.email,
+                values.password,
+                values.password_confirmation
+            )
+            .then(() => {
+                this.props.handleOnSuccess();
+            })
+            .catch(error => {
+                console.log(error);
+                const formErrors = api.translateApiErrors(error.response.data);
+                if (formErrors.form) {
+                    this.handleGlobalFormErrors(formErrors);
+                } else {
+                    actions.setErrors(formErrors);
+                }
+            })
+            .then(() => {
+                actions.setSubmitting(false);
+            });
     }
 
     render() {
@@ -63,7 +100,7 @@ class ForgotChangeForm extends React.Component {
 
                     return (
                         <Form>
-                            <div className="p-2">
+                            <div className="p-3">
                                 <FormGroup>
                                     <Label for="password">Password</Label>
                                     <FormikFieldWithBootstrapInput
@@ -86,7 +123,7 @@ class ForgotChangeForm extends React.Component {
                                     />
                                 </FormGroup>
                             </div>
-                            <div className="p-2">{button}</div>
+                            <div className="p-3">{button}</div>
                         </Form>
                     );
                 }}
