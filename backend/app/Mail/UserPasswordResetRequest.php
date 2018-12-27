@@ -26,7 +26,7 @@ class UserPasswordResetRequest extends Mailable
     {
         $this->user = $user;
         $this->token = $token;
-        $this->url = config('app.marketing_url') . "/forgot/change?" . build_query_string(['token' => $token, 'email' => $user->email]);
+        $this->url = config('app.marketing_url').'/forgot/change?'.build_query_string(['token' => $token, 'email' => $user->email]);
     }
 
     public function build()

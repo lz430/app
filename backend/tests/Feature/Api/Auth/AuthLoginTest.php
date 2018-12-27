@@ -26,7 +26,7 @@ class AuthLoginTest extends TestCaseWithAuth
                     'expires_in',
                 ])->assertStatus(200);
 
-        $this->assertTrue(strlen($response->json()['access_token']) > 20, "Access token is probably not a token");
+        $this->assertTrue(strlen($response->json()['access_token']) > 20, 'Access token is probably not a token');
     }
 
     /** @test */

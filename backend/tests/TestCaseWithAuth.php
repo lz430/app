@@ -2,9 +2,9 @@
 
 namespace Tests;
 
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 abstract class TestCaseWithAuth extends TestCase
 {
@@ -14,7 +14,8 @@ abstract class TestCaseWithAuth extends TestCase
     public function actingAs(Authenticatable $user, $driver = null)
     {
         $token = JWTAuth::fromUser($user);
-        $this->withHeader('Authorization', 'Bearer ' . $token);
+        $this->withHeader('Authorization', 'Bearer '.$token);
+
         return $this;
     }
 }
