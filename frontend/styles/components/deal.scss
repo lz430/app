@@ -365,13 +365,31 @@
     }
 
     &__specs {
-        h6,
+        align-self: center;
+
+        & > .p-15 {
+            padding: 15px;
+        }
+
+        h5,
         svg {
             display: inline-block;
+        }
+        h5 {
+            color: $color-darkestgrey;
+            font-size: 1.1rem;
         }
         svg {
             color: $color-darkergrey;
             margin-right: 20px;
+        }
+
+        .accordion-body {
+            padding: 15px;
+
+            &:nth-child(even) {
+                background: #f6f6f6;
+            }
         }
 
         .headings {
