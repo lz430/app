@@ -4,7 +4,6 @@ namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
 use App\Models\JATO\Version;
-use BuildData;
 
 class BuildEquipmentData
 {
@@ -38,9 +37,6 @@ class BuildEquipmentData
 
     private $standardEquipmentText;
     private $equipmentOnDeal;
-
-    private $dealData;
-
 
     private function organizeEquipmentOnDeal()
     {
@@ -234,7 +230,7 @@ class BuildEquipmentData
                 } else {
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         $equipments->name,
-                       'Included',
+                        'Included',
                         [
                             'equipment' => $equipments,
                             'from' => 'Equipment Name',
@@ -281,7 +277,8 @@ class BuildEquipmentData
         $this->deal = $deal;
         $this->debug = $debug;
 
-        $this->dealData = new BuildData($this->deal);
+        $this->compileEquipmentData();
+        $this->dealEquipment();
         $this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
 

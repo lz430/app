@@ -94,7 +94,6 @@ class BuildData
     {
         $this->deal = $deal;
         $this->debug = $debug;
-
         $this->compileEquipmentData();
         $this->dealEquipment();
 

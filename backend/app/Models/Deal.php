@@ -13,6 +13,7 @@ use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use DeliverMyRide\JATO\Manager\BuildOverviewData;
+use DeliverMyRide\JATO\Manager\BuildData;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -363,6 +364,11 @@ class Deal extends Model
         'source_price' => 'object',
         'payments' => 'object',
     ];
+
+    public function getEquipment()
+    {
+        return resolve('DeliverMyRide\JATO\Manager\BuildData')->build($this);
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -919,14 +925,15 @@ class Deal extends Model
             }
         }
 
-
+        $equipmentOnDeal = $this->getEquipment();
         // Overview data for detail page
-        $record['overview'] = [];
-        $record['overview'] = (new BuildOverviewData())->build($this);
+        //$record['overview'] = [];
+        //$record['overview'] = (new BuildOverviewData())->build($this);
 
         // Equipment on car
         $record['equipment'] = [];
-        $record['equipment'] = (new BuildEquipmentData())->build($this);
+        $record['equipment'] = (new BuildEquipmentData())->build($equipmentOnDeal);
+        //$record['equipment'] = (new BuildEquipmentData())->build($this);
 
         //
         // Catchall
