@@ -1,6 +1,7 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 import { Row, Col, Collapse } from 'reactstrap';
+import SpecsDetails from './SpecsDetails';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -23,20 +24,7 @@ export default class extends React.PureComponent {
         active: false,
     };
 
-    toggleActiveFaq(faqKey) {
-        // If the user clicks on the open faq, close all faqss
-        if (faqKey === this.state.activeFaqKey) {
-            this.setState({
-                activeFaqKey: false,
-            });
-        } else {
-            this.setState({
-                activeFaqKey: faqKey,
-            });
-        }
-    }
-
-    getVehicleData(cat) {
+    getVehicleData() {
         var theData = this.props.vehicle.equipment;
         // console.log(theData);
         return theData;
@@ -55,51 +43,51 @@ export default class extends React.PureComponent {
         this.setState({
             collapse: !this.state.collapse,
             active: !this.state.active,
-            category: !this.state.category,
         });
+
+    specSetCat = category =>
+        this.setState({
+            category: this.category,
+        });
+
+    getTheCats() {
+        const cats = [...new Set(this.getVehicleData().map(v => v.category))];
+        const catsR = cats.filter(c => c).map((category, i) => {
+            // console.log(this.props);
+
+            return (
+                <Col
+                    xs="12"
+                    key={i}
+                    onClick={() => this.specSetCat(category)}
+                    className={
+                        this.state.category === category
+                            ? 'border-bottom p-15 active'
+                            : 'border-bottom p-15 not-active'
+                    }
+                >
+                    <FontAwesomeIcon
+                        icon={this.state.active ? faMinusCircle : faPlusCircle}
+                    />
+                    <h5 className=""> {category} </h5>
+                    <SpecsDetails
+                        key={this.props.vehicle.id}
+                        vehicle={this.props.vehicle}
+                    />
+                </Col>
+            );
+        });
+        return (
+            <Row className="deal-details__specs accoridon-heading" id="specs">
+                {catsR}
+            </Row>
+        );
+    }
 
     render() {
         const { deal } = this.props;
-        return (
-            <React.Fragment>
-                {this.getCategories().map(category => (
-                    <Row
-                        className="deal-details__specs accoridon-heading"
-                        id="specs"
-                        onClick={this.toggle}
-                    >
-                        <Col xs="12" className="border-bottom p-15">
-                            <FontAwesomeIcon
-                                icon={
-                                    this.state.active
-                                        ? faMinusCircle
-                                        : faPlusCircle
-                                }
-                                onClick={this.getCategories()}
-                            />
-                            <h5 className=""> {category} </h5>
-                            <Collapse isOpen={this.state.collapse}>
-                                {this.getVehicleData().map(vehicle => (
-                                    <Row className="deal-details__specs accordion-body">
-                                        <Col
-                                            sm="6"
-                                            className="deal-details__specs capabilities text-left"
-                                        >
-                                            <span>{vehicle.label}</span>
-                                        </Col>
-                                        <Col
-                                            sm="6"
-                                            className="deal-details__specs features text-center"
-                                        >
-                                            <span>{vehicle.value}</span>
-                                        </Col>
-                                    </Row>
-                                ))}
-                            </Collapse>
-                        </Col>
-                    </Row>
-                ))}
-            </React.Fragment>
-        );
+        // console.log(this.state);
+
+        return <React.Fragment>{this.getTheCats()}</React.Fragment>;
     }
 }
