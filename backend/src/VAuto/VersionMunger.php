@@ -252,7 +252,7 @@ class VersionMunger
                 'location' => $equip->location,
                 'availability' => $equip->availability,
                 'value' => $equip->value,
-                'attributes' => json_encode($equip->attributes),
+                'aspects' => $equip->attributes,
             ];
             Equipment::updateOrCreate($data);
         }

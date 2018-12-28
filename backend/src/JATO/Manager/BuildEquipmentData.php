@@ -151,7 +151,7 @@ class BuildEquipmentData
         $labels = [];
         $attributes = [];
 
-        foreach ($equipments->attributes as $attribute) {
+        foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
         switch ($equipments->name) {
@@ -215,9 +215,10 @@ class BuildEquipmentData
                 break;
             case 'Transmission':
                 if (isset($attributes['Transmission type'])) {
+                    $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
                     $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
                         'Transmission',
-                        "{$attributes['number of speeds']->value} speed {$attributes['Transmission type']->value}",
+                        "{$speeds} speed {$attributes['Transmission type']->value}",
                         [
                             'equipment' => $equipments,
                             'from' => 'Custom',
@@ -273,14 +274,14 @@ class BuildEquipmentData
                         'from' => 'Custom',
                     ]);
                 break;
-                break;
             default:
+                //
+                // If the equipment isn't optional, and we have standard text.
                 if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
                     if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
-                        $labels[$equipments->schema_id] = $this->standardEquipmentText[$equipments->schema_id]->content;
                         $labels[$equipments->schema_id] = $this->itemFactory(
-                            'Label',
                             $this->standardEquipmentText[$equipments->schema_id]->content,
+                            'Included',
                             [
                                 'equipment' => $equipments,
                                 'from' => 'Standard Text Content',
@@ -296,8 +297,8 @@ class BuildEquipmentData
                     }
                 } else {
                     $labels[$equipments->schema_id] = $this->itemFactory(
-                        'Label',
                         $equipments->name,
+                       'Included',
                         [
                             'equipment' => $equipments,
                             'from' => 'Equipment Name',

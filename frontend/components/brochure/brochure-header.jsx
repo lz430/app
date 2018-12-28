@@ -69,7 +69,11 @@ export default class Header extends React.Component {
                                 </ActiveLink>
                             </NavItem>
                             <NavItem>
-                                <Link href="/deal-list" as="/filter" passHref>
+                                <Link
+                                    href="/deal-list?entity=model&sort=payment&purchaseStrategy=lease"
+                                    as="/filter?entity=model&sort=payment&purchaseStrategy=lease"
+                                    passHref
+                                >
                                     <a className="btn btn-primary">
                                         Get Started
                                     </a>
