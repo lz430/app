@@ -107,53 +107,56 @@ class SignupForm extends React.Component {
                                         {this.state.globalFormError}
                                     </Alert>
                                 )}
-                                <Row>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="first_name">
-                                                First Name
-                                            </Label>
-                                            <FormikFieldWithBootstrapInput
-                                                type="text"
-                                                name="first_name"
-                                                id="first_name"
-                                                placeholder="Matt"
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                    <Col>
-                                        <FormGroup>
-                                            <Label for="last_name">
-                                                Last Name
-                                            </Label>
-                                            <FormikFieldWithBootstrapInput
-                                                type="text"
-                                                name="last_name"
-                                                id="last_name"
-                                                placeholder="Smith"
-                                            />
-                                        </FormGroup>
-                                    </Col>
-                                </Row>
+                                <fieldset>
+                                    <legend>Account Info</legend>
+                                    <Row>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="first_name">
+                                                    First Name
+                                                </Label>
+                                                <FormikFieldWithBootstrapInput
+                                                    type="text"
+                                                    name="first_name"
+                                                    id="first_name"
+                                                    placeholder="Matt"
+                                                />
+                                            </FormGroup>
+                                        </Col>
+                                        <Col>
+                                            <FormGroup>
+                                                <Label for="last_name">
+                                                    Last Name
+                                                </Label>
+                                                <FormikFieldWithBootstrapInput
+                                                    type="text"
+                                                    name="last_name"
+                                                    id="last_name"
+                                                    placeholder="Smith"
+                                                />
+                                            </FormGroup>
+                                        </Col>
+                                    </Row>
 
-                                <FormGroup>
-                                    <Label for="email">Email Address</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        placeholder="msmith@gmail.com"
-                                    />
-                                </FormGroup>
-                                <FormGroup>
-                                    <Label for="email">Phone Number</Label>
-                                    <FormikFieldWithBootstrapInput
-                                        type="text"
-                                        name="phone"
-                                        id="phone"
-                                        placeholder="231-555-5555"
-                                    />
-                                </FormGroup>
+                                    <FormGroup>
+                                        <Label for="email">Email Address</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="email"
+                                            name="email"
+                                            id="email"
+                                            placeholder="msmith@gmail.com"
+                                        />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label for="email">Phone Number</Label>
+                                        <FormikFieldWithBootstrapInput
+                                            type="text"
+                                            name="phone"
+                                            id="phone"
+                                            placeholder="231-555-5555"
+                                        />
+                                    </FormGroup>
+                                </fieldset>
                                 <fieldset className="form-group">
                                     <legend>Update your password</legend>
                                     <FormGroup>

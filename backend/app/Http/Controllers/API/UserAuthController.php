@@ -84,15 +84,6 @@ class UserAuthController extends BaseAPIController
     }
 
     /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function user(Request $request)
-    {
-        return response()->json($request->user());
-    }
-
-    /**
      * Get the token array structure.
      * @param $token
      * @return array

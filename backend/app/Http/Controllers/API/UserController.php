@@ -7,15 +7,25 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserPasswordResetSuccess;
 
-class UserPasswordChangeController extends BaseAPIController
+class UserController extends BaseAPIController
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function me(Request $request)
+    {
+        return response()->json($request->user());
+    }
+
     /**
      * Reset password.
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function change(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'password' => 'required|string|confirmed',

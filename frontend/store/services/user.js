@@ -40,7 +40,7 @@ class UserService {
      * @returns {*}
      */
     me = () => {
-        return httpclient.get('/api/auth/user', {
+        return httpclient.get('/api/user/me', {
             headers: this.client.headers(),
         });
     };
