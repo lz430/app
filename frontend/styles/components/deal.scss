@@ -365,6 +365,15 @@
     }
 
     &__specs {
+        h6,
+        svg {
+            display: inline-block;
+        }
+        svg {
+            color: $color-darkergrey;
+            margin-right: 20px;
+        }
+
         .headings {
             &__item {
                 background: $color-grey;

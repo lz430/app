@@ -1,8 +1,7 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 import DealColors from '../../../components/Deals/DealColors';
-import StandardFeaturesModal from './StandardFeaturesModal';
-import AdditionalFeaturesModal from './AdditionalFeaturesModal';
+import SpecsGroup from './SpecsGroup';
 import { Row, Col } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,50 +16,26 @@ export default class extends React.PureComponent {
         basicFeatures: [],
         fuelEconomy: {},
         upholsteryType: null,
-        standardFeaturesModalOpen: false,
-        additionalFeaturesModalOpen: false,
+        category: 'Engine',
+        activeSpec: false,
     };
 
     componentDidMount() {
         if (this.props.deal) {
-            const {
-                body_style,
-                driven_wheels,
-                fuel_econ_city,
-                fuel_econ_hwy,
-            } = this.props.deal.version;
-
-            const { engine, transmission } = this.props.deal;
-
-            const basicFeatures = [
-                { name: 'Body', content: body_style },
-                { name: 'Drive Train', content: driven_wheels },
-                { name: 'Engine', content: engine },
-                { name: 'Transmission', content: transmission },
-            ];
-
-            const fuelEconomy = {
-                city: fuel_econ_city,
-                highway: fuel_econ_hwy,
-            };
-
-            this.setState({ basicFeatures, fuelEconomy });
-
-            console.log(this.props.deal);
         }
     }
 
-    toggleStandardFeaturesModal() {
-        this.setState({
-            standardFeaturesModalOpen: !this.state.standardFeaturesModalOpen,
-        });
-    }
-
-    toggleAdditionalFeaturesModal() {
-        this.setState({
-            additionalFeaturesModalOpen: !this.state
-                .additionalFeaturesModalOpen,
-        });
+    toggleSpecAccordion(faqKey) {
+        // If the user clicks on the open faq, close all faqss
+        if (faqKey === this.state.activeSpec) {
+            this.setState({
+                activeSpec: false,
+            });
+        } else {
+            this.setState({
+                activeSpec: faqKey,
+            });
+        }
     }
 
     render() {
@@ -90,30 +65,10 @@ export default class extends React.PureComponent {
                                 <h6 className="m-0">Features</h6>
                             </Col>
                         </Row>
-
-                        <Row
-                            className="deal-details__specs accoridon-heading"
-                            id="specs"
-                        >
-                            <Col xs="12">
-                                <h6 className=""> Powertrain </h6>
-                            </Col>
-                        </Row>
-
-                        <Row className="deal-details__specs row">
-                            <Col
-                                sm="6"
-                                className="deal-details__specs capabilities text-left"
-                            >
-                                <span>Fuel Type</span>
-                            </Col>
-                            <Col
-                                sm="6"
-                                className="deal-details__specs features text-center"
-                            >
-                                <span>Gas v8</span>
-                            </Col>
-                        </Row>
+                        <SpecsGroup
+                            key={this.props.deal.id}
+                            vehicle={this.props.deal}
+                        />
                     </Col>
                 </Row>
             </div>
