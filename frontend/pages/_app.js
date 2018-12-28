@@ -28,7 +28,10 @@ class MyApp extends App {
         if (isServer) {
             //
             // Location
-            if (!ctx.req.session.location) {
+            if (
+                !ctx.req.session.location ||
+                !ctx.req.session.location.is_valid
+            ) {
                 await ctx.store.dispatch(
                     requestLocation(null, ctx.req.session)
                 );

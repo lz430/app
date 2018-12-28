@@ -9,7 +9,7 @@ import Head from 'next/head';
 
 import { Container, Row, Col } from 'reactstrap';
 
-import LoginForm from '../../modules/login/components/LoginForm';
+import LoginForm from '../../apps/user/components/LoginForm';
 
 import Link from 'next/link';
 

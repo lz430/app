@@ -14,23 +14,34 @@ import { withRouter } from 'next/router';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { getUser } from '../../apps/session/selectors';
-import { logoutUser } from '../../apps/user/actions';
-import AccountSummary from '../../apps/user/components/AccountSummary';
-import AccountOrdersList from '../../apps/user/components/AccountOrdersList';
-import AccountLogout from '../../apps/user/components/AccountLogout';
+import UpdateAccountForm from '../../apps/user/components/UpdateAccountForm';
+import Link from 'next/link';
 
-class MyAccount extends Page {
+class UpdateAccount extends Page {
     static propTypes = {
         user: PropTypes.object,
         logoutUser: PropTypes.func.isRequired,
         router: nextRouterType,
     };
 
+    state = {
+        wasSuccess: false,
+    };
+
+    handleOnSuccess() {
+        this.setState({ wasSuccess: true });
+    }
+
     renderBreadcrumb() {
         return (
             <Container>
                 <Breadcrumb>
-                    <BreadcrumbItem active>My Account</BreadcrumbItem>
+                    <BreadcrumbItem>
+                        <Link href="/auth/my-account" as="/my-account">
+                            <a>My Account</a>
+                        </Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem active>Update Account</BreadcrumbItem>
                 </Breadcrumb>
             </Container>
         );
@@ -51,12 +62,18 @@ class MyAccount extends Page {
     renderPageContent() {
         return (
             <React.Fragment>
-                <AccountSummary user={this.props.user} />
-                <AccountOrdersList user={this.props.user} />
-                <AccountLogout
-                    user={this.props.user}
-                    logoutUser={this.props.logoutUser}
-                />
+                <Row>
+                    <Col md={{ size: 6, offset: 3 }}>
+                        <div className="bg-white pt-3 pb-3 rounded shadow-sm">
+                            <UpdateAccountForm
+                                user={this.props.user}
+                                handleOnSuccess={this.handleOnSuccess.bind(
+                                    this
+                                )}
+                            />
+                        </div>
+                    </Col>
+                </Row>
             </React.Fragment>
         );
     }
@@ -84,11 +101,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => {
-    return {
-        logoutUser: () => {
-            return dispatch(logoutUser());
-        },
-    };
+    return {};
 };
 
 export default compose(
@@ -98,4 +111,4 @@ export default compose(
         mapStateToProps,
         mapDispatchToProps
     )
-)(MyAccount);
+)(UpdateAccount);

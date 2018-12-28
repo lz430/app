@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Head from 'next/head';
 import { Container, Row, Col } from 'reactstrap';
 
-import ForgotForm from '../../modules/forgot/components/ForgotForm';
+import ForgotForm from '../../apps/user/components/ForgotForm';
 import Link from 'next/link';
 import { getUser } from '../../apps/session/selectors';
 import { withRouter } from 'next/dist/lib/router';

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Head from 'next/head';
 import { Container, Row, Col } from 'reactstrap';
 
-import SignupForm from '../../modules/signup/components/SignupForm';
+import SignupForm from '../../apps/user/components/SignupForm';
 import Link from 'next/link';
 import { getUser } from '../../apps/session/selectors';
 import { withRouter } from 'next/dist/lib/router';

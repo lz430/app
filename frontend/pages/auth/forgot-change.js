@@ -4,7 +4,7 @@ import Head from 'next/head';
 
 import { Container, Row, Col } from 'reactstrap';
 
-import ForgotChangeForm from '../../modules/forgot-change/components/ForgotChangeForm';
+import ForgotChangeForm from '../../apps/user/components/ForgotChangeForm';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 
