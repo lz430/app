@@ -927,13 +927,12 @@ class Deal extends Model
 
         $equipmentOnDeal = $this->getEquipment();
         // Overview data for detail page
-        //$record['overview'] = [];
-        //$record['overview'] = (new BuildOverviewData())->build($this);
+        $record['overview'] = [];
+        $record['overview'] = (new BuildOverviewData())->build($equipmentOnDeal);
 
         // Equipment on car
         $record['equipment'] = [];
         $record['equipment'] = (new BuildEquipmentData())->build($equipmentOnDeal);
-        //$record['equipment'] = (new BuildEquipmentData())->build($this);
 
         //
         // Catchall

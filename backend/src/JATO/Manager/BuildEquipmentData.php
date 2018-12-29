@@ -2,63 +2,16 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
-use App\Models\Deal;
-use App\Models\JATO\Version;
-
 class BuildEquipmentData
 {
-    private const EQUIPMENT_TO_SKIP = [
-        'Internal dimensions',
-        'Crash test results',
-        'Front seat belts',
-        'Rear seat belts',
-        'Axle ratio :1',
-        'Powertrain type',
-        'Bumpers',
-        'Exterior door handles',
-        'Paint',
-        'Rear door',
-        'Rear axle',
-        'Cargo capacity',
-        'Emission control level',
-        'Additional fuel types',
-    ];
-
-    private const CATEGORIES_TO_SKIP = [
-        'Pricing',
-        'General',
-    ];
-
     /* @var \App\Models\Deal */
-    private $deal;
+    private $equipment;
 
     /* @var bool */
     private $debug;
 
     private $standardEquipmentText;
     private $equipmentOnDeal;
-
-    private function organizeEquipmentOnDeal()
-    {
-        $equipmentCategories = [];
-
-        foreach ($this->equipmentOnDeal as $equipment) {
-            if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
-                continue;
-            }
-
-            if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
-                continue;
-            }
-
-            if (! isset($equipmentCategories[$equipment->category])) {
-                $equipmentCategories[$equipment->category] = [];
-            }
-
-            $equipmentCategories[$equipment->category][$equipment->schema_id] = $equipment;
-        }
-        $this->equipmentOnDeal = $equipmentCategories;
-    }
 
     private function itemFactory($label, $value, $meta = [])
     {
@@ -246,7 +199,7 @@ class BuildEquipmentData
     private function labelEquipmentOnDeal()
     {
         $labeledEquipment = [];
-        foreach ($this->equipmentOnDeal as $category => $equipments) {
+        foreach ($this->equipment as $category => $equipments) {
             foreach ($equipments as $equipment) {
                 $labels = $this->getLabelsForJatoEquipment($equipment);
                 foreach ($labels as $schemaId => $label) {
@@ -268,18 +221,19 @@ class BuildEquipmentData
     }
 
     /**
-     * @param Deal $deal
+     * @param array $equipment
      * @param bool $debug
      * @return mixed
      */
-    public function build(Deal $deal, $debug = false)
+    public function build($equipment = [], $debug = false)
     {
-        $this->deal = $deal;
+
+        $this->equipment = $equipment;
         $this->debug = $debug;
 
-        $this->compileEquipmentData();
-        $this->dealEquipment();
-        $this->organizeEquipmentOnDeal();
+        //$this->compileEquipmentData();
+        //$this->dealEquipment();
+        //$this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
 
         return $this->equipmentOnDeal;

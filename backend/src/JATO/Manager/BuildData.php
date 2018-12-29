@@ -8,6 +8,28 @@ use App\Models\JATO\Version;
 class BuildData
 {
 
+    private const EQUIPMENT_TO_SKIP = [
+        'Internal dimensions',
+        'Crash test results',
+        'Front seat belts',
+        'Rear seat belts',
+        'Axle ratio :1',
+        'Powertrain type',
+        'Bumpers',
+        'Exterior door handles',
+        'Paint',
+        'Rear door',
+        'Rear axle',
+        'Cargo capacity',
+        'Emission control level',
+        'Additional fuel types',
+    ];
+
+    private const CATEGORIES_TO_SKIP = [
+        'Pricing',
+        'General',
+    ];
+
     /* @var \App\Models\Deal */
     private $deal;
 
@@ -85,6 +107,27 @@ class BuildData
         }
     }
 
+    private function organizeEquipmentOnDeal()
+    {
+        $equipmentCategories = [];
+        foreach ($this->equipmentOnDeal as $equipment) {
+            if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
+                continue;
+            }
+
+            if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
+                continue;
+            }
+
+            if (! isset($equipmentCategories[$equipment->category])) {
+                $equipmentCategories[$equipment->category] = [];
+            }
+
+            $equipmentCategories[$equipment->category][$equipment->schema_id] = $equipment;
+        }
+        $this->equipmentOnDeal = $equipmentCategories;
+    }
+
     /**
      * @param Deal $deal
      * @param bool $debug
@@ -96,6 +139,7 @@ class BuildData
         $this->debug = $debug;
         $this->compileEquipmentData();
         $this->dealEquipment();
+        $this->organizeEquipmentOnDeal();
 
         return $this->equipmentOnDeal;
     }
