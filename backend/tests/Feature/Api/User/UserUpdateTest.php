@@ -27,7 +27,7 @@ class UserUpdateTest extends TestCaseWithAuth
             'password_confirmation' => '1234',
         ];
 
-        $response = $this->json('POST', 'api/user/update', $payload);
+        $response = $this->actingAs($user)->json('POST', 'api/user/update', $payload);
         $response->assertStatus(200);
     }
 }
