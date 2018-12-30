@@ -34,7 +34,7 @@ class UserController extends BaseAPIController
             'last_name' => 'required|string',
             'phone' => 'sometimes|string',
             'current_password' => 'sometimes|string',
-            'password' => 'required|string|confirmed',
+            'password' => 'required_with:current_password|string|confirmed',
         ]);
 
         $user = $request->user();
@@ -54,7 +54,7 @@ class UserController extends BaseAPIController
         //
         // Update Password
         if ($request->get('current_password', false)) {
-            if (Hash::make($request->get('current_password', false)) !== $user->password) {
+            if (!Hash::check($request->get('current_password', false), $user->password)) {
                 return $this->respondWithGlobalFormError("Current password is incorrect");
             }
 
