@@ -100,15 +100,8 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {};
-};
-
 export default compose(
     withRouter,
     withTracker,
-    connect(
-        mapStateToProps,
-        mapDispatchToProps
-    )
+    connect(mapStateToProps)
 )(UpdateAccount);
