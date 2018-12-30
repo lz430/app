@@ -15,12 +15,12 @@ const validationSchema = object().shape({
     email: string().required(),
     phone_number: string(),
     current_password: string(),
-    password: string().when('current_password', (current_password, schema) => {
+    password: string().when('current_password', current_password => {
         return current_password;
     }),
     password_confirmation: string().when(
         'current_password',
-        (current_password, schema) => {
+        current_password => {
             return current_password;
         }
     ),

@@ -190,7 +190,7 @@ export function* updateUser(data) {
     const values = data.values;
     const formActions = data.actions;
 
-    let token, user;
+    let user;
 
     //
     // Update User
