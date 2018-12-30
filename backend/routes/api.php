@@ -46,12 +46,10 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-
 Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
     Route::get('me', 'UserController@me');
     Route::post('update', 'UserController@update');
 });
-
 
 Route::group(['prefix' => 'password'], function () {
     Route::post('create', 'UserPasswordResetController@create');

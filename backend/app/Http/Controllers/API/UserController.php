@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\UserPasswordResetSuccess;
-use App\Models\User;
 
 class UserController extends BaseAPIController
 {
@@ -44,7 +42,7 @@ class UserController extends BaseAPIController
         if ($user->email !== $request->get('email')) {
             $isEmailInUse = User::where('email', '=', $request->get('email'))->count();
             if ($isEmailInUse) {
-                return $this->respondWithGlobalFormError("Email address already in use");
+                return $this->respondWithGlobalFormError('Email address already in use');
             }
         }
 
@@ -54,14 +52,15 @@ class UserController extends BaseAPIController
         //
         // Update Password
         if ($request->get('current_password', false)) {
-            if (!Hash::check($request->get('current_password', false), $user->password)) {
-                return $this->respondWithGlobalFormError("Current password is incorrect");
+            if (! Hash::check($request->get('current_password', false), $user->password)) {
+                return $this->respondWithGlobalFormError('Current password is incorrect');
             }
 
             $user->password = Hash::make($request->password);
         }
 
         $user->save();
+
         return response()->json($user);
     }
 }

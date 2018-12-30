@@ -2,11 +2,8 @@
 
 namespace Tests\Feature\Api\Auth;
 
-use App\Mail\UserCreated;
 use App\Models\User;
 use Tests\TestCaseWithAuth;
-use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Mail;
 
 class UserUpdateTest extends TestCaseWithAuth
 {
