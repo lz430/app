@@ -156,7 +156,7 @@ $factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $fa
         'dmr_price' => 30000,
         'monthly_payment' => 500,
         'msrp' => 28000,
-        'rebates' => (new \App\Services\Quote\Factories\fakeQuote())->get()->rebates,
+        'rebates' => (new \App\Services\Quote\Factories\FakeQuote())->get()->rebates,
         'trade' => (object) [],
     ];
 });

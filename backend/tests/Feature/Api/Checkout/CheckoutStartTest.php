@@ -4,7 +4,7 @@ namespace Tests\Feature\Api\Checkout;
 
 use App\Models\Deal;
 use Tests\TestCaseWithAuth;
-use App\Services\Quote\Factories\fakeQuote;
+use App\Services\Quote\Factories\FakeQuote;
 
 class CheckoutStartTest extends TestCaseWithAuth
 {
@@ -16,7 +16,7 @@ class CheckoutStartTest extends TestCaseWithAuth
         $payload = [
             'deal_id' => $deal->id,
             'strategy' => 'lease',
-            'quote' => (new fakeQuote())->get(),
+            'quote' => (new FakeQuote())->get(),
             'amounts' => (object) [
                 'role' => 'dmr',
                 'price' => '21926.00',
