@@ -7,34 +7,43 @@ import { Button, FormGroup, Label, Alert, Row, Col } from 'reactstrap';
 
 import { faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import api from '../../../store/api';
 import PropTypes from 'prop-types';
 
 const validationSchema = object().shape({
     first_name: string().required(),
     last_name: string().required(),
     email: string().required(),
-    password: string().required(),
-    password_confirmation: string().required(),
+    phone_number: string(),
+    current_password: string(),
+    password: string().when('current_password', (current_password, schema) => {
+        return current_password;
+    }),
+    password_confirmation: string().when(
+        'current_password',
+        (current_password, schema) => {
+            return current_password;
+        }
+    ),
 });
-
-const initialFormValues = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    current_password: '',
-    password: '',
-    password_confirmation: '',
-};
 
 class SignupForm extends React.Component {
     static propTypes = {
+        user: PropTypes.object.isRequired,
         handleOnSuccess: PropTypes.func.isRequired,
+        updateUser: PropTypes.func.isRequired,
     };
 
     state = {
         globalFormError: null,
+        initialFormValues: {
+            first_name: this.props.user.first_name || '',
+            last_name: this.props.user.last_name || '',
+            email: this.props.user.email || '',
+            phone_number: this.props.user.phone_number || '',
+            current_password: '',
+            password: '',
+            password_confirmation: '',
+        },
     };
 
     handleGlobalFormErrors(errors) {
@@ -42,29 +51,23 @@ class SignupForm extends React.Component {
     }
 
     handleOnSubmit(values, actions) {
-        api.user
-            .signup(values)
-            .then(() => {
-                this.props.handleOnSuccess();
-            })
-            .catch(error => {
-                console.log(error);
-                const formErrors = api.translateApiErrors(error.response.data);
-                if (formErrors.form) {
-                    this.handleGlobalFormErrors(formErrors);
-                } else {
-                    actions.setErrors(formErrors);
-                }
-            })
-            .then(() => {
-                actions.setSubmitting(false);
-            });
+        let payload = { ...values };
+
+        if (!payload['current_password']) {
+            delete payload['current_password'];
+            delete payload['password'];
+            delete payload['password_confirmation'];
+        }
+
+        actions.handleGlobalFormErrors = this.handleGlobalFormErrors.bind(this);
+        actions.handleOnSuccess = this.props.handleOnSuccess;
+        this.props.updateUser(payload, actions);
     }
 
     render() {
         return (
             <Formik
-                initialValues={initialFormValues}
+                initialValues={this.state.initialFormValues}
                 validationSchema={validationSchema}
                 onSubmit={(values, actions) =>
                     this.handleOnSubmit(values, actions)
@@ -148,11 +151,13 @@ class SignupForm extends React.Component {
                                         />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="email">Phone Number</Label>
+                                        <Label for="phone_number">
+                                            Phone Number
+                                        </Label>
                                         <FormikFieldWithBootstrapInput
                                             type="text"
-                                            name="phone"
-                                            id="phone"
+                                            name="phone_number"
+                                            id="phone_number"
                                             placeholder="231-555-5555"
                                         />
                                     </FormGroup>

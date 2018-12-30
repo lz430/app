@@ -6,6 +6,7 @@ import {
     REQUEST_IP_LOCATION_INFO,
     REQUEST_LOCATION,
     LOGIN_USER,
+    UPDATE_USER,
     LOGOUT_USER,
 } from './consts';
 import { receiveLocation } from './actions';
@@ -185,6 +186,54 @@ export function* logoutUser() {
     Router.push('/auth/login', 'login');
 }
 
+export function* updateUser(data) {
+    const values = data.values;
+    const formActions = data.actions;
+
+    let token, user;
+
+    //
+    // Update User
+    try {
+        user = yield call(api.user.update, values);
+        user = user.data;
+    } catch (error) {
+        console.log(error);
+        const formErrors = api.translateApiErrors(error.response.data);
+
+        if (formErrors.form) {
+            formActions.handleGlobalFormErrors(formErrors);
+        } else {
+            formActions.setErrors(formErrors);
+        }
+
+        formActions.setSubmitting(false);
+    }
+
+    if (user) {
+        formActions.handleOnSuccess();
+    }
+
+    //
+    // Store the user in the session
+    if (user) {
+        storeSessionData({ user: user });
+    }
+
+    //
+    // Soft update the session
+    if (user) {
+        yield put(softUpdateSessionData({ user: user }));
+    }
+
+    //
+    // Redirect to my account for testing
+    formActions.setSubmitting(false);
+    if (user) {
+        Router.push('/auth/my-account', 'my-account');
+    }
+}
+
 /*******************************************************************
  * Watchers
  ********************************************************************/
@@ -202,4 +251,8 @@ export function* watchLogin() {
 
 export function* watchLogout() {
     yield takeEvery(LOGOUT_USER, logoutUser);
+}
+
+export function* watchUpdateUser() {
+    yield takeEvery(UPDATE_USER, updateUser);
 }

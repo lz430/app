@@ -21,15 +21,16 @@ class UserUpdateTest extends TestCaseWithAuth
             'first_name' => 'Smith',
             'last_name' => 'Wisner',
             'email' => 'mattwisner1@gmail.com',
+            'phone_number' => '231-225-1102',
         ];
 
         $response = $this->actingAs($user)->json('POST', 'api/user/update', $payload);
         $response
             ->assertStatus(200)
             ->assertJsonStructure(
-                ['id', 'first_name', 'last_name', 'email']
+                ['id', 'first_name', 'last_name', 'email', 'phone_number']
             )
-        ->assertJsonFragment(['first_name' => $payload['first_name']]);
+        ->assertJsonFragment($payload);
     }
 
     /** @test */
@@ -68,14 +69,16 @@ class UserUpdateTest extends TestCaseWithAuth
             'password_confirmation' => '1234',
         ];
 
-        $response = $this->actingAs($user)->json('POST', 'api/user/update', $payload);
+        $response = $this
+            ->actingAs($user)
+            ->json('POST', 'api/user/update', $payload);
+
         $response
             ->assertStatus(422)
             ->assertJson(
                 ['errors' => ['form' => 'Current password is incorrect']]
             );
     }
-
 
     /** @test */
     public function it_updates_password_successfully()
@@ -91,7 +94,10 @@ class UserUpdateTest extends TestCaseWithAuth
             'password_confirmation' => '1234',
         ];
 
-        $response = $this->actingAs($user)->json('POST', 'api/user/update', $payload);
+        $response = $this
+            ->actingAs($user)
+            ->json('POST', 'api/user/update', $payload);
+
         $response
             ->assertStatus(200)
             ->assertJsonStructure(

@@ -46,6 +46,16 @@ class UserService {
     };
 
     /**
+     * Get currently logged in user.
+     * @returns {*}
+     */
+    update = values => {
+        return httpclient.post('/api/user/update', values, {
+            headers: this.client.headers(),
+        });
+    };
+
+    /**
      *
      * @param values
      * @returns {*}

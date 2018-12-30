@@ -20,7 +20,7 @@ class AccountSummary extends React.Component {
                         </h4>
                         <div className="pl-3 pr-3 pb-3">
                             <div>{this.props.user.email}</div>
-                            <div>{this.props.user.phone}</div>
+                            <div>{this.props.user.phone_number}</div>
                         </div>
                         <div className=" p-3 bg-light">
                             <Link

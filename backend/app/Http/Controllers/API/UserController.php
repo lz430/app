@@ -32,7 +32,7 @@ class UserController extends BaseAPIController
             'email' => 'required|string|email',
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'phone' => 'sometimes|string',
+            'phone_number' => 'sometimes|string',
             'current_password' => 'sometimes|string',
             'password' => 'required_with:current_password|string|confirmed',
         ]);
@@ -48,7 +48,7 @@ class UserController extends BaseAPIController
             }
         }
 
-        $input = $request->only('first_name', 'last_name', 'email', 'phone');
+        $input = $request->only('first_name', 'last_name', 'email', 'phone_number');
         $user->update($input);
 
         //

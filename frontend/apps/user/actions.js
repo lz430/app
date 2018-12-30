@@ -58,3 +58,17 @@ export function logoutUser() {
         type: ActionTypes.LOGOUT_USER,
     };
 }
+
+/**
+ *
+ * @param values
+ * @param actions
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function updateUser(values, actions) {
+    return {
+        type: ActionTypes.UPDATE_USER,
+        values: values,
+        actions: actions,
+    };
+}

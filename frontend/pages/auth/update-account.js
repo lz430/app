@@ -16,11 +16,12 @@ import { nextRouterType } from '../../core/types';
 import { getUser } from '../../apps/session/selectors';
 import UpdateAccountForm from '../../apps/user/components/UpdateAccountForm';
 import Link from 'next/link';
+import { updateUser } from '../../apps/user/actions';
 
 class UpdateAccount extends Page {
     static propTypes = {
         user: PropTypes.object,
-        logoutUser: PropTypes.func.isRequired,
+        updateUser: PropTypes.func.isRequired,
         router: nextRouterType,
     };
 
@@ -67,6 +68,7 @@ class UpdateAccount extends Page {
                         <div className="bg-white pt-3 pb-3 rounded shadow-sm">
                             <UpdateAccountForm
                                 user={this.props.user}
+                                updateUser={this.props.updateUser}
                                 handleOnSuccess={this.handleOnSuccess.bind(
                                     this
                                 )}
@@ -100,8 +102,19 @@ const mapStateToProps = state => {
     };
 };
 
+const mapDispatchToProps = dispatch => {
+    return {
+        updateUser: (values, actions) => {
+            return dispatch(updateUser(values, actions));
+        },
+    };
+};
+
 export default compose(
     withRouter,
     withTracker,
-    connect(mapStateToProps)
+    connect(
+        mapStateToProps,
+        mapDispatchToProps
+    )
 )(UpdateAccount);
