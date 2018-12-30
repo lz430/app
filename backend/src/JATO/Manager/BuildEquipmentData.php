@@ -231,9 +231,6 @@ class BuildEquipmentData
         $this->equipment = $equipment;
         $this->debug = $debug;
 
-        //$this->compileEquipmentData();
-        //$this->dealEquipment();
-        //$this->organizeEquipmentOnDeal();
         $this->labelEquipmentOnDeal();
 
         return $this->equipmentOnDeal;

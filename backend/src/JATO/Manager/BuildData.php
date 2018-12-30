@@ -128,6 +128,30 @@ class BuildData
         $this->equipmentOnDeal = $equipmentCategories;
     }
 
+    private function labelEquipmentOnDeal()
+    {
+        $labeledEquipment = [];
+        foreach ($this->equipment as $category => $equipments) {
+            foreach ($equipments as $equipment) {
+                $labels = $this->getLabelsForJatoEquipment($equipment);
+                foreach ($labels as $schemaId => $label) {
+                    $data = [
+                        'category' => $category,
+                        'label' => $label['label'],
+                        'value' => $label['value'],
+                    ];
+
+                    if (isset($label['meta'])) {
+                        $data['meta'] = $label['meta'];
+                    }
+
+                    $labeledEquipment[] = $data;
+                }
+            }
+        }
+        $this->equipmentOnDeal = $labeledEquipment;
+    }
+
     /**
      * @param Deal $deal
      * @param bool $debug
