@@ -48,22 +48,22 @@ export default class extends React.PureComponent {
         return (
             <React.Fragment>
                 <Collapse isOpen={this.state.collapse}>
-                    {this.getVehicleData().map(vehicle => (
-                        <Row className="deal-details__specs accordion-body">
-                            <Col
-                                sm="6"
-                                className="deal-details__specs capabilities text-left"
-                            >
-                                <span>{vehicle.label}</span>
-                            </Col>
-                            <Col
-                                sm="6"
-                                className="deal-details__specs features text-center"
-                            >
-                                <span>{vehicle.value}</span>
-                            </Col>
-                        </Row>
-                    ))}
+                    {/*{this.getVehicleData().map(vehicle => (*/}
+                    <Row className="deal-details__specs accordion-body">
+                        <Col
+                            sm="6"
+                            className="deal-details__specs capabilities text-left"
+                        >
+                            {/*<span>{vehicle.label}</span>*/}
+                        </Col>
+                        <Col
+                            sm="6"
+                            className="deal-details__specs features text-center"
+                        >
+                            {/*<span>{vehicle.value}</span>*/}
+                        </Col>
+                    </Row>
+                    {/*))}*/}
                 </Collapse>
             </React.Fragment>
         );
