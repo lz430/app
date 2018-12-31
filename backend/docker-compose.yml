@@ -26,6 +26,7 @@ services:
   redis:
     image: redis:latest
 
+
   ###
   # ES Stuff
   ###
@@ -64,6 +65,15 @@ services:
       - elasticsearch
 
   ###
+  # Dev things
+  ###
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+    - "1025:1025"
+    - "8025:8025"
+
+  ###
   # Actual Application
   ###
   app:
@@ -76,7 +86,8 @@ services:
         - mysql
         - elasticsearch
         - redis
-        
+        - mailhog
+
   nginx:
     build: ./compose/local/nginx
     ports:

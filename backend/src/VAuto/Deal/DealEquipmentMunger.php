@@ -50,7 +50,6 @@ class DealEquipmentMunger
         $this->equipment = null;
         $this->packages = null;
         $this->options = null;
-        $this->discovered_features = null;
 
         $this->debug = [
             'equipment_extracted_codes' => [],
