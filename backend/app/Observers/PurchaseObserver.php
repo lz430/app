@@ -54,7 +54,7 @@ class PurchaseObserver
 
             //
             // Remove deal from index
-            Deal::where('id', $purchase->deal_id)->searchable();
+            $purchase->deal->searchable();
         }
     }
 }

@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Deal;
-use  App\Models\Dealer;
+use  App\Models\User;
+use App\Models\Dealer;
 use App\Models\Feature;
 use App\Models\JATO\Version;
 use App\Models\Order\Purchase;
 use App\Observers\DealObserver;
+use App\Observers\UserObserver;
 use App\Models\JATO\VersionQuote;
 use App\Observers\DealerObserver;
 use App\Observers\FeatureObserver;
@@ -35,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
             Version::observe(VersionObserver::class);
         }
 
+        User::observe(UserObserver::class);
         Purchase::observe(PurchaseObserver::class);
         VersionQuote::observe(VersionQuoteObserver::class);
         Deal::observe(DealObserver::class);

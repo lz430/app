@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Routing\Controller as BaseController;
@@ -13,6 +14,11 @@ class BaseAPIController extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $status_code = Response::HTTP_OK;
+
+    public function __construct()
+    {
+        Auth::setDefaultDriver('api');
+    }
 
     public function setStatusCode($code)
     {
@@ -64,5 +70,11 @@ class BaseAPIController extends BaseController
     {
         return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->respondWithError($message);
+    }
+
+    public function respondWithGlobalFormError($error)
+    {
+        return $this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
+            ->respond(['errors' => ['form' => $error]]);
     }
 }
