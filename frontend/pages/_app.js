@@ -9,7 +9,7 @@ import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import * as Sentry from '@sentry/browser';
 import config from '../core/config';
-import { requestLocation } from '../apps/user/actions';
+//import { requestLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
 import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
