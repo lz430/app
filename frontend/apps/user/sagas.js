@@ -30,8 +30,8 @@ import { getSessionCSRFToken } from '../session/selectors';
 
 export function* requestIpLocation() {
     // Don't get ip location if location is already set.
-
     const userCurrentLocation = yield select(getUserLocation);
+
     if (userCurrentLocation.latitude && userCurrentLocation.longitude) {
         return;
     }
@@ -55,6 +55,7 @@ export function* requestIpLocation() {
 export function* requestLocation(data) {
     let newData;
     let location;
+    const csrfToken = yield select(getSessionCSRFToken);
 
     try {
         location = yield call(api.user.getLocation, data.data);
@@ -75,7 +76,7 @@ export function* requestLocation(data) {
             has_results: false,
         };
     }
-    storeSessionData({ location: location }, data.session);
+    storeSessionData({ location: location }, data.session, csrfToken);
     yield put(softUpdateSessionData({ location: location }));
 
     //

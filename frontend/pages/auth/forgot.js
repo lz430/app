@@ -28,44 +28,40 @@ class Page extends React.Component {
 
     renderAuthError() {
         return (
-            <Row>
-                <Col>
-                    <h5 className="text-center mb-5 mt-5">
-                        You are already logged in.
-                    </h5>
-                </Col>
-            </Row>
+            <div className="bg-white border border-light rounded shadow-sm">
+                <h5 className="text-center mb-5 mt-5">
+                    You are already logged in.
+                </h5>
+            </div>
         );
     }
 
     renderSuccessMessage() {
         return (
-            <Row>
-                <Col>
-                    <div>Please check your email</div>
-                </Col>
-            </Row>
+            <div className="bg-white border border-light rounded shadow-sm">
+                <h5 className="text-center mb-5 mt-5">
+                    Please check your email
+                </h5>
+            </div>
         );
     }
 
     renderPageContent() {
         return (
-            <Row>
-                <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
-                    <div className="bg-white border border-light rounded shadow-sm">
-                        <h4 className="m-0 p-3">Request Password Reset</h4>
-                        <ForgotForm
-                            handleOnSuccess={this.handleOnSuccess.bind(this)}
-                        />
-                    </div>
+            <React.Fragment>
+                <div className="bg-white border border-light rounded shadow-sm">
+                    <h4 className="m-0 p-3">Request Password Reset</h4>
+                    <ForgotForm
+                        handleOnSuccess={this.handleOnSuccess.bind(this)}
+                    />
+                </div>
 
-                    <div className="text-center pt-1">
-                        <Link href="/auth/login" as="/login" passHref>
-                            <a>Back to login</a>
-                        </Link>
-                    </div>
-                </Col>
-            </Row>
+                <div className="text-center pt-1">
+                    <Link href="/auth/login" as="/login" passHref>
+                        <a>Back to login</a>
+                    </Link>
+                </div>
+            </React.Fragment>
         );
     }
 
@@ -85,7 +81,13 @@ class Page extends React.Component {
                 <Head>
                     <title>Deliver My Ride | Forgot Password</title>
                 </Head>
-                <Container>{content}</Container>
+                <Container>
+                    <Row>
+                        <Col md={{ size: 4, offset: 4 }} className="mt-5 mb-5">
+                            {content}
+                        </Col>
+                    </Row>
+                </Container>
             </React.Fragment>
         );
     }

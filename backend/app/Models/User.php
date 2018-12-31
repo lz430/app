@@ -87,15 +87,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Purchase::class);
     }
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($user) {
-            $user->api_token = str_random(60);
-        });
-    }
-
     /**
      * Send the password reset notification.
      *

@@ -17,7 +17,7 @@ export const getSessionCSRFToken = state => {
         token = state.session.token;
     }
 
-    if (!token) {
+    if (!token && typeof document !== 'undefined') {
         const csrf = JSON.parse(document.getElementById('csrf').textContent);
         if (csrf.token) {
             token = csrf.token;
