@@ -41,7 +41,8 @@ class API {
 
     headers = () => {
         let headers = {};
-
+        //
+        // Auth Token
         let token = this.token();
 
         if (token['token']) {

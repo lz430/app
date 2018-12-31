@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 class AccountSummary extends React.Component {
     static propTypes = {
-        user: PropTypes.func.isRequired,
+        user: PropTypes.object.isRequired,
     };
 
     render() {

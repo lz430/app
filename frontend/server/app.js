@@ -1,6 +1,7 @@
 const express = require('express');
 const next = require('next');
 const compression = require('compression');
+const csrf = require('csurf');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
 
@@ -12,6 +13,8 @@ const staticRoutes = require('./staticRoutes');
 const authRoutes = require('./authRoutes');
 const brochureRoutes = require('./brochureRoutes');
 const sessionRoutes = require('./sessionRoutes');
+
+const csrfProtection = csrf({});
 
 app.prepare()
     .then(async () => {
@@ -33,10 +36,10 @@ app.prepare()
             server.use(compression());
         }
 
-        staticRoutes({ server, app });
-        authRoutes({ server, app });
-        brochureRoutes({ server, app });
-        sessionRoutes({ server, app });
+        staticRoutes({ server, app, csrfProtection });
+        authRoutes({ server, app, csrfProtection });
+        brochureRoutes({ server, app, csrfProtection });
+        sessionRoutes({ server, app, csrfProtection });
 
         server.get('/filter', (req, res) => {
             const queryParams = { ...req.query };

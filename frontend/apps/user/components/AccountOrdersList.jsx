@@ -5,7 +5,7 @@ import { Row, Col } from 'reactstrap';
 
 class AccountOrdersList extends React.Component {
     static propTypes = {
-        user: PropTypes.func.isRequired,
+        user: PropTypes.object.isRequired,
     };
 
     render() {

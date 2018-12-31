@@ -16,3 +16,10 @@ export function softRemoveUserFromSession() {
         type: ActionTypes.SOFT_REMOVE_USER_FROM_SESSION,
     };
 }
+
+export function setCSRFToken(token) {
+    return {
+        type: ActionTypes.SET_CSRF_TOKEN,
+        data: token,
+    };
+}

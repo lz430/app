@@ -11,7 +11,7 @@ import * as Sentry from '@sentry/browser';
 import config from '../core/config';
 import { requestLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
-import { softUpdateSessionData } from '../apps/session/actions';
+import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
@@ -37,6 +37,10 @@ class MyApp extends App {
                 );
             }
             await softUpdateSessionData(ctx.req.session);
+        }
+
+        if (ctx.query.csrfToken) {
+            await setCSRFToken(ctx.query.csrfToken);
         }
 
         return { pageProps };

@@ -22,6 +22,7 @@ import {
 import { setCookie, destroyCookie } from 'nookies';
 
 import Router from 'next/router';
+import { getSessionCSRFToken } from '../session/selectors';
 
 /*******************************************************************
  * Request IP Location
@@ -92,7 +93,7 @@ export function* requestLocation(data) {
 export function* loginUser(data) {
     const values = data.values;
     const formActions = data.actions;
-
+    const csrfToken = yield select(getSessionCSRFToken);
     let token, user;
 
     //
@@ -143,7 +144,7 @@ export function* loginUser(data) {
     //
     // Store the user in the session
     if (user) {
-        storeSessionData({ user: user });
+        storeSessionData({ user: user }, null, csrfToken);
     }
 
     //
@@ -161,6 +162,8 @@ export function* loginUser(data) {
 }
 
 export function* logoutUser() {
+    const csrfToken = yield select(getSessionCSRFToken);
+
     //
     // Delete tokens from API
     try {
@@ -175,7 +178,7 @@ export function* logoutUser() {
 
     //
     // Delete session
-    clearSessionData();
+    clearSessionData(null, csrfToken);
 
     //
     // Soft delete session
@@ -189,6 +192,7 @@ export function* logoutUser() {
 export function* updateUser(data) {
     const values = data.values;
     const formActions = data.actions;
+    const csrfToken = yield select(getSessionCSRFToken);
 
     let user;
 
@@ -217,7 +221,7 @@ export function* updateUser(data) {
     //
     // Store the user in the session
     if (user) {
-        storeSessionData({ user: user });
+        storeSessionData({ user: user }, null, csrfToken);
     }
 
     //

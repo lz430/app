@@ -147,18 +147,31 @@ class UserService {
     /**
      * Calls the express session storage url. Used for the client set info in the session.
      * @param data
+     * @param csrfToken
      * @returns {*}
      */
-    setSession(data) {
-        return sessionClient.post('/session', data);
+    setSession(data, csrfToken) {
+        return sessionClient.post('/session', data, {
+            headers: {
+                'CSRF-Token': csrfToken,
+            },
+        });
     }
 
     /**
      * Delete session
      * @returns {*}
      */
-    destroySession() {
-        return sessionClient.post('/session/destroy', {});
+    destroySession(csrfToken) {
+        return sessionClient.post(
+            '/session/destroy',
+            {},
+            {
+                headers: {
+                    'CSRF-Token': csrfToken,
+                },
+            }
+        );
     }
 }
 

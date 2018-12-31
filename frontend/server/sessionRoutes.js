@@ -1,8 +1,8 @@
-const setup = ({ server /*app*/ }) => {
+const setup = ({ server, csrfProtection }) => {
     /**
      * Used when the client needs to update the session
      */
-    server.post('/session', function(req, res) {
+    server.post('/session', csrfProtection, function(req, res) {
         Object.keys(req.body).map(key => {
             req.session[key] = req.body[key];
         });

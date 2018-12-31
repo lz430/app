@@ -1,14 +1,24 @@
-const setup = ({ server, app }) => {
+const setup = ({ server, app, csrfProtection }) => {
     server.get('/my-account', (req, res) => {
         app.render(req, res, '/auth/my-account', req.query);
     });
 
-    server.get('/my-account/update', (req, res) => {
-        app.render(req, res, '/auth/update-account', req.query);
+    server.get('/my-account/update', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/update-account', query);
     });
 
-    server.get('/login', (req, res) => {
-        app.render(req, res, '/auth/login', req.query);
+    server.get('/login', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/login', query);
     });
 
     server.get('/signup', (req, res) => {

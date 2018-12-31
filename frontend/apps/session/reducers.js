@@ -16,6 +16,12 @@ const reducer = function(state = initialState, action = {}) {
                 user: null,
             };
 
+        case ActionTypes.SET_CSRF_TOKEN:
+            return {
+                ...state,
+                token: action.data,
+            };
+
         default:
             return state;
     }
