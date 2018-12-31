@@ -25,6 +25,5 @@ class RemoveApiKeyFromUser extends Migration
      */
     public function down()
     {
-
     }
 }
