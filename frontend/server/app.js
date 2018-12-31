@@ -4,6 +4,7 @@ const compression = require('compression');
 const csrf = require('csurf');
 const session = require('express-session');
 const MemoryStore = require('memorystore')(session);
+const RedisStore = require('connect-redis')(session);
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -16,21 +17,39 @@ const sessionRoutes = require('./sessionRoutes');
 
 const csrfProtection = csrf({});
 
+console.log(process.env);
+
 app.prepare()
     .then(async () => {
         const server = express();
         server.use(express.json());
-        server.use(
-            session({
-                secret: 'keyboard cat',
-                resave: false,
-                saveUninitialized: true,
-                //cookie: { secure: true },
-                store: new MemoryStore({
-                    checkPeriod: 86400000,
-                }),
-            })
-        );
+
+        if (dev) {
+            server.use(
+                session({
+                    secret: 'RnaomasdFfasr4',
+                    resave: false,
+                    saveUninitialized: true,
+                    //cookie: { secure: true },
+                    store: new MemoryStore({
+                        checkPeriod: 86400000,
+                    }),
+                })
+            );
+        } else {
+            server.use(
+                session({
+                    secret: 'zxcvzxasdFFwwA5',
+                    resave: false,
+                    saveUninitialized: true,
+                    //cookie: { secure: true },
+                    store: new RedisStore({
+                        host: process.env.REDIS_HOST,
+                        port: process.env.REDIS_PORT,
+                    }),
+                })
+            );
+        }
 
         if (!dev) {
             server.use(compression());

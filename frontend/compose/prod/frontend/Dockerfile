@@ -15,6 +15,8 @@ ARG REACT_APP_RECAPTCHA_PUBLIC_KEY
 ARG REACT_APP_MIXPANEL_TOKEN
 ARG REACT_APP_GA_TOKEN
 ARG REACT_APP_SENTRY_DSN
+ARG REDIS_HOST
+ARG REDIS_PORT
 
 ###########################################################################
 # System Updates
