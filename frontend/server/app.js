@@ -17,8 +17,6 @@ const sessionRoutes = require('./sessionRoutes');
 
 const csrfProtection = csrf({});
 
-console.log(process.env);
-
 app.prepare()
     .then(async () => {
         const server = express();

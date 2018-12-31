@@ -64,9 +64,7 @@ export default (initialState = initialAppState, options) => {
         };
 
         const persistedReducer = persistReducer(persistConfig, rootReducer);
-        initialState.session = JSON.parse(
-            document.getElementById('session').textContent
-        );
+        initialState.session = sessionState;
         const store = makeConfiguredStore(persistedReducer, initialState);
         store.__persistor = persistStore(store); // Nasty hack
         return store;
