@@ -32,9 +32,9 @@ class MyApp extends App {
                 !ctx.req.session.location ||
                 !ctx.req.session.location.is_valid
             ) {
-                await ctx.store.dispatch(
-                    requestLocation(null, ctx.req.session)
-                );
+                //await ctx.store.dispatch(
+                //                    requestLocation(null, ctx.req.session)
+                //              );
             }
             await softUpdateSessionData(ctx.req.session);
         }
