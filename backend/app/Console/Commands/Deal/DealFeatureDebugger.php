@@ -34,9 +34,7 @@ class DealFeatureDebugger extends Command
     public function __construct(JatoClient $client)
     {
         parent::__construct();
-
         $this->client = $client;
-        $this->features = Feature::with('category')->get();
     }
 
     /**
@@ -44,6 +42,7 @@ class DealFeatureDebugger extends Command
      */
     public function handle()
     {
+        $this->features = Feature::with('category')->get();
         $dealId = $this->argument('deal');
 
         $deal = Deal::find($dealId);

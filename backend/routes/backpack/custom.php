@@ -58,5 +58,4 @@ Route::group([
     // Custom Debug tools
     Route::get('jato-logs/{date}', 'JatoLogController@showDay');
     Route::get('jato-logs', 'JatoLogController@index');
-    Route::get('statistics/deals', 'StatisticsController@deals');
 });

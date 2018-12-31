@@ -35,12 +35,11 @@ RUN docker-php-ext-configure intl \
 ###########################################################################
 # xDebug:
 ###########################################################################
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+#RUN pecl install xdebug && \
+#    docker-php-ext-enable xdebug
 
 # Copy xdebug configuration for remote debugging
-COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
+#COPY ./conf/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 ###########################################################################
 # Final Thoughts:

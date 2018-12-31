@@ -9,8 +9,8 @@ jobs:
 
         environment:
         - MYSQL_DATABASE=delivermyridetesting
-        - MYSQL_USER=dmr
-        - MYSQL_PASSWORD=dmr
+        - MYSQL_USER=delivermyride
+        - MYSQL_PASSWORD=delivermyride
 
       - image: redis:latest
 
@@ -43,10 +43,6 @@ jobs:
 
       # Tests
       ##################
-      #- run:
-      #    name: Run PHPunit tests
-      #    command:  vendor/bin/phpunit
-
       - run:
           name: Run Frontend linting
           command: cd frontend && yarn lint
@@ -92,6 +88,10 @@ jobs:
 
       # Tests
       ##################
-      #- run:
-      #    name: Run PHPunit tests
-      #    command:  vendor/bin/phpunit
+      - run:
+          name: Run PHPunit Unit Tests
+          command:  cd backend && vendor/bin/phpunit --testsuite unit
+
+      - run:
+          name: Run PHPunit Unit Feature
+          command:  cd backend && vendor/bin/phpunit --testsuite feature

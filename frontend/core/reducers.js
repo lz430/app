@@ -8,6 +8,7 @@ import appUserReducer from '../apps/user/reducers';
 import appPageReducer from '../apps/page/reducers';
 import appPricingReducer from '../apps/pricing/reducers';
 import appCheckoutReducer from '../apps/checkout/reducers';
+import appSessionReducer from '../apps/session/reducers';
 
 import dealDetailsReducer from '../modules/deal-detail/reducer';
 import dealListReducer from '../modules/deal-list/reducers';
@@ -33,5 +34,6 @@ export default combineReducers({
     pricing: appPricingReducer,
     checkout: appCheckoutReducer,
     page: appPageReducer,
+    session: appSessionReducer,
     pages: persistReducer(pagesPersistConfig, pagesReducer),
 });

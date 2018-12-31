@@ -32,23 +32,41 @@ const makeConfiguredStore = function(reducer, initialState) {
     return store;
 };
 
-export default (initialState = initialAppState, { isServer }) => {
-    if (isServer) {
+export default (initialState = initialAppState, options) => {
+    let sessionState;
+    if (options.isServer && options.req) {
+        // Access to: options.req, options.res, options.query, etc (see wrapper lib)
+        sessionState = options.req.session;
+    }
+    if (!options.isServer && document) {
+        sessionState = JSON.parse(
+            document.getElementById('session').textContent
+        );
+    }
+
+    if (options.isServer) {
         initialState = initialState || { fromServer: 'foo' };
+        initialState.session = sessionState;
         return makeConfiguredStore(rootReducer, initialState);
     } else {
         const { persistStore, persistReducer } = require('redux-persist');
         const persistConfig = {
             ...basePersistConfig,
             key: 'root',
-            blacklist: ['pages', 'page', 'pricing', 'user', 'checkout'],
+            blacklist: [
+                'pages',
+                'page',
+                'pricing',
+                'user',
+                'checkout',
+                'session',
+            ],
         };
 
         const persistedReducer = persistReducer(persistConfig, rootReducer);
+        initialState.session = sessionState;
         const store = makeConfiguredStore(persistedReducer, initialState);
-
         store.__persistor = persistStore(store); // Nasty hack
-
         return store;
     }
 };
