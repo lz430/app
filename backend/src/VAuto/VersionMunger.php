@@ -235,27 +235,34 @@ class VersionMunger
      */
     private function equipment($vehicleId, $versionId)
     {
-        $getEquipment = collect($this->jatoClient->equipment->get($vehicleId)->results);
-        $equipment = $getEquipment
-            ->reject(function ($equipment) {
-                return ! in_array($equipment->availability, ['standard', 'optional']);
-            });
+        try {
+            $getEquipment = collect($this->jatoClient->equipment->get($vehicleId)->results);
 
-        foreach ($equipment as $equip) {
-            $data = [
-                'version_id' => $versionId,
-                'option_id' => $equip->optionId,
-                'schema_id' => $equip->schemaId,
-                'category_id' =>$equip->categoryId,
-                'category' => $equip->category,
-                'name' => $equip->name,
-                'location' => $equip->location,
-                'availability' => $equip->availability,
-                'value' => $equip->value,
-                'aspects' => $equip->attributes,
-            ];
-            Equipment::updateOrCreate($data);
+            $equipment = $getEquipment
+                ->reject(function ($equipment) {
+                    return ! in_array($equipment->availability, ['standard', 'optional']);
+                });
+
+            foreach ($equipment as $equip) {
+                $data = [
+                    'version_id' => $versionId,
+                    'option_id' => $equip->optionId,
+                    'schema_id' => $equip->schemaId,
+                    'category_id' =>$equip->categoryId,
+                    'category' => $equip->category,
+                    'name' => $equip->name,
+                    'location' => $equip->location,
+                    'availability' => $equip->availability,
+                    'value' => $equip->value,
+                    'aspects' => $equip->attributes,
+                ];
+                Equipment::updateOrCreate($data);
+            }
+        } catch (ClientException $e) {
+            echo $e->getMessage();
         }
+
+
     }
 
     /**
@@ -264,26 +271,30 @@ class VersionMunger
      */
     private function options($vehicleId, $versionId)
     {
-        $getOptions = collect($this->jatoClient->option->get($vehicleId)->options);
-        $options = $getOptions
-            ->reject(function ($options) {
-                return ! in_array($options->optionType, ['O', 'P']);
-            });
+        try {
+            $getOptions = collect($this->jatoClient->option->get($vehicleId)->options);
+            $options = $getOptions
+                ->reject(function ($options) {
+                    return ! in_array($options->optionType, ['O', 'P']);
+                });
 
-        foreach ($options as $option) {
-            $data = [
-                'version_id' => $versionId,
-                'option_id' => $option->optionId,
-                'option_code' => $option->optionCode,
-                'option_type' => $option->optionType,
-                'msrp' => $option->msrp,
-                'invoice_price' => $option->invoicePrice,
-                'option_name' => $option->optionName,
-                'option_state_name' => $option->optionStateTranslation,
-                'option_state' => $option->optionState,
-                'option_description' => $option->optionDescription,
-            ];
-            Option::updateOrCreate($data);
+            foreach ($options as $option) {
+                $data = [
+                    'version_id' => $versionId,
+                    'option_id' => $option->optionId,
+                    'option_code' => $option->optionCode,
+                    'option_type' => $option->optionType,
+                    'msrp' => $option->msrp,
+                    'invoice_price' => $option->invoicePrice,
+                    'option_name' => $option->optionName,
+                    'option_state_name' => $option->optionStateTranslation,
+                    'option_state' => $option->optionState,
+                    'option_description' => $option->optionDescription,
+                ];
+                Option::updateOrCreate($data);
+            }
+        } catch (ClientException $e) {
+            echo $e->getMessage();
         }
     }
 
@@ -293,18 +304,22 @@ class VersionMunger
      */
     private function stardardText($vehicleId, $versionId)
     {
-        $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
-        foreach ($getStandardText as $standard) {
-            $data = [
-                'version_id' => $versionId,
-                'schema_id' => $standard->schemaId,
-                'category_id' =>$standard->categoryId,
-                'category' => $standard->category,
-                'item_name' => $standard->itemName,
-                'content' => $standard->content,
+        try {
+            $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
+            foreach ($getStandardText as $standard) {
+                $data = [
+                    'version_id' => $versionId,
+                    'schema_id' => $standard->schemaId,
+                    'category_id' =>$standard->categoryId,
+                    'category' => $standard->category,
+                    'item_name' => $standard->itemName,
+                    'content' => $standard->content,
 
-            ];
-            StandardText::updateOrCreate($data);
+                ];
+                StandardText::updateOrCreate($data);
+            }
+        } catch (ClientException $e) {
+            echo $e->getMessage();
         }
     }
 
