@@ -83,13 +83,19 @@ app.prepare()
         brochureRoutes({ server, app, csrfProtection });
         sessionRoutes({ server, app, csrfProtection });
 
-        server.get('/filter', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/deal-list', queryParams);
+        server.get('/filter', csrfProtection, (req, res) => {
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/deal-list', query);
         });
 
-        server.get('/deals/:id', (req, res) => {
-            const queryParams = { id: req.params.id };
+        server.get('/deals/:id', csrfProtection, (req, res) => {
+            const queryParams = {
+                id: req.params.id,
+                csrfToken: req.csrfToken(),
+            };
             return app.render(req, res, '/deal-detail', queryParams);
         });
 

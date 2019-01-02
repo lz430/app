@@ -15,6 +15,19 @@ import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
+const brochureSiteRoutes = [
+    '/home',
+    '/brochure/contact',
+    '/brochure/about',
+    '/brochure/how-it-works',
+    '/brochure/faq',
+    '/brochure/terms-of-service',
+    '/brochure/privacy-policy',
+    '/brochure/concierge',
+];
+
+const desktopOnlyFooter = ['/deal-list'];
+
 class MyApp extends App {
     static async getInitialProps({ Component, /*router, */ ctx }) {
         let pageProps = {};
@@ -27,12 +40,16 @@ class MyApp extends App {
 
         if (isServer) {
             const session = ctx.req.session;
+
             //
             // Location
-            if (!session.location || !session.location.is_valid) {
-                //await ctx.store.dispatch(
-                //  requestLocation(null, ctx.req.session)
-                //);
+            if (
+                (!session.location || !session.location.is_valid) &&
+                !brochureSiteRoutes.includes(ctx.req.path)
+            ) {
+                await ctx.store.dispatch(
+                    requestLocation(null, ctx.req.session)
+                );
             }
             await softUpdateSessionData(session);
         }
@@ -43,26 +60,6 @@ class MyApp extends App {
 
         return { pageProps };
     }
-
-    /**
-     * List of pages that we only expose the footer on the desktop view port
-     * @type {string[]}
-     */
-    desktopOnlyFooter = ['/deal-list'];
-
-    /**
-     * @type {string[]}
-     */
-    brochureSiteRoutes = [
-        '/home',
-        '/brochure/contact',
-        '/brochure/about',
-        '/brochure/how-it-works',
-        '/brochure/faq',
-        '/brochure/terms-of-service',
-        '/brochure/privacy-policy',
-        '/brochure/concierge',
-    ];
 
     constructor(...args) {
         super(...args);
@@ -104,10 +101,10 @@ class MyApp extends App {
                 <Container>
                     <Provider store={store}>
                         <DeliverMyRide
-                            desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                            desktopOnlyFooter={desktopOnlyFooter.includes(
                                 pathname
                             )}
-                            isBrochureSite={this.brochureSiteRoutes.includes(
+                            isBrochureSite={brochureSiteRoutes.includes(
                                 pathname
                             )}
                         >
@@ -129,12 +126,8 @@ class MyApp extends App {
             <Container>
                 <Provider store={store}>
                     <DeliverMyRide
-                        desktopOnlyFooter={this.desktopOnlyFooter.includes(
-                            pathname
-                        )}
-                        isBrochureSite={this.brochureSiteRoutes.includes(
-                            pathname
-                        )}
+                        desktopOnlyFooter={desktopOnlyFooter.includes(pathname)}
+                        isBrochureSite={brochureSiteRoutes.includes(pathname)}
                     >
                         <Component {...pageProps} />
                     </DeliverMyRide>
