@@ -41,7 +41,7 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'interior_color' => $deal->interior_color,
             'fuel_econ_city' => $deal->fuel_econ_city,
             'fuel_econ_hwy' => $deal->fuel_econ_hwy,
-            'fuel_type' => $deal->fuel_type,
+            'fuel_type' => isset($deal->fuel_type) ? $deal->fuel_type : null,
             'seating_capacity' => $deal->seating_capacity,
             'drive_train' => $deal->drive_train,
             'photos' => $deal->photos,
