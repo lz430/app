@@ -34,7 +34,6 @@ class CheckoutContactTest extends TestCaseWithAuth
 
         $response = $this
             ->json('POST', 'api/checkout/'.$purchase->id.'/contact', $payload);
-
         $response
             ->assertStatus(200)
             ->assertJsonStructure(

@@ -261,8 +261,6 @@ class VersionMunger
         } catch (ClientException $e) {
             echo $e->getMessage();
         }
-
-
     }
 
     /**
