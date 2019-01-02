@@ -84,76 +84,34 @@ export default [
             'For sure. And we expose them all to you. Nothing is hidden and we go to great lengths to expose all the rebates so you don’t miss out.',
     },
     {
-        category: 'Car Shopping and Buying Questions',
-        title: 'Where does the car inventory come from?',
-        content:
-            'Deliver My Ride is not a dealer and we do not take possession of the vehicle. You purchase directly from a franchised new car dealer. We facilitate the transaction and keep you informed and anonymous in the process.',
+        category: 'Finding the right car',
+        title: 'Do you sell used cars?',
+        content: 'Currently, we only offer new cars.',
     },
     {
-        category: 'Car Shopping and Buying Questions',
-        title: 'Can I compare several brands in one place?',
+        category: 'Finding the right car',
+        title:
+            'If I am not ready to buy now, will the deal and vehicle be the same when I am ready?',
         content:
-            'Yes! That is one of the greatest benefits of Deliver My Ride! Unlike dealer sites where you can only see one brand, we are independent of the manufacturer so we can show all makes and models together. We use technology to normalize features on a car so you can compare like vehicles among various brands.',
+            'Possibly, but no guarantees. Rebates normally change on a monthly basis. Dealers have no control over this, the car manufacturers provide rebates and rules associated with them. So, you may be looking at a deal on March 25<sup>th</sup> and it could be completely different on April 3<sup>rd</sup>. In addition, dealers pay bank interest on their vehicle inventory, so it is too expensive to hold cars for more than a day or two. The good news is that new cars are commodities and if the specific one you wanted has been sold, there is likely another one just like it available. Every scenario is different, and we can advise you with whatever your current situation is.',
     },
     {
-        category: 'Car Shopping and Buying Questions',
-        title: 'Can I test drive before buying?',
+        category: 'Finding the right car',
+        title: 'Can I select my dealership?',
         content:
-            'Of course. The best way is to drive the car upon delivery, before you sign for it. If you don’t like it, no problem, we will take it back to the dealership. If you need to be sure in advance, we recommend that you visit dealers near your home or office and indicate that you are in the discovery phase and intend to drive several cars but don’t wish to take up their time negotiating numbers. In many cases, calling ahead will give them time to have a car pulled up and ready to test drive.',
+            'We work with the biggest and the best dealers in each market, but not all of them. There is a chance we already use your favorite dealer, if not, notify us and we will investigate the opportunity.',
     },
     {
-        category: 'Car Shopping and Buying Questions',
-        title: 'Do you accept trade-ins?',
+        category: 'Finding the right car',
+        title: 'What if I can’t find the right car on your site?',
         content:
-            'We can facilitate the process. This is a feature we are currently developing.',
+            'Since we sell new vehicles, it is likely that the dealers we work with can find and trade for a specific car from another dealership. If you can’t find the car you want, chat with or call us so we can find the perfect fit.',
     },
     {
-        category: 'Car Shopping and Buying Questions',
-        title: 'What do I do with my lease car?',
+        category: 'Finding the right car',
+        title: 'Can I test drive before I buy?',
         content:
-            'Typically, the new dealer will handle the return. You will need to verify the lease condition and will be responsible for any excess damage or mileage.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'How can I finance my new car purchase?',
-        content:
-            'Delivery My Ride uses a secure application form that submits your credit information to various lenders. Approval typically takes a few minutes.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'What if I want to pay cash?',
-        content:
-            'The dealer will gladly accept cash. Simply indicate through the Deliver My Ride platform that you intend to pay cash and the dealer will indicate the format, typically certified funds from your bank.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'How will I receive my new car?',
-        content:
-            'This is our favorite part. First, tell us when and where you want it delivered. Then, we will send a certified Deliver My Ride representative over to explain the vehicle features and deliver your new car.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'Is there a shipping charge?',
-        content:
-            'No, your new vehicle will be delivered to your home or office for no additional charge.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'What if I have questions?',
-        content:
-            'We offer a ton of support. In fact, that’s our primary role. If you have questions, call, chat or email us. If we don’t know the answer right away, we’ll find it and respond quickly.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'What if I have bad credit?',
-        content:
-            'Your credit may be denied but you may be able to contact the dealer directly to see what can be worked out.',
-    },
-    {
-        category: 'Car Shopping and Buying Questions',
-        title: 'What if I change my mind?',
-        content:
-            'No problem. Cancel the transaction at any time, even if the car is in your driveway. We know there are lots of reasons you might change your mind over such an expensive transaction. It’s all about what’s best for you, not the salesman or dealer.',
+            'On average, only 20% of car shoppers test drive a vehicle before they buy it. While this may seem counter to common sense, it is true. However, if you want to test drive a car before you buy, we recommend that you test drive the vehicle of a friend, neighbor, co-worker or family member for the most valuable experience. In these cases, you will likely get more honest feedback and be able to test the car for a few hours instead of a few minutes if done at a dealership. Since the cars we sell are brand new, the quality and condition will not factor into drivability. If you want to drive the dealer’s vehicle, we can facilitate a test drive or you are welcome to visit a local dealer to do so. In this case, we recommend contacting the dealer in advance and schedule a time with a specific person. Be sure to ask that the vehicle is pulled up and ready to drive so you don’t end up waiting around.',
     },
     {
         category: 'Service and Maintenance',
