@@ -7,7 +7,6 @@ use App\Models\JATO\Version;
 
 class BuildData
 {
-
     private const EQUIPMENT_TO_SKIP = [
         'Internal dimensions',
         'Crash test results',

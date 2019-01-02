@@ -227,7 +227,6 @@ class BuildEquipmentData
      */
     public function build($equipment = [], $debug = false)
     {
-
         $this->equipment = $equipment;
         $this->debug = $debug;
 

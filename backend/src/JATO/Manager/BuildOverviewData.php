@@ -38,8 +38,8 @@ class BuildOverviewData
         foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
-        if($equipments->name == 'Transmission') {
-            if(isset($attributes['Transmission type'])) {
+        if ($equipments->name == 'Transmission') {
+            if (isset($attributes['Transmission type'])) {
                 $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
                     'Transmission Type',
                     "{$attributes['Transmission type']->value}",
@@ -48,7 +48,7 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
-            if(isset($attributes['number of speeds'])) {
+            if (isset($attributes['number of speeds'])) {
                 $labels[$attributes['number of speeds']->schemaId] = $this->itemFactory(
                     'Transmission Speed',
                     "{$attributes['number of speeds']->value}",
@@ -58,8 +58,8 @@ class BuildOverviewData
                     ]);
             }
         }
-        if($equipments->name == 'Fuel economy') {
-            if(isset($attributes['urban (mpg)'])) {
+        if ($equipments->name == 'Fuel economy') {
+            if (isset($attributes['urban (mpg)'])) {
                 $labels[$attributes['urban (mpg)']->schemaId] = $this->itemFactory(
                     'City MPG',
                     $attributes['urban (mpg)']->value,
@@ -68,7 +68,7 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
-            if(isset($attributes['country/highway (mpg)'])) {
+            if (isset($attributes['country/highway (mpg)'])) {
                 $labels[$attributes['country/highway (mpg)']->schemaId] = $this->itemFactory(
                     'Highway MPG',
                     $attributes['country/highway (mpg)']->value,
@@ -78,8 +78,8 @@ class BuildOverviewData
                     ]);
             }
         }
-        if($equipments->name == 'Warranty whole vehicle - Total') {
-            if(isset($attributes['duration (months)'])) {
+        if ($equipments->name == 'Warranty whole vehicle - Total') {
+            if (isset($attributes['duration (months)'])) {
                 $labels[$attributes['duration (months)']->schemaId] = $this->itemFactory(
                     'Warranty Duration in months',
                     $attributes['duration (months)']->value,
@@ -88,7 +88,7 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
-            if(isset($attributes['distance (miles)'])) {
+            if (isset($attributes['distance (miles)'])) {
                 $labels[$attributes['distance (miles)']->schemaId] = $this->itemFactory(
                     'Warranty Distance in miles',
                     $attributes['distance (miles)']->value,
@@ -98,8 +98,8 @@ class BuildOverviewData
                     ]);
             }
         }
-        if($equipments->name == 'Wheels') {
-            if(isset($attributes['rim type'])) {
+        if ($equipments->name == 'Wheels') {
+            if (isset($attributes['rim type'])) {
                 $labels[$attributes['rim type']->schemaId] = $this->itemFactory(
                     'Rim Type',
                     $attributes['rim type']->value,
@@ -108,7 +108,7 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
-            if(isset($attributes['rim diameter (in)'])) {
+            if (isset($attributes['rim diameter (in)'])) {
                 $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
                     'Rim Diameter',
                     $attributes['rim diameter (in)']->value,
@@ -128,7 +128,7 @@ class BuildOverviewData
         foreach ($this->equipment as $category => $equipments) {
             foreach ($equipments as $equipment) {
                 $labels = $this->getLabelsForJatoEquipment($equipment);
-                if($labels) {
+                if ($labels) {
                     foreach ($labels as $schemaId => $label) {
                         $data = [
                             'category' => $category,
@@ -143,7 +143,6 @@ class BuildOverviewData
                         $labeledEquipment[] = $data;
                     }
                 }
-
             }
         }
         $this->equipmentOnDeal = $labeledEquipment;
