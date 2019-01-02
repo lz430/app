@@ -47,6 +47,43 @@ export default [
             'Call us at (877) 675-7301 or email <a href="mailto:Support@DeliverMyRide.com">Support@DeliverMyRide.com</a>',
     },
     {
+        category: 'Pricing & Payments',
+        title: 'What if I have issues with my credit?',
+        content:
+            'Once you confirm the purchase details on a new vehicle, we will provide a secure credit application which integrates directly into the dealer’s finance system. From that point, dealer management will work with their finance sources to facilitate credit approval. This scenario works well because dealers have close relationships with several banks and can usually help you obtain a loan for your new vehicle. All payments displayed on Deliver My Ride assume good to excellent credit.',
+    },
+    {
+        category: 'Pricing & Payments',
+        title: 'Can I save money using Deliver My Ride?',
+        content:
+            'Absolutely! We hand select large dealerships in your area and beyond which are built for selling large volumes of vehicles. In order to do so, they price their inventory very competitively, so you can have confidence that you will not overpay. On average, pricing on our site is 13% ($4800) below sticker/MSRP. Besides that, you can compare all the brands in one view instead of bouncing around from website to website. This way you can find savings on a car you may not have originally considered. In addition, what your time is worth? Maybe you can save a couple hundred dollars by driving or calling around to several dealers and fighting it out, but that could take hours and doesn’t guarantee that you won’t pay more once you walk in the dealership.',
+    },
+    {
+        category: 'Pricing & Payments',
+        title: 'Why are prices higher on Deliver My Ride than ads I am seeing?',
+        content:
+            'Advertised prices are confusing. In fact, we have been in the car business for 30 years and even we cannot decipher some of the ads we see on television or the dealer’s websites. There is one thing that every ad has in common; the prices and/or payments are not what they appear. In other words, they are lower than the amount you will actually pay when you visit the dealership. For example, if a lease payment is advertised for $89/month, significant down payment is required, the payment does not include tax, and you will likely need to qualify for obscure rebates. This is one of the primary reasons that we created Deliver My Ride.',
+    },
+    {
+        category: 'Pricing & Payments',
+        title: 'Can I use my employee/military, etc., discount?',
+        content:
+            'Absolutely! You can do anything on our site that you can do at the dealer. If you qualify for a rebate or discount provided by the manufacturer, then you qualify on our site as well.',
+    },
+    {
+        category: 'Pricing & Payments',
+        title: 'Can I negotiate the price?',
+        content:
+            'Our site was designed to eliminate the hassle and haggle of the negotiation process. If you want to get into the weeds and negotiate, our site is probably not your thing. And that’s fine.  Many people feel that they need to do the dealer dance and bicker back and forth with the manager. But there is very little margin in new cars anymore, so you need to decide if driving all over town to possibly save a couple hundred is worth your time.',
+    },
+
+    {
+        category: 'Pricing & Payments',
+        title: 'Can I apply manufacturer’s incentives and rebates?',
+        content:
+            'For sure. And we expose them all to you. Nothing is hidden and we go to great lengths to expose all the rebates so you don’t miss out.',
+    },
+    {
         category: 'Car Shopping and Buying Questions',
         title: 'Where does the car inventory come from?',
         content:
@@ -117,43 +154,6 @@ export default [
         title: 'What if I change my mind?',
         content:
             'No problem. Cancel the transaction at any time, even if the car is in your driveway. We know there are lots of reasons you might change your mind over such an expensive transaction. It’s all about what’s best for you, not the salesman or dealer.',
-    },
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Is pricing competitive?',
-        content:
-            'The pricing our customers receive is very competitive. We constantly compare our pricing with other sites and encourage our dealers to do the same so only the most competitive prices are displayed. What we can’t control are TV and newspaper ads that flash a low price, but include small print disclaimers.',
-    },
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Will I get a great deal?',
-        content:
-            'By comparing multiple brands side by side, you will see if any vehicles have deep discounts and large rebates. This is hard to do by driving around. We’ve seen where similar vehicles are thousands of dollars apart due to incentives.',
-    },
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Can I compare prices from multiple dealerships?',
-        content:
-            'Yes. This is the basis of our value. We typically have 75-100 dealers’ inventory listed on our site. We don’t bother showing the dealer’s name because it’s all about the deal, not the dealer.',
-    },
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Can I use my employee/military, etc., discount?',
-        content:
-            'Absolutely! You can do anything on our site that you can do at the dealer. If you qualify for a rebate or discount provided by the manufacturer, then you qualify on our site as well.',
-    },
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Can I negotiate the price?',
-        content:
-            'Our site was designed to eliminate the hassle and haggle of the negotiation process. If you want to get into the weeds and negotiate, our site is probably not your thing. And that’s fine.  Many people feel that they need to do the dealer dance and bicker back and forth with the manager. But there is very little margin in new cars anymore, so you need to decide if driving all over town to possibly save a couple hundred is worth your time.',
-    },
-
-    {
-        category: 'Pricing, Rebates, and Incentives',
-        title: 'Can I apply manufacturer’s incentives and rebates?',
-        content:
-            'For sure. And we expose them all to you. Nothing is hidden and we go to great lengths to expose all the rebates so you don’t miss out.',
     },
     {
         category: 'Service and Maintenance',
