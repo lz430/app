@@ -200,20 +200,22 @@ class BuildEquipmentData
     {
         $labeledEquipment = [];
         foreach ($this->equipment as $category => $equipments) {
-            foreach ($equipments as $equipment) {
-                $labels = $this->getLabelsForJatoEquipment($equipment);
-                foreach ($labels as $schemaId => $label) {
-                    $data = [
-                        'category' => $category,
-                        'label' => $label['label'],
-                        'value' => $label['value'],
-                    ];
+            if (is_array($equipments)) {
+                foreach ($equipments as $equipment) {
+                    $labels = $this->getLabelsForJatoEquipment($equipment);
+                    foreach ($labels as $schemaId => $label) {
+                        $data = [
+                            'category' => $category,
+                            'label' => $label['label'],
+                            'value' => $label['value'],
+                        ];
 
-                    if (isset($label['meta'])) {
-                        $data['meta'] = $label['meta'];
+                        if (isset($label['meta'])) {
+                            $data['meta'] = $label['meta'];
+                        }
+
+                        $labeledEquipment[] = $data;
                     }
-
-                    $labeledEquipment[] = $data;
                 }
             }
         }
