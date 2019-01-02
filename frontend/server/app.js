@@ -3,6 +3,8 @@ const next = require('next');
 const compression = require('compression');
 const csrf = require('csurf');
 const session = require('express-session');
+const morgan = require('morgan');
+
 const MemoryStore = require('memorystore')(session);
 const RedisStore = require('connect-redis')(session);
 
@@ -17,35 +19,58 @@ const sessionRoutes = require('./sessionRoutes');
 
 const csrfProtection = csrf({});
 
+const pathsToSkip = ['/ping', '/favicon.ico', '/robots.txt', '/sitemap.xml'];
+
+const unless = function(paths, middleware, match = 'exact') {
+    return function(req, res, next) {
+        if (match === 'exact' && paths.includes(req.path)) {
+            return next();
+        } else {
+            return middleware(req, res, next);
+        }
+    };
+};
+
 app.prepare()
     .then(async () => {
         const server = express();
         server.use(express.json());
-
         if (dev) {
             server.use(
-                session({
-                    secret: 'RnaomasdFfasr4',
-                    resave: false,
-                    saveUninitialized: true,
-                    //cookie: { secure: true },
-                    store: new MemoryStore({
-                        checkPeriod: 86400000,
-                    }),
-                })
+                unless(
+                    pathsToSkip,
+                    session({
+                        secret: 'RnaomasdFfasr4',
+                        resave: false,
+                        saveUninitialized: true,
+                        //cookie: { secure: true },
+                        store: new MemoryStore({
+                            checkPeriod: 86400000,
+                        }),
+                    })
+                )
             );
         } else {
             server.use(
-                session({
-                    secret: 'zxcvzxasdFFwwA5',
-                    resave: false,
-                    saveUninitialized: true,
-                    //cookie: { secure: true },
-                    store: new RedisStore({
-                        host: process.env.REDIS_HOST,
-                        port: process.env.REDIS_PORT,
-                    }),
-                })
+                unless(
+                    pathsToSkip,
+                    session({
+                        secret: 'zxcvzxasdFFwwA5',
+                        resave: false,
+                        saveUninitialized: true,
+                        //cookie: { secure: true },
+                        store: new RedisStore({
+                            host: process.env.REDIS_HOST,
+                            port: process.env.REDIS_PORT,
+                        }),
+                    })
+                )
+            );
+            server.use(
+                unless(
+                    pathsToSkip,
+                    morgan('combined', { stream: process.stdout })
+                )
             );
         }
 
@@ -58,13 +83,19 @@ app.prepare()
         brochureRoutes({ server, app, csrfProtection });
         sessionRoutes({ server, app, csrfProtection });
 
-        server.get('/filter', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/deal-list', queryParams);
+        server.get('/filter', csrfProtection, (req, res) => {
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/deal-list', query);
         });
 
-        server.get('/deals/:id', (req, res) => {
-            const queryParams = { id: req.params.id };
+        server.get('/deals/:id', csrfProtection, (req, res) => {
+            const queryParams = {
+                id: req.params.id,
+                csrfToken: req.csrfToken(),
+            };
             return app.render(req, res, '/deal-detail', queryParams);
         });
 
@@ -104,6 +135,10 @@ app.prepare()
 
         server.get('/experiments/concierge', (req, res) => {
             return app.render(req, res, '/experiments/concierge', req.query);
+        });
+
+        server.get('/ping', (req, res) => {
+            res.send('pong');
         });
 
         server.get('*', (req, res) => {
