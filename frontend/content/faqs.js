@@ -3,19 +3,18 @@ export default [
         category: 'General Questions',
         title: 'What is Deliver My Ride?',
         content:
-            'Deliver My Ride is the modern way to buy or lease a new vehicle. We offer visibility into local dealer inventory, pricing, rebates and financing options, all without having to leave your home. We even deliver (for free!) to your home or office.',
+            'We are the new way to buy or lease a dealership owned vehicle. With technology, there is no need to invest your valuable time driving around to find the right car. Our platform provides transparency into dealership inventory, pricing, and incentives from all brands by multiple dealers. Our site if full of useful tools for you to customize your vehicle and your deal entirely online, on your own time.',
     },
     {
         category: 'General Questions',
-        title: 'How does Deliver My Ride work?',
+        title: 'How much does Deliver My Ride Cost?',
         content:
-            'Simply browse dealer inventory, select equipment that is important to you, and compare multiple brands to find the best deal. Once you land on the right car, review current rebates and calculate your lease or purchase payment using our advanced tools. Avoid salesmanship and pressure at the dealership by doing it all yourself. We even facilitate the financing if needed by using the same finance sources as the dealer and more. Structure your entire deal online and the dealer will draw up your paperwork and deliver your vehicle at the time and place convenient to you.',
+            'Zero. We do not charge customers to use our site to buy a car. We charge the dealer. Because we are technically selling the car, not a salesperson, the dealer pays us a small fee for a transaction. But for your benefit, we do not push you toward one vehicle over another for selfish purposes. Frankly, we don’t have any bias. We only hope to provide an excellent experience.',
     },
     {
         category: 'General Questions',
-        title: 'How much does it cost?',
-        content:
-            'Nothing. Zip. Zilch. Zero. In fact, we save you money. As an alternate sales channel, we replace the salesperson and reduce the cost to the dealer, passing the savings to you. Since we don’t work for any one dealer and aren’t working on a commission percentage, we stay unbiased throughout the entire buying process. With Deliver My Ride, nobody sells you a car, you buy the car that’s right for you.',
+        title: 'Who can use Deliver My Ride?',
+        content: 'Anyone who lives in the state of Michigan.',
     },
     {
         category: 'General Questions',
@@ -31,6 +30,12 @@ export default [
     },
     {
         category: 'General Questions',
+        title: 'Am I buying a car from the dealership or Deliver My Ride? ',
+        content:
+            'The dealer is the official sales agent. They own the cars and they alone have the legal ability to sell you a new car based on franchise laws. All vehicles carry their manufacturer’s warranty, giving you confidence in the car you buy. Deliver My Ride facilitates the transaction by providing a convenient platform to view live inventory and pricing. We communicate with a network of dealers to acquire their inventory and pricing rules, so you can shop anonymously, not as a lead sold to multiple dealerships.',
+    },
+    {
+        category: 'General Questions',
         title: 'How do you work with the dealership?',
         content:
             'Our dealership partners are critical to our success. We tie into their inventory system to display real-time inventory, prices, rebates and incentives. The dealer is also tied to your account for any service, maintenance, and warranty needs that you may have, though you are welcome to visit any franchised dealer for these needs as well.',
@@ -38,7 +43,8 @@ export default [
     {
         category: 'General Questions',
         title: 'How can I contact Deliver My Ride if I have a question?',
-        content: 'Call us at (877) 675-7301 or email Support@DeliverMyRide.com',
+        content:
+            'Call us at (877) 675-7301 or email <a href="mailto:Support@DeliverMyRide.com">Support@DeliverMyRide.com</a>',
     },
     {
         category: 'Car Shopping and Buying Questions',
