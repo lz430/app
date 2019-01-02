@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\User;
 
+use App\Http\Controllers\API\BaseAPIController;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;

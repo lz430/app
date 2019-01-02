@@ -127,7 +127,7 @@ class UserService {
             params.ip = ip;
         }
 
-        return httpclient.get('/api/location', {
+        return httpclient.get('/api/user/location', {
             params: params,
             headers: this.client.headers(),
         });

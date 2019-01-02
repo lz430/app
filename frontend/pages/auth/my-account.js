@@ -67,7 +67,7 @@ class MyAccount extends Page {
                 <Head>
                     <title>Deliver My Ride | My Account</title>
                 </Head>
-                {this.renderBreadcrumb()};
+                {this.renderBreadcrumb()}
                 <Container className="mt-5 mb-5">
                     {!this.props.user && this.renderAuthError()}
                     {!!this.props.user && this.renderPageContent()}

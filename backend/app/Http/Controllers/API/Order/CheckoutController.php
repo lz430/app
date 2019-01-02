@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Order;
 
+use App\Http\Controllers\API\BaseAPIController;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\User;
@@ -27,6 +28,7 @@ class CheckoutController extends BaseAPIController
      */
     public function __construct()
     {
+        parent::__construct();
         $this
         ->middleware(['auth:api', 'can:update,purchase'], ['except' => ['start', 'contact']]);
     }
@@ -68,6 +70,12 @@ class CheckoutController extends BaseAPIController
             'amount_financed' => isset($amounts['financed_amount']) ? $amounts['financed_amount'] : 0,
             'lease_mileage' => isset($amounts['leased_annual_mileage']) ? $amounts['leased_annual_mileage'] : null,
         ]);
+
+        if ($request->user()) {
+            $purchase->user_id = $request->user()->id;
+        }
+
+
 
         $purchase->save();
         $jwt = resolve('Tymon\JWTAuth\JWT');
