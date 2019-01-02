@@ -106,7 +106,8 @@ class UserLocationController extends Controller
     public function show(Geocoder $geocoder)
     {
         $this->validate(request(), [
-            'search' => 'sometimes',
+            'search' => 'sometimes|string',
+            'ip' => 'sometimes|ip',
             'latitude' => 'sometimes|numeric',
             'longitude' => 'sometimes|numeric',
         ]);
@@ -119,7 +120,10 @@ class UserLocationController extends Controller
         } elseif (request('search')) {
             $location = $this->getLocationForAddress($geocoder, request('search'));
         } else {
-            $ip = request()->header('X-Real-IP');
+            $ip = request('ip', null);
+            if (! $ip) {
+                $ip = request()->header('X-Real-IP');
+            }
             if (! $ip) {
                 $ip = request()->ip();
             }
@@ -131,6 +135,7 @@ class UserLocationController extends Controller
 
             $location = $this->getLocationForIp($ip);
         }
+
         if ($location && $location['country'] != 'US') {
             $has_results = false;
         } elseif ($location) {

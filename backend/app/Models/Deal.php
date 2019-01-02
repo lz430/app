@@ -61,7 +61,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Version $version
  * @property Purchase[] $purchases
  * @property DealPhoto[] $photos
- * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
  * @property int $seating_capacity
  * @property string $vehicle_color
@@ -391,14 +390,6 @@ class Deal extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(DealPhoto::class)->orderBy('id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jatoFeatures(): BelongsToMany
-    {
-        return $this->belongsToMany(JatoFeature::class)->hasGroup();
     }
 
     /**

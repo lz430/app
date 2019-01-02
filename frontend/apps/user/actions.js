@@ -18,6 +18,14 @@ export function receiveLocation(data) {
     };
 }
 
+export function requestIpLocation(ip, session = null) {
+    return {
+        type: ActionTypes.REQUEST_IP_LOCATION_INFO,
+        ip: ip,
+        session: session,
+    };
+}
+
 export function requestLocation(data, session = null) {
     return {
         type: ActionTypes.REQUEST_LOCATION,
