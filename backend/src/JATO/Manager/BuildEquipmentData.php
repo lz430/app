@@ -200,7 +200,7 @@ class BuildEquipmentData
     {
         $labeledEquipment = [];
         foreach ($this->equipment as $category => $equipments) {
-            if(is_array($equipments)) {
+            if (is_array($equipments)) {
                 foreach ($equipments as $equipment) {
                     $labels = $this->getLabelsForJatoEquipment($equipment);
                     foreach ($labels as $schemaId => $label) {
