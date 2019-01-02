@@ -28,22 +28,47 @@ import { getSessionCSRFToken } from '../session/selectors';
  * Request IP Location
  ********************************************************************/
 
-export function* requestIpLocation() {
+export function* requestIpLocation(data) {
     // Don't get ip location if location is already set.
     const userCurrentLocation = yield select(getUserLocation);
 
-    if (userCurrentLocation.latitude && userCurrentLocation.longitude) {
+    if (
+        userCurrentLocation &&
+        userCurrentLocation.latitude &&
+        userCurrentLocation.longitude
+    ) {
         return;
     }
 
-    let location = null;
+    const csrfToken = yield select(getSessionCSRFToken);
+    const ip = data ? data.ip : null;
+
+    let location;
+    let newData;
 
     try {
-        location = yield call(api.user.getLocation);
+        location = yield call(api.user.getLocation, null, null, null, ip);
         location = location.data;
+        newData = {
+            latitude: location.location.latitude,
+            longitude: location.location.longitude,
+            zipcode: location.location.zip,
+            city: location.location.city,
+            state: location.location.state,
+            has_results: location.has_results,
+            is_valid: true,
+        };
+        location = newData;
     } catch (e) {
         console.log(e);
+        location = {
+            is_valid: false,
+            has_results: false,
+        };
     }
+
+    storeSessionData({ location: location }, data.session, csrfToken);
+    yield put(softUpdateSessionData({ location: location }));
 
     yield put(receiveLocation(location));
 }
@@ -158,7 +183,7 @@ export function* loginUser(data) {
     // Redirect to my account for testing
     formActions.setSubmitting(false);
     if (token && user) {
-        Router.push('/auth/my-account', 'my-account');
+        Router.push('/auth/my-account', '/my-account');
     }
 }
 
@@ -187,7 +212,7 @@ export function* logoutUser() {
 
     //
     // Redirect to homepage or something
-    Router.push('/auth/login', 'login');
+    Router.push('/auth/login', '/login');
 }
 
 export function* updateUser(data) {
@@ -235,7 +260,7 @@ export function* updateUser(data) {
     // Redirect to my account for testing
     formActions.setSubmitting(false);
     if (user) {
-        Router.push('/auth/my-account', 'my-account');
+        Router.push('/auth/my-account', '/my-account');
     }
 }
 

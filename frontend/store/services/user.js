@@ -102,12 +102,14 @@ class UserService {
     };
 
     /**
+     *
      * @param search
      * @param lat
      * @param lon
+     * @param ip
      * @returns {*}
      */
-    getLocation = (search = null, lat = null, lon = null) => {
+    getLocation = (search = null, lat = null, lon = null, ip = null) => {
         let params = {};
         if (search) {
             params.search = search;
@@ -119,6 +121,10 @@ class UserService {
 
         if (lon) {
             params.longitude = lon;
+        }
+
+        if (ip) {
+            params.ip = ip;
         }
 
         return httpclient.get('/api/location', {

@@ -9,7 +9,7 @@ import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import * as Sentry from '@sentry/browser';
 import config from '../core/config';
-import { requestLocation } from '../apps/user/actions';
+import { requestIpLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
 import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
@@ -48,7 +48,7 @@ class MyApp extends App {
                 !brochureSiteRoutes.includes(ctx.req.path)
             ) {
                 await ctx.store.dispatch(
-                    requestLocation(null, ctx.req.session)
+                    requestIpLocation(ctx.req.ip, ctx.req.session)
                 );
             }
             await softUpdateSessionData(session);
