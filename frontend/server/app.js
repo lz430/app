@@ -34,6 +34,7 @@ const unless = function(paths, middleware, match = 'exact') {
 app.prepare()
     .then(async () => {
         const server = express();
+        server.enable('trust proxy');
         server.use(express.json());
         if (dev) {
             server.use(
