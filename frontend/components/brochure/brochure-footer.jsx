@@ -10,13 +10,15 @@ import {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import TopWorkplace from '../../static/brochure/top-workplace/twp2018.svg';
+
 export default class Footer extends React.PureComponent {
     render() {
         return (
             <footer className="brochure-footer">
                 <Container>
                     <Row>
-                        <Col sm={8}>
+                        <Col sm={6}>
                             <ul className="footer-nav">
                                 <NavItem>
                                     <Link
@@ -68,6 +70,9 @@ export default class Footer extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                             </ul>
+                        </Col>
+                        <Col sm={2} className="top-workplaces">
+                            <TopWorkplace />
                         </Col>
                     </Row>
                     <Col className="border-bottom mb-3" />

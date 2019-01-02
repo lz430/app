@@ -241,10 +241,6 @@ class Importer
                     $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
 
-                // Features
-                $this->info("    -- Features: Skipped?: {$debug['feature_skipped']}");
-                $this->info("    -- Features: New Jato Features: {$debug['feature_count']}");
-
                 // Photos
                 $this->info("    -- Photos: Skipped?: {$debug['deal_photos_skipped']}");
                 $this->info("    -- Photos: Refreshed?: {$debug['deal_photos_refreshed']}");

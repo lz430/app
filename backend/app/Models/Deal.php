@@ -11,9 +11,8 @@ use App\Models\Order\Purchase;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
-use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use DeliverMyRide\JATO\Manager\BuildOverviewData;
-use DeliverMyRide\JATO\Manager\BuildData;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -62,7 +61,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Version $version
  * @property Purchase[] $purchases
  * @property DealPhoto[] $photos
- * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
  * @property int $seating_capacity
  * @property string $vehicle_color
@@ -392,14 +390,6 @@ class Deal extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(DealPhoto::class)->orderBy('id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jatoFeatures(): BelongsToMany
-    {
-        return $this->belongsToMany(JatoFeature::class)->hasGroup();
     }
 
     /**
