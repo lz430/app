@@ -44,6 +44,7 @@ RUN docker-php-ext-configure intl \
 
 COPY ./compose/prod/php-fpm/conf/app.ini /usr/local/etc/php/conf.d
 COPY ./compose/prod/php-fpm/conf/app-php-fpm.conf /usr/local/etc/php-fpm.d
+COPY ./compose/prod/php-fpm/conf/docker.conf /usr/local/etc/php-fpm.d
 
 
 RUN usermod -u 1000 www-data

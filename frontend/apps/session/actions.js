@@ -5,9 +5,13 @@ import * as ActionTypes from './consts';
  * @returns {{type: string, data: *}}
  */
 export function softUpdateSessionData(data) {
+    const sessionData = { ...data };
+    delete sessionData['cookie'];
+    delete sessionData['csrfSecret'];
+
     return {
         type: ActionTypes.SOFT_UPDATE_SESSION_DATA,
-        data: data,
+        data: sessionData,
     };
 }
 

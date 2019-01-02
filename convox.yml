@@ -31,7 +31,7 @@ services:
       path: ./frontend
       manifest: compose/prod/frontend/Dockerfile
     port: 3000
-    health: /
+    health: /ping
     internal: true
     environment:
       - "*"
