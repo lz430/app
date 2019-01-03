@@ -4,9 +4,9 @@ import { Container, Row, Col } from 'reactstrap';
 import testimonials from '../../../content/testimonials';
 
 export default class extends React.Component {
-    renderTestimonials(test) {
+    renderTestimonials(test, index) {
         return (
-            <Col md={4} className="individual">
+            <Col key={`testimonial-${index}`} md={4} className="individual">
                 <p>
                     &quot;
                     {test.content}
@@ -29,8 +29,8 @@ export default class extends React.Component {
                         </Col>
                     </Row>
                     <Row>
-                        {testimonials.map(test =>
-                            this.renderTestimonials(test)
+                        {testimonials.map((test, index) =>
+                            this.renderTestimonials(test, index)
                         )}
                     </Row>
                 </Container>

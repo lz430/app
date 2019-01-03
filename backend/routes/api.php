@@ -18,24 +18,26 @@ Route::get('search', 'SearchController@index')->name('search.index');
 
 Route::group(['prefix' => 'deals'], function () {
     Route::get('/', 'DealsController@list')->name('deals.index');
-    Route::get('compare', 'DealsCompareController@compare')->name('deals.compare');
     Route::get('{deal}', 'DealsController@detail')->name('deals.detail');
     Route::get('{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
     Route::get('{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
     Route::get('{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 });
 
-Route::group(['prefix' => 'checkout'], function () {
+Route::group(['prefix' => 'checkout', 'namespace' => 'Order'], function () {
     Route::post('start', 'CheckoutController@start')->name('checkout.start');
     Route::post('{purchase}/contact', 'CheckoutController@contact')->name('checkout.contact');
     Route::get('{purchase}/financing', 'CheckoutController@getFinancing')->name('checkout.financing');
     Route::post('{purchase}/financing', 'CheckoutController@financingComplete')->name('checkout.financingComplete');
 });
 
-Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
-Route::get('location', 'UserLocationController@show')->name('location.show');
+Route::group(['prefix' => 'order', 'namespace' => 'Order', 'middleware' => 'auth:api'], function () {
+    Route::get('/', 'OrderController@list')->name('order.list');
+});
 
-Route::group(['prefix' => 'auth'], function () {
+Route::get('application-status', 'ApplicationStatusController@checkCompleted')->name('application.checkCompleted');
+
+Route::group(['prefix' => 'auth', 'namespace' => 'User'], function () {
     Route::post('login', 'UserAuthController@login');
     Route::post('registration', 'UserAuthController@registration');
 
@@ -46,12 +48,16 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'user', 'middleware' => 'auth:api'], function () {
-    Route::get('me', 'UserController@me');
-    Route::post('update', 'UserController@update');
+Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
+    Route::get('location', 'UserLocationController@show')->name('location.show');
+
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('me', 'UserController@me');
+        Route::post('update', 'UserController@update');
+    });
 });
 
-Route::group(['prefix' => 'password'], function () {
+Route::group(['prefix' => 'password', 'namespace' => 'User'], function () {
     Route::post('create', 'UserPasswordResetController@create');
     Route::get('find/{token}', 'UserPasswordResetController@find');
     Route::post('reset', 'UserPasswordResetController@reset');

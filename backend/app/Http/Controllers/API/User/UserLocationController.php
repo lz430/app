@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\User;
 
 use GuzzleHttp;
 use App\Services\Search\DealSearch;
-use App\Http\Controllers\Controller;
 use GuzzleHttp\Exception\ConnectException;
+use App\Http\Controllers\API\BaseAPIController;
 use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 
-class UserLocationController extends Controller
+class UserLocationController extends BaseAPIController
 {
     /**
      * Lets just do this the worst way possible.

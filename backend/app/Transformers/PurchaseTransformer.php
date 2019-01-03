@@ -11,6 +11,7 @@ class PurchaseTransformer extends TransformerAbstract
     {
         return [
             'id' => $purchase->id,
+            'status' => $purchase->status,
             'deal_id' => $purchase->deal_id,
             'rebates' => $purchase->rebates,
             'down_payment' => $purchase->down_payment,
