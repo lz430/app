@@ -61,6 +61,7 @@ import OurPromise from './components/Promise';
 import NavHighlights from './components/NavHighlights';
 import Overview from './components/Overview/Overview';
 import Specs from './components/Specs';
+import AdditionalInformation from './components/MiscFeatures';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -299,6 +300,7 @@ class DealDetailContainer extends React.PureComponent {
                 </StickyContainer>
                 <Overview deal={this.props.deal} />
                 <Specs deal={this.props.deal} />
+                <AdditionalInformation deal={this.props.deal} />
                 <OurPromise />
                 <div className="bg-white pb-5 pt-5">
                     <Container>
