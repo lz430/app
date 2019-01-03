@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api\Checkout;
+namespace Tests\Feature\Api\Order;
 
 use Tests\TestCaseWithAuth;
 use App\Models\Order\Purchase;

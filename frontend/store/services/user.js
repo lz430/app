@@ -123,11 +123,11 @@ class UserService {
             params.longitude = lon;
         }
 
-        if (ip) {
+        if (ip && ip !== '::1' && ip !== '127.0.0.1') {
             params.ip = ip;
         }
 
-        return httpclient.get('/api/location', {
+        return httpclient.get('/api/user/location', {
             params: params,
             headers: this.client.headers(),
         });
