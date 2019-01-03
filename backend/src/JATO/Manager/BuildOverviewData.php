@@ -89,17 +89,6 @@ class BuildOverviewData
                     ]);
             }
         }
-        /*$liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
-       $cylinders = isset($attributes['number of cylinders']) ? $attributes['number of cylinders']->value : '';
-       $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
-       $labels[$equipments->schema_id] = $this->itemFactory(
-           'Engine',
-           "{$liters} v{$cylinders} {$configuration}",
-           [
-               'equipment' => $equipments,
-               'from' => 'Custom',
-           ]);
-       break;*/
         if ($equipments->name == 'Warranty whole vehicle - Total') {
             $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
             $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
