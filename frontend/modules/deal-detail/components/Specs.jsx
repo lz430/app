@@ -3,6 +3,7 @@ import { dealType } from '../../../core/types';
 import DealColors from '../../../components/Deals/DealColors';
 import SpecsGroup from './SpecsGroup';
 import { Row, Col, TabContent, TabPane } from 'reactstrap';
+import { groupBy, map, toPairs, pipe, prop, dissoc, zipObj } from 'ramda';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +19,7 @@ export default class extends React.PureComponent {
         upholsteryType: null,
         category: 'Engine',
         activeSpec: false,
-        activeTab: '1',
+        activeTab: 'capabilities',
     };
 
     componentDidMount() {
@@ -34,22 +35,21 @@ export default class extends React.PureComponent {
         }
     }
 
-    toggleSpecAccordion(faqKey) {
-        // If the user clicks on the open faq, close all faqss
-        if (faqKey === this.state.activeSpec) {
-            this.setState({
-                activeSpec: false,
-            });
-        } else {
-            this.setState({
-                activeSpec: faqKey,
-            });
-        }
+    filterSpecs(activeTab) {
+        const groupByCategories = pipe(
+            groupBy(prop('category')),
+            map(map(dissoc('category'))), // optional - if you want to remove the category from the values
+            toPairs,
+            map(zipObj(['category', 'values']))
+        );
+        const specList = groupByCategories(this.props.deal.equipment);
+
+        return specList;
     }
 
     render() {
         const { deal } = this.props;
-        console.log(this.state);
+        // console.log(this.state.activeTab);
 
         return (
             <div className="row deal-details__container p-10">
@@ -66,10 +66,10 @@ export default class extends React.PureComponent {
                                 sm="6"
                                 className={
                                     'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
-                                    (this.state.activeTab === '1')
+                                    (this.state.activeTab === 'capabilities')
                                 }
                                 onClick={() => {
-                                    this.toggle('1');
+                                    this.toggle('capabilities');
                                 }}
                             >
                                 <h6 className="m-0">Capabilities</h6>
@@ -78,25 +78,32 @@ export default class extends React.PureComponent {
                                 sm="6"
                                 className={
                                     'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
-                                    (this.state.activeTab === '2')
+                                    (this.state.activeTab === 'features')
                                 }
                                 onClick={() => {
-                                    this.toggle('2');
+                                    this.toggle('features');
                                 }}
                             >
                                 <h6 className="m-0">Features</h6>
                             </Col>
                         </Row>
-
                         <TabContent activeTab={this.state.activeTab}>
-                            <TabPane tabId="1">
+                            <TabPane tabId="capabilities">
                                 <SpecsGroup
                                     key={this.props.deal.id}
                                     vehicle={this.props.deal}
+                                    category={this.state.activeTab}
+                                    specs={this.filterSpecs()}
                                 />
                             </TabPane>
-                            <TabPane tabId="2">
-                                <h2>Features go here </h2>
+                            <TabPane tabId="features">
+                                <h3>Features go here </h3>
+                                <SpecsGroup
+                                    key={this.props.deal.id}
+                                    vehicle={this.props.deal}
+                                    category={this.state.activeTab}
+                                    specs={this.filterSpecs()}
+                                />
                             </TabPane>
                         </TabContent>
                     </Col>

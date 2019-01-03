@@ -2,6 +2,7 @@ import React from 'react';
 import { dealType } from '../../../core/types';
 import { Row, Col, Collapse } from 'reactstrap';
 import SpecsDetails from './SpecsDetails';
+import { groupBy, map, toPairs, pipe, prop, dissoc, zipObj } from 'ramda';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,6 +23,7 @@ export default class extends React.PureComponent {
         category: 'Engine',
         collapse: false,
         active: false,
+        activeTab: 'capabilities',
     };
 
     getVehicleData() {
@@ -51,15 +53,13 @@ export default class extends React.PureComponent {
         });
 
     getTheCats() {
-        const cats = [...new Set(this.getVehicleData().map(v => v.category))];
-        const catsR = cats.filter(c => c).map((category, i) => {
-            // console.log(this.props);
-
+        console.log(this.props);
+        const specsCats = [...new Set(this.props.specs.map(v => v.category))];
+        const specsCatsR = specsCats.filter(c => c).map((category, i) => {
             return (
                 <Col
                     xs="12"
                     key={i}
-                    onClick={() => this.specSetCat(category)}
                     className={
                         this.state.category === category
                             ? 'border-bottom p-15 active'
@@ -70,16 +70,19 @@ export default class extends React.PureComponent {
                         icon={this.state.active ? faMinusCircle : faPlusCircle}
                     />
                     <h5 className=""> {category} </h5>
-                    <SpecsDetails
-                        key={this.props.vehicle.id}
-                        vehicle={this.props.vehicle}
-                    />
+                    {this.props.specs.map(item => (
+                        <SpecsDetails
+                            key={this.props.vehicle.id}
+                            vehicle={this.props.vehicle}
+                            specDetail={this.props.specs}
+                        />
+                    ))}
                 </Col>
             );
         });
         return (
             <Row className="deal-details__specs accoridon-heading" id="specs">
-                {catsR}
+                {specsCatsR}
             </Row>
         );
     }

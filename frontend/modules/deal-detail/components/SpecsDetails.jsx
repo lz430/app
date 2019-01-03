@@ -1,6 +1,7 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 import { Row, Col, Collapse } from 'reactstrap';
+import { groupBy, map, toPairs, pipe, prop, dissoc, zipObj } from 'ramda';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -23,12 +24,6 @@ export default class extends React.PureComponent {
         active: false,
     };
 
-    getVehicleData() {
-        var theData = this.equipment;
-        // console.log(theData);
-        return theData;
-    }
-
     toggle = () =>
         this.setState({
             collapse: !this.state.collapse,
@@ -43,27 +38,26 @@ export default class extends React.PureComponent {
 
     render() {
         const { deal } = this.props;
-        // console.log(this.state);
-
+        // console.log(this.props);
         return (
             <React.Fragment>
                 <Collapse isOpen={this.state.collapse}>
-                    {/*{this.getVehicleData().map(vehicle => (*/}
-                    <Row className="deal-details__specs accordion-body">
-                        <Col
-                            sm="6"
-                            className="deal-details__specs capabilities text-left"
-                        >
-                            {/*<span>{vehicle.label}</span>*/}
-                        </Col>
-                        <Col
-                            sm="6"
-                            className="deal-details__specs features text-center"
-                        >
-                            {/*<span>{vehicle.value}</span>*/}
-                        </Col>
-                    </Row>
-                    {/*))}*/}
+                    {this.props.specDetail.map(detail => (
+                        <Row className="deal-details__specs accordion-body">
+                            <Col
+                                sm="6"
+                                className="deal-details__specs capabilities text-left"
+                            >
+                                <span>Hello World</span>
+                            </Col>
+                            <Col
+                                sm="6"
+                                className="deal-details__specs features text-center"
+                            >
+                                <span>{detail.value}</span>
+                            </Col>
+                        </Row>
+                    ))}
                 </Collapse>
             </React.Fragment>
         );
