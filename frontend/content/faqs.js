@@ -60,12 +60,6 @@ export default [
     },
     {
         category: 'Pricing & Payments',
-        title: 'Why are prices higher on Deliver My Ride than ads I am seeing?',
-        content:
-            'Advertised prices are confusing. In fact, we have been in the car business for 30 years and even we cannot decipher some of the ads we see on television or the dealer’s websites. There is one thing that every ad has in common; the prices and/or payments are not what they appear. In other words, they are lower than the amount you will actually pay when you visit the dealership. For example, if a lease payment is advertised for $89/month, significant down payment is required, the payment does not include tax, and you will likely need to qualify for obscure rebates. This is one of the primary reasons that we created Deliver My Ride.',
-    },
-    {
-        category: 'Pricing & Payments',
         title: 'Can I use my employee/military, etc., discount?',
         content:
             'Absolutely! You can do anything on our site that you can do at the dealer. If you qualify for a rebate or discount provided by the manufacturer, then you qualify on our site as well.',
@@ -114,16 +108,34 @@ export default [
             'On average, only 20% of car shoppers test drive a vehicle before they buy it. While this may seem counter to common sense, it is true. However, if you want to test drive a car before you buy, we recommend that you test drive the vehicle of a friend, neighbor, co-worker or family member for the most valuable experience. In these cases, you will likely get more honest feedback and be able to test the car for a few hours instead of a few minutes if done at a dealership. Since the cars we sell are brand new, the quality and condition will not factor into drivability. If you want to drive the dealer’s vehicle, we can facilitate a test drive or you are welcome to visit a local dealer to do so. In this case, we recommend contacting the dealer in advance and schedule a time with a specific person. Be sure to ask that the vehicle is pulled up and ready to drive so you don’t end up waiting around.',
     },
     {
-        category: 'Service and Maintenance',
-        title: 'Is my car under warranty?',
+        category: 'Lease Turn-In & Trade-In',
+        title: 'What if want to get out of my current lease early?',
         content:
-            'It sure is. Your new car is untitled and fully warranted by the manufacturer. Again, we do not change the designation of your purchase simply because we facilitated the transaction. In the end, you are still technically buying your car from a franchised dealer in accordance with the new car franchise laws.',
+            'Every scenario is different. You might be only a few months into your lease, in which case, getting out early will be costly. Or, you might have a month or two remaining on your lease and want to investigate your options. In this case, we can likely help. Chat with or call us to discuss the specifics.',
     },
     {
-        category: 'Service and Maintenance',
-        title: 'How do I service my new car?',
+        category: 'Lease Turn-In & Trade-In',
+        title: 'What if I still owe money on my car?',
         content:
-            'We recommend that you use the dealer who registered your sale if their dealership is near your home or office. If your car came from a dealer further away, because they gave the best price, then simply make arrangements with your nearby dealer. They are all bound by their dealer agreement to service all cars under warranty.',
+            'Depending on your personal financial situation, once you are in discussions with the dealership&#39;s financial resources you will be able to either roll your current loan amount into the new vehicle loan or they will request you pay the vehicle off before purchasing a new car.',
+    },
+    {
+        category: 'Lease Turn-In & Trade-In',
+        title: 'What if I have a car to trade?',
+        content:
+            'If you currently own a car, you have several options. You can sell the vehicle yourself, give it away/or donate, or trade it to a dealer. Here are the positives and negatives: <ol><li>Sell your car for “retail” <ol type="a"> <li>In this case, you will find a buyer through personal marketing efforts <ol type="i"> <li>Craig’s List, Ebay, Facebook Marketplace, classified ad</li></ol></li><li>Selling a car yourself to another end user takes more time and could include marketing costs, but you will likely get the most money for your car this way</li><li>Be sure to have the car cleaned and detailed professionally for best results</li></ol></li><li>Give or donate your car <ol type="a"><li>If your car has excessive miles or poor condition, you might benefit from giving it to a young driver or donating it for a tax credit</li></ol></li><li>Trade your vehicle <ol type="a"><li>Sell to a wholesaler <ol type="i"><li>Wholesalers have a network of dealers, customers and auctioned where they can re-sell your car. This is typically the least competitive option.</li></ol></li><li>Sell to an online retailer<ol type="i"><li>Sites like Vroom.com will buy your car and sell it on their site</li></ol></li><li>Trade to a dealer<ol type="i"><li>This is the most convenient way to sell your car. You can shop it around to several dealers, but it is time-consuming. It is most convenient to sell it to the dealer from whom you buy your new car.</li></ol></li></ol></li></ol>Whichever path you choose, we can advise. Please chat with or call us for assistance.',
+    },
+    {
+        category: 'Purchase & Delivery',
+        title: 'How will I receive my new car?',
+        content:
+            'This is our favorite part. First, tell us when and where you want it delivered. Then, we will send a certified Deliver My Ride representative over to explain the vehicle features and deliver your new car.',
+    },
+    {
+        category: 'Purchase & Delivery',
+        title: 'Is there a shipping charge?',
+        content:
+            'Within the greater Metro Detroit area, there are no additional charges. If you live outside the Metro Detroit area, additional shipping fees may apply.',
     },
     {
         key: 1,
