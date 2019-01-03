@@ -2,16 +2,7 @@ import React from 'react';
 import { dealType } from '../../../core/types';
 import SpecsGroup from './SpecsGroup';
 import { Row, Col, Container } from 'reactstrap';
-import {
-    groupBy,
-    map,
-    toPairs,
-    pipe,
-    prop,
-    dissoc,
-    zipObj,
-    filter,
-} from 'ramda';
+import { groupBy, map, toPairs, pipe, prop, zipObj, filter } from 'ramda';
 
 const capabilitiesCategories = [
     'Engine',
@@ -95,7 +86,7 @@ export default class extends React.PureComponent {
                                 <Col
                                     sm="6"
                                     className={
-                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
+                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom  cursor-pointer ' +
                                         (this.state.activeTab ===
                                             'capabilities')
                                     }
@@ -108,7 +99,7 @@ export default class extends React.PureComponent {
                                 <Col
                                     sm="6"
                                     className={
-                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
+                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom cursor-pointer  ' +
                                         (this.state.activeTab === 'features')
                                     }
                                     onClick={() => {

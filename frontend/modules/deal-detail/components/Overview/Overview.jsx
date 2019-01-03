@@ -5,6 +5,9 @@ import { Row, Col, Container } from 'reactstrap';
 import HighlightItem from './HighlightItem';
 import KeyFeatureItem from './KeyFeatureItem';
 
+import { faCheck } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 export default class extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
@@ -88,6 +91,7 @@ export default class extends React.PureComponent {
                                 key={`${label}-${index}`}
                                 className="deal__section-overview-options-item"
                             >
+                                <FontAwesomeIcon icon={faCheck} />{' '}
                                 {item.option_name}
                             </div>
                         );
