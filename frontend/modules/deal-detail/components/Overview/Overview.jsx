@@ -17,6 +17,26 @@ export default class extends React.PureComponent {
     getOverviewItems() {
         let items = this.props.deal.overview;
 
+        console.log(this.props.deal);
+
+        items.unshift({
+            category: 'Misc',
+            label: 'Fuel Type',
+            value: this.props.deal.fuel_type[0],
+        });
+
+        items.unshift({
+            category: 'Misc',
+            label: 'Drive Train',
+            value: this.props.deal.drive_train[0],
+        });
+
+        items.unshift({
+            category: 'Misc',
+            label: 'Body Style',
+            value: this.props.deal.style,
+        });
+
         items.unshift({
             category: 'Colors',
             label: 'Interior Color',
