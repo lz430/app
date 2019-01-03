@@ -17,8 +17,6 @@ export default class extends React.PureComponent {
     getOverviewItems() {
         let items = this.props.deal.overview;
 
-        console.log(this.props.deal);
-
         items.unshift({
             category: 'Misc',
             label: 'Fuel Type',
