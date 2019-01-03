@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\API\Order;
 
-use App\Http\Controllers\API\BaseAPIController;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\User;
@@ -10,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Order\Purchase;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\PurchaseTransformer;
+use App\Http\Controllers\API\BaseAPIController;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -74,8 +74,6 @@ class CheckoutController extends BaseAPIController
         if ($request->user()) {
             $purchase->user_id = $request->user()->id;
         }
-
-
 
         $purchase->save();
         $jwt = resolve('Tymon\JWTAuth\JWT');

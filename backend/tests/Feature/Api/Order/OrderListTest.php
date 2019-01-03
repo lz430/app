@@ -36,7 +36,8 @@ class OrderListTest extends TestCaseWithAuth
     }
 
     /** @test */
-    public function it_only_returns_my_orders() {
+    public function it_only_returns_my_orders()
+    {
         $user = factory(User::class)->create();
         $user2 = factory(User::class)->create();
 

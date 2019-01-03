@@ -55,7 +55,6 @@ Route::group(['prefix' => 'user', 'namespace' => 'User'], function () {
         Route::get('me', 'UserController@me');
         Route::post('update', 'UserController@update');
     });
-
 });
 
 Route::group(['prefix' => 'password', 'namespace' => 'User'], function () {

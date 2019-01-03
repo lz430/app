@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\API\BaseAPIController;
 use GuzzleHttp;
 use App\Services\Search\DealSearch;
 use GuzzleHttp\Exception\ConnectException;
+use App\Http\Controllers\API\BaseAPIController;
 use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 
 class UserLocationController extends BaseAPIController
