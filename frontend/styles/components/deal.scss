@@ -3,6 +3,7 @@
         &.deal__row {
             margin-top: 50px;
         }
+
         @include media-breakpoint-down(sm) {
             & > .col-md-6 {
                 margin-top: 50px;
@@ -20,6 +21,7 @@
         font-size: 1.1rem;
         line-height: 1.3rem;
         text-decoration: none;
+
         &:hover {
             text-decoration: none;
         }
@@ -72,11 +74,14 @@
         display: flex;
         justify-content: space-around;
         margin: 5px 0 0 0;
+
         > .btn {
             flex: 1;
+
             &:first-child {
                 margin-right: 5px;
             }
+
             &:last-child {
                 margin-left: 5px;
             }
@@ -102,6 +107,7 @@
                     cursor: pointer;
                 }
             }
+
             .content {
                 padding-bottom: 15px;
             }
@@ -131,6 +137,7 @@
                 background-color: transparent;
             }
         }
+
         textarea {
             height: 44px;
         }
@@ -189,7 +196,6 @@
     }
 }
 
-// New deal detail header
 .deal-details__new-header {
     &.title-year-make {
         font-size: 1.6rem;
@@ -224,60 +230,57 @@
             }
         }
     }
-}
 
-.deal-details__new-header {
-    &.fixed {
+    .title-year-make {
+        font-size: 1.6rem;
+        font-weight: 700;
+    }
+
+    .title-model-trim {
+        font-size: 1.3rem;
+        font-weight: 400;
+    }
+
+    .payment {
+        sup {
+            top: -0.7em;
+            font-size: 50%;
+        }
+
+        sub {
+            bottom: 0.7em;
+            font-size: 50%;
+        }
+
+        .dmr-price {
+            font-size: 2rem;
+            line-height: 1;
+            padding-right: 20px;
+        }
+
+        &__monthly {
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .tooltip {
+            font-size: 0.9em;
+
+            svg {
+                width: 0.9em;
+            }
+        }
+    }
+
+    button {
+        align-self: center;
+        margin-left: auto;
+    }
+
+    &.stickied {
         background: $color-background-secondary;
         z-index: 999;
         border-bottom: 1px solid $color-darkgrey;
-
-        & > .row {
-            background: $color-background-secondary;
-        }
-
-        .title-year-make {
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-
-        .title-model-trim {
-            font-size: 1.3rem;
-            font-weight: 400;
-        }
-        .payment {
-            sup {
-                top: -0.7em;
-                font-size: 50%;
-            }
-
-            sub {
-                bottom: 0.7em;
-                font-size: 50%;
-            }
-
-            .dmr-price {
-                font-size: 2rem;
-                line-height: 1;
-                padding-right: 20px;
-            }
-            &__monthly {
-                font-size: 2rem;
-                line-height: 1;
-            }
-            .tooltip {
-                font-size: 0.9em;
-
-                svg {
-                    width: 0.9em;
-                }
-            }
-        }
-
-        button {
-            align-self: center;
-            margin-left: auto;
-        }
     }
 }
 
@@ -338,6 +341,7 @@
             width: 100%;
         }
     }
+
     &__top-highlights {
         background: $color-lightgrey;
         padding: 20px 0;
@@ -357,6 +361,7 @@
         &-icon {
             margin-right: 10px;
         }
+
         .deal-details__deal-content-color {
             margin-left: 0;
             width: 90%;
@@ -374,10 +379,12 @@
         svg {
             display: inline-block;
         }
+
         h5 {
             color: $color-darkestgrey;
             font-size: 1.1rem;
         }
+
         svg {
             color: $color-darkergrey;
             margin-right: 20px;
@@ -405,6 +412,7 @@
                         border-bottom: 1px solid $color-text-white;
                     }
                 }
+
                 h6 {
                     font-size: 0.8rem;
                 }
@@ -421,6 +429,7 @@
         height: 20px;
         width: 20px;
     }
+
     &__swatch-name {
     }
 }

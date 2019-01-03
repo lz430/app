@@ -55,18 +55,11 @@ class DealDetailSearchTransformer extends TransformerAbstract
 
             'vauto_features' => (isset($deal->misc) ? $deal->misc : []),
             'dealer' => $dealer,
-            'dmr_features' => (isset($deal->legacy_features) ? $deal->legacy_features : []),
             'color' => $deal->color,
             'color_simple' => $simpleColor,
             'exterior_color_swatch' => $simpleColorSwatch,
             'pricing' => $deal->pricing,
             'fees' => (isset($deal->fees) ? $deal->fees : null),
-
-            // TODO: refactor frontend to use the fees values instead.
-            'doc_fee' => (float) $dealer->doc_fee,
-            'cvr_fee' => (float) $dealer->cvr_fee,
-            'registration_fee' => (float) $dealer->registration_fee,
-            'acquisition_fee' => (float) $dealer->acquisition_fee,
         ];
     }
 }

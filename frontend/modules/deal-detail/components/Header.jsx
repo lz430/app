@@ -1,57 +1,33 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 
-import { Row, Col, Button } from 'reactstrap';
-import { faCalculator, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Row, Col, Button, Container } from 'reactstrap';
+import classNames from 'classnames';
 import { Sticky } from 'react-sticky';
 
 export default class Header extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
     };
+
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
 
     render() {
         return (
-            <div>
-                {/*<Row className="deal-details__new-header stationary">
-                    <Col sm="8">
-                        <div className="deal-details__new-header title-year-make">
-                            {this.props.deal.year} {this.props.deal.make}{' '}
-                            {this.props.deal.model}
-                        </div>
-                        <div className="deal-details__new-header title-model-trim">
-                            {this.props.deal.series}
-                        </div>
-                    </Col>
-                    <Col
-                        sm="4"
-                        className="deal-details__new-header payment d-flex"
+            <Sticky topOffset={-62}>
+                {({ style, isSticky }) => (
+                    <div
+                        className={classNames('deal-details__new-header', {
+                            stickied: isSticky,
+                        })}
+                        style={{
+                            ...style,
+                            marginTop: isSticky ? '62px' : '0px',
+                        }}
                     >
-                        <div className="d-inline-block monthly">
-                            <sup>$</sup>
-                            <b>637</b>
-                            <sub>/mo</sub>
-                        </div>
-                        <div className="configure d-inline-block">
-                            <FontAwesomeIcon icon={faCalculator} />
-                            Configure Payment
-                        </div>
-                    </Col>
-                </Row>*/}
-
-                <Sticky topOffset={-62}>
-                    {({ style, isSticky }) => (
-                        <div
-                            className="deal-details__new-header fixed"
-                            style={{
-                                ...style,
-                                marginTop: isSticky ? '64px' : '0px',
-                            }}
-                        >
+                        <Container>
                             <Row>
                                 <Col sm="6">
                                     <div className="deal-details__new-header title-year-make">
@@ -93,10 +69,10 @@ export default class Header extends React.PureComponent {
                                     </Button>
                                 </Col>
                             </Row>
-                        </div>
-                    )}
-                </Sticky>
-            </div>
+                        </Container>
+                    </div>
+                )}
+            </Sticky>
         );
     }
 }

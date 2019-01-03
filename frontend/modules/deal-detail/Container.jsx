@@ -54,14 +54,12 @@ import { getSearchQuery } from '../deal-list/selectors';
 import { StickyContainer } from 'react-sticky';
 import Header from './components/Header';
 import Media from './components/Media';
-import DealFeatures from './components/DealFeatures';
-//import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
 import OurPromise from './components/Promise';
-import NavHighlights from './components/Nav-Highlights';
-import Highlights from './components/Highlights';
+import NavHighlights from './components/NavHighlights';
+import Overview from './components/Overview/Overview';
 import Specs from './components/Specs';
 
 class DealDetailContainer extends React.PureComponent {
@@ -254,20 +252,11 @@ class DealDetailContainer extends React.PureComponent {
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
                 <StickyContainer>
+                    <Header deal={this.props.deal} />
                     <Container className="mb-5 deal-details">
-                        <Header deal={this.props.deal} />
                         <Row>
                             <Col md="6" lg="7" xl="8">
                                 <Media deal={this.props.deal} />
-                                {/*
-                                <DealFeatures deal={this.props.deal} />
-                                
-                                <CompareButton
-                                    deal={this.props.deal}
-                                    compareList={this.props.compareList}
-                                    onToggleCompare={this.props.toggleCompare}
-                                />
-                                 */}
                             </Col>
                             <Col md="6" lg="5" xl="4">
                                 <AddToCart
@@ -307,7 +296,7 @@ class DealDetailContainer extends React.PureComponent {
                             <NavHighlights deal={this.props.deal} />
                         </div>
                         <div className="deal__row m-0">
-                            <Highlights deal={this.props.deal} />
+                            <Overview deal={this.props.deal} />
                         </div>
                         <div className="deal__row">
                             <Specs deal={this.props.deal} />

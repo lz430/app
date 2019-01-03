@@ -1,8 +1,5 @@
 import React from 'react';
-import { dealType } from '../../../core/types';
-import DealColors from '../../../components/Deals/DealColors';
-import StandardFeaturesModal from './StandardFeaturesModal';
-import AdditionalFeaturesModal from './AdditionalFeaturesModal';
+import { dealType } from '../../../../core/types';
 import { Row, Col } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,56 +10,6 @@ export default class extends React.PureComponent {
         deal: dealType.isRequired,
     };
 
-    state = {
-        basicFeatures: [],
-        fuelEconomy: {},
-        upholsteryType: null,
-        standardFeaturesModalOpen: false,
-        additionalFeaturesModalOpen: false,
-    };
-
-    componentDidMount() {
-        if (this.props.deal) {
-            const {
-                body_style,
-                driven_wheels,
-                fuel_econ_city,
-                fuel_econ_hwy,
-            } = this.props.deal.version;
-
-            const { engine, transmission } = this.props.deal;
-
-            const basicFeatures = [
-                { name: 'Body', content: body_style },
-                { name: 'Drive Train', content: driven_wheels },
-                { name: 'Engine', content: engine },
-                { name: 'Transmission', content: transmission },
-            ];
-
-            const fuelEconomy = {
-                city: fuel_econ_city,
-                highway: fuel_econ_hwy,
-            };
-
-            this.setState({ basicFeatures, fuelEconomy });
-
-            // console.log(this.props.deal);
-        }
-    }
-
-    toggleStandardFeaturesModal() {
-        this.setState({
-            standardFeaturesModalOpen: !this.state.standardFeaturesModalOpen,
-        });
-    }
-
-    toggleAdditionalFeaturesModal() {
-        this.setState({
-            additionalFeaturesModalOpen: !this.state
-                .additionalFeaturesModalOpen,
-        });
-    }
-
     render() {
         const { deal } = this.props;
 
@@ -72,30 +19,23 @@ export default class extends React.PureComponent {
                     className="deal-details__top-highlights border-bottom"
                     id="overview"
                 >
-                    <Col>
-                        <h3 className="text-center">350 hp</h3>
-                        <h6 className="text-center">
-                            {this.props.deal.engine}
-                        </h6>
+                    <Col className="text-center">
+                        <h3>350 hp</h3>
+                        <h6>{deal.engine}</h6>
                     </Col>
-                    <Col>
-                        <h3 className="text-center">6-speed</h3>
-                        <h6 className="text-center">
-                            {this.props.deal.transmission} transmission
-                        </h6>
+                    <Col className="text-center">
+                        <h3>6-speed</h3>
+                        <h6>{deal.transmission} transmission</h6>
                     </Col>
-                    <Col>
-                        <h3 className="text-center">
-                            {this.props.deal.fuel_econ_city} |{' '}
-                            {this.props.deal.fuel_econ_hwy}
+                    <Col className="text-center">
+                        <h3>
+                            {deal.fuel_econ_city} | {deal.fuel_econ_hwy}
                         </h3>
-                        <h6 className="text-center">
-                            city &nbsp; MPG &nbsp; hwy
-                        </h6>
+                        <h6>city &nbsp; MPG &nbsp; hwy</h6>
                     </Col>
-                    <Col>
-                        <h3 className="text-center">Up to 7</h3>
-                        <h6 className="text-center">passengers</h6>
+                    <Col className="text-center">
+                        <h3>Up to {deal.seating_capacity - 1}</h3>
+                        <h6>passengers</h6>
                     </Col>
                 </Row>
 

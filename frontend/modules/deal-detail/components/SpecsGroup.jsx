@@ -53,7 +53,6 @@ export default class extends React.PureComponent {
         });
 
     getTheCats() {
-        console.log(this.props);
         const specsCats = [...new Set(this.props.specs.map(v => v.category))];
         const specsCatsR = specsCats.filter(c => c).map((category, i) => {
             return (
