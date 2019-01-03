@@ -36,6 +36,12 @@ export default class extends React.PureComponent {
         });
 
         items.unshift({
+            category: 'Misc',
+            label: 'Seating Materials',
+            value: this.props.deal.seat_materials,
+        });
+
+        items.unshift({
             category: 'Colors',
             label: 'Interior Color',
             value: this.props.deal.interior_color,
