@@ -41,6 +41,10 @@ class MyApp extends App {
         if (isServer) {
             const session = ctx.req.session;
 
+            if (ctx.query.csrfToken) {
+                await setCSRFToken(ctx.query.csrfToken);
+            }
+
             //
             // Location
             if (
@@ -52,10 +56,6 @@ class MyApp extends App {
                 );
             }
             await softUpdateSessionData(session);
-        }
-
-        if (ctx.query.csrfToken) {
-            await setCSRFToken(ctx.query.csrfToken);
         }
 
         return { pageProps };
