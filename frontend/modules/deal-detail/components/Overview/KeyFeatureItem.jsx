@@ -22,7 +22,6 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        console.log(this.props);
         return (
             <Col md={6}>
                 <div className="d-flex deal__section-overview-features-item align-items-center">

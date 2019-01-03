@@ -7,6 +7,7 @@ import KeyFeatureItem from './KeyFeatureItem';
 
 import { faCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { filter } from 'ramda';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -28,6 +29,14 @@ export default class extends React.PureComponent {
             value: this.props.deal.color,
             swatch: this.props.deal.exterior_color_swatch,
         });
+
+        items = filter(item => {
+            if (['Fuel Economy', 'Transmission'].includes(item.category)) {
+                return false;
+            }
+
+            return true;
+        }, items);
 
         return items;
     }
@@ -112,9 +121,9 @@ export default class extends React.PureComponent {
 
         return (
             <Row className="deal__section-overview-options" noGutters>
-                {renderPackages &&
+                {!!renderPackages &&
                     this.renderPackagesOrOptions('Packages', deal.packages)}
-                {renderOptions &&
+                {!!renderOptions &&
                     this.renderPackagesOrOptions('Options', deal.options)}
             </Row>
         );
