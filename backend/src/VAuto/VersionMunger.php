@@ -261,8 +261,6 @@ class VersionMunger
         } catch (ClientException $e) {
             echo $e->getMessage();
         }
-
-
     }
 
     /**
@@ -495,7 +493,6 @@ class VersionMunger
         foreach ($version->fresh()->deals as $attachedDeal) {
             if ($attachedDeal->status == 'available') {
                 $attachedDeal->features()->sync([]);
-                $attachedDeal->jatoFeatures()->sync([]);
             }
         }
 

@@ -95,4 +95,10 @@ export default class CheckoutService {
             }
         );
     };
+
+    orderList = () => {
+        return httpclient.get(`/api/order`, {
+            headers: this.client.headers(),
+        });
+    };
 }

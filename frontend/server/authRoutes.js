@@ -8,7 +8,6 @@ const setup = ({ server, app, csrfProtection }) => {
             ...req.query,
             csrfToken: req.csrfToken(),
         };
-
         app.render(req, res, '/auth/update-account', query);
     });
 
