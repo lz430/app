@@ -1,7 +1,7 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 import SpecsGroup from './SpecsGroup';
-import { Row, Col, TabContent, TabPane } from 'reactstrap';
+import { Row, Col, Container } from 'reactstrap';
 import {
     groupBy,
     map,
@@ -77,51 +77,55 @@ export default class extends React.PureComponent {
 
     render() {
         const { deal } = this.props;
-        // console.log(this.state.activeTab);
 
         return (
-            <div className="row deal-details__container p-10">
-                <Row className="deal-details__specs heading" id="specs">
-                    <Col xs="12">
-                        <h2 className="text-center"> Specifications </h2>
-                    </Col>
-                </Row>
-
-                <Row className="border">
-                    <Col>
-                        <Row tabs className="deal-details__specs headings p-15">
-                            <Col
-                                sm="6"
-                                className={
-                                    'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
-                                    (this.state.activeTab === 'capabilities')
-                                }
-                                onClick={() => {
-                                    this.toggle('capabilities');
-                                }}
+            <div className="deal-details__container pt-3 pb-3">
+                <Container>
+                    <Row className="deal__section-heading">
+                        <Col>
+                            <h3 className="text-center"> Specifications </h3>
+                        </Col>
+                    </Row>
+                    <Row className="border">
+                        <Col>
+                            <Row
+                                tabs
+                                className="deal-details__specs headings p-15"
                             >
-                                <h6 className="m-0">Capabilities</h6>
-                            </Col>
-                            <Col
-                                sm="6"
-                                className={
-                                    'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
-                                    (this.state.activeTab === 'features')
-                                }
-                                onClick={() => {
-                                    this.toggle('features');
-                                }}
-                            >
-                                <h6 className="m-0">Features</h6>
-                            </Col>
-                        </Row>
-                        <SpecsGroup
-                            vehicle={this.props.deal}
-                            category={this.state.activeTab}
-                            specs={this.filterSpecs()}
-                        />
-                    </Col>
-                </Row>
+                                <Col
+                                    sm="6"
+                                    className={
+                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
+                                        (this.state.activeTab ===
+                                            'capabilities')
+                                    }
+                                    onClick={() => {
+                                        this.toggle('capabilities');
+                                    }}
+                                >
+                                    <h6 className="m-0">Capabilities</h6>
+                                </Col>
+                                <Col
+                                    sm="6"
+                                    className={
+                                        'deal-details__specs headings__item d-flex justify-content-center border-bottom ' +
+                                        (this.state.activeTab === 'features')
+                                    }
+                                    onClick={() => {
+                                        this.toggle('features');
+                                    }}
+                                >
+                                    <h6 className="m-0">Features</h6>
+                                </Col>
+                            </Row>
+                            <SpecsGroup
+                                vehicle={this.props.deal}
+                                category={this.state.activeTab}
+                                specs={this.filterSpecs()}
+                            />
+                        </Col>
+                    </Row>
+                </Container>
             </div>
         );
     }

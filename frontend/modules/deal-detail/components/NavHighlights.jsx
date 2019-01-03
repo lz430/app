@@ -1,10 +1,7 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
-import DealColors from '../../../components/Deals/DealColors';
 import { Row, Col } from 'reactstrap';
 import { Sticky } from 'react-sticky';
-
-import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -33,14 +30,6 @@ export default class extends React.PureComponent {
                                                 href="#overview"
                                             >
                                                 Overview
-                                            </a>
-                                        </li>
-                                        <li className="d-inline-flex">
-                                            <a
-                                                className="d-block border-right"
-                                                href="#gallery"
-                                            >
-                                                Gallery
                                             </a>
                                         </li>
                                         <li className="d-inline-flex">
