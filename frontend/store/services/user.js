@@ -123,7 +123,7 @@ class UserService {
             params.longitude = lon;
         }
 
-        if (ip) {
+        if (ip && ip !== '::1' && ip !== '127.0.0.1') {
             params.ip = ip;
         }
 
