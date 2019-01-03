@@ -12,10 +12,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        deal: dealType.isRequired,
-    };
-
     state = {
         basicFeatures: [],
         fuelEconomy: {},
@@ -27,14 +23,14 @@ export default class extends React.PureComponent {
     };
 
     getVehicleData() {
-        var theData = this.props.vehicle.equipment;
+        let theData = this.props.vehicle.equipment;
         // console.log(theData);
         return theData;
     }
 
     getCategories() {
-        var array = [];
-        var unique = this.props.vehicle.equipment.forEach(
+        let array = [];
+        let unique = this.props.vehicle.equipment.forEach(
             v =>
                 array.indexOf(v.category) === -1 ? array.push(v.category) : null
         );
@@ -53,7 +49,6 @@ export default class extends React.PureComponent {
         });
 
     getTheCats() {
-        console.log(this.props);
         const specsCats = [...new Set(this.props.specs.map(v => v.category))];
         const specsCatsR = specsCats.filter(c => c).map((category, i) => {
             return (
@@ -72,7 +67,6 @@ export default class extends React.PureComponent {
                     <h5 className=""> {category} </h5>
                     {this.props.specs.map(item => (
                         <SpecsDetails
-                            key={this.props.vehicle.id}
                             vehicle={this.props.vehicle}
                             specDetail={this.props.specs}
                         />
@@ -89,7 +83,7 @@ export default class extends React.PureComponent {
 
     render() {
         const { deal } = this.props;
-        // console.log(this.state);
+        console.log(this.props);
 
         return <React.Fragment>{this.getTheCats()}</React.Fragment>;
     }

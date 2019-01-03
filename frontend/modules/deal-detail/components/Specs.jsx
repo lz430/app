@@ -3,10 +3,35 @@ import { dealType } from '../../../core/types';
 import DealColors from '../../../components/Deals/DealColors';
 import SpecsGroup from './SpecsGroup';
 import { Row, Col, TabContent, TabPane } from 'reactstrap';
-import { groupBy, map, toPairs, pipe, prop, dissoc, zipObj } from 'ramda';
+import {
+    groupBy,
+    filter,
+    map,
+    toPairs,
+    pipe,
+    prop,
+    dissoc,
+    zipObj,
+} from 'ramda';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCar } from '@fortawesome/free-solid-svg-icons';
+
+const capabilitiesCategories = [
+    'Engine',
+    'Dimensions',
+    'Hybrid & Electric',
+    'Transmission',
+    'Fuel Economy',
+    'Suspension',
+];
+
+const featuresCategories = [
+    'Comfort & Convenience',
+    'Infotainment',
+    'Exterior',
+    'Safety & Driver Assist',
+];
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -22,6 +47,33 @@ export default class extends React.PureComponent {
         activeTab: 'capabilities',
     };
 
+    filterSpecs() {
+        const groupByCategories = pipe(
+            filter(item => {
+                if (
+                    this.state.activeTab === 'capabilities' &&
+                    capabilitiesCategories.includes(item.category)
+                ) {
+                    return true;
+                }
+
+                if (
+                    this.state.activeTab === 'features' &&
+                    featuresCategories.includes(item.category)
+                ) {
+                    return true;
+                }
+
+                return false;
+            }),
+            groupBy(prop('category')),
+            toPairs,
+            map(zipObj(['category', 'values']))
+        );
+
+        return groupByCategories(this.props.deal.equipment);
+    }
+
     componentDidMount() {
         if (this.props.deal) {
         }
@@ -33,18 +85,6 @@ export default class extends React.PureComponent {
                 activeTab: tab,
             });
         }
-    }
-
-    filterSpecs(activeTab) {
-        const groupByCategories = pipe(
-            groupBy(prop('category')),
-            map(map(dissoc('category'))), // optional - if you want to remove the category from the values
-            toPairs,
-            map(zipObj(['category', 'values']))
-        );
-        const specList = groupByCategories(this.props.deal.equipment);
-
-        return specList;
     }
 
     render() {
@@ -90,7 +130,6 @@ export default class extends React.PureComponent {
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="capabilities">
                                 <SpecsGroup
-                                    key={this.props.deal.id}
                                     vehicle={this.props.deal}
                                     category={this.state.activeTab}
                                     specs={this.filterSpecs()}
@@ -99,7 +138,6 @@ export default class extends React.PureComponent {
                             <TabPane tabId="features">
                                 <h3>Features go here </h3>
                                 <SpecsGroup
-                                    key={this.props.deal.id}
                                     vehicle={this.props.deal}
                                     category={this.state.activeTab}
                                     specs={this.filterSpecs()}
