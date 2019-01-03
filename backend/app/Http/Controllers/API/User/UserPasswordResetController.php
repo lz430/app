@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\User;
 
 use Carbon\Carbon;
 use App\Models\User;
@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\UserPasswordResetRequest;
 use App\Mail\UserPasswordResetSuccess;
+use App\Http\Controllers\API\BaseAPIController;
 
 class UserPasswordResetController extends BaseAPIController
 {
