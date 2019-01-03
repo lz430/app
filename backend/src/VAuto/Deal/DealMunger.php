@@ -15,9 +15,6 @@ class DealMunger
     /* @var \DeliverMyRide\VAuto\Deal\DealEquipmentMunger */
     private $equipmentManager;
 
-    /* @var \DeliverMyRide\VAuto\Deal\DealFeaturesMunger */
-    private $featuresManager;
-
     /**
      * @param JatoClient $jatoClient
      */
@@ -26,7 +23,6 @@ class DealMunger
         $this->jatoClient = $jatoClient;
         $this->photoManager = new DealPhotosMunger();
         $this->equipmentManager = new DealEquipmentMunger();
-        $this->featuresManager = new DealFeaturesMunger($this->jatoClient);
     }
 
     /**
@@ -41,9 +37,8 @@ class DealMunger
         $debug = [];
 
         $equipment_debug = $this->equipmentManager->import($deal, $force);
-        $features_debug = $this->featuresManager->import($deal, $force);
         $photos_debug = $this->photoManager->import($deal, $data, $force);
 
-        return array_merge($debug, $equipment_debug, $photos_debug, $features_debug);
+        return array_merge($debug, $equipment_debug, $photos_debug);
     }
 }
