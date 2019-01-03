@@ -38,6 +38,17 @@ class BuildOverviewData
         foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
+        if ($equipments->name == 'Power') {
+            if (isset($attributes['Maximum power hp/PS'])) {
+                $labels[$attributes['Maximum power hp/PS']->schemaId] = $this->itemFactory(
+                    'Horse Power',
+                    "{$attributes['Maximum power hp/PS']->value}",
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
+        }
         if ($equipments->name == 'Transmission') {
             if (isset($attributes['Transmission type'])) {
                 $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
@@ -78,25 +89,27 @@ class BuildOverviewData
                     ]);
             }
         }
+        /*$liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
+       $cylinders = isset($attributes['number of cylinders']) ? $attributes['number of cylinders']->value : '';
+       $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
+       $labels[$equipments->schema_id] = $this->itemFactory(
+           'Engine',
+           "{$liters} v{$cylinders} {$configuration}",
+           [
+               'equipment' => $equipments,
+               'from' => 'Custom',
+           ]);
+       break;*/
         if ($equipments->name == 'Warranty whole vehicle - Total') {
-            if (isset($attributes['duration (months)'])) {
-                $labels[$attributes['duration (months)']->schemaId] = $this->itemFactory(
-                    'Warranty Duration in months',
-                    $attributes['duration (months)']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-            if (isset($attributes['distance (miles)'])) {
-                $labels[$attributes['distance (miles)']->schemaId] = $this->itemFactory(
-                    'Warranty Distance in miles',
-                    $attributes['distance (miles)']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
+            $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
+            $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
+            $labels[$equipments->schemaId] = $this->itemFactory(
+                'Warranty',
+                "{$months} months / {$miles} miles",
+                [
+                    'equipment' => $equipments,
+                    'from' => 'Custom',
+                ]);
         }
         if ($equipments->name == 'Wheels') {
             if (isset($attributes['rim type'])) {
