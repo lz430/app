@@ -36,7 +36,8 @@ class Category extends Model
         'title',
         'slug',
         'has_custom_jato_mapping',
-        'display_order', ];
+        'display_order',
+    ];
 
     public function features()
     {

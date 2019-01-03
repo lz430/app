@@ -324,6 +324,13 @@ class Importer
         \DB::connection()->disableQueryLog();
 
         $sources = $this->buildSourceData();
+
+        if (! count($sources)) {
+            $this->info('No Files found to import!');
+
+            return false;
+        }
+
         $hashes = [];
         foreach ($sources as $source) {
             $this->parseSourceData($source);
@@ -345,7 +352,11 @@ class Importer
         $this->info(' -- Records to delete from db: '.$queryToDelete->count());
 
         // Sets status of deals that are not in feed to sold
-        $queryUpdateSold->update(['status' => 'sold', 'sold_at' => Carbon::now()]);
+        $queryUpdateSold->update(
+            [
+                'status' => 'sold',
+                'sold_at' => Carbon::now(),
+            ]);
         $queryUpdateSold->searchable();
 
         //Finds and deletes deals with no purchases after 6 months
@@ -382,6 +393,8 @@ class Importer
             ->notify(new NotifyToSlackChannel($data));
 
         $this->fileManager->archiveFiles($sources);
+
+        return true;
     }
 
     /**

@@ -17,13 +17,10 @@ $color-sidebar-background-secondary-light: lighten(
 );
 
 $color-footer-background: #454d52;
-
 $color-compare-bar-background: rgba(204, 204, 204, 1);
-
 $color-text-white: #fff;
 $color-text-blue: #0e9dce;
 $color-black: #000;
-
 $color-blue: #41b1ac;
 $color-dark-blue: #436d82;
 $color-light-blue: #65d1f6;
@@ -31,42 +28,36 @@ $color-lighter-blue: #d5efef;
 $color-pink: rgba(231, 2, 144, 1);
 $color-purple: #e70290;
 $color-error: #ac0000;
-
 $color-lightgrey: #f6f6f7;
 $color-grey: #ced4d9;
+
 $color-darkgrey: #999;
 $color-darkergrey: #535d63;
 $color-darkestgrey: #484d50;
-
 $color-facebook-blue: #3b5998;
 $color-twitter-blue: #4099ff;
 
 $color-left-filter-selected: #279c99;
-
 $primary: $brand-green;
 $success: $color-pink;
-
 // Typography
 // $font-family-sans-serif: 'Open Sans', sans-serif;
 $font-family: 'Roboto', sans-serif;
 $line-height-base: 1.6;
 $text-color: #484d50;
 $text-color-dark: darken($text-color, 25);
-
 // Nav
 $nav-height: 76px;
 $steps-bar-height: 56px;
 $header-height: $nav-height;
 $footer-height: 70px;
 $footer-height-mobile: 40px;
-
 // Breakpoints
 $break-extra-small: 375px;
 $break-small: 576px;
 $break-medium: 768px;
 $break-large: 992px;
 $break-extra-large: 1200px;
-
 // Filter Page
 $sidebar-filters-width: 300px;
 $sortbar-height: 47px;
@@ -75,24 +66,19 @@ $filterbar-vertical-padding: 20px;
 $compare-bar-height: 70px;
 $compare-bar-width: 992px;
 $selector-icon-size: 23px;
-
 // Section
 $section-padding: 66px;
-
 // Deal Card
 $deal-card-width: 300px;
-$deal-card-margin: 5px;
 
+$deal-card-margin: 5px;
 // Deal Card
 $carousel-control-color: $primary;
 $carousel-control-icon-width: 1.5rem;
 $carousel-control-width: 6%;
-
 $transition-standard: 0.15s ease-in-out;
-
 // Border
 $border-none: 0 none;
-$border-radius: 3px;
-
+$border-radius: 5px;
 // Box shadow
 $shadow-subtle: 3px 2px 10px 0px rgba(0, 0, 0, 0.5);

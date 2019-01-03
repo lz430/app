@@ -4,6 +4,10 @@ import httpclient from '../httpclient';
  * Brochure site specific code
  */
 class BrochureService {
+    constructor(client) {
+        this.client = client;
+    }
+
     /**
      *
      * @param data

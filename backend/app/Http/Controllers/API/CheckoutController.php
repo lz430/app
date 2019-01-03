@@ -99,7 +99,7 @@ class CheckoutController extends BaseAPIController
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
                 'phone_number' => 'required|digits:10',
-                'g_recaptcha_response' => 'required|recaptcha',
+                'g_recaptcha_response' => 'required|captcha',
             ],
             [
                 'drivers_license_number' => 'Please provide a valid License Number.',
