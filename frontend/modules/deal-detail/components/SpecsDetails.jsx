@@ -9,22 +9,25 @@ export default class extends React.PureComponent {
 
     render() {
         const { deal } = this.props;
+        console.log(this.vehicle);
         return (
             <React.Fragment>
-                <Row className="deal-details__specs accordion-body">
-                    <Col
-                        sm="6"
-                        className="deal-details__specs capabilities text-left"
-                    >
-                        <span />
-                    </Col>
-                    <Col
-                        sm="6"
-                        className="deal-details__specs features text-center"
-                    >
-                        <span />
-                    </Col>
-                </Row>
+                {this.props.values.map(item => (
+                    <Row className="deal-details__specs accordion-body">
+                        <Col
+                            sm="6"
+                            className="deal-details__specs capabilities text-left"
+                        >
+                            <span>{item.label} </span>
+                        </Col>
+                        <Col
+                            sm="6"
+                            className="deal-details__specs features text-center"
+                        >
+                            <span>{item.value} </span>
+                        </Col>
+                    </Row>
+                ))}
             </React.Fragment>
         );
     }
