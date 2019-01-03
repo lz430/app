@@ -66,9 +66,9 @@ $factory->define(App\Models\JATO\VehicleModel::class, function (Faker\Generator 
 
 $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $faker) {
     return [
-        'jato_vehicle_id' => $faker->randomNumber(),
-        'jato_uid' => $faker->randomNumber(),
-        'jato_model_id' => $faker->randomNumber(),
+        'jato_vehicle_id' => $faker->unique()->randomNumber(),
+        'jato_uid' => $faker->unique()->randomNumber(),
+        'jato_model_id' => $faker->unique()->randomNumber(),
         'model_id' => factory(App\Models\JATO\VehicleModel::class),
         'year' => $faker->year,
         'name' => $faker->name,

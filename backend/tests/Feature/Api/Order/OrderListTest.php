@@ -47,7 +47,6 @@ class OrderListTest extends TestCaseWithAuth
         });
 
         factory(Purchase::class, 6)->make()->each(function ($purchase) use ($user2) {
-            print_r($user2->id);
             $purchase->status = 'contact';
             $purchase->user_id = $user2->id;
             $purchase->save();
