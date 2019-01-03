@@ -42,7 +42,10 @@ export default class extends React.PureComponent {
                                 this.state.active ? faMinusCircle : faPlusCircle
                             }
                         />
-                        <h5 onClick={this.toggle} className="collapse-header">
+                        <h5
+                            onClick={this.toggle.bind(this)}
+                            className="collapse-header"
+                        >
                             {' '}
                             {category}{' '}
                         </h5>
@@ -50,7 +53,8 @@ export default class extends React.PureComponent {
                             {this.props.specs.map(item => (
                                 <SpecsDetails
                                     vehicle={this.props.vehicle}
-                                    specDetail={this.props.specs}
+                                    values={item.values}
+                                    category={item.category}
                                 />
                             ))}
                         </Collapse>
