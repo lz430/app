@@ -1,21 +1,8 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
-import DealColors from '../../../components/Deals/DealColors';
 import SpecsGroup from './SpecsGroup';
 import { Row, Col, TabContent, TabPane } from 'reactstrap';
-import {
-    groupBy,
-    filter,
-    map,
-    toPairs,
-    pipe,
-    prop,
-    dissoc,
-    zipObj,
-} from 'ramda';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCar } from '@fortawesome/free-solid-svg-icons';
+import { groupBy, filter, map, toPairs, pipe, prop, zipObj } from 'ramda';
 
 const capabilitiesCategories = [
     'Engine',
@@ -71,11 +58,6 @@ export default class extends React.PureComponent {
         return groupByCategories(this.props.deal.equipment);
     }
 
-    componentDidMount() {
-        if (this.props.deal) {
-        }
-    }
-
     toggle(tab) {
         if (this.state.activeTab !== tab) {
             this.setState({
@@ -85,7 +67,6 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        const { deal } = this.props;
         // console.log(this.state.activeTab);
 
         return (
@@ -133,7 +114,6 @@ export default class extends React.PureComponent {
                                 />
                             </TabPane>
                             <TabPane tabId="features">
-                                <h3>Features go here </h3>
                                 <SpecsGroup
                                     vehicle={this.props.deal}
                                     category={this.state.activeTab}
