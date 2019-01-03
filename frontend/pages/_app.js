@@ -9,11 +9,24 @@ import withRedux from 'next-redux-wrapper';
 import withReduxSaga from 'next-redux-saga';
 import * as Sentry from '@sentry/browser';
 import config from '../core/config';
-//import { requestLocation } from '../apps/user/actions';
+import { requestIpLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
 import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
+
+const brochureSiteRoutes = [
+    '/home',
+    '/brochure/contact',
+    '/brochure/about',
+    '/brochure/how-it-works',
+    '/brochure/faq',
+    '/brochure/terms-of-service',
+    '/brochure/privacy-policy',
+    '/brochure/concierge',
+];
+
+const desktopOnlyFooter = ['/deal-list'];
 
 class MyApp extends App {
     static async getInitialProps({ Component, /*router, */ ctx }) {
@@ -26,17 +39,19 @@ class MyApp extends App {
         }
 
         if (isServer) {
+            const session = ctx.req.session;
+
             //
             // Location
             if (
-                !ctx.req.session.location ||
-                !ctx.req.session.location.is_valid
+                (!session.location || !session.location.is_valid) &&
+                !brochureSiteRoutes.includes(ctx.req.path)
             ) {
-                //await ctx.store.dispatch(
-                //                    requestLocation(null, ctx.req.session)
-                //              );
+                await ctx.store.dispatch(
+                    requestIpLocation(ctx.req.ip, ctx.req.session)
+                );
             }
-            await softUpdateSessionData(ctx.req.session);
+            await softUpdateSessionData(session);
         }
 
         if (ctx.query.csrfToken) {
@@ -45,26 +60,6 @@ class MyApp extends App {
 
         return { pageProps };
     }
-
-    /**
-     * List of pages that we only expose the footer on the desktop view port
-     * @type {string[]}
-     */
-    desktopOnlyFooter = ['/deal-list'];
-
-    /**
-     * @type {string[]}
-     */
-    brochureSiteRoutes = [
-        '/home',
-        '/brochure/contact',
-        '/brochure/about',
-        '/brochure/how-it-works',
-        '/brochure/faq',
-        '/brochure/terms-of-service',
-        '/brochure/privacy-policy',
-        '/brochure/concierge',
-    ];
 
     constructor(...args) {
         super(...args);
@@ -106,10 +101,10 @@ class MyApp extends App {
                 <Container>
                     <Provider store={store}>
                         <DeliverMyRide
-                            desktopOnlyFooter={this.desktopOnlyFooter.includes(
+                            desktopOnlyFooter={desktopOnlyFooter.includes(
                                 pathname
                             )}
-                            isBrochureSite={this.brochureSiteRoutes.includes(
+                            isBrochureSite={brochureSiteRoutes.includes(
                                 pathname
                             )}
                         >
@@ -131,12 +126,8 @@ class MyApp extends App {
             <Container>
                 <Provider store={store}>
                     <DeliverMyRide
-                        desktopOnlyFooter={this.desktopOnlyFooter.includes(
-                            pathname
-                        )}
-                        isBrochureSite={this.brochureSiteRoutes.includes(
-                            pathname
-                        )}
+                        desktopOnlyFooter={desktopOnlyFooter.includes(pathname)}
+                        isBrochureSite={brochureSiteRoutes.includes(pathname)}
                     >
                         <Component {...pageProps} />
                     </DeliverMyRide>

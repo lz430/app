@@ -153,7 +153,6 @@
         }
 
         &__columns {
-            border: 1px solid $color-darkgrey;
             padding: 30px;
 
             @include media-breakpoint-down(sm) {

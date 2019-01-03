@@ -9,7 +9,7 @@ export default class extends React.PureComponent {
                 <Col xs="12">
                     <h2 className="text-center"> We Promise </h2>
                 </Col>
-                <Row className="deal__promise__columns no-gutters bg-white shadow-sm">
+                <Row className="deal__promise__columns no-gutters bg-white shadow-sm rounded">
                     <Col md="4">
                         <MediumAndUp>
                             <Row className="no-gutters">

@@ -15,7 +15,6 @@
 use Carbon\Carbon;
 use App\Models\Feature;
 use App\Models\Category;
-use App\Models\JatoFeature;
 use Illuminate\Support\Facades\Hash;
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
@@ -66,9 +65,9 @@ $factory->define(App\Models\JATO\VehicleModel::class, function (Faker\Generator 
 
 $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $faker) {
     return [
-        'jato_vehicle_id' => $faker->randomNumber(),
-        'jato_uid' => $faker->randomNumber(),
-        'jato_model_id' => $faker->randomNumber(),
+        'jato_vehicle_id' => $faker->unique()->randomNumber(),
+        'jato_uid' => $faker->unique()->randomNumber(),
+        'jato_model_id' => $faker->unique()->randomNumber(),
         'model_id' => factory(App\Models\JATO\VehicleModel::class),
         'year' => $faker->year,
         'name' => $faker->name,
@@ -128,13 +127,6 @@ $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
         'package_codes' => [],
         'source_price' => (object) [],
         'payments' => (object) [],
-    ];
-});
-
-$factory->define(App\Models\JatoFeature::class, function (Faker\Generator $faker) {
-    return [
-        'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
-        'group' => $faker->randomElement(JatoFeature::SYNC_GROUPS)['title'],
     ];
 });
 
