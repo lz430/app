@@ -67,7 +67,12 @@ export default class extends React.PureComponent {
     }
 
     render() {
-        // console.log(this.state.activeTab);
+        if (
+            !this.props.deal.equipment ||
+            this.props.deal.equipment.length === 0
+        ) {
+            return false;
+        }
 
         return (
             <div className="row deal-details__container p-10">
