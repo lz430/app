@@ -11,10 +11,6 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 export default class extends React.PureComponent {
-    static propTypes = {
-        deal: dealType.isRequired,
-    };
-
     state = {
         basicFeatures: [],
         fuelEconomy: {},
