@@ -208,6 +208,7 @@ class BuildEquipmentData
                             'category' => $category,
                             'label' => $label['label'],
                             'value' => $label['value'],
+                            'option_code' => $equipment->option_id,
                         ];
 
                         if (isset($label['meta'])) {
