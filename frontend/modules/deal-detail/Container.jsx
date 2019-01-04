@@ -51,14 +51,17 @@ import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { withRouter } from 'next/router';
 import { getSearchQuery } from '../deal-list/selectors';
+import { StickyContainer } from 'react-sticky';
 import Header from './components/Header';
 import Media from './components/Media';
-import DealFeatures from './components/DealFeatures';
-//import CompareButton from './components/CompareButton';
 import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
 import OurPromise from './components/Promise';
+//import NavHighlights from './components/NavHighlights';
+import Overview from './components/Overview/Overview';
+import Specs from './components/Specs/Specs';
+import AdditionalInformation from './components/MiscFeatures';
 
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
@@ -249,56 +252,56 @@ class DealDetailContainer extends React.PureComponent {
 
                 {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
 
-                <Container className="mb-5 deal-details">
+                <StickyContainer>
                     <Header deal={this.props.deal} />
-                    <Row>
-                        <Col md="6" lg="7" xl="8">
-                            <Media deal={this.props.deal} />
-                            <DealFeatures deal={this.props.deal} />
-                            {/*
-                            <CompareButton
-                                deal={this.props.deal}
-                                compareList={this.props.compareList}
-                                onToggleCompare={this.props.toggleCompare}
-                            />
-                             */}
-                        </Col>
-                        <Col md="6" lg="5" xl="4">
-                            <AddToCart
-                                deal={this.props.deal}
-                                purchaseStrategy={this.props.purchaseStrategy}
-                                isDealQuoteRefreshing={
-                                    this.props.isDealQuoteRefreshing
-                                }
-                                handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
-                                    this
-                                )}
-                                pricing={this.props.pricing}
-                                handleDiscountChange={this.handleDiscountChange.bind(
-                                    this
-                                )}
-                                handleRebatesChange={this.handleRebatesChange.bind(
-                                    this
-                                )}
-                                handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
-                                    this
-                                )}
-                                handleFinanceTermChange={this.handleFinanceTermChange.bind(
-                                    this
-                                )}
-                                handleLeaseChange={this.handleLeaseChange.bind(
-                                    this
-                                )}
-                                handleBuyNow={this.handleBuyNow.bind(this)}
-                                userLocation={this.props.userLocation}
-                                tradeSet={this.props.tradeSet}
-                            />
-                        </Col>
-                    </Row>
-                    <Row className="deal__row">
-                        <OurPromise />
-                    </Row>
-                </Container>
+                    <Container className="mb-5 deal-details">
+                        <Row>
+                            <Col md="6" lg="7" xl="8">
+                                <Media deal={this.props.deal} />
+                            </Col>
+                            <Col md="6" lg="5" xl="4">
+                                <AddToCart
+                                    deal={this.props.deal}
+                                    purchaseStrategy={
+                                        this.props.purchaseStrategy
+                                    }
+                                    isDealQuoteRefreshing={
+                                        this.props.isDealQuoteRefreshing
+                                    }
+                                    handlePaymentTypeChange={this.handlePaymentTypeChange.bind(
+                                        this
+                                    )}
+                                    pricing={this.props.pricing}
+                                    handleDiscountChange={this.handleDiscountChange.bind(
+                                        this
+                                    )}
+                                    handleRebatesChange={this.handleRebatesChange.bind(
+                                        this
+                                    )}
+                                    handleFinanceDownPaymentChange={this.handleFinanceDownPaymentChange.bind(
+                                        this
+                                    )}
+                                    handleFinanceTermChange={this.handleFinanceTermChange.bind(
+                                        this
+                                    )}
+                                    handleLeaseChange={this.handleLeaseChange.bind(
+                                        this
+                                    )}
+                                    handleBuyNow={this.handleBuyNow.bind(this)}
+                                    userLocation={this.props.userLocation}
+                                    tradeSet={this.props.tradeSet}
+                                />
+                            </Col>
+                        </Row>
+                        {/* <div className="deal__row">
+                            <NavHighlights deal={this.props.deal} />
+                        </div> */}
+                    </Container>
+                </StickyContainer>
+                <Overview deal={this.props.deal} />
+                <Specs deal={this.props.deal} />
+                <AdditionalInformation deal={this.props.deal} />
+                <OurPromise />
                 <div className="bg-white pb-5 pt-5">
                     <Container>
                         <Row>
