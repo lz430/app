@@ -68,6 +68,15 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
+            if (isset($attributes['transmission description'])) {
+                $labels[$attributes['transmission description']->schemaId] = $this->itemFactory(
+                    'Transmission Description',
+                    "{$attributes['transmission description']->value}",
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
         }
         if ($equipments->name == 'Fuel economy') {
             if (isset($attributes['urban (mpg)'])) {
