@@ -13,47 +13,53 @@ export default class extends React.PureComponent {
         upholsteryType: null,
         category: 'Engine',
         collapse: false,
-        active: false,
+        active: null,
         activeTab: 'capabilities',
     };
 
-    toggle = () =>
+    toggle = id => ev => {
+        //Add brackets here, you do not need to return the result of setState
         this.setState({
             collapse: !this.state.collapse,
-            active: !this.state.active,
+            active: id,
         });
+    };
 
     getTheCats() {
-        // console.log(this.state);
+        console.log(this.state);
         const specsCatsR = this.props.specs.map((item, i) => {
             return (
                 <React.Fragment>
-                    <Col xs="12" key={i}>
+                    <Col xs="12" key={i} className="border-bottom p-15">
                         <FontAwesomeIcon
                             icon={
-                                this.state.active ? faMinusCircle : faPlusCircle
+                                this.state.active === i
+                                    ? faMinusCircle
+                                    : faPlusCircle
                             }
                         />
                         <h5
-                            onClick={this.toggle.bind(this)}
                             className="collapse-header"
+                            onClick={this.toggle(i)}
                         >
-                            {' '}
-                            {item.category}{' '}
+                            {` ${item.category} `}
                         </h5>
-                        <div isOpen={this.state.active}>
+                        <Collapse isOpen={this.state.active === i}>
                             <SpecsDetails
                                 vehicle={this.props.vehicle}
                                 values={item.values}
                                 category={item.category}
                             />
-                        </div>
+                        </Collapse>
                     </Col>
                 </React.Fragment>
             );
         });
         return (
-            <Row className="deal-details__specs accoridon-heading" id="specs">
+            <Row
+                className="deal-details__specs accoridon-heading p-10"
+                id="specs"
+            >
                 {specsCatsR}
             </Row>
         );
