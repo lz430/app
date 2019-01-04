@@ -36,6 +36,7 @@ app.prepare()
         const server = express();
         server.enable('trust proxy');
         server.use(express.json());
+
         if (dev) {
             server.use(
                 unless(
@@ -100,19 +101,28 @@ app.prepare()
             return app.render(req, res, '/deal-detail', queryParams);
         });
 
-        server.get('/checkout/contact', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/checkout-contact', queryParams);
+        server.get('/checkout/contact', csrfProtection, (req, res) => {
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/checkout-contact', query);
         });
 
-        server.get('/checkout/financing', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/checkout-financing', queryParams);
+        server.get('/checkout/financing', csrfProtection, (req, res) => {
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/checkout-financing', query);
         });
 
-        server.get('/checkout/complete', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/checkout-complete', queryParams);
+        server.get('/checkout/complete', csrfProtection, (req, res) => {
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/checkout-complete', query);
         });
 
         /*
@@ -125,17 +135,28 @@ app.prepare()
         //
         // Experiment / Beta Pages
         server.get('/experiments/kb-poc', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/experiments/kb-poc', queryParams);
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/experiments/kb-poc', query);
         });
 
         server.get('/experiments/tp-poc', (req, res) => {
-            const queryParams = { ...req.query };
-            return app.render(req, res, '/experiments/tp-poc', queryParams);
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+            return app.render(req, res, '/experiments/tp-poc', query);
         });
 
         server.get('/experiments/concierge', (req, res) => {
-            return app.render(req, res, '/experiments/concierge', req.query);
+            const query = {
+                ...req.query,
+                csrfToken: req.csrfToken(),
+            };
+
+            return app.render(req, res, '/experiments/concierge', query);
         });
 
         server.get('/ping', (req, res) => {
