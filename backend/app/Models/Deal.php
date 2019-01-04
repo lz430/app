@@ -324,6 +324,9 @@ class Deal extends Model
                     'value' => [
                         'type' => 'text',
                     ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
                 ],
             ],
             'overview' => [
