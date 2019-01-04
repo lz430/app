@@ -1,6 +1,11 @@
 const setup = ({ server, app, csrfProtection }) => {
-    server.get('/my-account', (req, res) => {
-        app.render(req, res, '/auth/my-account', req.query);
+    server.get('/my-account', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/my-account', query);
     });
 
     server.get('/my-account/update', csrfProtection, (req, res) => {
@@ -20,16 +25,31 @@ const setup = ({ server, app, csrfProtection }) => {
         app.render(req, res, '/auth/login', query);
     });
 
-    server.get('/signup', (req, res) => {
-        app.render(req, res, '/auth/signup', req.query);
+    server.get('/signup', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/signup', query);
     });
 
-    server.get('/forgot', (req, res) => {
-        app.render(req, res, '/auth/forgot', req.query);
+    server.get('/forgot', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/forgot', query);
     });
 
-    server.get('/forgot/change', (req, res) => {
-        app.render(req, res, '/auth/forgot-change', req.query);
+    server.get('/forgot/change', csrfProtection, (req, res) => {
+        const query = {
+            ...req.query,
+            csrfToken: req.csrfToken(),
+        };
+
+        app.render(req, res, '/auth/forgot-change', query);
     });
 };
 
