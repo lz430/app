@@ -436,31 +436,36 @@
             margin-right: 20px;
         }
 
-        .accordion-body {
+        &-tabs {
+            &-tab {
+                background: $color-grey;
+                color: $color-text-white;
+                padding: 15px;
+                text-transform: uppercase;
+                font-size: 0.8rem;
+                &:first-child {
+                    border-top-left-radius: $border-radius;
+                }
+                &:last-child {
+                    border-top-right-radius: $border-radius;
+                }
+                &.active {
+                    background: $color-darkestgrey;
+                }
+            }
+        }
+
+        &-detail {
             padding: 15px;
 
             &:nth-child(even) {
                 background: #f6f6f6;
             }
-        }
 
-        .headings {
-            &__item {
-                background: $color-grey;
-                color: $color-text-white;
-                padding: 15px;
-                text-transform: uppercase;
-
-                &.true {
-                    background: $color-darkestgrey;
-
-                    h6 {
-                        border-bottom: 1px solid $color-text-white;
-                    }
-                }
-
-                h6 {
-                    font-size: 0.8rem;
+            &-item {
+                border-bottom: 1px solid $gray-300;
+                &:last-child {
+                    border-bottom: 0;
                 }
             }
         }
