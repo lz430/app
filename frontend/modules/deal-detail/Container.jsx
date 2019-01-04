@@ -58,7 +58,7 @@ import AddToCart from './components/AddToCart';
 import Faq from './components/faq';
 import ContactForm from './components/ContactForm';
 import OurPromise from './components/Promise';
-import NavHighlights from './components/NavHighlights';
+//import NavHighlights from './components/NavHighlights';
 import Overview from './components/Overview/Overview';
 import Specs from './components/Specs/Specs';
 import AdditionalInformation from './components/MiscFeatures';
