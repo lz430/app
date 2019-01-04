@@ -1,57 +1,57 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 
-import { Row, Col, Button } from 'reactstrap';
-import { faCalculator, faInfoCircle } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Sticky } from 'react-sticky';
+import { Row, Col, /*Button, */ Container } from 'reactstrap';
+//import classNames from 'classnames';
+//import { Sticky } from 'react-sticky';
+
+import DealStockNumber from '../../../components/Deals/DealStockNumber';
+import strings from '../../../util/strings';
 
 export default class Header extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
     };
+
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
 
     render() {
         return (
-            <div>
-                {/*<Row className="deal-details__new-header stationary">
-                    <Col sm="8">
-                        <div className="deal-details__new-header title-year-make">
-                            {this.props.deal.year} {this.props.deal.make}{' '}
-                            {this.props.deal.model}
+            <Container>
+                <Row className="deal-details__header">
+                    <Col sm="6">
+                        <div className="deal-details__title-year-make">
+                            {strings.dealYearMake(this.props.deal)}
                         </div>
-                        <div className="deal-details__new-header title-model-trim">
-                            {this.props.deal.series}
-                        </div>
-                    </Col>
-                    <Col
-                        sm="4"
-                        className="deal-details__new-header payment d-flex"
-                    >
-                        <div className="d-inline-block monthly">
-                            <sup>$</sup>
-                            <b>637</b>
-                            <sub>/mo</sub>
-                        </div>
-                        <div className="configure d-inline-block">
-                            <FontAwesomeIcon icon={faCalculator} />
-                            Configure Payment
+                        <div className="deal-details__title-model-trim">
+                            {strings.dealModelTrim(this.props.deal)}
                         </div>
                     </Col>
-                </Row>*/}
+                    <Col sm="6" className="deal-details__stock-number">
+                        <DealStockNumber deal={this.props.deal} />
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
 
-                <Sticky topOffset={-62}>
-                    {({ style, isSticky }) => (
-                        <div
-                            className="deal-details__new-header fixed"
-                            style={{
-                                ...style,
-                                marginTop: isSticky ? '64px' : '0px',
-                            }}
-                        >
+    /*
+    render() {
+        return (
+            <Sticky topOffset={-62}>
+                {({ style, isSticky }) => (
+                    <div
+                        className={classNames('deal-details__new-header', {
+                            stickied: isSticky,
+                        })}
+                        style={{
+                            ...style,
+                            marginTop: isSticky ? '62px' : '0px',
+                        }}
+                    >
+                        <Container>
                             <Row>
                                 <Col sm="6">
                                     <div className="deal-details__new-header title-year-make">
@@ -93,10 +93,11 @@ export default class Header extends React.PureComponent {
                                     </Button>
                                 </Col>
                             </Row>
-                        </div>
-                    )}
-                </Sticky>
-            </div>
+                        </Container>
+                    </div>
+                )}
+            </Sticky>
         );
     }
+    */
 }

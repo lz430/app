@@ -152,6 +152,10 @@ class Dealer extends Model
         unset($data['zip']);
         unset($data['money_factor']);
         unset($data['notification_emails']);
+        unset($data['acquisition_fee']);
+        unset($data['cvr_fee']);
+        unset($data['doc_fee']);
+        unset($data['registration_fee']);
 
         return $data;
     }

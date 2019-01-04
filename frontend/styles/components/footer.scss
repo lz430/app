@@ -188,6 +188,7 @@
     .top-workplaces {
         display: flex;
         flex-direction: column;
+        max-width: 125px;
 
         @include media-breakpoint-up(xs) {
             width: 100%;
