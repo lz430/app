@@ -9,7 +9,6 @@ export default class extends React.PureComponent {
 
     render() {
         const { deal } = this.props;
-        console.log(this.vehicle);
         return (
             <React.Fragment>
                 {this.props.values.map(item => (

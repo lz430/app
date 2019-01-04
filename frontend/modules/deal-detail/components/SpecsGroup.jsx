@@ -13,57 +13,53 @@ export default class extends React.PureComponent {
         upholsteryType: null,
         category: 'Engine',
         collapse: false,
-        active: false,
+        active: null,
         activeTab: 'capabilities',
     };
 
-    toggle = () =>
+    toggle = id => ev => {
+        //Add brackets here, you do not need to return the result of setState
         this.setState({
             collapse: !this.state.collapse,
-            active: !this.state.active,
+            active: id,
         });
+    };
 
     getTheCats() {
-        const specsCats = [...new Set(this.props.specs.map(v => v.category))];
-        const specsCatsR = specsCats.filter(c => c).map((category, i) => {
+        console.log(this.state);
+        const specsCatsR = this.props.specs.map((item, i) => {
             return (
                 <React.Fragment>
-                    <Col
-                        xs="12"
-                        key={i}
-                        className={
-                            this.state.category === category
-                                ? 'border-bottom p-15 active'
-                                : 'border-bottom p-15 not-active'
-                        }
-                    >
+                    <Col xs="12" key={i} className="border-bottom p-15">
                         <FontAwesomeIcon
                             icon={
-                                this.state.active ? faMinusCircle : faPlusCircle
+                                this.state.active === i
+                                    ? faMinusCircle
+                                    : faPlusCircle
                             }
                         />
                         <h5
-                            onClick={this.toggle.bind(this)}
                             className="collapse-header"
+                            onClick={this.toggle(i)}
                         >
-                            {' '}
-                            {category}{' '}
+                            {` ${item.category} `}
                         </h5>
-                        <Collapse isOpen={this.state.collapse}>
-                            {this.props.specs.map(item => (
-                                <SpecsDetails
-                                    vehicle={this.props.vehicle}
-                                    values={item.values}
-                                    category={item.category}
-                                />
-                            ))}
+                        <Collapse isOpen={this.state.active === i}>
+                            <SpecsDetails
+                                vehicle={this.props.vehicle}
+                                values={item.values}
+                                category={item.category}
+                            />
                         </Collapse>
                     </Col>
                 </React.Fragment>
             );
         });
         return (
-            <Row className="deal-details__specs accoridon-heading" id="specs">
+            <Row
+                className="deal-details__specs accoridon-heading p-10"
+                id="specs"
+            >
                 {specsCatsR}
             </Row>
         );
