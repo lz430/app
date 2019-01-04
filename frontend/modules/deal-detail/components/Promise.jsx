@@ -25,21 +25,20 @@ export default class extends React.PureComponent {
                                         </Col>
                                         <Col md="10">
                                             <h5 className="text-uppercase">
-                                                Not to sell you out{' '}
+                                                We Won’t Sell You Out{' '}
                                             </h5>
                                             <p className="text-sm">
-                                                We are not a lead generating
-                                                site for dealerships. If anyone
-                                                asks for your contact
-                                                information without promising
-                                                that you won&apos;t be spammed -
-                                                you&apos;ll be spammed. At
-                                                Deliver My Ride you control the
-                                                process of purchasing your new
-                                                vehicle 100% online, and your
-                                                information stays private,
-                                                meaning no annoying sales calls
-                                                - ever
+                                                We are not a lead generation
+                                                site for dealerships like most
+                                                other sites. If a web site asks
+                                                for your contact information,
+                                                promising that you won’t be
+                                                spammed – you will be spammed.
+                                                At Deliver My Ride, you shop
+                                                privately and control the
+                                                purchase process 100% online.
+                                                That means no annoying texts,
+                                                emails, or phone calls – ever.
                                             </p>
                                         </Col>
                                     </Row>
@@ -51,24 +50,23 @@ export default class extends React.PureComponent {
                                             alt="Our promise shield"
                                         />
                                         <h5 className="text-uppercase">
-                                            Not to sell you out{' '}
+                                            We Won’t Sell You Out{' '}
                                         </h5>
                                     </Row>
                                     <Row>
                                         <Col>
                                             <p className="text-sm">
-                                                We are not a lead generating
-                                                site for dealerships. If anyone
-                                                asks for your contact
-                                                information without promising
-                                                that you won&apos;t be spammed -
-                                                you&apos;ll be spammed. At
-                                                Deliver My Ride you control the
-                                                process of purchasing your new
-                                                vehicle 100% online, and your
-                                                information stays private,
-                                                meaning no annoying sales calls
-                                                - ever
+                                                We are not a lead generation
+                                                site for dealerships like most
+                                                other sites. If a web site asks
+                                                for your contact information,
+                                                promising that you won’t be
+                                                spammed – you will be spammed.
+                                                At Deliver My Ride, you shop
+                                                privately and control the
+                                                purchase process 100% online.
+                                                That means no annoying texts,
+                                                emails, or phone calls – ever.
                                             </p>
                                         </Col>
                                     </Row>
@@ -86,22 +84,23 @@ export default class extends React.PureComponent {
                                         </Col>
                                         <Col md="10">
                                             <h5 className="text-uppercase">
-                                                Not to try to fool you{' '}
+                                                No Fooling Around{' '}
                                             </h5>
                                             <p className="text-sm">
                                                 Are you a helicopter pilot,
-                                                ski-patrol surgeon and recent
-                                                college graduate that happens to
-                                                be an astronaut? Yeah, neither
-                                                are we. That&apos;s why
-                                                you&apos;ll never see a
-                                                full-sized luxury SUV for $79/mo
-                                                on our site. Advertised prices
-                                                are too good to be true -
-                                                because they often are.
-                                                Don&apos;t be fooled, at Deliver
-                                                My Ride the price you see is the
-                                                price you&apos;ll pay.
+                                                ski-patrol surgeon, and a recent
+                                                college grad who just happens to
+                                                be an astronaut? Probably not.
+                                                That’s why full transparency
+                                                matters when car shopping.
+                                                Advertised prices look too good
+                                                to be true -because they always
+                                                are. At Deliver My Ride, you
+                                                won’t see a full-sized luxury
+                                                SUV for $79/month because we
+                                                won’t fool you. Instead, the
+                                                price you see is the price
+                                                you’ll pay.
                                             </p>
                                         </Col>
                                     </Row>
@@ -113,25 +112,26 @@ export default class extends React.PureComponent {
                                             alt="Our promise mag"
                                         />
                                         <h5 className="text-uppercase">
-                                            Not to try to fool you{' '}
+                                            No Fooling Around{' '}
                                         </h5>
                                     </Row>
                                     <Row>
                                         <Col>
                                             <p className="text-sm">
                                                 Are you a helicopter pilot,
-                                                ski-patrol surgeon and recent
-                                                college graduate that happens to
-                                                be an astronaut Yeah, neither
-                                                are we. That&apos;s why
-                                                you&apos;ll never see a
-                                                full-sized luxury SUV for $79/mo
-                                                on our site. Advertised prices
-                                                are too good to be true -
-                                                because they often are.
-                                                Don&apos;t be fooled, at Deliver
-                                                My Ride the price you see is the
-                                                price you&apos;ll pay.
+                                                ski-patrol surgeon, and a recent
+                                                college grad who just happens to
+                                                be an astronaut? Probably not.
+                                                That’s why full transparency
+                                                matters when car shopping.
+                                                Advertised prices look too good
+                                                to be true -because they always
+                                                are. At Deliver My Ride, you
+                                                won’t see a full-sized luxury
+                                                SUV for $79/month because we
+                                                won’t fool you. Instead, the
+                                                price you see is the price
+                                                you’ll pay.
                                             </p>
                                         </Col>
                                     </Row>
@@ -152,17 +152,23 @@ export default class extends React.PureComponent {
                                                 100% dealer inventory{' '}
                                             </h5>
                                             <p className="text-sm">
-                                                Deliver My Ride is the modern
-                                                way to buy or lease a new
-                                                vehicle. We only show you real
-                                                cars that are in local dealer
-                                                inventory - right now. Our
-                                                pricing, rebates and financing
-                                                options, aren&apos;t estimates
-                                                they are the real price you will
-                                                pay all without having to leave
-                                                your home. We even deliver (for
-                                                free) to your home or office.
+                                                Deliver My Ride is not a
+                                                dealership, but we display
+                                                thousands of cars from
+                                                dealership inventory that you
+                                                can buy right now. Not only can
+                                                you review current inventory,
+                                                but also discounted pricing,
+                                                rebates, finance/lease options,
+                                                and all taxes and fees. We will
+                                                only provide real prices, not
+                                                estimates, so you can have
+                                                confidence in your purchase
+                                                choice. And every vehicle is
+                                                fully protected by the
+                                                manufacturer’s warranty. We even
+                                                deliver (for free) to your home
+                                                or office.
                                             </p>
                                         </Col>
                                     </Row>
@@ -180,17 +186,23 @@ export default class extends React.PureComponent {
                                     <Row>
                                         <Col>
                                             <p className="text-sm">
-                                                Deliver My Ride is the modern
-                                                way to buy or lease a new
-                                                vehicle. We only show you real
-                                                cars that are in local dealer
-                                                inventory - right now. Our
-                                                pricing, rebates and financing
-                                                options, aren&apos;t estimates
-                                                they are the real price you will
-                                                pay all without having to leave
-                                                your home. We even deliver (for
-                                                free) to your home or office.
+                                                Deliver My Ride is not a
+                                                dealership, but we display
+                                                thousands of cars from
+                                                dealership inventory that you
+                                                can buy right now. Not only can
+                                                you review current inventory,
+                                                but also discounted pricing,
+                                                rebates, finance/lease options,
+                                                and all taxes and fees. We will
+                                                only provide real prices, not
+                                                estimates, so you can have
+                                                confidence in your purchase
+                                                choice. And every vehicle is
+                                                fully protected by the
+                                                manufacturer’s warranty. We even
+                                                deliver (for free) to your home
+                                                or office.
                                             </p>
                                         </Col>
                                     </Row>
