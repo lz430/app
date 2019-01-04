@@ -24,19 +24,11 @@ export default class extends React.PureComponent {
         });
 
     getTheCats() {
-        const specsCats = [...new Set(this.props.specs.map(v => v.category))];
-        const specsCatsR = specsCats.filter(c => c).map((category, i) => {
+        // console.log(this.state);
+        const specsCatsR = this.props.specs.map((item, i) => {
             return (
                 <React.Fragment>
-                    <Col
-                        xs="12"
-                        key={i}
-                        className={
-                            this.state.category === category
-                                ? 'border-bottom p-15 active'
-                                : 'border-bottom p-15 not-active'
-                        }
-                    >
+                    <Col xs="12" key={i}>
                         <FontAwesomeIcon
                             icon={
                                 this.state.active ? faMinusCircle : faPlusCircle
@@ -47,17 +39,15 @@ export default class extends React.PureComponent {
                             className="collapse-header"
                         >
                             {' '}
-                            {category}{' '}
+                            {item.category}{' '}
                         </h5>
-                        <Collapse isOpen={this.state.collapse}>
-                            {this.props.specs.map(item => (
-                                <SpecsDetails
-                                    vehicle={this.props.vehicle}
-                                    values={item.values}
-                                    category={item.category}
-                                />
-                            ))}
-                        </Collapse>
+                        <div isOpen={this.state.active}>
+                            <SpecsDetails
+                                vehicle={this.props.vehicle}
+                                values={item.values}
+                                category={item.category}
+                            />
+                        </div>
                     </Col>
                 </React.Fragment>
             );
