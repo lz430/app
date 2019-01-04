@@ -16,21 +16,11 @@ const strings = {
     },
 
     dealUpholsteryType: deal => {
-        if (!deal.dmr_features.length) {
+        if (!deal.seating_materials) {
             return '';
         }
 
-        const upholsteryType = deal.dmr_features.find(feature => {
-            return (
-                feature.slug && feature.slug.includes('seat_main_upholstery_')
-            );
-        });
-
-        if (!upholsteryType) {
-            return '';
-        }
-
-        return upholsteryType['title'];
+        return deal.seating_materials;
     },
 };
 

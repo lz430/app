@@ -2,6 +2,7 @@ import React from 'react';
 
 import ImageGallery from 'react-image-gallery';
 import { dealType } from '../../../core/types';
+import { StickyContainer } from 'react-sticky';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -20,16 +21,18 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <div className="deal-details__images">
-                <ImageGallery
-                    items={this.galleryImages()}
-                    showBullets={true}
-                    showIndex={true}
-                    showThumbnails={false}
-                    showPlayButton={false}
-                    showFullscreenButton={false}
-                />
-            </div>
+            <StickyContainer>
+                <div className="deal-details__images">
+                    <ImageGallery
+                        items={this.galleryImages()}
+                        showBullets={true}
+                        showIndex={true}
+                        showThumbnails={false}
+                        showPlayButton={false}
+                        showFullscreenButton={false}
+                    />
+                </div>
+            </StickyContainer>
         );
     }
 }
