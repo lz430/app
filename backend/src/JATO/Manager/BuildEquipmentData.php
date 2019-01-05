@@ -183,6 +183,10 @@ class BuildEquipmentData
                 } else {
                     if (isset($attributes["type"])) {
                         $value = [ucwords($attributes['type']->value)];
+                    } else if (isset($attributes['distance (miles)']) && isset($attributes['duration (months)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value) . ' (miles) / ' . $attributes['duration (months)']->value . ' (months)'];
+                    } else if (isset($attributes['distance (miles)']) && isset($attributes['period (mths)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value) . ' (miles) / ' . $attributes['period (mths)']->value . ' (months)'];
                     } else {
                         $value = ['Included'];
                     }
