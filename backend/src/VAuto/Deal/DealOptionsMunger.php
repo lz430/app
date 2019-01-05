@@ -23,13 +23,6 @@ class DealOptionsMunger
     /* @var \Illuminate\Support\Collection */
     private $vauto_features;
 
-
-    /* @var \Illuminate\Support\Collection */
-    private $packages;
-
-    /* @var \Illuminate\Support\Collection */
-    private $options;
-
     /* @var \Illuminate\Support\Collection */
     private $possiblePackagesAndOptions;
 
