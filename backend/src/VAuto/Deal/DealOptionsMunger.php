@@ -34,6 +34,8 @@ class DealOptionsMunger
     private $possiblePackagesAndOptions;
 
     /**
+     * TODO: There is no good way right now to figure out if we 'should' update this..
+     * so we're going to just update it every time. Fix this
      * @param Deal $deal
      * @param bool $force
      * @return array
