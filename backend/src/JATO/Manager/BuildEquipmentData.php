@@ -89,9 +89,16 @@ class BuildEquipmentData
                 break;
             case 'Drive':
                 if (isset($attributes['Driven wheels'])) {
+                    $value = [
+                        $attributes['Driven wheels']->value
+                    ];
+
+                    if (isset($attributes["manufacturer's name"])) {
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
+                    }
                     $labels[$attributes['Driven wheels']->schemaId] = $this->itemFactory(
                         'Drive',
-                        $attributes['Driven wheels']->value,
+                        implode(' ', $value),
                         [
                             'equipment' => $equipments,
                             'from' => 'Custom',
