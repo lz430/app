@@ -303,6 +303,17 @@ class BuildEquipmentData
                     $customMeta
                 );
                 break;
+            case 'Fuel tank':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'capacity (UK gallons)',
+                    'Fuel take capacity',
+                    ['suffix' => "Gallons"],
+                    $customMeta
+                );
+                break;
+
             case 'Luxury trim':
                 $this->addItemFactoryFromSingleAttribute(
                     $labels,
