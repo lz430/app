@@ -309,7 +309,7 @@ class BuildEquipmentData
                     $attributes,
                     'capacity (UK gallons)',
                     'Fuel take capacity',
-                    ['suffix' => "Gallons"],
+                    ['suffix' => 'Gallons'],
                     $customMeta
                 );
                 break;
