@@ -30,13 +30,13 @@ export default class SpecsDetails extends React.PureComponent {
                         noGutters
                     >
                         <Col
-                            sm="6"
+                            xs="6"
                             className="deal-details__specs capabilities text-left p-2"
                         >
                             <span>{item.label} </span>
                         </Col>
                         <Col
-                            sm="6"
+                            xs="6"
                             className="deal-details__specs features text-left  p-2"
                         >
                             <span>{item.value} </span>
