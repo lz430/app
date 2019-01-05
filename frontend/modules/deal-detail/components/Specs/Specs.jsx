@@ -12,11 +12,13 @@ const capabilitiesCategories = [
     'Transmission',
     'Fuel Economy',
     'Suspension',
+    'Warranty',
 ];
 
 const featuresCategories = [
     'Comfort & Convenience',
     'Infotainment',
+    'Interior',
     'Exterior',
     'Safety & Driver Assist',
 ];

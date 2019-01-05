@@ -3,7 +3,9 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
+use App\Models\JATO\Option;
 use App\Models\JATO\Version;
+use App\Models\JATO\Equipment;
 
 class BuildData
 {
@@ -40,18 +42,15 @@ class BuildData
 
     private function buildStandardEquipmentText()
     {
-        $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
-
-        return $data;
+        return Version::with('standard_text')->where('id', $this->deal->version_id)->get();
     }
 
     private function findStandardDealEquipment()
     {
-        $data = Version::with(['equipment' => function ($query) {
-            $query->where('availability', 'standard');
-        }])->where('id', $this->deal->version_id)->get();
-
-        return $data;
+        return $this->deal->version
+            ->equipment()
+            ->where('availability', '=', 'standard')
+            ->get();
     }
 
     private function findOptionalDealEquipment()
@@ -61,13 +60,24 @@ class BuildData
             $this->deal->option_codes ? $this->deal->option_codes : []
         );
 
-        $data = Version::with(['equipment' => function ($query) {
-            $query->where('availability', 'optional');
-        }])->with(['options' => function ($query) use ($codes) {
-            $query->whereIn('option_code', $codes);
-        }])->where('id', $this->deal->version_id)->get();
+        if (! count($codes)) {
+            return [];
+        }
 
-        return $data;
+        $options = Option::whereIn('option_code', $codes)->get()->pluck('option_id');
+
+        if (! count($options)) {
+            return [];
+        }
+
+        $query = Equipment::query();
+
+        return $query
+            ->where('availability', 'optional')
+            ->whereIn('option_id', $options)
+            ->whereHas('version', function ($query) {
+                $query->where('id', '=', $this->deal->version_id);
+            })->get();
     }
 
     private function compileEquipmentData()
@@ -91,18 +101,14 @@ class BuildData
         $equipments = $this->findStandardDealEquipment();
 
         foreach ($equipments as $equipment) {
-            foreach ($equipment->equipment as $equip) {
-                $data[$equip->schema_id] = $equip;
-            }
+            $data[$equipment->schema_id] = $equipment;
         }
         $this->equipmentOnDeal = $data;
 
         //
         // Find optional equipment
         foreach ($this->findOptionalDealEquipment() as $equipment) {
-            foreach ($equipment->equipment as $equip) {
-                $this->equipmentOnDeal[$equip->schema_id] = $equip;
-            }
+            $this->equipmentOnDeal[$equipment->schema_id] = $equipment;
         }
     }
 
@@ -125,30 +131,6 @@ class BuildData
             $equipmentCategories[$equipment->category][$equipment->schema_id] = $equipment;
         }
         $this->equipmentOnDeal = $equipmentCategories;
-    }
-
-    private function labelEquipmentOnDeal()
-    {
-        $labeledEquipment = [];
-        foreach ($this->equipment as $category => $equipments) {
-            foreach ($equipments as $equipment) {
-                $labels = $this->getLabelsForJatoEquipment($equipment);
-                foreach ($labels as $schemaId => $label) {
-                    $data = [
-                        'category' => $category,
-                        'label' => $label['label'],
-                        'value' => $label['value'],
-                    ];
-
-                    if (isset($label['meta'])) {
-                        $data['meta'] = $label['meta'];
-                    }
-
-                    $labeledEquipment[] = $data;
-                }
-            }
-        }
-        $this->equipmentOnDeal = $labeledEquipment;
     }
 
     /**

@@ -7,15 +7,52 @@ import KeyFeatureItem from './KeyFeatureItem';
 
 import { faCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { filter } from 'ramda';
+import { filter, groupBy, prop } from 'ramda';
 
 export default class extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
     };
 
+    getHighlightItems() {
+        const { deal } = this.props;
+        // Probably a smarter way to do this.
+        const overviewData = groupBy(prop('label'), deal.overview);
+        console.log(overviewData);
+
+        let items = [];
+        if (overviewData['Horse Power']) {
+            items.push({
+                primary: `${overviewData['Horse Power'][0]['value']} hp`,
+                secondary: this.props.deal.engine,
+            });
+        }
+        if (overviewData['Transmission Speed']) {
+            items.push({
+                primary: `${
+                    overviewData['Transmission Speed'][0]['value']
+                }-speed`,
+                secondary: `${deal.transmission} transmission`,
+            });
+        }
+        if (deal.fuel_econ_city && deal.fuel_econ_hwy) {
+            items.push({
+                primary: `${deal.fuel_econ_city} | ${deal.fuel_econ_hwy}`,
+                secondary: 'city  MPG  hwy',
+            });
+        }
+        if (deal.seating_capacity) {
+            items.push({
+                primary: `Up to ${deal.seating_capacity - 1}`,
+                secondary: 'Passengers',
+            });
+        }
+
+        return items;
+    }
+
     getOverviewItems() {
-        let items = this.props.deal.overview;
+        let items = [...this.props.deal.overview];
 
         if (this.props.deal.fuel_type && this.props.deal.fuel_type.length) {
             items.unshift({
@@ -25,11 +62,13 @@ export default class extends React.PureComponent {
             });
         }
 
-        items.unshift({
-            category: 'Misc',
-            label: 'Drive Train',
-            value: this.props.deal.drive_train[0],
-        });
+        if (this.props.deal.drive_train && this.props.deal.drive_train.length) {
+            items.unshift({
+                category: 'Misc',
+                label: 'Drive Train',
+                value: this.props.deal.drive_train[0],
+            });
+        }
 
         items.unshift({
             category: 'Misc',
@@ -59,7 +98,11 @@ export default class extends React.PureComponent {
         });
 
         items = filter(item => {
-            if (['Fuel Economy', 'Transmission'].includes(item.category)) {
+            if (
+                ['Fuel Economy', 'Transmission', 'Engine'].includes(
+                    item.category
+                )
+            ) {
                 return false;
             }
 
@@ -70,27 +113,21 @@ export default class extends React.PureComponent {
     }
 
     renderHighlight() {
-        const { deal } = this.props;
-
         return (
             <Row
                 className="deal__section-overview-highlights  rounded-top"
                 id="overview"
                 noGutters
             >
-                <HighlightItem primary={'350 hp'} secondary={deal.engine} />
-                <HighlightItem
-                    primary={'6-speed'}
-                    secondary={`${deal.transmission} transmission`}
-                />
-                <HighlightItem
-                    primary={`${deal.fuel_econ_city} | ${deal.fuel_econ_hwy}`}
-                    secondary={'city  MPG  hwy'}
-                />
-                <HighlightItem
-                    primary={`Up to ${deal.seating_capacity - 1}`}
-                    secondary={'Passengers'}
-                />
+                {this.getHighlightItems().map((item, index) => {
+                    return (
+                        <HighlightItem
+                            key={`highlight-${index}`}
+                            primary={item.primary}
+                            secondary={item.secondary}
+                        />
+                    );
+                })}
             </Row>
         );
     }
