@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
         Commands\Version\VersionFillMissingPhotos::class,
         Commands\Version\VersionGenerateQuotes::class,
         Commands\Version\VersionRefresh::class,
-        Commands\Deal\DealFeatureDebugger::class,
+        Commands\Deal\DealBuildFilters::class,
         Commands\Deal\DealProgramDebugger::class,
         Commands\Deal\DealLeaseRatesDebugger::class,
         Commands\Deal\DealCalculatePayments::class,

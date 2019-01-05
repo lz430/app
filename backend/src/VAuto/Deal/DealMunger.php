@@ -3,26 +3,22 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
 
 class DealMunger
 {
-    private $jatoClient;
 
     /* @var \DeliverMyRide\VAuto\Deal\DealPhotosMunger */
     private $photoManager;
 
-    /* @var \DeliverMyRide\VAuto\Deal\DealEquipmentMunger */
+    /* @var \DeliverMyRide\VAuto\Deal\DealFiltersMunger */
     private $equipmentManager;
 
-    /**
-     * @param JatoClient $jatoClient
-     */
-    public function __construct(JatoClient $jatoClient)
+
+    public function __construct()
     {
-        $this->jatoClient = $jatoClient;
         $this->photoManager = new DealPhotosMunger();
-        $this->equipmentManager = new DealEquipmentMunger();
+        $this->equipmentManager = new DealFiltersMunger();
+        $this->optionsManager = new DealOptionsMunger();
     }
 
     /**
@@ -36,9 +32,11 @@ class DealMunger
     {
         $debug = [];
 
+        // OPTIONS MUST BE RAN BEFORE EQUIPMENT!
+        $options_debug = $this->optionsManager->import($deal, $force);
         $equipment_debug = $this->equipmentManager->import($deal, $force);
         $photos_debug = $this->photoManager->import($deal, $data, $force);
 
-        return array_merge($debug, $equipment_debug, $photos_debug);
+        return array_merge($debug, $options_debug, $equipment_debug, $photos_debug);
     }
 }

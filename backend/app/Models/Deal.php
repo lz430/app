@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\JATO\Equipment;
+use App\Models\JATO\Option;
 use Carbon\Carbon;
 use App\Models\JATO\Version;
 use Backpack\CRUD\CrudTrait;
@@ -369,6 +371,49 @@ class Deal extends Model
     public function getEquipment()
     {
         return resolve('DeliverMyRide\JATO\Manager\BuildData')->build($this);
+    }
+
+    public function getEquipmentForDeal() {
+        $codes = array_merge(
+            $this->package_codes ? $this->package_codes : [],
+            $this->option_codes ? $this->option_codes : []
+        );
+
+        //
+        // Standard Equipment
+        $query = Equipment::query();
+        $query = $query->whereHas('version', function ($query) {
+            $query->where('id', '=', $this->version_id);
+        });
+        $query = $query->where('availability', '=', 'standard');
+
+        $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
+           return (string) $equipment->slug();
+        });
+
+        //
+        // Optional Equipment
+        if (count($codes)) {
+            $query = Equipment::query();
+            $query = $query->whereHas('version', function ($query) {
+                $query->where('id', '=', $this->version_id);
+            });
+            $options = Option::whereIn('option_code', $codes)
+                ->get()
+                ->pluck('option_id');
+            $query = $query->where('availability', '=', 'optional');
+            $query = $query->whereIn('option_id', $options);
+            $optionalEquipment = $query->get()->keyBy(function ($equipment) {
+                return $equipment->slug();
+            });
+
+        } else {
+            $optionalEquipment = collect([]);
+        }
+
+        // Collect->merge is supposed to return the same amount, but doesn't seem to work correctly.
+        $mergedEquipment = collect(array_merge($equipmentOnDeal->all(), $optionalEquipment->all()));
+        return $mergedEquipment;
     }
 
     /**
