@@ -89,54 +89,54 @@
     </div>
     <div class="row">
         @foreach($quotes as $type => $roles)
-        <div class="col-md-4">
-            @component('components.box')
-                @slot('title')
-                    @php $scenarioType = null; @endphp
+            <div class="col-md-4">
+                @component('components.box')
+                    @slot('title')
+                        @php $scenarioType = null; @endphp
+                        @foreach($roles as $role => $data)
+                            @foreach($data['rebates']['everyone']['programs'] as $program)
+                                @php $scenarioType = $program->scenario->DealScenarioType; @endphp
+                            @endforeach
+                        @endforeach
+                        <b>{{ucwords($type)}}</b> | {{$scenarioType}}
+                    @endslot
                     @foreach($roles as $role => $data)
-                    @foreach($data['rebates']['everyone']['programs'] as $program)
-                        @php $scenarioType = $program->scenario->DealScenarioType; @endphp
-                    @endforeach
-                    @endforeach
-                    <b>{{ucwords($type)}}</b> | {{$scenarioType}}
-                @endslot
-                @foreach($roles as $role => $data)
-                    @component('components.box')
-                        @slot('title')
-                            {{ucwords($role)}}
-                        @endslot
+                        @component('components.box')
+                            @slot('title')
+                                {{ucwords($role)}}
+                            @endslot
                             @component('components.box', ['collapsible' => true, 'key' => "{$type}-{$role}-rates"])
                                 @slot('title')
                                     Rates & Rebates
                                 @endslot
                                 <div class="box box-default">
                                     <div class="box-header with-border">
-                                    <div class="box-title">
-                                       Cash Programs for Everyone
-                                    </div>
-                                    <table class="table table-condensed">
-                                        <thead>
-                                        <tr>
-                                            <th>Title</th>
-                                            <th>Id</th>
-                                            <th>Value</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($data['rebates']['everyone']['programs'] as $program)
+                                        <div class="box-title">
+                                            Cash Programs for Everyone
+                                        </div>
+                                        <table class="table table-condensed">
+                                            <thead>
                                             <tr>
-                                                <td>{{$program->program->ProgramName}}</td>
-                                                <td>{{$program->program->ProgramID}}</td>
-                                                <td>${{$program->value}}</td>
+                                                <th>Title</th>
+                                                <th>Id</th>
+                                                <th>Value</th>
                                             </tr>
-                                        @endforeach
-                                        <tr class="well">
-                                            <td><b>Total</b></td>
-                                            <td></td>
-                                            <td>${{$data['rebates']['everyone']['total']}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                            @foreach($data['rebates']['everyone']['programs'] as $program)
+                                                <tr>
+                                                    <td>{{$program->program->ProgramName}}</td>
+                                                    <td>{{$program->program->ProgramID}}</td>
+                                                    <td>${{$program->value}}</td>
+                                                </tr>
+                                            @endforeach
+                                            <tr class="well">
+                                                <td><b>Total</b></td>
+                                                <td></td>
+                                                <td>${{$data['rebates']['everyone']['total']}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 <div class="box box-default">
@@ -172,66 +172,68 @@
                                     @slot('title')
                                         Quotes
                                     @endslot
-                                        <table class="table table-condensed">
-                                            <thead>
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>Term Length</th>
+                                            <th>Rate/Money Factor</th>
+                                            <th>Residuals</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($data['rates'] as $rate)
                                             <tr>
-                                                <th>Term Length</th>
-                                                <th>Rate/Money Factor</th>
-                                                <th>Residuals</th>
+                                                <td>{{isset($rate['termLength']) ? $rate['termLength'] : '--'}}</td>
+                                                <td>{{isset($rate['rate']) ? $rate['rate'] . '%' : (isset($rate['moneyFactor']) ? $rate['moneyFactor'] : '--')}}</td>
+                                                @foreach($rate['residuals'] as $residual)
+                                                    <td>{{isset($residual['annualMileage']) ? $residual['annualMileage'] . ' miles' : '--'}}</td>
+                                                    <td>{{isset($residual['residualPercent']) ? $residual['residualPercent'] . '%' : '--'}}</td>
+                                                @endforeach
                                             </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($data['rates'] as $rate)
-                                                <tr>
-                                                    <td>{{isset($rate['termLength']) ? $rate['termLength'] : '--'}}</td>
-                                                    <td>{{isset($rate['rate']) ? $rate['rate'] . '%' : (isset($rate['moneyFactor']) ? $rate['moneyFactor'] : '--')}}</td>
-                                                    @foreach($rate['residuals'] as $residual)
-                                                        <td>{{isset($residual['annualMileage']) ? $residual['annualMileage'] . ' miles' : '--'}}</td>
-                                                        <td>{{isset($residual['residualPercent']) ? $residual['residualPercent'] . '%' : '--'}}</td>
-                                                    @endforeach
-                                                </tr>
-                                            @endforeach
+                                        @endforeach
 
-                                            </tbody>
-                                        </table>
+                                        </tbody>
+                                    </table>
                                 @endcomponent
                                 @component('components.box', ['collapsible' => true, 'key' => "{$type}-{$role}-payment"])
                                     @slot('title')
                                         Lease Payments
                                     @endslot
-                                        <table class="table table-condensed">
-                                            <thead>
+                                    <table class="table table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>Term</th>
+                                            <th>Cash Due</th>
+                                            <th>Annual Mileage</th>
+                                            <th>Monthly Payment</th>
+                                            <th>Total Amt. @ Drive Off</th>
+                                            <th>Use Tax</th>
+                                            <th>Pre Tax Amt.</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($data['payments'] as $payment)
                                             <tr>
-                                                <th>Term</th>
-                                                <th>Cash Due</th>
-                                                <th>Annual Mileage</th>
-                                                <th>Monthly Payment</th>
-                                                <th>Total Amt. @ Drive Off</th>
-                                                <th>Use Tax</th>
-                                                <th>Pre Tax Amt.</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($data['payments'] as $payment)
-                                                <tr>
+                                                @if (isset($payment['term']))
                                                     <td>{{$payment['term']}}</td>
-                                                    <td>{{isset($payment['cash_due']) ? $payment['cash_due'] : '--'}}</td>
-                                                    <td>{{isset($payment['annual_mileage']) ? $payment['annual_mileage'] : '--'}}</td>
-                                                    <td>{{isset($payment['monthly_payment']) ? '$' . $payment['monthly_payment'] : '--'}}</td>
-                                                    <td>{{isset($payment['total_amount_at_drive_off']) ? '$' . $payment['total_amount_at_drive_off'] : '--'}}</td>
-                                                    <td>{{isset($payment['monthly_use_tax']) ? '$' . $payment['monthly_use_tax'] : '--'}}</td>
-                                                    <td>{{isset($payment['monthly_pre_tax_payment']) ? '$' . $payment['monthly_pre_tax_payment'] : '--'}}</td>
-                                                    <td></td>
-                                                </tr>
-                                            @endforeach
-                                            </tbody>
-                                        </table>
+                                                @endif
+                                                <td>{{isset($payment['cash_due']) ? $payment['cash_due'] : '--'}}</td>
+                                                <td>{{isset($payment['annual_mileage']) ? $payment['annual_mileage'] : '--'}}</td>
+                                                <td>{{isset($payment['monthly_payment']) ? '$' . $payment['monthly_payment'] : '--'}}</td>
+                                                <td>{{isset($payment['total_amount_at_drive_off']) ? '$' . $payment['total_amount_at_drive_off'] : '--'}}</td>
+                                                <td>{{isset($payment['monthly_use_tax']) ? '$' . $payment['monthly_use_tax'] : '--'}}</td>
+                                                <td>{{isset($payment['monthly_pre_tax_payment']) ? '$' . $payment['monthly_pre_tax_payment'] : '--'}}</td>
+                                                <td></td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
                                 @endcomponent
                             @endif
-                    @endcomponent
-                @endforeach
-            @endcomponent
-        </div>
+                        @endcomponent
+                    @endforeach
+                @endcomponent
+            </div>
         @endforeach
     </div>
 @endsection

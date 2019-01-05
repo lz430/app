@@ -231,7 +231,6 @@ class VersionMunger
     /**
      * @param $vehicleId
      * @param $versionId
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     private function equipment($vehicleId, $versionId)
     {
