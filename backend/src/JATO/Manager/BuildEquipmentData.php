@@ -34,8 +34,7 @@ class BuildEquipmentData
                                                        array $mods = [],
                                                        array $meta = [])
     {
-
-        if (!isset($attributes[$attributeName])) {
+        if (! isset($attributes[$attributeName])) {
             return;
         }
 
@@ -77,7 +76,7 @@ class BuildEquipmentData
 
         $customMeta = [
             'equipment' => $equipments,
-            'from' => 'Custom'
+            'from' => 'Custom',
         ];
 
         switch ($equipments->name) {
@@ -97,7 +96,7 @@ class BuildEquipmentData
                     'maximum speed (mph)',
                     'maximum speed (mph)',
                     [
-                        'suffix' => 'MPH'
+                        'suffix' => 'MPH',
                     ],
                     $customMeta
                 );
@@ -279,7 +278,7 @@ class BuildEquipmentData
                     $attributes,
                     'combined vehicle range (miles)',
                     'Estimated range',
-                    ['suffix' => "Miles"],
+                    ['suffix' => 'Miles'],
                     $customMeta
                 );
 
@@ -350,11 +349,11 @@ class BuildEquipmentData
             case 'Drive':
                 if (isset($attributes['Driven wheels'])) {
                     $value = [
-                        $attributes['Driven wheels']->value
+                        $attributes['Driven wheels']->value,
                     ];
 
                     if (isset($attributes["manufacturer's name"])) {
-                        $value[] = '(' . $attributes["manufacturer's name"]->value . ')';
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
                     }
                     $labels[$attributes['Driven wheels']->schemaId] = $this->itemFactory(
                         'Drive',
@@ -416,7 +415,7 @@ class BuildEquipmentData
             default:
                 //
                 // If the equipment isn't optional, and we have standard text.
-                if (isset($this->standardEquipmentText[$equipments->schema_id]) && !$equipments->option_id) {
+                if (isset($this->standardEquipmentText[$equipments->schema_id]) && ! $equipments->option_id) {
                     if ($this->standardEquipmentText[$equipments->schema_id]->item_name == $this->standardEquipmentText[$equipments->schema_id]->content) {
                         $labels[$equipments->schema_id] = $this->itemFactory(
                             $this->standardEquipmentText[$equipments->schema_id]->content,
@@ -435,18 +434,18 @@ class BuildEquipmentData
                             ]);
                     }
                 } else {
-                    if (isset($attributes["type"])) {
+                    if (isset($attributes['type'])) {
                         $value = [ucwords($attributes['type']->value)];
-                    } else if (isset($attributes['distance (miles)']) && isset($attributes['duration (months)'])) {
-                        $value = [number_format($attributes['distance (miles)']->value) . ' (miles) / ' . $attributes['duration (months)']->value . ' (months)'];
-                    } else if (isset($attributes['distance (miles)']) && isset($attributes['period (mths)'])) {
-                        $value = [number_format($attributes['distance (miles)']->value) . ' (miles) / ' . $attributes['period (mths)']->value . ' (months)'];
+                    } elseif (isset($attributes['distance (miles)']) && isset($attributes['duration (months)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value).' (miles) / '.$attributes['duration (months)']->value.' (months)'];
+                    } elseif (isset($attributes['distance (miles)']) && isset($attributes['period (mths)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value).' (miles) / '.$attributes['period (mths)']->value.' (months)'];
                     } else {
                         $value = ['Included'];
                     }
 
                     if (isset($attributes["manufacturer's name"])) {
-                        $value[] = '(' . $attributes["manufacturer's name"]->value . ')';
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
                     }
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         $equipments->name,

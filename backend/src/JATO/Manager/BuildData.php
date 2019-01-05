@@ -3,9 +3,9 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
-use App\Models\JATO\Equipment;
 use App\Models\JATO\Option;
 use App\Models\JATO\Version;
+use App\Models\JATO\Equipment;
 
 class BuildData
 {
@@ -51,7 +51,6 @@ class BuildData
             ->equipment()
             ->where('availability', '=', 'standard')
             ->get();
-
     }
 
     private function findOptionalDealEquipment()
@@ -61,13 +60,13 @@ class BuildData
             $this->deal->option_codes ? $this->deal->option_codes : []
         );
 
-        if (!count($codes)) {
+        if (! count($codes)) {
             return [];
         }
 
         $options = Option::whereIn('option_code', $codes)->get()->pluck('option_id');
 
-        if (!count($options)) {
+        if (! count($options)) {
             return [];
         }
 
@@ -125,7 +124,7 @@ class BuildData
                 continue;
             }
 
-            if (!isset($equipmentCategories[$equipment->category])) {
+            if (! isset($equipmentCategories[$equipment->category])) {
                 $equipmentCategories[$equipment->category] = [];
             }
 
@@ -133,7 +132,6 @@ class BuildData
         }
         $this->equipmentOnDeal = $equipmentCategories;
     }
-
 
     /**
      * @param Deal $deal
@@ -147,6 +145,7 @@ class BuildData
         $this->compileEquipmentData();
         $this->dealEquipment();
         $this->organizeEquipmentOnDeal();
+
         return $this->equipmentOnDeal;
     }
 }
