@@ -181,9 +181,18 @@ class BuildEquipmentData
                             ]);
                     }
                 } else {
+                    if (isset($attributes["type"])) {
+                        $value = [ucwords($attributes['type']->value)];
+                    } else {
+                        $value = ['Included'];
+                    }
+
+                    if (isset($attributes["manufacturer's name"])) {
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
+                    }
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         $equipments->name,
-                        'Included',
+                        implode(' ', $value),
                         [
                             'equipment' => $equipments,
                             'from' => 'Equipment Name',
