@@ -62,11 +62,13 @@ export default class extends React.PureComponent {
             });
         }
 
-        items.unshift({
-            category: 'Misc',
-            label: 'Drive Train',
-            value: this.props.deal.drive_train[0],
-        });
+        if (this.props.deal.drive_train && this.props.deal.drive_train.length) {
+            items.unshift({
+                category: 'Misc',
+                label: 'Drive Train',
+                value: this.props.deal.drive_train[0],
+            });
+        }
 
         items.unshift({
             category: 'Misc',
