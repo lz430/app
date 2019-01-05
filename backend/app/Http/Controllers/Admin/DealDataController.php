@@ -48,7 +48,6 @@ class DealDataController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(Deal $deal)
-
     {
         $this->deal = $deal;
         $this->version = $deal->version;

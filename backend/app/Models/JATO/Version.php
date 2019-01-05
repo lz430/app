@@ -218,6 +218,7 @@ class Version extends Model
         unset($data['doors']);
         unset($data['cab']);
         unset($data['body_style']);
+
         return $data;
     }
 }

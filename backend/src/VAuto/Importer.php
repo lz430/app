@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use League\Flysystem\FileExistsException;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
-use League\Flysystem\FileExistsException;
 
 class Importer
 {
@@ -324,6 +324,7 @@ class Importer
 
         if (! count($sources)) {
             $this->info('No Files found to import!');
+
             return false;
         }
 
@@ -342,7 +343,6 @@ class Importer
         $this->info(' -- Skipped Deals: '.$this->debug['skipped']);
         $this->info(' -- Records to remove from es: '.$queryUpdateSold->count());
         $this->info(' -- Records to delete from db: '.$queryToDelete->count());
-
 
         // Sets status of deals that are not in feed to sold
         $queryUpdateSold->update(
@@ -387,8 +387,8 @@ class Importer
         try {
             $this->fileManager->archiveFiles($sources);
         } catch (FileExistsException $e) {
-
         }
+
         return true;
     }
 

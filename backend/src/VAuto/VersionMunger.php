@@ -4,7 +4,6 @@ namespace DeliverMyRide\VAuto;
 
 use App\Models\Deal;
 use App\Models\JATO\Make;
-use App\Models\JATO\Option;
 use App\Models\JATO\Version;
 use App\Models\JATO\Equipment;
 use App\Models\JATO\Manufacturer;
@@ -56,7 +55,7 @@ class VersionMunger
 
         $matches = $this->decodedVin->versions;
 
-        if (!count($matches)) {
+        if (! count($matches)) {
             return null;
         }
 
@@ -99,7 +98,7 @@ class VersionMunger
             $trim = $row['Series'];
 
             if ($row['Series Detail']) {
-                $trim .= ' ' . $row['Series Detail'];
+                $trim .= ' '.$row['Series Detail'];
             }
 
             // Try and specific match first
@@ -156,7 +155,7 @@ class VersionMunger
     {
         $manufacturer = Manufacturer::where('name', $name)->first();
 
-        if (!$manufacturer) {
+        if (! $manufacturer) {
             $data = $this->jatoClient->manufacturer->get($name);
 
             $manufacturer = Manufacturer::updateOrCreate([
@@ -181,7 +180,7 @@ class VersionMunger
     {
         $make = Make::where('name', $name)->first();
 
-        if (!$make) {
+        if (! $make) {
             $data = $this->jatoClient->make->get($name);
 
             $make = $manufacturer->makes()->updateOrCreate([
@@ -214,7 +213,7 @@ class VersionMunger
             })
             ->first();
 
-        if (!$model) {
+        if (! $model) {
             $data = $this->jatoClient->model->get($urlModelName);
 
             $model = $make->models()->updateOrCreate([
@@ -237,7 +236,7 @@ class VersionMunger
         try {
             $equipments = collect($this->jatoClient->equipment->get($version->jato_vehicle_id)->results)
                 ->reject(function ($equipment) {
-                    return !in_array($equipment->availability, ['standard', 'optional', '-']);
+                    return ! in_array($equipment->availability, ['standard', 'optional', '-']);
                 })->map(function ($equipment) {
                     return [
                         'option_id' => $equipment->optionId,
@@ -265,7 +264,7 @@ class VersionMunger
         try {
             $options = collect($this->jatoClient->option->get($version->jato_vehicle_id)->options)
                 ->reject(function ($option) {
-                    return !in_array($option->optionType, ['O', 'P']);
+                    return ! in_array($option->optionType, ['O', 'P']);
                 })
                 ->map(function ($option) {
                     return [
@@ -340,7 +339,7 @@ class VersionMunger
     {
         $data = $this->getJatoVersion($this->jatoVersion->vehicle_ID);
 
-        if (!$data) {
+        if (! $data) {
             return null;
         }
 
@@ -354,7 +353,7 @@ class VersionMunger
             'jato_uid' => $data->uid,
             'jato_model_id' => $data->modelId,
             'year' => str_before($data->modelYear, '.'), // trim off .5
-            'name' => !in_array($data->versionName, ['-', '']) ? $data->versionName : null,
+            'name' => ! in_array($data->versionName, ['-', '']) ? $data->versionName : null,
             'trim_name' => $data->trimName,
             'description' => rtrim($data->headerDescription, ' -'),
             'driven_wheels' => $data->drivenWheels,
@@ -366,7 +365,7 @@ class VersionMunger
             'cab' => $data->cabType !== '' ? $data->cabType : null,
             'fuel_econ_city' => $data->fuelEconCity !== '' ? $data->fuelEconCity : null,
             'fuel_econ_hwy' => $data->fuelEconHwy !== '' ? $data->fuelEconHwy : null,
-            'manufacturer_code' => !in_array($data->manufacturerCode, ['-', '']) ? $data->manufacturerCode : null,
+            'manufacturer_code' => ! in_array($data->manufacturerCode, ['-', '']) ? $data->manufacturerCode : null,
             'delivery_price' => $data->delivery !== '' ? $data->delivery : null,
             'is_current' => $data->isCurrent,
         ]);
@@ -418,7 +417,7 @@ class VersionMunger
         $quoteData = resolve('DeliverMyRide\RIS\Manager\VersionToVehicle')->get($version);
 
         foreach ($quoteData as $strategy => $data) {
-            if (!$data) {
+            if (! $data) {
                 $version->quotes()->where('strategy', $strategy)->delete();
             } else {
                 VersionQuote::updateOrCreate([
@@ -427,11 +426,11 @@ class VersionMunger
                 ], [
                     'hashcode' => $data->hashcode,
                     'make_hashcode' => $data->makeHashcode,
-                    'rate' => (float)$data->rate,
-                    'term' => (int)$data->term,
-                    'rebate' => (int)$data->rebate,
-                    'residual' => (int)$data->residual,
-                    'miles' => (int)$data->miles,
+                    'rate' => (float) $data->rate,
+                    'term' => (int) $data->term,
+                    'rebate' => (int) $data->rebate,
+                    'residual' => (int) $data->residual,
+                    'miles' => (int) $data->miles,
                     'rate_type' => $data->rateType,
                     'data' => $data->data,
                 ]);
@@ -457,7 +456,6 @@ class VersionMunger
 
         return true;
     }
-
 
     /**
      * @param Version $version
@@ -505,12 +503,12 @@ class VersionMunger
         //
         // Match Jato Version
         $this->decodeVin();
-        if (!$this->decodedVin) {
+        if (! $this->decodedVin) {
             return [false, false, false];
         }
 
         $jatoVersion = $this->matchVinToVersion();
-        if (!$jatoVersion) {
+        if (! $jatoVersion) {
             return [false, false, false];
         }
 
@@ -520,7 +518,7 @@ class VersionMunger
         //
         // Decide if we need to create
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
-        if (!$version) {
+        if (! $version) {
             $version = $this->create();
             $this->debug['versionsCreated']++;
             if ($version) {
@@ -529,7 +527,7 @@ class VersionMunger
             }
         }
 
-        if (!$version) {
+        if (! $version) {
             return [false, false, false];
         }
 
@@ -540,7 +538,7 @@ class VersionMunger
             $this->debug['versionsUpdated']++;
         }
 
-        if (!$version->photos()->count()) {
+        if (! $version->photos()->count()) {
             $this->photos($version);
         }
 

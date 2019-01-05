@@ -67,6 +67,7 @@ class VersionPhoto extends Model
         unset($data['color_simple']);
         unset($data['shot_code']);
         unset($data['type']);
+
         return $data;
     }
 }

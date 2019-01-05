@@ -2,9 +2,9 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
+use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\JATO\Version;
-use Carbon\Carbon;
 
 class DealMunger
 {
@@ -57,7 +57,6 @@ class DealMunger
 
         return (object) $return;
     }
-
 
     /**
      * @param Version $version
