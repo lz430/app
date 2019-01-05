@@ -13,6 +13,7 @@ use App\Models\JATO\VehicleModel;
 use App\Models\JATO\VersionQuote;
 use DeliverMyRide\JATO\JatoClient;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ServerException;
 
 class VersionMunger
 {
@@ -55,7 +56,7 @@ class VersionMunger
 
         $matches = $this->decodedVin->versions;
 
-        if (! count($matches)) {
+        if (!count($matches)) {
             return null;
         }
 
@@ -98,7 +99,7 @@ class VersionMunger
             $trim = $row['Series'];
 
             if ($row['Series Detail']) {
-                $trim .= ' '.$row['Series Detail'];
+                $trim .= ' ' . $row['Series Detail'];
             }
 
             // Try and specific match first
@@ -155,7 +156,7 @@ class VersionMunger
     {
         $manufacturer = Manufacturer::where('name', $name)->first();
 
-        if (! $manufacturer) {
+        if (!$manufacturer) {
             $data = $this->jatoClient->manufacturer->get($name);
 
             $manufacturer = Manufacturer::updateOrCreate([
@@ -180,7 +181,7 @@ class VersionMunger
     {
         $make = Make::where('name', $name)->first();
 
-        if (! $make) {
+        if (!$make) {
             $data = $this->jatoClient->make->get($name);
 
             $make = $manufacturer->makes()->updateOrCreate([
@@ -213,7 +214,7 @@ class VersionMunger
             })
             ->first();
 
-        if (! $model) {
+        if (!$model) {
             $data = $this->jatoClient->model->get($urlModelName);
 
             $model = $make->models()->updateOrCreate([
@@ -229,92 +230,87 @@ class VersionMunger
     }
 
     /**
-     * @param $vehicleId
-     * @param $versionId
+     * @param Version $version
      */
-    private function equipment($vehicleId, $versionId)
+    private function equipment(Version $version)
     {
         try {
-            $getEquipment = collect($this->jatoClient->equipment->get($vehicleId)->results);
-
-            $equipment = $getEquipment
+            $equipments = collect($this->jatoClient->equipment->get($version->jato_vehicle_id)->results)
                 ->reject(function ($equipment) {
-                    return ! in_array($equipment->availability, ['standard', 'optional']);
+                    return !in_array($equipment->availability, ['standard', 'optional', '-']);
+                })->map(function ($equipment) {
+                    return [
+                        'option_id' => $equipment->optionId,
+                        'schema_id' => $equipment->schemaId,
+                        'category_id' => $equipment->categoryId,
+                        'category' => $equipment->category,
+                        'name' => $equipment->name,
+                        'location' => $equipment->location,
+                        'availability' => $equipment->availability,
+                        'value' => $equipment->value,
+                        'aspects' => $equipment->attributes,
+                    ];
                 });
-            foreach ($equipment as $equip) {
-                $data = [
-                    'version_id' => $versionId,
-                    'option_id' => $equip->optionId,
-                    'schema_id' => $equip->schemaId,
-                    'category_id' =>$equip->categoryId,
-                    'category' => $equip->category,
-                    'name' => $equip->name,
-                    'location' => $equip->location,
-                    'availability' => $equip->availability,
-                    'value' => $equip->value,
-                    'aspects' => $equip->attributes,
-                ];
-                Equipment::create($data);
-            }
-        } catch (ClientException $e) {
+            $version->equipment()->createMany($equipments->all());
+        } catch (ServerException | ClientException $e) {
             echo $e->getMessage();
         }
     }
 
     /**
-     * @param $vehicleId
-     * @param $versionId
+     * @param Version $version
      */
-    private function options($vehicleId, $versionId)
+    private function options(Version $version)
     {
         try {
-            $getOptions = collect($this->jatoClient->option->get($vehicleId)->options);
-            $options = $getOptions
-                ->reject(function ($options) {
-                    return ! in_array($options->optionType, ['O', 'P']);
+            $options = collect($this->jatoClient->option->get($version->jato_vehicle_id)->options)
+                ->reject(function ($option) {
+                    return !in_array($option->optionType, ['O', 'P']);
+                })
+                ->map(function ($option) {
+                    return [
+                        'option_id' => $option->optionId,
+                        'option_code' => $option->optionCode,
+                        'option_type' => $option->optionType,
+                        'msrp' => $option->msrp,
+                        'invoice_price' => $option->invoicePrice,
+                        'option_name' => $option->optionName,
+                        'option_state_name' => $option->optionStateTranslation,
+                        'option_state' => $option->optionState,
+                        'option_description' => $option->optionDescription,
+                    ];
                 });
-
-            foreach ($options as $option) {
-                $data = [
-                    'version_id' => $versionId,
-                    'option_id' => $option->optionId,
-                    'option_code' => $option->optionCode,
-                    'option_type' => $option->optionType,
-                    'msrp' => $option->msrp,
-                    'invoice_price' => $option->invoicePrice,
-                    'option_name' => $option->optionName,
-                    'option_state_name' => $option->optionStateTranslation,
-                    'option_state' => $option->optionState,
-                    'option_description' => $option->optionDescription,
-                ];
-                Option::create($data);
-            }
-        } catch (ClientException $e) {
+            $version->options()->createMany($options->all());
+        } catch (ServerException | ClientException $e) {
             echo $e->getMessage();
         }
     }
 
     /**
-     * @param $vehicleId
-     * @param $versionId
+     * @param Version $version
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    private function standardText($vehicleId, $versionId)
+    private function standardText(Version $version)
     {
         try {
-            $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
-            foreach ($getStandardText as $standard) {
-                $data = [
-                    'version_id' => $versionId,
-                    'schema_id' => $standard->schemaId,
-                    'category_id' =>$standard->categoryId,
-                    'category' => $standard->category,
-                    'item_name' => $standard->itemName,
-                    'content' => $standard->content,
+            $text = collect($this->jatoClient->standard->get(
+                $version->jato_vehicle_id,
+                '',
+                '',
+                '1',
+                '5000')->results)
+                ->map(function ($item) {
+                    return [
+                        'schema_id' => $item->schemaId,
+                        'category_id' => $item->categoryId,
+                        'category' => $item->category,
+                        'item_name' => $item->itemName,
+                        'content' => $item->content,
+                    ];
+                });
 
-                ];
-                StandardText::updateOrCreate($data);
-            }
-        } catch (ClientException $e) {
+            $version->standard_text()->createMany($text->all());
+        } catch (ServerException | ClientException $e) {
             echo $e->getMessage();
         }
     }
@@ -336,13 +332,6 @@ class VersionMunger
         return $data;
     }
 
-    private function getManufacturerByMake($make)
-    {
-        $data = $this->jatoClient->make->get($make);
-
-        return $data->manufacturerName;
-    }
-
     /**
      * @return Version
      * @throws \GuzzleHttp\Exception\GuzzleException
@@ -351,7 +340,7 @@ class VersionMunger
     {
         $data = $this->getJatoVersion($this->jatoVersion->vehicle_ID);
 
-        if (! $data) {
+        if (!$data) {
             return null;
         }
 
@@ -365,7 +354,7 @@ class VersionMunger
             'jato_uid' => $data->uid,
             'jato_model_id' => $data->modelId,
             'year' => str_before($data->modelYear, '.'), // trim off .5
-            'name' => ! in_array($data->versionName, ['-', '']) ? $data->versionName : null,
+            'name' => !in_array($data->versionName, ['-', '']) ? $data->versionName : null,
             'trim_name' => $data->trimName,
             'description' => rtrim($data->headerDescription, ' -'),
             'driven_wheels' => $data->drivenWheels,
@@ -377,14 +366,14 @@ class VersionMunger
             'cab' => $data->cabType !== '' ? $data->cabType : null,
             'fuel_econ_city' => $data->fuelEconCity !== '' ? $data->fuelEconCity : null,
             'fuel_econ_hwy' => $data->fuelEconHwy !== '' ? $data->fuelEconHwy : null,
-            'manufacturer_code' => ! in_array($data->manufacturerCode, ['-', '']) ? $data->manufacturerCode : null,
+            'manufacturer_code' => !in_array($data->manufacturerCode, ['-', '']) ? $data->manufacturerCode : null,
             'delivery_price' => $data->delivery !== '' ? $data->delivery : null,
             'is_current' => $data->isCurrent,
         ]);
 
-        $this->equipment($data->vehicleId, $version->id);
-        $this->options($data->vehicleId, $version->id);
-        $this->standardText($data->vehicleId, $version->id);
+        $this->equipment($version);
+        $this->options($version);
+        $this->standardText($version);
 
         return $version;
     }
@@ -429,7 +418,7 @@ class VersionMunger
         $quoteData = resolve('DeliverMyRide\RIS\Manager\VersionToVehicle')->get($version);
 
         foreach ($quoteData as $strategy => $data) {
-            if (! $data) {
+            if (!$data) {
                 $version->quotes()->where('strategy', $strategy)->delete();
             } else {
                 VersionQuote::updateOrCreate([
@@ -438,11 +427,11 @@ class VersionMunger
                 ], [
                     'hashcode' => $data->hashcode,
                     'make_hashcode' => $data->makeHashcode,
-                    'rate' => (float) $data->rate,
-                    'term' => (int) $data->term,
-                    'rebate' => (int) $data->rebate,
-                    'residual' => (int) $data->residual,
-                    'miles' => (int) $data->miles,
+                    'rate' => (float)$data->rate,
+                    'term' => (int)$data->term,
+                    'rebate' => (int)$data->rebate,
+                    'residual' => (int)$data->residual,
+                    'miles' => (int)$data->miles,
                     'rate_type' => $data->rateType,
                     'data' => $data->data,
                 ]);
@@ -453,22 +442,22 @@ class VersionMunger
     /**
      * @param Version $version
      * @return bool
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function refreshMakeModel(Version $version)
+    public function refreshVersionEquipment(Version $version)
     {
-        $data = $this->getJatoVersion($version->jato_vehicle_id);
-        if (! $data) {
-            return false;
-        }
-        $manufacturerName = $this->getManufacturerByMake($data->makeName);
 
-        $manufacturer = $this->manufacturer($manufacturerName);
-        $make = $this->make($data->makeName, $manufacturer);
-        $model = $this->model($data->modelName, $data->modelName, $make);
-        $version->model()->associate($model);
-        $version->save();
+        //Refresh equipment/options/standard text for versions
+        $version->options()->delete();
+        $version->equipment()->delete();
+        $version->standard_text()->delete();
+
+        $this->equipment($version);
+        $this->options($version);
+        $this->standardText($version);
+
+        return true;
     }
+
 
     /**
      * @param Version $version
@@ -499,9 +488,9 @@ class VersionMunger
         $version->equipment()->delete();
         $version->standard_text()->delete();
 
-        $this->equipment($jatoVersion->vehicle_ID, $version->id);
-        $this->options($jatoVersion->vehicle_ID, $version->id);
-        $this->standardText($jatoVersion->vehicle_ID, $version->id);
+        $this->equipment($version);
+        $this->options($version);
+        $this->standardText($version);
     }
 
     /**
@@ -516,12 +505,12 @@ class VersionMunger
         //
         // Match Jato Version
         $this->decodeVin();
-        if (! $this->decodedVin) {
+        if (!$this->decodedVin) {
             return [false, false, false];
         }
 
         $jatoVersion = $this->matchVinToVersion();
-        if (! $jatoVersion) {
+        if (!$jatoVersion) {
             return [false, false, false];
         }
 
@@ -531,7 +520,7 @@ class VersionMunger
         //
         // Decide if we need to create
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
-        if (! $version) {
+        if (!$version) {
             $version = $this->create();
             $this->debug['versionsCreated']++;
             if ($version) {
@@ -540,7 +529,7 @@ class VersionMunger
             }
         }
 
-        if (! $version) {
+        if (!$version) {
             return [false, false, false];
         }
 
@@ -551,7 +540,7 @@ class VersionMunger
             $this->debug['versionsUpdated']++;
         }
 
-        if (! $version->photos()->count()) {
+        if (!$version->photos()->count()) {
             $this->photos($version);
         }
 

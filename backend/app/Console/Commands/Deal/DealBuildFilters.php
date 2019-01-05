@@ -34,8 +34,8 @@ class DealBuildFilters extends Command
         $deal->fresh();
         $this->info($deal->id);
         $this->info($deal->title());
-        $this->info(' -- Option Codes: '.implode(', ', $deal->option_codes));
-        $this->info(' -- Package Codes: '.implode(', ', $deal->package_codes));
+        $this->info(' -- Option Codes: '.implode(', ', $deal->option_codes ? $deal->option_codes : []));
+        $this->info(' -- Package Codes: '.implode(', ', $deal->package_codes ? $deal->package_codes : []));
 
         $munger->printDiscoveredFeatures();
     }

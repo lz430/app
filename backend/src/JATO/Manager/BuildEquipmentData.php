@@ -526,12 +526,13 @@ class BuildEquipmentData
             $labeledEquipment = collect($labeledEquipment)->keyBy('label')->all();
         }
 
-        $this->equipmentOnDeal = $labeledEquipment;
+        $this->equipmentOnDeal = array_values($labeledEquipment);
     }
 
     /**
-     * @param array $equipment
+     * @param Collection $equipment
      * @param Deal $deal
+     * @param bool $removeDuplicateLabels
      * @param bool $debug
      * @return mixed
      */

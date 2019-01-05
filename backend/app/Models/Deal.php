@@ -381,7 +381,7 @@ class Deal extends Model
         $query = $query->whereHas('version', function ($query) {
             $query->where('id', '=', $this->version_id);
         });
-        $query = $query->where('availability', '=', 'standard');
+        $query = $query->whereIn('availability', ['standard', '-']);
 
         $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
             return (string) $equipment->slug();
@@ -977,7 +977,6 @@ class Deal extends Model
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
         }
-
         return $record;
     }
 }

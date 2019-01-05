@@ -72,12 +72,6 @@ class DealFiltersMunger
         // Find information for the deal model
         $this->syncSeatingCapacity();
 
-        //
-        // Finally get some features.
-        // TODO: we don't seem to have any equipment that matches this miscData concept..
-        // Not sure where this is coming from.
-        $this->buildFeaturesForMiscData();
-
         // Handles optional and standard equipment
         $this->buildFiltersForEquipmentOnDeal();
         $this->buildFiltersForKnownAttributes();
@@ -202,27 +196,6 @@ class DealFiltersMunger
 
             $this->discovered_features[$category][$feature->feature->id] = $feature;
         }
-    }
-
-    /**
-     * Build features based on option codes.
-     */
-    public function buildFeaturesForMiscData()
-    {
-        $features = $this->equipmentOnDeal
-            ->reject(function ($equipment) {
-                return $equipment->availability != '-';
-            })
-            ->reject(function ($equipment) {
-                return $equipment->optionId !== 0;
-            })
-            ->map(function ($equipment) {
-                return $this->getFeatureFromEquipment($equipment);
-            })
-            ->filter()
-            ->unique();
-
-        $this->categorizeDiscoveredFeatures($features);
     }
 
     /**
