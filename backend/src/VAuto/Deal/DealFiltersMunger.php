@@ -20,9 +20,6 @@ class DealFiltersMunger
     private $vauto_features;
 
     /* @var \Illuminate\Support\Collection */
-    private $equipment;
-
-    /* @var \Illuminate\Support\Collection */
     private $equipmentOnDeal;
 
     private $discovered_features;
@@ -36,13 +33,11 @@ class DealFiltersMunger
     {
         $this->deal = $deal;
         $this->version = $this->deal->version;
+
         //
         // Reset importer class
         $this->discovered_features = [];
         $this->vauto_features = [];
-        $this->option_codes = null;
-        $this->vauto_features = null;
-        $this->equipment = null;
 
         $this->debug = [
             'equipment_feature_count' => 0,
@@ -147,14 +142,6 @@ class DealFiltersMunger
                 echo "  --- {$feature->feature->title} - {$feature->equipment->schema_id} - {$feature->equipment->option_id}\n";
             }
         }
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    private function fetchVersionEquipment(): \Illuminate\Support\Collection
-    {
-        return $this->deal->version->equipment;
     }
 
     /**
