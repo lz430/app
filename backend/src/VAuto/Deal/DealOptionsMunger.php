@@ -128,7 +128,7 @@ class DealOptionsMunger
             foreach ($options as $code => $option_name) {
                 $score = levenshtein($option_name, $feature);
                 if ($score < 5) {
-                    $this->debug['equipment_extracted_codes'][] = [
+                    $this->debug['options_extracted_codes'][] = [
                         'Option Code' => $code,
                         'Option Title' => $option_name,
                         'Feature' => $feature,
@@ -193,7 +193,7 @@ class DealOptionsMunger
             ->reject(function ($option) use ($transmission) {
                 $score = levenshtein($option->option_name, $transmission);
                 if ($score < 3) {
-                    $this->debug['equipment_extracted_codes'][] = [
+                    $this->debug['options_extracted_codes'][] = [
                         'Option Code' => $option->option_code,
                         'Option Title' => $option->option_name,
                         'Feature' => 'Transmission',

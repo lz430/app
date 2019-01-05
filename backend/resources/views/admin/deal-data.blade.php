@@ -177,6 +177,9 @@
         @slot('title')
             Equipment
         @endslot
+        <div class="alert alert-danger">
+            Note: Duplicate labels will be removed before being shown to the user.
+        </div>
         @foreach($equipment as $categoryTitle => $items)
             @component('components.box', ['collapsible' => true, 'key' => 'cat-' . str_slug($categoryTitle)])
                 @slot('title')

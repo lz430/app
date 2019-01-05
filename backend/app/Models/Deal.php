@@ -368,12 +368,7 @@ class Deal extends Model
         'payments' => 'object',
     ];
 
-    public function getEquipment()
-    {
-        return resolve('DeliverMyRide\JATO\Manager\BuildData')->build($this);
-    }
-
-    public function getEquipmentForDeal() {
+    public function getEquipment() {
         $codes = array_merge(
             $this->package_codes ? $this->package_codes : [],
             $this->option_codes ? $this->option_codes : []
@@ -964,13 +959,14 @@ class Deal extends Model
         }
 
         $equipmentOnDeal = $this->getEquipment();
+
         // Overview data for detail page
         $record['overview'] = [];
         $record['overview'] = (new BuildOverviewData())->build($equipmentOnDeal);
 
         // Equipment on car
         $record['equipment'] = [];
-        $record['equipment'] = (new BuildEquipmentData())->build($equipmentOnDeal);
+        $record['equipment'] = (new BuildEquipmentData())->build($equipmentOnDeal, $this);
 
         //
         // Catchall

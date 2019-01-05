@@ -60,7 +60,7 @@ class DealFiltersMunger
 
         // Packages, options, and standard equipment already
         // considered and merged together.
-        $this->equipmentOnDeal = $deal->getEquipmentForDeal();
+        $this->equipmentOnDeal = $deal->getEquipment();
 
         // If we don't have any equipment something is probably wrong
         if (! $this->equipmentOnDeal->count()) {

@@ -241,7 +241,6 @@ class VersionMunger
                 ->reject(function ($equipment) {
                     return ! in_array($equipment->availability, ['standard', 'optional']);
                 });
-
             foreach ($equipment as $equip) {
                 $data = [
                     'version_id' => $versionId,
@@ -255,7 +254,7 @@ class VersionMunger
                     'value' => $equip->value,
                     'aspects' => $equip->attributes,
                 ];
-                Equipment::updateOrCreate($data);
+                Equipment::create($data);
             }
         } catch (ClientException $e) {
             echo $e->getMessage();
@@ -288,7 +287,7 @@ class VersionMunger
                     'option_state' => $option->optionState,
                     'option_description' => $option->optionDescription,
                 ];
-                Option::updateOrCreate($data);
+                Option::create($data);
             }
         } catch (ClientException $e) {
             echo $e->getMessage();
@@ -299,7 +298,7 @@ class VersionMunger
      * @param $vehicleId
      * @param $versionId
      */
-    private function stardardText($vehicleId, $versionId)
+    private function standardText($vehicleId, $versionId)
     {
         try {
             $getStandardText = collect($this->jatoClient->standard->get($vehicleId, '', '', '1', '5000')->results);
@@ -385,7 +384,7 @@ class VersionMunger
 
         $this->equipment($data->vehicleId, $version->id);
         $this->options($data->vehicleId, $version->id);
-        $this->stardardText($data->vehicleId, $version->id);
+        $this->standardText($data->vehicleId, $version->id);
 
         return $version;
     }
@@ -502,7 +501,7 @@ class VersionMunger
 
         $this->equipment($jatoVersion->vehicle_ID, $version->id);
         $this->options($jatoVersion->vehicle_ID, $version->id);
-        $this->stardardText($jatoVersion->vehicle_ID, $version->id);
+        $this->standardText($jatoVersion->vehicle_ID, $version->id);
     }
 
     /**

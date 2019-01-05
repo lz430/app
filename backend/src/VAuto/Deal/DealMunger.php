@@ -7,12 +7,14 @@ use App\Models\Deal;
 class DealMunger
 {
 
-    /* @var \DeliverMyRide\VAuto\Deal\DealPhotosMunger */
+    /* @var DealPhotosMunger */
     private $photoManager;
 
-    /* @var \DeliverMyRide\VAuto\Deal\DealFiltersMunger */
+    /* @var DealFiltersMunger */
     private $equipmentManager;
 
+    /* @var DealOptionsMunger */
+    private $optionsManager;
 
     public function __construct()
     {
@@ -26,7 +28,6 @@ class DealMunger
      * @param array $data
      * @param bool $force
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function import(Deal $deal, array $data, bool $force = false)
     {

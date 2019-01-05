@@ -70,7 +70,7 @@ class DealDataController extends Controller
             'model' => $this->version->toArray(),
         ];
 
-        $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), true);
+        $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), $deal, false, true);
 
         $equipment = collect($equipment)->groupBy('category');
         $data = [

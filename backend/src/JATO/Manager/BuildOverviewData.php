@@ -2,6 +2,8 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
+use Illuminate\Support\Collection;
+
 class BuildOverviewData
 {
     /* @var \App\Models\Deal */
@@ -156,18 +158,20 @@ class BuildOverviewData
                 }
             }
         }
+
         $this->equipmentOnDeal = $labeledEquipment;
     }
 
     /**
-     * @param array $equipment
+     * @param Collection $equipment
      * @param bool $debug
      * @return mixed
      */
-    public function build($equipment = [], $debug = false)
+    public function build(Collection $equipment, $debug = false)
     {
-        $this->equipment = $equipment;
         $this->debug = $debug;
+        $this->equipment = $equipment
+            ->groupBy('category', true);
 
         $this->labelEquipmentOnDeal();
 

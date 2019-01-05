@@ -235,8 +235,8 @@ class Importer
                 // Equipment
                 $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
 
-                if (count($debug['equipment_extracted_codes'])) {
-                    $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
+                if (count($debug['options_extracted_codes'])) {
+                    $codes = collect($debug['options_extracted_codes'])->pluck('Option Code')->all();
                     $msg = implode(', ', $codes);
                     $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
                 }
