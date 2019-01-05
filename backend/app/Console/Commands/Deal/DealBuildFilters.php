@@ -3,10 +3,7 @@
 namespace App\Console\Commands\Deal;
 
 use App\Models\Deal;
-use App\Models\Feature;
 use Illuminate\Console\Command;
-use DeliverMyRide\JATO\JatoClient;
-use DeliverMyRide\VAuto\Deal\DealFiltersMunger;
 
 class DealBuildFilters extends Command
 {
@@ -27,6 +24,7 @@ class DealBuildFilters extends Command
 
         if (! $deal) {
             $this->info('NO DEAL!');
+
             return;
         }
 

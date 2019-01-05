@@ -29,7 +29,6 @@ class BuildEquipmentData
         'General',
     ];
 
-
     /* @var \App\Models\Deal */
     private $deal;
 
@@ -549,7 +548,7 @@ class BuildEquipmentData
         //
         // Categorize and reduce equipment
         $this->equipment = $equipment
-            ->reject(function($equipment) {
+            ->reject(function ($equipment) {
                 if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
                     return true;
                 }

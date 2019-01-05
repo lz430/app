@@ -2,13 +2,10 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
-use App\Models\JATO\Equipment;
-use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Feature;
-use App\Models\Category;
-use App\Models\JATO\Version;
 use DeliverMyRide\VAuto\Map;
+use App\Models\JATO\Equipment;
 
 /**
  * Handles finding and fixing up the packages and options found for a given vehicle.
@@ -28,7 +25,7 @@ class DealOptionsMunger
 
     /**
      * TODO: There is no good way right now to figure out if we 'should' update this..
-     * so we're going to just update it every time. Fix this
+     * so we're going to just update it every time. Fix this.
      * @param Deal $deal
      * @param bool $force
      * @return array
@@ -59,6 +56,7 @@ class DealOptionsMunger
         $this->buildOptionsAndPackages();
 
         $this->deal->save();
+
         return $this->debug;
     }
 

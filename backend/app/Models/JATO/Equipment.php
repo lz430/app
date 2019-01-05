@@ -83,11 +83,13 @@ class Equipment extends Model
      * but if it's a string, the values are overridden.
      * @return int|string
      */
-    public function slug() {
-        $slug = "e-" . (string) $this->schema_id;
+    public function slug()
+    {
+        $slug = 'e-'.(string) $this->schema_id;
         if ($this->location) {
-            $slug .= '-' . str_slug($this->location);
+            $slug .= '-'.str_slug($this->location);
         }
+
         return $slug;
     }
 }

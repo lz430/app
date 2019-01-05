@@ -6,7 +6,6 @@ use App\Models\Deal;
 
 class DealMunger
 {
-
     /* @var DealPhotosMunger */
     private $photoManager;
 

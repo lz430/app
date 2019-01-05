@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\JATO\Equipment;
-use App\Models\JATO\Option;
 use Carbon\Carbon;
+use App\Models\JATO\Option;
 use App\Models\JATO\Version;
 use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
+use App\Models\JATO\Equipment;
 use App\Models\Order\Purchase;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
@@ -368,7 +368,8 @@ class Deal extends Model
         'payments' => 'object',
     ];
 
-    public function getEquipment() {
+    public function getEquipment()
+    {
         $codes = array_merge(
             $this->package_codes ? $this->package_codes : [],
             $this->option_codes ? $this->option_codes : []
@@ -383,7 +384,7 @@ class Deal extends Model
         $query = $query->where('availability', '=', 'standard');
 
         $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
-           return (string) $equipment->slug();
+            return (string) $equipment->slug();
         });
 
         //
@@ -401,13 +402,13 @@ class Deal extends Model
             $optionalEquipment = $query->get()->keyBy(function ($equipment) {
                 return $equipment->slug();
             });
-
         } else {
             $optionalEquipment = collect([]);
         }
 
         // Collect->merge is supposed to return the same amount, but doesn't seem to work correctly.
         $mergedEquipment = collect(array_merge($equipmentOnDeal->all(), $optionalEquipment->all()));
+
         return $mergedEquipment;
     }
 

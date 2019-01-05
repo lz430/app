@@ -2,12 +2,12 @@
 
 namespace DeliverMyRide\VAuto\Deal;
 
-use App\Models\JATO\Equipment;
 use Carbon\Carbon;
 use App\Models\Deal;
 use App\Models\Feature;
 use App\Models\Category;
 use DeliverMyRide\VAuto\Map;
+use App\Models\JATO\Equipment;
 
 class DealFiltersMunger
 {
