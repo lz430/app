@@ -27,6 +27,7 @@ export default class SpecsDetails extends React.PureComponent {
                     <Row
                         className="deal-details__specs-detail-item"
                         key={`detail-${this.props.category}-${index}`}
+                        noGutters
                     >
                         <Col
                             sm="6"

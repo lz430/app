@@ -456,10 +456,14 @@
         }
 
         &-detail {
-            padding: 15px;
-
             &:nth-child(even) {
                 background: #f6f6f6;
+            }
+            > h5 {
+                padding: 15px;
+            }
+            > div {
+                padding: 0 15px 15px 15px;
             }
 
             &-item {

@@ -228,7 +228,7 @@ class BuildEquipmentData
      * @param bool $debug
      * @return mixed
      */
-    public function build($equipment = [], $debug = false)
+    public function build(array $equipment = [], $debug = false)
     {
         $this->equipment = $equipment;
         $this->debug = $debug;

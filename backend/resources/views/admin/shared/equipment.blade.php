@@ -11,6 +11,11 @@
             <td>availability</td>
             <td>{{$equipment->availability}}</td>
         </tr>
+
+        <tr>
+            <td>package</td>
+            <td>{{$equipment->option_id}}</td>
+        </tr>
         <tr>
             <td>location</td>
             <td>{{$equipment->location}}</td>
