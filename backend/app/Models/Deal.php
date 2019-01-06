@@ -977,7 +977,6 @@ class Deal extends Model
             $misc = array_map('trim', $misc);
             $record['misc'] = $misc;
         }
-
         return $record;
     }
 }

@@ -47,7 +47,6 @@ class DealFiltersMunger
         // An iffy way to check if we have updated features. we don't
         // do this often, so probably not that big of a deal right now.
         $updatedFeatures = Feature::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
-
         if ($force || $updatedFeatures) {
             $this->deal->features()->sync([]);
         }

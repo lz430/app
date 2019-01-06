@@ -130,13 +130,15 @@ class DealMunger
      */
     public function decorate(Deal $deal, array $data, bool $force = false)
     {
-        $debug = [];
+        $debug = Deal::withoutSyncingToSearch(function () use ($deal, $data, $force) {
+            $debug = [];
+            // OPTIONS MUST BE RAN BEFORE EQUIPMENT!
+            $options_debug = $this->optionsManager->import($deal, $force);
+            $equipment_debug = $this->equipmentManager->import($deal, $force);
+            $photos_debug = $this->photoManager->import($deal, $data, $force);
+            return array_merge($debug, $options_debug, $equipment_debug, $photos_debug);
+        });
 
-        // OPTIONS MUST BE RAN BEFORE EQUIPMENT!
-        $options_debug = $this->optionsManager->import($deal, $force);
-        $equipment_debug = $this->equipmentManager->import($deal, $force);
-        $photos_debug = $this->photoManager->import($deal, $data, $force);
-
-        return array_merge($debug, $options_debug, $equipment_debug, $photos_debug);
+        return $debug;
     }
 }
