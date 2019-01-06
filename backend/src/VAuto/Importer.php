@@ -2,6 +2,7 @@
 
 namespace DeliverMyRide\VAuto;
 
+use DeliverMyRide\VAuto\Deal\DealMunger;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Deal;
@@ -75,14 +76,28 @@ class Importer
     private $error;
     private $info;
     private $debug;
+    private $force;
 
     /* @var VautoFileManager */
     private $fileManager;
 
-    public function __construct(JatoClient $jatoClient)
+    /* @var VersionMunger */
+    private $versionManager;
+
+    /* @var DealMunger */
+    private $dealManager;
+
+    public function __construct(
+        JatoClient $jatoClient,
+        VautoFileManager $fileManager,
+        VersionMunger $versionManager,
+        DealMunger $dealManager
+    )
     {
         $this->jatoClient = $jatoClient;
-        $this->fileManager = new VautoFileManager();
+        $this->fileManager = $fileManager;
+        $this->versionManager = $versionManager;
+        $this->dealManager = $dealManager;
 
         $this->debug = [
             'start' => microtime(true),
@@ -186,7 +201,7 @@ class Importer
     {
         try {
             $start = microtime(true);
-            list($version, $versionDebugData) = (new VersionMunger($this->jatoClient))->build($row);
+            list($version, $versionDebugData) = $this->versionManager->build($row);
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             if (isset($versionDebugData['versionPhotos'])) {
@@ -211,9 +226,8 @@ class Importer
                 $this->debug['versionsUpdated']++;
             }
 
-            $dealMunger = resolve('DeliverMyRide\VAuto\Deal\DealMunger');
-            $deal = Deal::withoutSyncingToSearch(function () use ($dealMunger, $version, $row) {
-                return $dealMunger->saveOrUpdateDeal($version, $row['file_hash'], $row);
+            $deal = Deal::withoutSyncingToSearch(function () use ($version, $row) {
+                return $this->dealManager->saveOrUpdateDeal($version, $row['file_hash'], $row);
             });
 
             if ($deal->wasRecentlyCreated) {
@@ -233,8 +247,8 @@ class Importer
             $this->info("    -- Deal Title: {$deal->title()}");
             $this->info('    -- Is New: ' . ($deal->wasRecentlyCreated ? 'Yes' : 'No'));
 
-            $debug = DB::transaction(function () use ($dealMunger, $deal, $row, $start) {
-                return $dealMunger->decorate($deal, $row);
+            $debug = DB::transaction(function () use ($deal, $row, $start) {
+                return $this->dealManager->decorate($deal, $row, $this->force);
             });
 
             $deal->searchable();
@@ -321,11 +335,14 @@ class Importer
     }
 
     /**
+     * @param bool $force
+     * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import()
+    public function import($force = false)
     {
-       \DB::connection()->disableQueryLog();
+        $this->force = $force;
+        \DB::connection()->disableQueryLog();
 
         $sources = $this->buildSourceData();
 
