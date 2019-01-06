@@ -199,6 +199,7 @@ class Version extends Model
         $data = $this->toArray();
         unset($data['model']);
         unset($data['quotes']);
+        unset($data['options']);
         unset($data['updated_at']);
         unset($data['created_at']);
         unset($data['segment']);
@@ -211,6 +212,12 @@ class Version extends Model
         unset($data['jato_uid']);
         unset($data['jato_vehicle_id']);
         unset($data['delivery_price']);
+        unset($data['fuel_econ_city']);
+        unset($data['fuel_econ_hwy']);
+        unset($data['driven_wheels']);
+        unset($data['doors']);
+        unset($data['cab']);
+        unset($data['body_style']);
 
         return $data;
     }

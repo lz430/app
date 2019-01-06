@@ -8,13 +8,14 @@ use App\Models\Deal;
 use App\Models\Dealer;
 use League\Csv\Reader;
 use League\Csv\Statement;
-use App\Models\JATO\Version;
 use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
+use DeliverMyRide\VAuto\Deal\DealMunger;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
+use League\Flysystem\FileExistsException;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
 
@@ -75,14 +76,27 @@ class Importer
     private $error;
     private $info;
     private $debug;
+    private $force;
 
     /* @var VautoFileManager */
     private $fileManager;
 
-    public function __construct(JatoClient $jatoClient)
-    {
+    /* @var VersionMunger */
+    private $versionManager;
+
+    /* @var DealMunger */
+    private $dealManager;
+
+    public function __construct(
+        JatoClient $jatoClient,
+        VautoFileManager $fileManager,
+        VersionMunger $versionManager,
+        DealMunger $dealManager
+    ) {
         $this->jatoClient = $jatoClient;
-        $this->fileManager = new VautoFileManager();
+        $this->fileManager = $fileManager;
+        $this->versionManager = $versionManager;
+        $this->dealManager = $dealManager;
 
         $this->debug = [
             'start' => microtime(true),
@@ -185,7 +199,8 @@ class Importer
     private function processRecord(array $row)
     {
         try {
-            list($version, $versionDebugData) = (new VersionMunger($this->jatoClient))->build($row);
+            $start = microtime(true);
+            list($version, $versionDebugData) = $this->versionManager->build($row);
             $this->info("Deal: {$row['VIN']} - {$row['Stock #']}");
 
             if (isset($versionDebugData['versionPhotos'])) {
@@ -203,14 +218,16 @@ class Importer
 
                 return;
             }
-            if (isset($versionDebugData['versionsCreated'])) {
-                $this->debug['versionsCreated'] = $versionDebugData['versionsCreated'];
-            }
-            if (isset($versionDebugData['versionsUpdated'])) {
-                $this->debug['versionsUpdated'] = $versionDebugData['versionsUpdated'];
+
+            if ($version->wasRecentlyCreated) {
+                $this->debug['versionsCreated']++;
+            } else {
+                $this->debug['versionsUpdated']++;
             }
 
-            $deal = $this->saveOrUpdateDeal($version, $row['file_hash'], $row);
+            $deal = Deal::withoutSyncingToSearch(function () use ($version, $row) {
+                return $this->dealManager->saveOrUpdateDeal($version, $row['file_hash'], $row);
+            });
 
             if ($deal->wasRecentlyCreated) {
                 $this->debug['dealsCreated']++;
@@ -228,33 +245,37 @@ class Importer
             $this->info("    -- Deal ID: {$deal->id}");
             $this->info("    -- Deal Title: {$deal->title()}");
             $this->info('    -- Is New: '.($deal->wasRecentlyCreated ? 'Yes' : 'No'));
-            $dealMunger = resolve('DeliverMyRide\VAuto\Deal\DealMunger');
-            DB::transaction(function () use ($dealMunger, $deal, $row) {
-                $debug = $dealMunger->import($deal, $row);
 
-                // Equipment
-                $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
-
-                if (count($debug['equipment_extracted_codes'])) {
-                    $codes = collect($debug['equipment_extracted_codes'])->pluck('Option Code')->all();
-                    $msg = implode(', ', $codes);
-                    $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
-                }
-
-                // Photos
-                $this->info("    -- Photos: Skipped?: {$debug['deal_photos_skipped']}");
-                $this->info("    -- Photos: Refreshed?: {$debug['deal_photos_refreshed']}");
-                $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
-                $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
-
-                if ($debug['deal_photos_refreshed'] == 'Yes') {
-                    $this->debug['dealPhotosRefreshed']++;
-                }
-
-                if ($debug['stock_photos'] > 0) {
-                    $this->debug['dealStockPhotos']++;
-                }
+            $debug = DB::transaction(function () use ($deal, $row, $start) {
+                return $this->dealManager->decorate($deal, $row, $this->force);
             });
+
+            $deal->searchable();
+
+            // Equipment
+            $this->info("    -- Equipment: Skipped?: {$debug['equipment_skipped']}");
+
+            if (count($debug['options_extracted_codes'])) {
+                $codes = collect($debug['options_extracted_codes'])->pluck('Option Code')->all();
+                $msg = implode(', ', $codes);
+                $this->info("    -- Equipment: Extracted Option Codes: {$msg}");
+            }
+
+            // Photos
+            $this->info("    -- Photos: Skipped?: {$debug['deal_photos_skipped']}");
+            $this->info("    -- Photos: Refreshed?: {$debug['deal_photos_refreshed']}");
+            $this->info("    -- Photos: Deal Photos: {$debug['deal_photos']}");
+            $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
+
+            $stop = microtime(true);
+            $this->info('    -- Took: '.($stop - $start));
+            if ($debug['deal_photos_refreshed'] == 'Yes') {
+                $this->debug['dealPhotosRefreshed']++;
+            }
+
+            if ($debug['stock_photos'] > 0) {
+                $this->debug['dealStockPhotos']++;
+            }
         } catch (ClientException | ServerException $e) {
             Log::channel('jato')->error('Importer error for vin ['.$row['VIN'].']: '.$e->getMessage());
             $this->error('Error: '.$e->getMessage());
@@ -313,10 +334,13 @@ class Importer
     }
 
     /**
+     * @param bool $force
+     * @return bool
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function import()
+    public function import($force = false)
     {
+        $this->force = $force;
         \DB::connection()->disableQueryLog();
 
         $sources = $this->buildSourceData();
@@ -333,17 +357,13 @@ class Importer
             $hashes[] = $source['hash'];
         }
 
-        $this->info('RESULTS ::::');
-
-        $this->info(' -- Created Deals: '.$this->debug['dealsCreated']);
-        $this->info(' -- Updated Deals: '.$this->debug['dealsUpdated']);
-        $this->info(' -- Skipped Deals: '.$this->debug['skipped']);
-
         $queryToDelete = Deal::whereRaw('created_at <= DATE_SUB(NOW(), INTERVAL 6 MONTH)')->whereDoesntHave('purchases');
         $queryUpdateSold = Deal::whereNotIn('file_hash', $hashes)->where('status', '=', 'available');
 
-        //
-        // Delete all the hashes
+        $this->info('RESULTS ::::');
+        $this->info(' -- Created Deals: '.$this->debug['dealsCreated']);
+        $this->info(' -- Updated Deals: '.$this->debug['dealsUpdated']);
+        $this->info(' -- Skipped Deals: '.$this->debug['skipped']);
         $this->info(' -- Records to remove from es: '.$queryUpdateSold->count());
         $this->info(' -- Records to delete from db: '.$queryToDelete->count());
 
@@ -387,8 +407,10 @@ class Importer
 
         Notification::route('slack', config('services.slack.webhook'))
             ->notify(new NotifyToSlackChannel($data));
-
-        $this->fileManager->archiveFiles($sources);
+        try {
+            $this->fileManager->archiveFiles($sources);
+        } catch (FileExistsException $e) {
+        }
 
         return true;
     }
@@ -406,104 +428,5 @@ class Importer
         $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
 
         return ($hours == 0 ? '00' : $hours).' Hours '.($minutes == 0 ? '00' : ($minutes < 10 ? '0'.$minutes : $minutes)).' Minutes '.($seconds == 0 ? '00' : ($seconds < 10 ? '0'.$seconds : $seconds)).' Seconds ';
-    }
-
-    /**
-     * @param array $row
-     * @return \stdClass
-     */
-    private function getDealSourcePrice($row)
-    {
-
-        /**
-         * key: internal value
-         * value: vauto row header.
-         */
-        $map = [
-            'msrp' => 'MSRP',
-            'price' => 'Price',
-            'invoice' => 'Invoice',
-            'sticker' => 'Sticker',
-            'dealerdiscounted' => 'Dealer Discounted',
-            'memoline1' => 'MEMOLINE1',
-            'memoline2' => 'MEMOLINE2',
-            'floorplanamount' => 'FLOORPLANAMOUNT',
-            'salescost' => 'SALESCOST',
-            'invoiceamount' => 'INVOICEAMOUNT',
-        ];
-
-        $return = [];
-
-        foreach ($map as $key => $value) {
-            if ($row[$value]) {
-                $return[$key] = trim($row[$value]);
-            }
-        }
-
-        return (object) $return;
-    }
-
-    /**
-     * @param Version $version
-     * @param string $fileHash
-     * @param array $row
-     * @return Deal
-     */
-    private function saveOrUpdateDeal(Version $version, string $fileHash, array $row): Deal
-    {
-        $pricing = $this->getDealSourcePrice($row);
-        if (! isset($pricing->msrp) && $version->msrp) {
-            $pricing->msrp = $version->msrp;
-        }
-
-        // Remove utf8 chars.
-        if ($row['Features']) {
-            $vauto_features = preg_replace('/[^\x01-\x7F]/', '', $row['Features']);
-        } else {
-            $vauto_features = null;
-        }
-
-        /* @var Deal $deal */
-        $deal = Deal::updateOrCreate([
-            'vin' => $row['VIN'],
-        ], [
-            'file_hash' => $fileHash,
-            'dealer_id' => $row['DealerId'],
-            'stock_number' => $row['Stock #'],
-            'vin' => $row['VIN'],
-            'new' => $row['New/Used'] === 'N',
-            'year' => $row['Year'],
-            'make' => $row['Make'],
-            'model' => $row['Model'],
-            'model_code' => $row['Model Code'],
-            'body' => $row['Body'],
-            'transmission' => $row['Transmission'],
-            'series' => $row['Series'],
-            'series_detail' => $row['Series Detail'],
-            'door_count' => $row['Door Count'],
-            'odometer' => $row['Odometer'],
-            'engine' => $row['Engine'],
-            'fuel' => $row['Fuel'],
-            'color' => $row['Colour'],
-            'interior_color' => $row['Interior Color'],
-            'price' => isset($pricing->price) ? $pricing->price : null,
-            'msrp' => (isset($pricing->msrp) && (strlen($pricing->msrp) <= 6)) ? $pricing->msrp : ((strlen($pricing->msrp) > 6) ? substr($pricing->msrp, 0, 6) : null),
-            'vauto_features' => $vauto_features,
-            'inventory_date' => Carbon::createFromFormat('m/d/Y', $row['Inventory Date']),
-            'certified' => $row['Certified'] === 'Yes',
-            'description' => $row['Description'],
-            'option_codes' => array_filter(explode(',', $row['Option Codes'])),
-            'fuel_econ_city' => (is_numeric($row['City MPG'])) ? $row['City MPG'] : 0,
-            'fuel_econ_hwy' => (is_numeric($row['Highway MPG'])) ? $row['Highway MPG'] : 0,
-            'dealer_name' => $row['Dealer Name'],
-            'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
-            'version_id' => $version->id,
-            'source_price' => $pricing,
-            // TODO: we should mark things as available if they are in the feed, but only if they weren't sold via DMR somehow.
-            'status' => 'available',
-            'sold_at' => null,
-        ]);
-
-        return $deal;
     }
 }

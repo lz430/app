@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Deal;
-use DeliverMyRide\JATO\JatoClient;
 use App\Http\Controllers\Controller;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
@@ -46,11 +45,9 @@ class DealDataController extends Controller
 
     /**
      * @param Deal $deal
-     * @param JatoClient $client
-     * @param BuildEquipmentData $equipmentDataManager
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function show(Deal $deal, BuildEquipmentData $equipmentDataManager)
+    public function show(Deal $deal)
     {
         $this->deal = $deal;
         $this->version = $deal->version;
@@ -70,7 +67,7 @@ class DealDataController extends Controller
             'model' => $this->version->toArray(),
         ];
 
-        $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), true);
+        $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), $deal, false, true);
 
         $equipment = collect($equipment)->groupBy('category');
         $data = [

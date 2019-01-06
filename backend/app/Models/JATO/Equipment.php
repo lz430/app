@@ -75,4 +75,21 @@ class Equipment extends Model
     {
         return $this->belongsToMany(Deal::class);
     }
+
+    /**
+     * We use this to override standard equipment
+     * with optional. The extra e is because when merging
+     * arrays by key, if it's numerical the array is appended
+     * but if it's a string, the values are overridden.
+     * @return int|string
+     */
+    public function slug()
+    {
+        $slug = 'e-'.(string) $this->schema_id;
+        if ($this->location) {
+            $slug .= '-'.str_slug($this->location);
+        }
+
+        return $slug;
+    }
 }

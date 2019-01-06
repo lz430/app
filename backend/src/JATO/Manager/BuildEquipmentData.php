@@ -2,9 +2,36 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
+use App\Models\Deal;
+use Illuminate\Support\Collection;
+
 class BuildEquipmentData
 {
+    private const EQUIPMENT_TO_SKIP = [
+        'Internal dimensions',
+        'Crash test results',
+        'Front seat belts',
+        'Rear seat belts',
+        'Axle ratio :1',
+        'Powertrain type',
+        'Bumpers',
+        'Exterior door handles',
+        'Paint',
+        'Rear door',
+        'Rear axle',
+        'Cargo capacity',
+        'Emission control level',
+        'Additional fuel types',
+    ];
+
+    private const CATEGORIES_TO_SKIP = [
+        'Pricing',
+        'General',
+    ];
+
     /* @var \App\Models\Deal */
+    private $deal;
+
     private $equipment;
 
     /* @var bool */
@@ -472,44 +499,69 @@ class BuildEquipmentData
         return $labels;
     }
 
-    private function labelEquipmentOnDeal()
+    private function labelEquipmentOnDeal($removeDuplicateLabels = true)
     {
         $labeledEquipment = [];
         foreach ($this->equipment as $category => $equipments) {
-            if (is_array($equipments)) {
-                foreach ($equipments as $equipment) {
-                    $labels = $this->getLabelsForJatoEquipment($equipment);
-                    foreach ($labels as $schemaId => $label) {
-                        $data = [
-                            'category' => $category,
-                            'label' => $label['label'],
-                            'value' => $label['value'],
-                            'option_code' => $equipment->option_id,
-                        ];
+            foreach ($equipments as $equipment) {
+                $labels = $this->getLabelsForJatoEquipment($equipment);
+                foreach ($labels as $schemaId => $label) {
+                    $data = [
+                        'category' => $category,
+                        'label' => $label['label'],
+                        'value' => $label['value'],
+                        'option_code' => $equipment->option_id,
+                    ];
 
-                        if (isset($label['meta'])) {
-                            $data['meta'] = $label['meta'];
-                        }
-
-                        $labeledEquipment[] = $data;
+                    if (isset($label['meta'])) {
+                        $data['meta'] = $label['meta'];
                     }
+
+                    $labeledEquipment[] = $data;
                 }
             }
         }
-        $this->equipmentOnDeal = $labeledEquipment;
+
+        if ($removeDuplicateLabels) {
+            $labeledEquipment = collect($labeledEquipment)->keyBy('label')->all();
+        }
+
+        $this->equipmentOnDeal = array_values($labeledEquipment);
     }
 
     /**
-     * @param array $equipment
+     * @param Collection $equipment
+     * @param Deal $deal
+     * @param bool $removeDuplicateLabels
      * @param bool $debug
      * @return mixed
      */
-    public function build(array $equipment = [], $debug = false)
+    public function build(Collection $equipment, Deal $deal, bool $removeDuplicateLabels = true, bool $debug = false)
     {
+        $this->deal = $deal;
         $this->equipment = $equipment;
         $this->debug = $debug;
 
-        $this->labelEquipmentOnDeal();
+        //
+        // Include standard Text
+        $this->standardEquipmentText = $this->deal->version->standard_text->keyBy('schema_id');
+
+        //
+        // Categorize and reduce equipment
+        $this->equipment = $equipment
+            ->reject(function ($equipment) {
+                if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
+                    return true;
+                }
+
+                if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
+                    return true;
+                }
+
+                return false;
+            })->groupBy('category', true);
+
+        $this->labelEquipmentOnDeal($removeDuplicateLabels);
 
         return $this->equipmentOnDeal;
     }
