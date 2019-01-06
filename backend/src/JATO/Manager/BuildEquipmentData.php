@@ -400,13 +400,38 @@ class BuildEquipmentData
                 }
                 break;
             case 'Transmission':
-                if (isset($attributes['Transmission type'])) {
-                    $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
-                    $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
-                        'Transmission',
-                        "{$speeds} speed {$attributes['Transmission type']->value}",
-                        $customMeta);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'transmission description',
+                    'Transmission description',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'number of speeds',
+                    'Number of speeds',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'manufacturer\'s name',
+                    'Transmission Name',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'gearchange paddles',
+                    'Gearchange paddles',
+                    [],
+                    $customMeta
+                );
                 break;
             case 'Weights':
                 if (isset($attributes['gross vehicle weight (lbs)'])) {
