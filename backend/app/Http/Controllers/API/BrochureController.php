@@ -20,7 +20,7 @@ class BrochureController extends BaseAPIController
             $request,
             [
                 'form' => 'required|string',
-                'g_recaptcha_response' => 'required|captcha',
+                'g_recaptcha_response' => 'required|string',
 
                 // All forms
                 'firstname' => 'required|string',
