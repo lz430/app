@@ -136,6 +136,7 @@ class DealMunger
             $options_debug = $this->optionsManager->import($deal, $force);
             $equipment_debug = $this->equipmentManager->import($deal, $force);
             $photos_debug = $this->photoManager->import($deal, $data, $force);
+
             return array_merge($debug, $options_debug, $equipment_debug, $photos_debug);
         });
 

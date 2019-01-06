@@ -2,7 +2,6 @@
 
 namespace DeliverMyRide\VAuto;
 
-use DeliverMyRide\VAuto\Deal\DealMunger;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Deal;
@@ -13,6 +12,7 @@ use DeliverMyRide\JATO\JatoClient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\QueryException;
+use DeliverMyRide\VAuto\Deal\DealMunger;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use League\Flysystem\FileExistsException;
@@ -92,8 +92,7 @@ class Importer
         VautoFileManager $fileManager,
         VersionMunger $versionManager,
         DealMunger $dealManager
-    )
-    {
+    ) {
         $this->jatoClient = $jatoClient;
         $this->fileManager = $fileManager;
         $this->versionManager = $versionManager;
@@ -155,7 +154,7 @@ class Importer
         $reader = Reader::createFromPath($source['path'], 'r');
         $stmt = (new Statement())
             ->where(function ($row) {
-                return !$this->skipSourceRecord($row);
+                return ! $this->skipSourceRecord($row);
             });
 
         $records = $stmt->process($reader, self::HEADERS);
@@ -210,7 +209,7 @@ class Importer
 
             //
             // Fail if we don't have a version
-            if (!$version) {
+            if (! $version) {
                 Log::channel('jato')->error('Could not find exact match for VIN -> JATO Version', [
                     'VAuto Row' => $row,
                 ]);
@@ -245,7 +244,7 @@ class Importer
             $this->info("    -- Version ID: {$version->id}");
             $this->info("    -- Deal ID: {$deal->id}");
             $this->info("    -- Deal Title: {$deal->title()}");
-            $this->info('    -- Is New: ' . ($deal->wasRecentlyCreated ? 'Yes' : 'No'));
+            $this->info('    -- Is New: '.($deal->wasRecentlyCreated ? 'Yes' : 'No'));
 
             $debug = DB::transaction(function () use ($deal, $row, $start) {
                 return $this->dealManager->decorate($deal, $row, $this->force);
@@ -269,7 +268,7 @@ class Importer
             $this->info("    -- Photos: Stock Photos: {$debug['stock_photos']}");
 
             $stop = microtime(true);
-            $this->info("    -- Took: " . ($stop - $start));
+            $this->info('    -- Took: '.($stop - $start));
             if ($debug['deal_photos_refreshed'] == 'Yes') {
                 $this->debug['dealPhotosRefreshed']++;
             }
@@ -278,8 +277,8 @@ class Importer
                 $this->debug['dealStockPhotos']++;
             }
         } catch (ClientException | ServerException $e) {
-            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::channel('jato')->error('Importer error for vin ['.$row['VIN'].']: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
@@ -289,8 +288,8 @@ class Importer
                 throw $e;
             }
         } catch (QueryException | Exception $e) {
-            Log::channel('jato')->error('Importer error for vin [' . $row['VIN'] . ']: ' . $e->getMessage());
-            $this->error('Error: ' . $e->getMessage());
+            Log::channel('jato')->error('Importer error for vin ['.$row['VIN'].']: '.$e->getMessage());
+            $this->error('Error: '.$e->getMessage());
             app('sentry')->captureException($e);
             $querySetErrorStatus = Deal::where('vin', $row['VIN']);
             $querySetErrorStatus->update(['status' => 'error']);
@@ -323,7 +322,7 @@ class Importer
         }
 
         $dealer = Dealer::where('dealer_id', $row['DealerId'])->first();
-        if (!$dealer) {
+        if (! $dealer) {
             $skip = true;
         }
 
@@ -346,7 +345,7 @@ class Importer
 
         $sources = $this->buildSourceData();
 
-        if (!count($sources)) {
+        if (! count($sources)) {
             $this->info('No Files found to import!');
 
             return false;
@@ -362,11 +361,11 @@ class Importer
         $queryUpdateSold = Deal::whereNotIn('file_hash', $hashes)->where('status', '=', 'available');
 
         $this->info('RESULTS ::::');
-        $this->info(' -- Created Deals: ' . $this->debug['dealsCreated']);
-        $this->info(' -- Updated Deals: ' . $this->debug['dealsUpdated']);
-        $this->info(' -- Skipped Deals: ' . $this->debug['skipped']);
-        $this->info(' -- Records to remove from es: ' . $queryUpdateSold->count());
-        $this->info(' -- Records to delete from db: ' . $queryToDelete->count());
+        $this->info(' -- Created Deals: '.$this->debug['dealsCreated']);
+        $this->info(' -- Updated Deals: '.$this->debug['dealsUpdated']);
+        $this->info(' -- Skipped Deals: '.$this->debug['skipped']);
+        $this->info(' -- Records to remove from es: '.$queryUpdateSold->count());
+        $this->info(' -- Records to delete from db: '.$queryToDelete->count());
 
         // Sets status of deals that are not in feed to sold
         $queryUpdateSold->update(
@@ -424,10 +423,10 @@ class Importer
     private function formatTimePeriod($endTime, $startTime)
     {
         $duration = $endTime - $startTime;
-        $hours = (int)($duration / 60 / 60);
-        $minutes = (int)($duration / 60) - $hours * 60;
-        $seconds = (int)$duration - $hours * 60 * 60 - $minutes * 60;
+        $hours = (int) ($duration / 60 / 60);
+        $minutes = (int) ($duration / 60) - $hours * 60;
+        $seconds = (int) $duration - $hours * 60 * 60 - $minutes * 60;
 
-        return ($hours == 0 ? '00' : $hours) . ' Hours ' . ($minutes == 0 ? '00' : ($minutes < 10 ? '0' . $minutes : $minutes)) . ' Minutes ' . ($seconds == 0 ? '00' : ($seconds < 10 ? '0' . $seconds : $seconds)) . ' Seconds ';
+        return ($hours == 0 ? '00' : $hours).' Hours '.($minutes == 0 ? '00' : ($minutes < 10 ? '0'.$minutes : $minutes)).' Minutes '.($seconds == 0 ? '00' : ($seconds < 10 ? '0'.$seconds : $seconds)).' Seconds ';
     }
 }

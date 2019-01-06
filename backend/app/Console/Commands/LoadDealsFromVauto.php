@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use DB;
 use Illuminate\Console\Command;
 use DeliverMyRide\VAuto\Importer;
 
