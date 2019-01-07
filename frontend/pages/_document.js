@@ -29,8 +29,11 @@ export default class MyDocument extends Document {
                         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
                     />
                     <meta name="theme-color" content="#41b1ac" />
+                    {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
+                        <meta name="robots" content="noindex,nofollow" />
+                    )}
 
-                    <link rel="shortcut icon" href="/favicon.ico" />
+                    <link rel=" shortcut icon" href="/favicon.ico" />
                     <link
                         href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
                         rel="stylesheet"

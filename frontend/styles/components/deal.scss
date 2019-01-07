@@ -224,7 +224,10 @@
             }
         }
         .content {
-            font-size: 1.2rem;
+            font-size: 1rem;
+            @include media-breakpoint-up(md) {
+                font-size: 1.2rem;
+            }
         }
     }
 
@@ -456,10 +459,14 @@
         }
 
         &-detail {
-            padding: 15px;
-
             &:nth-child(even) {
                 background: #f6f6f6;
+            }
+            > h5 {
+                padding: 15px;
+            }
+            > div {
+                padding: 0 15px 15px 15px;
             }
 
             &-item {
@@ -489,5 +496,8 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    column-count: 4;
+    column-count: 2;
+    @include media-breakpoint-up(md) {
+        column-count: 4;
+    }
 }

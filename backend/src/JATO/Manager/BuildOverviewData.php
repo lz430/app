@@ -2,6 +2,8 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
+use Illuminate\Support\Collection;
+
 class BuildOverviewData
 {
     /* @var \App\Models\Deal */
@@ -68,6 +70,15 @@ class BuildOverviewData
                         'from' => 'Custom',
                     ]);
             }
+            if (isset($attributes['transmission description'])) {
+                $labels[$attributes['transmission description']->schemaId] = $this->itemFactory(
+                    'Transmission Description',
+                    "{$attributes['transmission description']->value}",
+                    [
+                        'equipment' => $equipments,
+                        'from' => 'Custom',
+                    ]);
+            }
         }
         if ($equipments->name == 'Fuel economy') {
             if (isset($attributes['urban (mpg)'])) {
@@ -100,6 +111,7 @@ class BuildOverviewData
                     'from' => 'Custom',
                 ]);
         }
+        /*
         if ($equipments->name == 'Wheels') {
             if (isset($attributes['rim type'])) {
                 $labels[$attributes['rim type']->schemaId] = $this->itemFactory(
@@ -120,7 +132,7 @@ class BuildOverviewData
                     ]);
             }
         }
-
+        */
         return $labels;
     }
 
@@ -147,18 +159,20 @@ class BuildOverviewData
                 }
             }
         }
+
         $this->equipmentOnDeal = $labeledEquipment;
     }
 
     /**
-     * @param array $equipment
+     * @param Collection $equipment
      * @param bool $debug
      * @return mixed
      */
-    public function build($equipment = [], $debug = false)
+    public function build(Collection $equipment, $debug = false)
     {
-        $this->equipment = $equipment;
         $this->debug = $debug;
+        $this->equipment = $equipment
+            ->groupBy('category', true);
 
         $this->labelEquipmentOnDeal();
 
