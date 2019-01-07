@@ -115,6 +115,10 @@
     }
 
     &__contact {
+        @include media-breakpoint-down(sm) {
+            margin-top: 25px;
+        }
+
         input[type='text'],
         textarea,
         input[type='email'],
@@ -499,5 +503,9 @@
     column-count: 2;
     @include media-breakpoint-up(md) {
         column-count: 4;
+    }
+    li {
+        padding: 5px;
+        word-break: normal;
     }
 }
