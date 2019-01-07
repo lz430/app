@@ -3,8 +3,9 @@
 namespace App\Observers;
 
 use App\Models\User;
-use App\Mail\UserCreated;
-use Illuminate\Support\Facades\Mail;
+
+//use App\Mail\UserCreated;
+//use Illuminate\Support\Facades\Mail;
 
 class UserObserver
 {
@@ -18,6 +19,6 @@ class UserObserver
     {
         //
         // Send welcome email
-        Mail::to($user->email)->send(new UserCreated($user));
+        // Mail::to($user->email)->send(new UserCreated($user));
     }
 }
