@@ -111,6 +111,7 @@ class BuildOverviewData
                     'from' => 'Custom',
                 ]);
         }
+        /*
         if ($equipments->name == 'Wheels') {
             if (isset($attributes['rim type'])) {
                 $labels[$attributes['rim type']->schemaId] = $this->itemFactory(
@@ -131,7 +132,7 @@ class BuildOverviewData
                     ]);
             }
         }
-
+        */
         return $labels;
     }
 
