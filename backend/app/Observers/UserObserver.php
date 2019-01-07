@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\User;
+
 //use App\Mail\UserCreated;
 //use Illuminate\Support\Facades\Mail;
 
