@@ -15,7 +15,7 @@
 use Carbon\Carbon;
 use App\Models\Feature;
 use App\Models\Category;
-use App\Models\JatoFeature;
+use Illuminate\Support\Facades\Hash;
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
@@ -23,10 +23,17 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
         'last_name' => $faker->lastName,
         'email' => $faker->unique()->safeEmail,
         'phone_number' => $faker->phoneNumber,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm',
+        'password' => Hash::make('myfakepassword'),
         'remember_token' => str_random(10),
         'drivers_license_number' => str_random(10),
         'drivers_license_state' => str_random(2),
+    ];
+});
+
+$factory->define(App\Models\UserPasswordReset::class, function (Faker\Generator $faker) {
+    return [
+        'email' => $faker->unique()->safeEmail,
+        'token' => str_random(10),
     ];
 });
 
@@ -58,9 +65,9 @@ $factory->define(App\Models\JATO\VehicleModel::class, function (Faker\Generator 
 
 $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $faker) {
     return [
-        'jato_vehicle_id' => $faker->randomNumber(),
-        'jato_uid' => $faker->randomNumber(),
-        'jato_model_id' => $faker->randomNumber(),
+        'jato_vehicle_id' => $faker->unique()->randomNumber(),
+        'jato_uid' => $faker->unique()->randomNumber(),
+        'jato_model_id' => $faker->unique()->randomNumber(),
         'model_id' => factory(App\Models\JATO\VehicleModel::class),
         'year' => $faker->year,
         'name' => $faker->name,
@@ -83,7 +90,13 @@ $factory->define(App\Models\JATO\Version::class, function (Faker\Generator $fake
 $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
     return [
         'file_hash' => $faker->md5,
-        'dealer_id' => factory(App\Models\Dealer::class)->create()->dealer_id,
+        'dealer_id' => function () {
+            return factory(App\Models\Dealer::class)->create()->dealer_id;
+        },
+        'version_id' => function () {
+            return factory(App\Models\JATO\Version::class)->create()->id;
+        },
+        'status' => 'available',
         'stock_number' => 'AH2844A',
         'vin' => '3C4NJDBB4HT628358',
         'new' => true,
@@ -110,13 +123,10 @@ $factory->define(App\Models\Deal::class, function (Faker\Generator $faker) {
         'fuel_econ_hwy' => null,
         'dealer_name' => 'Suburban Chrysler Jeep Dodge of Troy',
         'days_old' => 11,
-    ];
-});
-
-$factory->define(App\Models\JatoFeature::class, function (Faker\Generator $faker) {
-    return [
-        'feature' => $faker->unique()->randomElement(JatoFeature::WHITELIST),
-        'group' => $faker->randomElement(JatoFeature::SYNC_GROUPS)['title'],
+        'option_codes' => [],
+        'package_codes' => [],
+        'source_price' => (object) [],
+        'payments' => (object) [],
     ];
 });
 
@@ -130,7 +140,7 @@ $factory->define(App\Models\Dealer::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Models\Purchase::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Order\Purchase::class, function (Faker\Generator $faker) {
     return [
         'type' => 'cash',
         'deal_id' => factory(App\Models\Deal::class),
@@ -138,23 +148,25 @@ $factory->define(App\Models\Purchase::class, function (Faker\Generator $faker) {
         'dmr_price' => 30000,
         'monthly_payment' => 500,
         'msrp' => 28000,
+        'rebates' => (new \App\Services\Quote\Factories\FakeQuote())->get()->rebates,
+        'trade' => (object) [],
     ];
 });
 
 $factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
     return [
-        'title'                     => $faker->unique()->company,
-        'slug'                      => $faker->unique()->slug,
-        'display_order'             => rand(1, 200),
+        'title' => $faker->unique()->company,
+        'slug' => $faker->unique()->slug,
+        'display_order' => rand(1, 200),
     ];
 });
 
 $factory->define(Feature::class, function (Faker\Generator $faker) {
     return [
-        'title'             => 'First Feature',
-        'slug'              => 'first-feature',
-        'category_id'       => factory(Category::class)->create(),
-        'display_order'     => 1,
-        'jato_schema_ids'   => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
+        'title' => 'First Feature',
+        'slug' => 'first-feature',
+        'category_id' => factory(Category::class)->create(),
+        'display_order' => 1,
+        'jato_schema_ids' => collect([$faker->randomNumber(5), $faker->randomNumber(5)])->toJson(),
     ];
 });

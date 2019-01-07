@@ -10,7 +10,6 @@ class DealListSearchTransformer extends TransformerAbstract
     public function transform(array $document)
     {
         $deal = (object) $document['_source'];
-        $dealer = (object) $deal->dealer;
         $fields = (isset($document['fields']) ? $document['fields'] : []);
 
         //compares feature id of color attribute to map and gets hex value back for use for swatch
@@ -41,12 +40,6 @@ class DealListSearchTransformer extends TransformerAbstract
             'pricing' => $deal->pricing,
 
             'fees' => (isset($deal->fees) ? $deal->fees : null),
-
-            // TODO: refactor frontend to use the fees values instead.
-            'doc_fee' => (float) $dealer->doc_fee,
-            'cvr_fee' => (float) $dealer->cvr_fee,
-            'registration_fee' => (float) $dealer->registration_fee,
-            'acquisition_fee' => (float) $dealer->acquisition_fee,
         ];
     }
 }

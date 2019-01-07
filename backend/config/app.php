@@ -52,9 +52,9 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost:5000'),
-
     'marketing_url' => env('MARKETING_URL', 'http://localhost'),
-
+    'default_date_format'     => 'j F Y',
+    'default_datetime_format' => 'F j, Y g:s a',
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -168,7 +168,6 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\JATOServiceProvider::class,
         Spatie\Fractal\FractalServiceProvider::class,
-        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         App\Providers\ScoutElasticServiceProvider::class,
         App\Providers\HubSpotServiceProvider::class,
     ],

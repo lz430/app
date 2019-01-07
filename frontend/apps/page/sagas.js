@@ -33,7 +33,7 @@ export function* initPage(page, handlePageLoadingFinished = true) {
         yield put(pageLoadingStart());
     }
 
-    yield* requestIpLocation();
+    yield* requestIpLocation({});
 
     if (handlePageLoadingFinished) {
         yield put(pageLoadingFinished());

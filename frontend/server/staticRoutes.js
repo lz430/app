@@ -1,5 +1,6 @@
 const sm = require('sitemap');
 const { join } = require('path');
+const isProduction = process.env.REACT_APP_ENVIRONMENT === 'production';
 
 const sitemap = sm.createSitemap({
     hostname: 'https://delivermyride.com',
@@ -67,7 +68,12 @@ const setup = ({ server, app }) => {
     });
 
     server.get('/robots.txt', (req, res) => {
-        const path = join(__dirname, '../static', 'robots.txt');
+        let file = 'robots.txt';
+        if (!isProduction) {
+            file = 'robots-dev.txt';
+        }
+        const path = join(__dirname, '../static', file);
+
         res.sendFile(path);
     });
 };

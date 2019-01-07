@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Equipment whereValue($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Equipment whereVersionId($value)
  * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\JATO\Equipment whereAspects($value)
  */
 class Equipment extends Model
 {
@@ -73,5 +74,22 @@ class Equipment extends Model
     public function deals() : BelongsToMany
     {
         return $this->belongsToMany(Deal::class);
+    }
+
+    /**
+     * We use this to override standard equipment
+     * with optional. The extra e is because when merging
+     * arrays by key, if it's numerical the array is appended
+     * but if it's a string, the values are overridden.
+     * @return int|string
+     */
+    public function slug()
+    {
+        $slug = 'e-'.(string) $this->schema_id;
+        if ($this->location) {
+            $slug .= '-'.str_slug($this->location);
+        }
+
+        return $slug;
     }
 }

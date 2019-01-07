@@ -18,10 +18,19 @@ export function receiveLocation(data) {
     };
 }
 
-export function requestLocation(data) {
+export function requestIpLocation(ip, session = null) {
+    return {
+        type: ActionTypes.REQUEST_IP_LOCATION_INFO,
+        ip: ip,
+        session: session,
+    };
+}
+
+export function requestLocation(data, session = null) {
     return {
         type: ActionTypes.REQUEST_LOCATION,
         data: data,
+        session: session,
     };
 }
 
@@ -31,5 +40,43 @@ export function setPurchaseStrategy(data) {
     return {
         type: ActionTypes.SET_PURCHASE_STRATEGY,
         data: data,
+    };
+}
+
+/**
+ *
+ * @param values
+ * @param actions
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function loginUser(values, actions) {
+    return {
+        type: ActionTypes.LOGIN_USER,
+        values: values,
+        actions: actions,
+    };
+}
+
+/**
+ *
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function logoutUser() {
+    return {
+        type: ActionTypes.LOGOUT_USER,
+    };
+}
+
+/**
+ *
+ * @param values
+ * @param actions
+ * @returns {{type: string, token: *, actions: *}}
+ */
+export function updateUser(values, actions) {
+    return {
+        type: ActionTypes.UPDATE_USER,
+        values: values,
+        actions: actions,
     };
 }

@@ -1,7 +1,7 @@
-<a role="button" data-toggle="collapse" href="#{{$prefix . $equipment->schema_id}}">
+<a role="button" data-toggle="collapse" href="#{{$prefix . $equipment->slug()}}">
     Extra Data
 </a>
-<div class="collapse" id="{{$prefix . $equipment->schema_id}}">
+<div class="collapse" id="{{$prefix . $equipment->slug()}}">
     <table class="table table-hover">
         <tr>
             <td>name</td>
@@ -10,6 +10,11 @@
         <tr>
             <td>availability</td>
             <td>{{$equipment->availability}}</td>
+        </tr>
+
+        <tr>
+            <td>package</td>
+            <td>{{$equipment->option_id}}</td>
         </tr>
         <tr>
             <td>location</td>

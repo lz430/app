@@ -70,8 +70,8 @@ export default class Pricing {
 
     taxRate = () => 0.06;
 
-    docFee = () => fromWholeDollars(this.data.deal.doc_fee);
-    cvrFee = () => fromWholeDollars(this.data.deal.cvr_fee);
+    docFee = () => fromWholeDollars(this.data.deal.fees.doc);
+    cvrFee = () => fromWholeDollars(this.data.deal.fees.cvr);
 
     defaultPrice = () => fromWholeDollars(this.data.deal.pricing.default);
     employeePrice = () => fromWholeDollars(this.data.deal.pricing.employee);

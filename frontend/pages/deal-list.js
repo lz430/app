@@ -10,9 +10,9 @@ export default class Page extends React.Component {
         query: PropTypes.object,
     };
 
-    static async getInitialProps({ ctx }) {
+    static async getInitialProps({ query }) {
         return {
-            query: ctx.query,
+            query: query,
         };
     }
 

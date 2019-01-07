@@ -3,7 +3,7 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use App\Models\Deal;
-use App\Models\JATO\Version;
+use Illuminate\Support\Collection;
 
 class BuildEquipmentData
 {
@@ -32,101 +32,13 @@ class BuildEquipmentData
     /* @var \App\Models\Deal */
     private $deal;
 
+    private $equipment;
+
     /* @var bool */
     private $debug;
 
     private $standardEquipmentText;
     private $equipmentOnDeal;
-
-    private function buildStandardEquipmentText()
-    {
-        $data = Version::with('standard_text')->where('id', $this->deal->version_id)->get();
-
-        return $data;
-    }
-
-    private function findStandardDealEquipment()
-    {
-        $data = Version::with(['equipment' => function ($query) {
-            $query->where('availability', 'standard');
-        }])->where('id', $this->deal->version_id)->get();
-
-        return $data;
-    }
-
-    private function findOptionalDealEquipment()
-    {
-        $codes = array_merge(
-            $this->deal->package_codes ? $this->deal->package_codes : [],
-            $this->deal->option_codes ? $this->deal->option_codes : []
-        );
-
-        $data = Version::with(['equipment' => function ($query) {
-            $query->where('availability', 'optional');
-        }])->with(['options' => function ($query) use ($codes) {
-            $query->whereIn('option_code', $codes);
-        }])->where('id', $this->deal->version_id)->get();
-
-        return $data;
-    }
-
-    private function compileEquipmentData()
-    {
-        //
-        // Build standard text
-        $text = [];
-        foreach ($this->buildStandardEquipmentText() as $item) {
-            foreach ($item->standard_text as $st) {
-                $text[$st->schema_id] = $st;
-            }
-        }
-        $this->standardEquipmentText = $text;
-    }
-
-    private function dealEquipment()
-    {
-        //
-        // Find standard equipment.
-        $data = [];
-        $equipments = $this->findStandardDealEquipment();
-
-        foreach ($equipments as $equipment) {
-            foreach ($equipment->equipment as $equip) {
-                $data[$equip->schema_id] = $equip;
-            }
-        }
-        $this->equipmentOnDeal = $data;
-
-        //
-        // Find optional equipment
-        foreach ($this->findOptionalDealEquipment() as $equipment) {
-            foreach ($equipment->equipment as $equip) {
-                $this->equipmentOnDeal[$equip->schema_id] = $equip;
-            }
-        }
-    }
-
-    private function organizeEquipmentOnDeal()
-    {
-        $equipmentCategories = [];
-
-        foreach ($this->equipmentOnDeal as $equipment) {
-            if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
-                continue;
-            }
-
-            if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
-                continue;
-            }
-
-            if (! isset($equipmentCategories[$equipment->category])) {
-                $equipmentCategories[$equipment->category] = [];
-            }
-
-            $equipmentCategories[$equipment->category][$equipment->schema_id] = $equipment;
-        }
-        $this->equipmentOnDeal = $equipmentCategories;
-    }
 
     private function itemFactory($label, $value, $meta = [])
     {
@@ -142,6 +54,40 @@ class BuildEquipmentData
         return $emptyItem;
     }
 
+    private function addItemFactoryFromSingleAttribute(array &$labels,
+                                                       array $attributes,
+                                                       string $attributeName,
+                                                       string $label,
+                                                       array $mods = [],
+                                                       array $meta = [])
+    {
+        if (! isset($attributes[$attributeName])) {
+            return;
+        }
+
+        if (in_array($attributes[$attributeName]->value, ['no', 'none', '-'])) {
+            return;
+        }
+
+        $attribute = $attributes[$attributeName];
+
+        $value = [];
+        if (isset($mods['prefix'])) {
+            $value[] = $mods['prefix'];
+        }
+        if (in_array($attribute->value, ['yes'])) {
+            $value[] = 'Included';
+        } else {
+            $value[] = ucwords($attribute->value);
+        }
+
+        if (isset($mods['suffix'])) {
+            $value[] = $mods['suffix'];
+        }
+
+        $labels[$attribute->schemaId] = $this->itemFactory($label, implode(' ', $value), $meta);
+    }
+
     /**
      * @param $equipments
      * @return mixed
@@ -154,76 +100,338 @@ class BuildEquipmentData
         foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
+
+        $customMeta = [
+            'equipment' => $equipments,
+            'from' => 'Custom',
+        ];
+
         switch ($equipments->name) {
+            case 'Performance':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'acceleration 0-60 mph',
+                    '0-60 mph in',
+                    ['suffix' => 'Seconds'],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'maximum speed (mph)',
+                    'maximum speed (mph)',
+                    [
+                        'suffix' => 'MPH',
+                    ],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'maximum speed (mph)',
+                    'maximum speed (mph)',
+                    ['suffix' => 'MPH'],
+                    $customMeta
+                );
+
+                break;
+            case 'Power':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'maximum torque lb ft',
+                    'Max Torque LB FT',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'Maximum power hp/PS',
+                    'Horsepower',
+                    [],
+                    $customMeta
+                );
+                break;
+            case 'Fuel system':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'injection/carburetion',
+                    'Fuel system',
+                    [],
+                    $customMeta
+                );
+                break;
+            case 'Speakers':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'brand name',
+                    'Sound: Brand',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'number of',
+                    'Sound: Number of speakers',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'surround sound',
+                    'Sound: Surround Sound',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'subwoofer',
+                    'Sound: Subwoofer',
+                    [],
+                    $customMeta
+                );
+                break;
+            case 'Mobile Integration':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'Apple CarPlay',
+                    'Apple CarPlay',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'Android Auto',
+                    'Android Auto',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'MirrorLink',
+                    'MirrorLink',
+                    [],
+                    $customMeta
+                );
+                break;
             case 'External dimensions':
-                if (isset($attributes['overall length (in)'])) {
-                    $overallLength = isset($attributes['overall length (in)']) ? $attributes['overall length (in)']->value : '';
-                    $overallWidth = isset($attributes['overall width (in)']) ? $attributes['overall width (in)']->value : '';
-                    $overallHeight = isset($attributes['overall height (in)']) ? $attributes['overall height (in)']->value : '';
-                    $labels[$attributes['overall length (in)']->schemaId] = $this->itemFactory(
-                        'External',
-                        "L: {$overallLength}\" - W: {$overallWidth}\" - H: {$overallHeight}\"",
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'overall length (in)',
+                    'Overall length',
+                    ['suffix' => 'In'],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'overall width (in)',
+                    'Overall width',
+                    ['suffix' => 'In'],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'overall height (in)',
+                    'Overall height',
+                    ['suffix' => 'In'],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'wheelbase (in)',
+                    'Wheelbase',
+                    ['suffix' => 'In'],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'curb to curb turning circle (ft)	',
+                    'Turning Circle',
+                    ['suffix' => 'Feet'],
+                    $customMeta
+                );
                 break;
             case 'Fuel economy':
-                if (isset($attributes['urban (mpg)'])) {
-                    $labels[$attributes['urban (mpg)']->schemaId] = $this->itemFactory(
-                        'City MPG',
-                        $attributes['urban (mpg)']->value,
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'urban (mpg)',
+                    'City MPG',
+                    [],
+                    $customMeta
+                );
 
-                if (isset($attributes['country/highway (mpg)'])) {
-                    $labels[$attributes['country/highway (mpg)']->schemaId] = $this->itemFactory(
-                        'Highway MPG',
-                        $attributes['country/highway (mpg)']->value,
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'country/highway (mpg)',
+                    'Highway MPG',
+                    [],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'combined (mpg)',
+                    'Combined MPG',
+                    [],
+                    $customMeta
+                );
+
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'combined vehicle range (miles)',
+                    'Estimated range',
+                    ['suffix' => 'Miles'],
+                    $customMeta
+                );
 
                 break;
             case 'Wheels':
-                if (isset($attributes['rim diameter (in)'])) {
-                    $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
-                        'Rim Size',
-                        $attributes['rim diameter (in)']->value,
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'rim diameter (in)',
+                    'Rim Size',
+                    ['suffix' => 'Inches'],
+                    $customMeta
+                );
                 break;
+            case 'Rear view mirror':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'auto-dimming',
+                    'Rear view mirror auto-dimming',
+                    [],
+                    $customMeta
+                );
+                break;
+            case 'Fuel tank':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'capacity (UK gallons)',
+                    'Fuel take capacity',
+                    ['suffix' => 'Gallons'],
+                    $customMeta
+                );
+                break;
+
+            case 'Luxury trim':
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'on shift knob',
+                    'Trim: on shift knob',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'on center floor console',
+                    'Trim: on center floor console',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'on doors',
+                    'Trim: on doors',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'on instrument panel',
+                    'Trim: on instrument panel',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'on handbrake grip',
+                    'Trim: on handbrake grip',
+                    [],
+                    $customMeta
+                );
+                break;
+
             case 'Drive':
                 if (isset($attributes['Driven wheels'])) {
+                    $value = [
+                        $attributes['Driven wheels']->value,
+                    ];
+
+                    if (isset($attributes["manufacturer's name"])) {
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
+                    }
                     $labels[$attributes['Driven wheels']->schemaId] = $this->itemFactory(
                         'Drive',
-                        $attributes['Driven wheels']->value,
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
+                        implode(' ', $value),
+                        $customMeta);
                 }
                 break;
             case 'Transmission':
-                if (isset($attributes['Transmission type'])) {
-                    $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
-                    $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
-                        'Transmission',
-                        "{$speeds} speed {$attributes['Transmission type']->value}",
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
-                }
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'transmission description',
+                    'Transmission description',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'number of speeds',
+                    'Number of speeds',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'manufacturer\'s name',
+                    'Transmission Name',
+                    [],
+                    $customMeta
+                );
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'gearchange paddles',
+                    'Gearchange paddles',
+                    [],
+                    $customMeta
+                );
                 break;
             case 'Weights':
                 if (isset($attributes['gross vehicle weight (lbs)'])) {
@@ -236,10 +444,7 @@ class BuildEquipmentData
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         'Weight',
                         "{$formatted} (lbs)",
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
+                        $customMeta);
                 }
                 break;
             case 'Tires':
@@ -247,10 +452,7 @@ class BuildEquipmentData
                     $labels[$attributes['type']->schemaId] = $this->itemFactory(
                         'Tires',
                         "{$attributes['type']->value}",
-                        [
-                            'equipment' => $equipments,
-                            'from' => 'Custom',
-                        ]);
+                        $customMeta);
                 }
                 break;
             case 'Engine':
@@ -260,20 +462,19 @@ class BuildEquipmentData
                 $labels[$equipments->schema_id] = $this->itemFactory(
                     'Engine',
                     "{$liters} v{$cylinders} {$configuration}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
+                    $customMeta);
                 break;
             case 'Fuel':
-                $labels[$equipments->schema_id] = $this->itemFactory(
+                $this->addItemFactoryFromSingleAttribute(
+                    $labels,
+                    $attributes,
+                    'Fuel type',
                     'Fuel Type',
-                    "{$attributes['Fuel type']->value}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
+                    [],
+                    $customMeta
+                );
                 break;
+
             default:
                 //
                 // If the equipment isn't optional, and we have standard text.
@@ -296,25 +497,37 @@ class BuildEquipmentData
                             ]);
                     }
                 } else {
+                    if (isset($attributes['type'])) {
+                        $value = [ucwords($attributes['type']->value)];
+                    } elseif (isset($attributes['distance (miles)']) && isset($attributes['duration (months)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value).' (miles) / '.$attributes['duration (months)']->value.' (months)'];
+                    } elseif (isset($attributes['distance (miles)']) && isset($attributes['period (mths)'])) {
+                        $value = [number_format($attributes['distance (miles)']->value).' (miles) / '.$attributes['period (mths)']->value.' (months)'];
+                    } else {
+                        $value = ['Included'];
+                    }
+
+                    if (isset($attributes["manufacturer's name"])) {
+                        $value[] = '('.$attributes["manufacturer's name"]->value.')';
+                    }
                     $labels[$equipments->schema_id] = $this->itemFactory(
                         $equipments->name,
-                       'Included',
+                        implode(' ', $value),
                         [
                             'equipment' => $equipments,
                             'from' => 'Equipment Name',
                         ]);
                 }
                 break;
-
         }
 
         return $labels;
     }
 
-    private function labelEquipmentOnDeal()
+    private function labelEquipmentOnDeal($removeDuplicateLabels = true)
     {
         $labeledEquipment = [];
-        foreach ($this->equipmentOnDeal as $category => $equipments) {
+        foreach ($this->equipment as $category => $equipments) {
             foreach ($equipments as $equipment) {
                 $labels = $this->getLabelsForJatoEquipment($equipment);
                 foreach ($labels as $schemaId => $label) {
@@ -322,6 +535,7 @@ class BuildEquipmentData
                         'category' => $category,
                         'label' => $label['label'],
                         'value' => $label['value'],
+                        'option_code' => $equipment->option_id,
                     ];
 
                     if (isset($label['meta'])) {
@@ -332,23 +546,47 @@ class BuildEquipmentData
                 }
             }
         }
-        $this->equipmentOnDeal = $labeledEquipment;
+
+        if ($removeDuplicateLabels) {
+            $labeledEquipment = collect($labeledEquipment)->keyBy('label')->all();
+        }
+
+        $this->equipmentOnDeal = array_values($labeledEquipment);
     }
 
     /**
+     * @param Collection $equipment
      * @param Deal $deal
+     * @param bool $removeDuplicateLabels
      * @param bool $debug
      * @return mixed
      */
-    public function build(Deal $deal, $debug = false)
+    public function build(Collection $equipment, Deal $deal, bool $removeDuplicateLabels = true, bool $debug = false)
     {
         $this->deal = $deal;
+        $this->equipment = $equipment;
         $this->debug = $debug;
 
-        $this->compileEquipmentData();
-        $this->dealEquipment();
-        $this->organizeEquipmentOnDeal();
-        $this->labelEquipmentOnDeal();
+        //
+        // Include standard Text
+        $this->standardEquipmentText = $this->deal->version->standard_text->keyBy('schema_id');
+
+        //
+        // Categorize and reduce equipment
+        $this->equipment = $equipment
+            ->reject(function ($equipment) {
+                if (in_array($equipment->category, self::CATEGORIES_TO_SKIP)) {
+                    return true;
+                }
+
+                if (in_array($equipment->name, self::EQUIPMENT_TO_SKIP)) {
+                    return true;
+                }
+
+                return false;
+            })->groupBy('category', true);
+
+        $this->labelEquipmentOnDeal($removeDuplicateLabels);
 
         return $this->equipmentOnDeal;
     }

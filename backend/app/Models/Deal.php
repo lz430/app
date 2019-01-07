@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\JATO\Option;
 use App\Models\JATO\Version;
 use Backpack\CRUD\CrudTrait;
 use ScoutElastic\Searchable;
 use App\DealIndexConfigurator;
+use App\Models\JATO\Equipment;
 use App\Models\Order\Purchase;
 use Illuminate\Database\Eloquent\Model;
 use DeliverMyRide\Fuel\Map as ColorMaps;
 use Illuminate\Database\Eloquent\Builder;
+use DeliverMyRide\JATO\Manager\BuildOverviewData;
 use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -60,7 +63,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Version $version
  * @property Purchase[] $purchases
  * @property DealPhoto[] $photos
- * @property jatoFeature[] $jatoFeatures
  * @property Feature[] $features
  * @property int $seating_capacity
  * @property string $vehicle_color
@@ -324,6 +326,23 @@ class Deal extends Model
                     'value' => [
                         'type' => 'text',
                     ],
+                    'option_code' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
+            'overview' => [
+                'type' => 'nested',
+                'properties' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
                 ],
             ],
         ],
@@ -349,6 +368,50 @@ class Deal extends Model
         'payments' => 'object',
     ];
 
+    public function getEquipment()
+    {
+        $codes = array_merge(
+            $this->package_codes ? $this->package_codes : [],
+            $this->option_codes ? $this->option_codes : []
+        );
+
+        //
+        // Standard Equipment
+        $query = Equipment::query();
+        $query = $query->whereHas('version', function ($query) {
+            $query->where('id', '=', $this->version_id);
+        });
+        $query = $query->whereIn('availability', ['standard', '-']);
+
+        $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
+            return (string) $equipment->slug();
+        });
+
+        //
+        // Optional Equipment
+        if (count($codes)) {
+            $query = Equipment::query();
+            $query = $query->whereHas('version', function ($query) {
+                $query->where('id', '=', $this->version_id);
+            });
+            $options = Option::whereIn('option_code', $codes)
+                ->get()
+                ->pluck('option_id');
+            $query = $query->where('availability', '=', 'optional');
+            $query = $query->whereIn('option_id', $options);
+            $optionalEquipment = $query->get()->keyBy(function ($equipment) {
+                return $equipment->slug();
+            });
+        } else {
+            $optionalEquipment = collect([]);
+        }
+
+        // Collect->merge is supposed to return the same amount, but doesn't seem to work correctly.
+        $mergedEquipment = collect(array_merge($equipmentOnDeal->all(), $optionalEquipment->all()));
+
+        return $mergedEquipment;
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -371,14 +434,6 @@ class Deal extends Model
     public function photos(): HasMany
     {
         return $this->hasMany(DealPhoto::class)->orderBy('id');
-    }
-
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function jatoFeatures(): BelongsToMany
-    {
-        return $this->belongsToMany(JatoFeature::class)->hasGroup();
     }
 
     /**
@@ -904,10 +959,15 @@ class Deal extends Model
             }
         }
 
+        $equipmentOnDeal = $this->getEquipment();
+
+        // Overview data for detail page
+        $record['overview'] = [];
+        $record['overview'] = (new BuildOverviewData())->build($equipmentOnDeal);
 
         // Equipment on car
         $record['equipment'] = [];
-        $record['equipment'] = (new BuildEquipmentData())->build($this);
+        $record['equipment'] = (new BuildEquipmentData())->build($equipmentOnDeal, $this);
 
         //
         // Catchall

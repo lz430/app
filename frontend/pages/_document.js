@@ -3,7 +3,23 @@ import React from 'react';
 import config from '../core/config';
 
 export default class MyDocument extends Document {
+    static async getInitialProps(ctx) {
+        const initialProps = await Document.getInitialProps(ctx);
+        const session = ctx.req.session;
+
+        const sessionData = { ...session };
+        delete sessionData['cookie'];
+        delete sessionData['csrfSecret'];
+
+        return { ...initialProps, sessionData };
+    }
+
     render() {
+        let csrfToken = null;
+
+        if (this.props.__NEXT_DATA__.query.csrfToken) {
+            csrfToken = this.props.__NEXT_DATA__.query.csrfToken;
+        }
         return (
             <html>
                 <Head>
@@ -13,10 +29,38 @@ export default class MyDocument extends Document {
                         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
                     />
                     <meta name="theme-color" content="#41b1ac" />
-                    <link rel="shortcut icon" href="/favicon.ico" />
+                    {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
+                        <meta name="robots" content="noindex,nofollow" />
+                    )}
+
+                    <link rel=" shortcut icon" href="/favicon.ico" />
                     <link
                         href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700"
                         rel="stylesheet"
+                    />
+
+                    <script
+                        id="session"
+                        type="application/json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(
+                                this.props.sessionData,
+                                null,
+                                2
+                            ),
+                        }}
+                    />
+
+                    <script
+                        id="csrf"
+                        type="application/json"
+                        dangerouslySetInnerHTML={{
+                            __html: JSON.stringify(
+                                { token: csrfToken },
+                                null,
+                                2
+                            ),
+                        }}
                     />
 
                     {config['REACT_APP_ENVIRONMENT'] === 'production' && (
