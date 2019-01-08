@@ -18,7 +18,6 @@ export default class extends React.PureComponent {
         const { deal } = this.props;
         // Probably a smarter way to do this.
         const overviewData = groupBy(prop('label'), deal.overview);
-        console.log(overviewData);
 
         let items = [];
         if (overviewData['Horse Power']) {

@@ -66,6 +66,7 @@ import AdditionalInformation from './components/MiscFeatures';
 class DealDetailContainer extends React.PureComponent {
     static propTypes = {
         deal: dealType,
+        initialQuery: PropTypes.object,
         quote: PropTypes.object,
         purchaseStrategy: PropTypes.string.isRequired,
         userLocation: PropTypes.object.isRequired,
@@ -196,10 +197,6 @@ class DealDetailContainer extends React.PureComponent {
             checkoutData.tradeIn
         );
         this.props.checkoutStart(pricing);
-    }
-
-    onSelectDeal(pricing) {
-        return this.props.checkoutStart(pricing, this.props.router);
     }
 
     renderPageLoadingIcon() {
