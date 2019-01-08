@@ -87,6 +87,54 @@
             }
         }
     }
+    &__container-faq-contact {
+        padding: 30px;
+
+        .row {
+            @include media-breakpoint-down(sm) {
+                box-shadow: none !important;
+            }
+        }
+
+        & > [class*='col-']:first-of-type {
+            padding-right: 15px;
+
+            @include media-breakpoint-down(sm) {
+                padding-right: 0;
+            }
+        }
+
+        div[class*='col-'] {
+            padding: 30px;
+
+            @include media-breakpoint-up(md) {
+                box-shadow: none !important;
+            }
+
+            h5 {
+                @include media-breakpoint-down(md) {
+                    text-align: center;
+                }
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            .container-faq {
+                margin-bottom: 3rem;
+            }
+        }
+
+        .container-faq {
+            @include media-breakpoint-up(sm) {
+                border-radius: 5px 0 0 5px !important;
+            }
+        }
+        .container-contact {
+            @include media-breakpoint-up(sm) {
+                border-radius: 0 5px 5px 0 !important;
+            }
+        }
+    }
 
     &__faq__list {
         margin: 0;
@@ -154,11 +202,6 @@
     }
 
     &__promise {
-        @include media-breakpoint-down(sm) {
-            margin: 0 auto;
-            width: 95%;
-        }
-
         &__columns {
             padding: 30px;
 
@@ -416,6 +459,10 @@
     &__specs {
         align-self: center;
 
+        @include media-breakpoint-down(sm) {
+            align-self: stretch;
+        }
+
         & > .p-15 {
             padding: 15px;
         }
@@ -459,11 +506,10 @@
         }
 
         &-detail {
-            &:nth-child(even) {
-                background: #f6f6f6;
-            }
             > h5 {
                 padding: 15px;
+                font-size: 1rem;
+                font-weight: 400;
             }
             > div {
                 padding: 0 15px 15px 15px;
@@ -471,6 +517,9 @@
 
             &-item {
                 border-bottom: 1px solid $gray-300;
+                &:nth-child(even) {
+                    background: #f6f6f6;
+                }
                 &:last-child {
                     border-bottom: 0;
                 }
@@ -500,4 +549,17 @@
     @include media-breakpoint-up(md) {
         column-count: 4;
     }
+    li {
+        padding: 5px;
+        word-break: normal;
+    }
 }
+
+// troubleshooting
+// .container {
+//     border: 1px solid red;
+
+//     &>div{
+//         border: 1px solid blue;
+//     }
+// }
