@@ -89,6 +89,14 @@
     }
     &__row-faq-contact {
         padding: 30px;
+
+        & > [class*='col-']:first-of-type {
+            padding-right: 15px;
+
+            @include media-breakpoint-down(sm) {
+                padding-right: 0;
+            }
+        }
     }
     &__faq__list {
         margin: 0;
@@ -465,11 +473,10 @@
         }
 
         &-detail {
-            &:nth-child(even) {
-                background: #f6f6f6;
-            }
             > h5 {
                 padding: 15px;
+                font-size: 1rem;
+                font-weight: 400;
             }
             > div {
                 padding: 0 15px 15px 15px;
@@ -477,6 +484,9 @@
 
             &-item {
                 border-bottom: 1px solid $gray-300;
+                &:nth-child(even) {
+                    background: #f6f6f6;
+                }
                 &:last-child {
                     border-bottom: 0;
                 }
