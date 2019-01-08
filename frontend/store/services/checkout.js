@@ -73,11 +73,14 @@ export default class CheckoutService {
     /**
      *
      * @param purchaseId
+     * @param token
      * @returns {*}
      */
-    getFinancing = purchaseId => {
+    getFinancing = (purchaseId, token) => {
         return httpclient.get(`/api/checkout/${purchaseId}/financing`, {
-            headers: this.client.headers(),
+            headers: {
+                Authorization: 'Bearer ' + token['access_token'],
+            },
         });
     };
 
