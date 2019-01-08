@@ -172,7 +172,7 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4 bg-pattern text-white">
+                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4 bg-secondary">
                         <Container>
                             <h3 className="text-center">
                                 What does Deliver My Ride Cost?
@@ -194,7 +194,7 @@ class Page extends React.Component {
                                     as="/brochure/faq"
                                     passHref
                                 >
-                                    <a className="btn btn-success">FAQs</a>
+                                    <a className="btn btn-primary">FAQs</a>
                                 </Link>
                             </div>
                         </Container>
