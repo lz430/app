@@ -4,8 +4,8 @@ namespace App\Observers;
 
 use App\Models\User;
 
-//use App\Mail\UserCreated;
-//use Illuminate\Support\Facades\Mail;
+use App\Mail\UserCreated;
+use Illuminate\Support\Facades\Mail;
 
 class UserObserver
 {
@@ -17,8 +17,9 @@ class UserObserver
      */
     public function created(User $user)
     {
-        //
-        // Send welcome email
-        // Mail::to($user->email)->send(new UserCreated($user));
+        //Send welcome email
+        if (config('app.env') !== 'production') {
+            Mail::to($user->email)->send(new UserCreated($user));
+        }
     }
 }

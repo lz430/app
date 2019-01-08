@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Api\Auth;
 
-//use App\Mail\UserCreated;
+use App\Mail\UserCreated;
 use Tests\TestCaseWithAuth;
-//use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailable;
 use Illuminate\Support\Facades\Mail;
 
 class AuthRegistrationTest extends TestCaseWithAuth
@@ -29,10 +29,10 @@ class AuthRegistrationTest extends TestCaseWithAuth
 
         //
         // Confirm welcome email
-        /*
+
         Mail::assertSent(UserCreated::class, function (Mailable $mail) use ($payload) {
             return $mail->hasTo($payload['email']);
         });
-        */
+
     }
 }
