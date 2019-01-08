@@ -1,4 +1,5 @@
 <?php
+use Monolog\Handler\StreamHandler;
 
 return [
     /*
@@ -34,7 +35,6 @@ return [
         'single' => [
           'driver' => 'single',
           'path' => storage_path('logs/laravel.log'),
-          'driver' => 'syslog',
           'level' => 'notice',
         ],
         'jato' => [
