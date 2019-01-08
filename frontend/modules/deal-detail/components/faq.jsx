@@ -29,17 +29,19 @@ class ListGroupCollapse extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <h5> Frequently Asked Questions </h5>
-                <ul className="deal__faq__list">
-                    {this.getFaqContent().map(item => (
-                        <FaqGroup
-                            key={item.title}
-                            item={item}
-                            isOpen={this.state.activeFaqKey === item.title}
-                            onToggle={this.toggleActiveFaq.bind(this)}
-                        />
-                    ))}
-                </ul>
+                <div className="deal__row-faq-contact">
+                    <h5> Frequently Asked Questions </h5>
+                    <ul className="deal__faq__list bg-white">
+                        {this.getFaqContent().map(item => (
+                            <FaqGroup
+                                key={item.title}
+                                item={item}
+                                isOpen={this.state.activeFaqKey === item.title}
+                                onToggle={this.toggleActiveFaq.bind(this)}
+                            />
+                        ))}
+                    </ul>
+                </div>
             </React.Fragment>
         );
     }

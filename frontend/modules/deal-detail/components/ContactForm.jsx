@@ -116,7 +116,7 @@ class ContactForm extends React.Component {
                     }
 
                     return (
-                        <Form className="deal__contact">
+                        <Form className="deal__contact deal__row-faq-contact">
                             <h5>Ask a Question About This Car </h5>
                             <Row>
                                 <Col>
