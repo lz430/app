@@ -169,8 +169,6 @@
 
     &__promise {
         @include media-breakpoint-down(sm) {
-            margin: 0 auto;
-            width: 95%;
         }
 
         &__columns {

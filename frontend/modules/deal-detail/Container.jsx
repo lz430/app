@@ -8,6 +8,8 @@ import { dealType } from '../../core/types';
 import { track } from '../../core/services';
 
 import { Alert, Container, Row, Col } from 'reactstrap';
+import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
+
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Loading from '../../components/Loading';
 import { toggleCompare } from '../../apps/common/actions';
@@ -302,18 +304,40 @@ class DealDetailContainer extends React.PureComponent {
                 <Specs deal={this.props.deal} />
                 <AdditionalInformation deal={this.props.deal} />
                 <OurPromise />
-                <div className="pb-5 pt-5">
-                    <Container>
-                        <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
-                            <Col md="6">
-                                <Faq />
-                            </Col>
-                            <Col md="6">
-                                <ContactForm deal={this.props.deal} />
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
+                <MediumAndUp>
+                    <div className="pb-5 pt-5">
+                        <Container>
+                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
+                                <Col md="6">
+                                    <Faq />
+                                </Col>
+                                <Col md="6">
+                                    <ContactForm deal={this.props.deal} />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
+                </MediumAndUp>
+                <SmallAndDown>
+                    <div className="">
+                        <Container>
+                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
+                                <Col md="6">
+                                    <Faq />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
+                    <div className="pb-5 pt-5">
+                        <Container>
+                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
+                                <Col md="6">
+                                    <ContactForm deal={this.props.deal} />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
+                </SmallAndDown>
             </React.Fragment>
         );
     }
