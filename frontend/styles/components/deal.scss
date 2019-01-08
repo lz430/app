@@ -168,9 +168,6 @@
     }
 
     &__promise {
-        @include media-breakpoint-down(sm) {
-        }
-
         &__columns {
             padding: 30px;
 
@@ -427,6 +424,10 @@
 
     &__specs {
         align-self: center;
+
+        @include media-breakpoint-down(sm) {
+            align-self: stretch;
+        }
 
         & > .p-15 {
             padding: 15px;
