@@ -377,10 +377,7 @@ class Deal extends Model
 
         //
         // Standard Equipment
-        $query = Equipment::query();
-        $query = $query->whereHas('version', function ($query) {
-            $query->where('id', '=', $this->version_id);
-        });
+        $query = Equipment::where('version_id', '=', $this->version_id);
         $query = $query->whereIn('availability', ['standard', '-']);
 
         $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
@@ -390,10 +387,7 @@ class Deal extends Model
         //
         // Optional Equipment
         if (count($codes)) {
-            $query = Equipment::query();
-            $query = $query->whereHas('version', function ($query) {
-                $query->where('id', '=', $this->version_id);
-            });
+            $query = Equipment::where('version_id', '=', $this->version_id);
             $options = Option::whereIn('option_code', $codes)
                 ->get()
                 ->pluck('option_id');
