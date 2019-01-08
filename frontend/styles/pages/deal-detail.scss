@@ -75,6 +75,10 @@
         font-size: 1.8rem;
         // font-weight: bold;
         margin-top: -10px;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 1.3rem;
+        }
     }
 
     &__stock-number {
@@ -83,7 +87,7 @@
         font-weight: bold;
         span {
             @include media-breakpoint-up(sm) {
-                font-size: 1.8rem;
+                font-size: 1.3rem;
                 margin-top: auto;
                 margin-left: auto;
             }

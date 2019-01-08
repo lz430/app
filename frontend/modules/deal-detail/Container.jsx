@@ -8,6 +8,7 @@ import { dealType } from '../../core/types';
 import { track } from '../../core/services';
 
 import { Alert, Container, Row, Col } from 'reactstrap';
+
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Loading from '../../components/Loading';
 import { toggleCompare } from '../../apps/common/actions';
@@ -299,13 +300,21 @@ class DealDetailContainer extends React.PureComponent {
                 <Specs deal={this.props.deal} />
                 <AdditionalInformation deal={this.props.deal} />
                 <OurPromise />
-                <div className="bg-white pb-5 pt-5">
-                    <Container>
-                        <Row>
-                            <Col md="6">
+                <div className="pb-5">
+                    <Container className="deal__container-faq-contact">
+                        <Row className="shadow-sm">
+                            <Col
+                                md="6"
+                                sm="12"
+                                className="bg-white shadow-sm rounded no-gutters container-faq"
+                            >
                                 <Faq />
                             </Col>
-                            <Col md="6">
+                            <Col
+                                md="6"
+                                sm="12"
+                                className="bg-white shadow-sm rounded no-gutters container-contact"
+                            >
                                 <ContactForm deal={this.props.deal} />
                             </Col>
                         </Row>
