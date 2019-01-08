@@ -7,7 +7,7 @@
         text-align: left;
         padding: 2rem 3rem;
     }
-    background-color: #1a1a1a;
+    background-color: $color-footer-background;
     color: #dedede;
     font-size: 0.85rem;
 
@@ -59,7 +59,7 @@
  * Brochure Footer
  */
 .brochure-footer {
-    background: #213a59;
+    background: $color-footer-background;
     color: $color-text-white;
     padding-top: 30px;
 
