@@ -1,8 +1,13 @@
 //
+//Updated Color Palette
+$primary: #1cbfde;
+$secondary: #f4f5f6;
+$warning: #eafc40;
+$success: #254558;
+$info: #2b2b3a;
+//
 // Colors
-$brand-green: #04c2b8;
-
-$color-background-primary: #f2f2f2;
+$color-background-primary: #f4f5f6;
 $color-background-secondary: #fff;
 $color-section-bottom-border: #ccc;
 
@@ -16,15 +21,15 @@ $color-sidebar-background-secondary-light: lighten(
     46%
 );
 
-$color-footer-background: #454d52;
+$color-footer-background: #002942;
 $color-compare-bar-background: rgba(204, 204, 204, 1);
 $color-text-white: #fff;
-$color-text-blue: #0e9dce;
+$color-text-blue: #1cbfde;
 $color-black: #000;
-$color-blue: #41b1ac;
-$color-dark-blue: #436d82;
-$color-light-blue: #65d1f6;
-$color-lighter-blue: #d5efef;
+$color-blue: #1cbfde;
+$color-dark-blue: #002942;
+$color-light-blue: #65d1f0;
+$color-lighter-blue: #c1edf6;
 $color-pink: rgba(231, 2, 144, 1);
 $color-purple: #e70290;
 $color-error: #ac0000;
@@ -38,13 +43,11 @@ $color-facebook-blue: #3b5998;
 $color-twitter-blue: #4099ff;
 
 $color-left-filter-selected: #279c99;
-$primary: $brand-green;
-$success: $color-pink;
 // Typography
 // $font-family-sans-serif: 'Open Sans', sans-serif;
 $font-family: 'Roboto', sans-serif;
 $line-height-base: 1.6;
-$text-color: #484d50;
+$text-color: #20202b;
 $text-color-dark: darken($text-color, 25);
 // Nav
 $nav-height: 76px;

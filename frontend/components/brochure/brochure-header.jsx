@@ -74,7 +74,7 @@ export default class Header extends React.Component {
                                     as="/filter?entity=model&sort=payment&purchaseStrategy=lease"
                                     passHref
                                 >
-                                    <a className="btn btn-primary">
+                                    <a className="btn btn-outline-primary">
                                         Get Started
                                     </a>
                                 </Link>
