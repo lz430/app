@@ -87,8 +87,14 @@
             }
         }
     }
-    &__row-faq-contact {
+    &__container-faq-contact {
         padding: 30px;
+
+        .row {
+            @include media-breakpoint-down(sm) {
+                box-shadow: none !important;
+            }
+        }
 
         & > [class*='col-']:first-of-type {
             padding-right: 15px;
@@ -97,7 +103,39 @@
                 padding-right: 0;
             }
         }
+
+        div[class*='col-'] {
+            padding: 30px;
+
+            @include media-breakpoint-up(md) {
+                box-shadow: none !important;
+            }
+
+            h5 {
+                @include media-breakpoint-down(md) {
+                    text-align: center;
+                }
+            }
+        }
+
+        @include media-breakpoint-down(sm) {
+            .container-faq {
+                margin-bottom: 3rem;
+            }
+        }
+
+        .container-faq {
+            @include media-breakpoint-up(sm) {
+                border-radius: 5px 0 0 5px !important;
+            }
+        }
+        .container-contact {
+            @include media-breakpoint-up(sm) {
+                border-radius: 0 5px 5px 0 !important;
+            }
+        }
     }
+
     &__faq__list {
         margin: 0;
         padding-left: 0;
@@ -125,10 +163,6 @@
     }
 
     &__contact {
-        @include media-breakpoint-down(sm) {
-            margin-top: 25px;
-        }
-
         input[type='text'],
         textarea,
         input[type='email'],
@@ -520,3 +554,12 @@
         word-break: normal;
     }
 }
+
+// troubleshooting
+// .container {
+//     border: 1px solid red;
+
+//     &>div{
+//         border: 1px solid blue;
+//     }
+// }

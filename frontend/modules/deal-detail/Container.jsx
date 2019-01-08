@@ -304,40 +304,26 @@ class DealDetailContainer extends React.PureComponent {
                 <Specs deal={this.props.deal} />
                 <AdditionalInformation deal={this.props.deal} />
                 <OurPromise />
-                <MediumAndUp>
-                    <div className="pb-5 pt-5">
-                        <Container>
-                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
-                                <Col md="6">
-                                    <Faq />
-                                </Col>
-                                <Col md="6">
-                                    <ContactForm deal={this.props.deal} />
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
-                </MediumAndUp>
-                <SmallAndDown>
-                    <div className="">
-                        <Container>
-                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
-                                <Col md="6">
-                                    <Faq />
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
-                    <div className="pb-5 pt-5">
-                        <Container>
-                            <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
-                                <Col md="6">
-                                    <ContactForm deal={this.props.deal} />
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
-                </SmallAndDown>
+                <div className="pb-5">
+                    <Container className="deal__container-faq-contact">
+                        <Row className="shadow-sm">
+                            <Col
+                                md="6"
+                                sm="12"
+                                className="bg-white shadow-sm rounded no-gutters container-faq"
+                            >
+                                <Faq />
+                            </Col>
+                            <Col
+                                md="6"
+                                sm="12"
+                                className="bg-white shadow-sm rounded no-gutters container-contact"
+                            >
+                                <ContactForm deal={this.props.deal} />
+                            </Col>
+                        </Row>
+                    </Container>
+                </div>
             </React.Fragment>
         );
     }
