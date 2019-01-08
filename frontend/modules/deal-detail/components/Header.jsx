@@ -1,9 +1,9 @@
 import React from 'react';
 import { dealType } from '../../../core/types';
 
-import { Row, Col, /*Button, */ Container } from 'reactstrap';
-//import classNames from 'classnames';
-//import { Sticky } from 'react-sticky';
+import { Row, Col, Button, Container } from 'reactstrap';
+import classNames from 'classnames';
+import { Sticky } from 'react-sticky';
 
 import DealStockNumber from '../../../components/Deals/DealStockNumber';
 import strings from '../../../util/strings';
@@ -36,11 +36,10 @@ export default class Header extends React.PureComponent {
             </Container>
         );
     }
-
-    /*
+    // Sticky header
     render() {
         return (
-            <Sticky topOffset={-62}>
+            <Sticky topOffset={100}>
                 {({ style, isSticky }) => (
                     <div
                         className={classNames('deal-details__new-header', {
@@ -48,7 +47,7 @@ export default class Header extends React.PureComponent {
                         })}
                         style={{
                             ...style,
-                            marginTop: isSticky ? '62px' : '0px',
+                            marginTop: isSticky ? '0' : '0',
                         }}
                     >
                         <Container>
@@ -99,5 +98,4 @@ export default class Header extends React.PureComponent {
             </Sticky>
         );
     }
-    */
 }
