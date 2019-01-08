@@ -25,7 +25,7 @@ export default class AdditionalInformation extends React.PureComponent {
                     </Row>
                     <Row>
                         <Col>
-                            <div className="bg-white rounded text-sm p-3">
+                            <div className="bg-white rounded text-sm p-3 shadow-sm">
                                 <ul className="deal__misc text-sm">
                                     {this.props.deal.vauto_features.map(
                                         (item, index) => {

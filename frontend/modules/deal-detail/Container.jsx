@@ -8,7 +8,6 @@ import { dealType } from '../../core/types';
 import { track } from '../../core/services';
 
 import { Alert, Container, Row, Col } from 'reactstrap';
-import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 
 import mapAndBindActionCreators from '../../util/mapAndBindActionCreators';
 import Loading from '../../components/Loading';
