@@ -1,10 +1,10 @@
 export default [
-    {
+    /*{
         title: 'Acura',
         logo: '/static/images/makes/acura.jpg',
         query: ['make:Acura'],
         featured: false,
-    },
+    },*/
     {
         title: 'Alfa Romeo',
         logo: '/static/images/makes/alfa-romeo.png',
