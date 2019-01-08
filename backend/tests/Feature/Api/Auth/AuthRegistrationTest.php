@@ -33,6 +33,5 @@ class AuthRegistrationTest extends TestCaseWithAuth
         Mail::assertSent(UserCreated::class, function (Mailable $mail) use ($payload) {
             return $mail->hasTo($payload['email']);
         });
-
     }
 }
