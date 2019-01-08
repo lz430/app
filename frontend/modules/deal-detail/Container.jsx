@@ -302,9 +302,9 @@ class DealDetailContainer extends React.PureComponent {
                 <Specs deal={this.props.deal} />
                 <AdditionalInformation deal={this.props.deal} />
                 <OurPromise />
-                <div className="bg-white pb-5 pt-5">
+                <div className="pb-5 pt-5">
                     <Container>
-                        <Row>
+                        <Row className="no-gutters bg-white shadow-sm rounded deal__row-faq-contact">
                             <Col md="6">
                                 <Faq />
                             </Col>
