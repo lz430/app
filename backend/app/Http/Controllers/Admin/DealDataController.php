@@ -68,11 +68,10 @@ class DealDataController extends Controller
         ];
 
         $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), $deal, false, true);
-
         $equipment = collect($equipment)->groupBy('category');
         $data = [
             'deal' => $deal,
-            'equipment' => [],
+            'equipment' => $equipment,
             'filters' => $this->buildFilters(),
             'models' => $debug_models,
         ];
