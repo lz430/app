@@ -14,7 +14,7 @@ class DealDataController extends Controller
     private function buildFilters()
     {
         $features = [];
-        foreach ($this->deal->features as $feature) {
+        foreach ($this->deal->features()->with('category')->get() as $feature) {
             if (! isset($features[$feature->category->title])) {
                 $features[$feature->category->title] = [];
             }
@@ -68,7 +68,6 @@ class DealDataController extends Controller
         ];
 
         $equipment = (new BuildEquipmentData())->build($deal->getEquipment(), $deal, false, true);
-
         $equipment = collect($equipment)->groupBy('category');
         $data = [
             'deal' => $deal,
