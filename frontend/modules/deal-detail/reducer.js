@@ -50,6 +50,11 @@ const reducer = function(state = initialState, action = {}) {
                 ...state,
                 deal: action.data,
             };
+        case ActionTypes.SET_FROM_INITIAL_QUOTE_PARAMS:
+            return {
+                ...state,
+                ...action.params,
+            };
 
         case ActionTypes.FINANCE_UPDATE_DOWN_PAYMENT:
             return {
@@ -79,8 +84,16 @@ const reducer = function(state = initialState, action = {}) {
                     annualMileage: action.annualMileage,
                 },
             };
-
-        case ActionTypes.SELECT_DMR_DISCOUNT:
+        case ActionTypes.SET_PRICING_ROLE:
+            return {
+                ...state,
+                discount: {
+                    ...state.discount,
+                    discountType: action.role,
+                    employeeBrand: action.make,
+                },
+            };
+        case ActionTypes.SET_DMR_DISCOUNT:
             return {
                 ...state,
                 discount: {
@@ -88,7 +101,7 @@ const reducer = function(state = initialState, action = {}) {
                     discountType: 'dmr',
                 },
             };
-        case ActionTypes.SELECT_EMPLOYEE_DISCOUNT:
+        case ActionTypes.SET_EMPLOYEE_DISCOUNT:
             return {
                 ...state,
                 discount: {
@@ -97,7 +110,7 @@ const reducer = function(state = initialState, action = {}) {
                     employeeBrand: action.make,
                 },
             };
-        case ActionTypes.SELECT_SUPPLIER_DISCOUNT:
+        case ActionTypes.SET_SUPPLIER_DISCOUNT:
             return {
                 ...state,
                 discount: {
@@ -106,7 +119,7 @@ const reducer = function(state = initialState, action = {}) {
                     supplierBrand: action.make,
                 },
             };
-        case ActionTypes.SELECT_CONDITIONAL_ROLES:
+        case ActionTypes.SET_CONDITIONAL_ROLES:
             return {
                 ...state,
                 discount: {

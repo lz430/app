@@ -38,6 +38,14 @@ export const getLease = state => {
     return state.pages.dealDetails.lease;
 };
 
+export const getFinance = state => {
+    return state.pages.dealDetails.finance;
+};
+
+export const getDiscount = state => {
+    return state.pages.dealDetails.discount;
+};
+
 const employeeBrand = state => {
     return state.pages.dealDetails.discount.employeeBrand === false
         ? null
@@ -49,8 +57,9 @@ const supplierBrand = state =>
         ? null
         : state.pages.dealDetails.discount.supplierBrand;
 
-export const discountType = state =>
-    state.pages.dealDetails.discount.discountType;
+export const discountType = state => {
+    return state.pages.dealDetails.discount.discountType;
+};
 
 const financeDownPayment = state => state.pages.dealDetails.finance.downPayment;
 const financeTerm = state => state.pages.dealDetails.finance.term;
@@ -73,6 +82,48 @@ const dealLeaseTerm = createSelector(leaseTerm, leaseTerm => {
 const dealLeaseCashDue = createSelector(leaseCashDue, leaseCashDue => {
     return leaseCashDue;
 });
+
+export const getUrlQuery = createSelector(
+    getUserPurchaseStrategy,
+    getDiscount,
+    getLease,
+    getFinance,
+    (strategy, discount, lease, finance) => {
+        let data = {
+            strategy: strategy,
+        };
+
+        if (discount.discountType) {
+            data.role = discount.discountType;
+        }
+
+        if (discount.conditionalRoles && discount.conditionalRoles.length) {
+            data.rebates = discount.conditionalRoles;
+        }
+
+        if (strategy === 'finance') {
+            if (finance.downPayment) {
+                data['finance_down'] = finance.downPayment;
+            }
+            if (finance.term) {
+                data['finance_term'] = finance.term;
+            }
+        }
+
+        if (strategy === 'lease') {
+            if (lease.annualMileage) {
+                data['lease_mileage'] = lease.annualMileage;
+            }
+            if (lease.cashDue) {
+                data['lease_due'] = lease.cashDue;
+            }
+            if (lease.term) {
+                data['lease_term'] = lease.term;
+            }
+        }
+        return data;
+    }
+);
 
 export const dealPricingDataForDetail = createSelector(
     getDeal,

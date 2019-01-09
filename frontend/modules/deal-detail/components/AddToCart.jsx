@@ -4,12 +4,14 @@ import { pricingType, dealType } from '../../../core/types';
 import classNames from 'classnames';
 import { Button } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
+
 import config from '../../../core/config';
 import Loading from '../../../components/Loading';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
 import TradeIn from './pricing/TradeIn';
-
 import PaymentCash from './pricing/PaymentCash';
 import PaymentFinance from './pricing/PaymentFinance';
 import PaymentLease from './pricing/PaymentLease';
@@ -19,20 +21,22 @@ import TaxesAndFees from './pricing/TaxesAndFees';
 import DetailsLeaseDueAtDeliveryFees from './pricing/DetailsLeaseDueAtDeliveryFees';
 import DetailsSummary from './pricing/DetailsSummary';
 import DetailsPrice from './pricing/DetailsPrice';
+
 import Line from '../../../apps/pricing/components/Line';
 import Label from '../../../apps/pricing/components/Label';
 import Value from '../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../components/money/DollarsAndCents';
 import Separator from '../../../apps/pricing/components/Separator';
 import Group from '../../../apps/pricing/components/Group';
-import { track } from '../../../core/services';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
+
+import { track } from '../../../core/services';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
+        initialQuoteParams: PropTypes.object.isRequired,
+        updateUrl: PropTypes.func.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         isDealQuoteRefreshing: PropTypes.bool.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
@@ -92,7 +96,9 @@ export default class AddToCart extends React.PureComponent {
         //
         // Progress to the next step
         if (this.state.step < this.steps.length - 1) {
-            this.setState({ step: this.state.step + 1 });
+            const newStep = this.state.step + 1;
+            this.setState({ step: newStep });
+            //  this.props.updateUrl({step: newStep});
         } else {
             this.handleSubmit();
         }
@@ -104,6 +110,7 @@ export default class AddToCart extends React.PureComponent {
         }
 
         this.setState({ step: step });
+        // this.props.updateUrl({step: step});
     }
 
     /**

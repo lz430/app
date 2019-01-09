@@ -10,8 +10,9 @@ export default class Page extends React.Component {
     };
 
     static async getInitialProps({ query }) {
+        console.log('getInitialProps', query);
         return {
-            query: query.query ? query : null,
+            query: query ? query : {},
         };
     }
 
@@ -21,7 +22,7 @@ export default class Page extends React.Component {
                 <Head>
                     <title>Deliver My Ride</title>
                 </Head>
-                <DealDetail initialQuery={this.props.query} />
+                <DealDetail initialQuoteParams={this.props.query} />
             </React.Fragment>
         );
     }
