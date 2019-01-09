@@ -28,7 +28,7 @@ import { setSelectedMake } from '../../../modules/deal-list/actions';
 import { faLocation, faQuestionCircle } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import Logo from '../../../static/images/logo.svg';
+import NewLogo from '../../../static/images/new-logo.svg';
 import Link from 'next/link';
 
 class Header extends React.PureComponent {
@@ -134,7 +134,7 @@ class Header extends React.PureComponent {
             >
                 <Link href="/home" as="/" passHref>
                     <NavbarBrand>
-                        <Logo />
+                        <NewLogo />
                     </NavbarBrand>
                 </Link>
                 <div className="mr-auto" />
