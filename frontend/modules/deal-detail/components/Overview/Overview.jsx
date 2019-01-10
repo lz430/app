@@ -42,8 +42,8 @@ export default class extends React.PureComponent {
         }
         if (deal.seating_capacity) {
             items.push({
-                primary: `Up to ${deal.seating_capacity - 1}`,
-                secondary: 'Passengers',
+                primary: `${deal.seating_capacity} People`,
+                secondary: 'Seating Capacity',
             });
         }
 
