@@ -11,8 +11,10 @@ export default class Page extends React.Component {
     };
 
     static async getInitialProps({ query }) {
+        let filteredQuery = { ...query };
+        delete filteredQuery.csrfToken;
         return {
-            query: query,
+            query: filteredQuery,
         };
     }
 
