@@ -972,7 +972,7 @@ class Deal extends Model
 
         // Highlights data for detail page above overview
         $record['highlights'] = [];
-        $record['highlights'] = $dealDetailData->getHighlightsData($equipmentOnDeal);
+        $record['highlights'] = $dealDetailData->getHighlightsData($equipmentOnDeal, $this);
 
         // Overview data for detail page
         $record['overview'] = [];

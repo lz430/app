@@ -15,11 +15,10 @@ class BuildOverviewData
 
     private $equipmentOnDeal;
 
-    private function labelEquipmentOnDeal()
+    private function labelEquipmentOnDeal($dealData)
     {
         $labeledEquipment = [];
         $attributes = [];
-        dd($this->deal);
         foreach ($this->equipment as $category => $equipments) {
             foreach ($equipments as $equipment) {
                 foreach ($equipment->aspects as $attribute) {
@@ -117,6 +116,20 @@ class BuildOverviewData
                         'value' => "{$driveTrain}",
                     ];
                 }
+                if (isset($dealData->interior_color)) {
+                    $labeledEquipment[] = [
+                        'category' => 'Interior',
+                        'label' => 'Interior Color',
+                        'value' => "{$dealData->interior_color} Interior",
+                    ];
+                }
+                if ($dealData->simpleExteriorColor() != '') {
+                    $labeledEquipment[] = [
+                        'category' => 'Exterior',
+                        'label' => 'Interior Color',
+                        'value' => "{$dealData->simpleExteriorColor()} Exterior",
+                    ];
+                }
             }
         }
 
@@ -127,22 +140,22 @@ class BuildOverviewData
     {
         $this->deal = $deal;
 
-        dd($this->deal->interior_color);
-
         $this->equipment = $equipment
             ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive'])
             ->groupBy('name', true);
-        $this->labelEquipmentOnDeal();
+        $this->labelEquipmentOnDeal($this->deal);
         return $this->equipmentOnDeal;
     }
 
-    public function getHighlightsData(Collection $equipment)
+    public function getHighlightsData(Collection $equipment, Deal $deal)
     {
+        $this->deal = $deal;
+
         $this->equipment = $equipment
             ->whereIn('name', ['Power', 'Engine', 'Fuel economy', 'Transmission', 'Seating'])
             ->groupBy('name', true);
 
-        $this->labelEquipmentOnDeal();
+        $this->labelEquipmentOnDeal($this->deal);
         return $this->equipmentOnDeal;
     }
 }
