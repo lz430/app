@@ -10,114 +10,10 @@ class BuildOverviewData
     /* @var \App\Models\Deal */
     private $equipment;
 
-    /* @var bool */
-    private $debug;
-
     /* @var \App\Models\Deal */
     private $deal;
 
     private $equipmentOnDeal;
-
-    private function itemFactory($label, $value, $meta = [])
-    {
-        $emptyItem = [
-            'label' => $label,
-            'value' => $value,
-        ];
-
-        if ($this->debug) {
-            $emptyItem['meta'] = $meta;
-        }
-
-        return $emptyItem;
-    }
-
-    /**
-     * @param $equipments
-     * @return mixed
-     */
-    private function getLabelsForJatoEquipment($equipments)
-    {
-        $labels = [];
-        $attributes = [];
-        foreach ($equipments->aspects as $attribute) {
-            $attributes[$attribute->name] = $attribute;
-        }
-        if (in_array($equipments->name, ['Engine', 'Power'])) {
-            $liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
-            $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
-            $valves = isset($attributes['number of valves per cylinder']) ? $attributes['number of valves per cylinder']->value : '';
-            $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
-            $labels[$equipments->schemaId] = $this->itemFactory(
-                "{$liters}L v{$valves}{$configuration}",
-                "{$horsePower} hp",
-                [
-                    'equipment' => $equipments,
-                    'from' => 'Custom',
-                ]);
-        }
-        if ($equipments->name == 'Fuel economy') {
-            $city = isset($attributes['urban (mpg)']) ? $attributes['urban (mpg)']->value : '';
-            $highway = isset($attributes['country/highway (mpg)']) ? $attributes['country/highway (mpg)']->value : '';
-            $labels[$equipments->schemaId] = $this->itemFactory(
-                'city MPG hwy',
-                "{$city} | {$highway}",
-                [
-                    'equipment' => $equipments,
-                    'from' => 'Custom',
-                ]);
-        }
-        /*if ($equipments->name == 'Warranty whole vehicle - Total') {
-            $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
-            $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
-            $labels[$equipments->schemaId] = $this->itemFactory(
-                'Warranty',
-                "{$months} months / {$miles} miles warranty",
-                [
-                    'equipment' => $equipments,
-                    'from' => 'Custom',
-                ]);
-        }
-        if ($equipments->name == 'Wheels') {
-            $rimType = isset($attributes['rim type']) ? $attributes['rim type']->value : '';
-            $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
-            $labels[$equipments->schemaId] = $this->itemFactory(
-                'Wheels',
-                "{$rimSize} {$rimType} wheels",
-                [
-                    'equipment' => $equipments,
-                    'from' => 'Custom',
-                ]);
-        }*/
-        return $labels;
-    }
-
-    /*private function labelEquipmentOnDeal()
-    {
-        $labeledEquipment = [];
-        foreach ($this->equipment as $category => $equipments) {
-            foreach ($equipments as $equipment) {
-                $labels = $this->getLabelsForJatoEquipment($equipment);
-                if ($labels) {
-                    foreach ($labels as $schemaId => $label) {
-                        $data = [
-                            'category' => $category,
-                            'label' => $label['label'],
-                            'value' => $label['value'],
-                        ];
-
-                        if (isset($label['meta'])) {
-                            $data['meta'] = $label['meta'];
-                        }
-
-                        $labeledEquipment[] = $data;
-                    }
-                }
-            }
-        }
-
-        $this->equipmentOnDeal = $labeledEquipment;
-    }*/
 
     private function labelEquipmentOnDeal()
     {
@@ -238,7 +134,6 @@ class BuildOverviewData
             ->groupBy('name', true);
         $this->labelEquipmentOnDeal();
         return $this->equipmentOnDeal;
-        //dd($this->equipment);
     }
 
     public function getHighlightsData(Collection $equipment)
@@ -249,24 +144,5 @@ class BuildOverviewData
 
         $this->labelEquipmentOnDeal();
         return $this->equipmentOnDeal;
-        //dd($this->equipmentOnDeal);
-        //$this->equipmentOnDeal = $labeledEquipment;
     }
-
-
-    /**
-     * @param Collection $equipment
-     * @param bool $debug
-     * @return mixed
-     */
-    /*public function build(Collection $equipment, $debug = false)
-    {
-        $this->debug = $debug;
-        $this->equipment = $equipment
-            ->groupBy('name', true);
-
-        $this->labelEquipmentOnDeal();
-
-        return $this->equipmentOnDeal;
-    }*/
 }
