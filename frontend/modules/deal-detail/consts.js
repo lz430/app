@@ -12,12 +12,16 @@ export const FINANCE_UPDATE_TERM = `${namespace}_FINANCE_UPDATE_TERM`;
 
 export const LEASE_UPDATE = `${namespace}_LEASE_UPDATE`;
 
-export const SELECT_DMR_DISCOUNT = `${namespace}_SELECT_DMR_DISCOUNT`;
-export const SELECT_EMPLOYEE_DISCOUNT = `${namespace}_SELECT_EMPLOYEE_DISCOUNT`;
-export const SELECT_SUPPLIER_DISCOUNT = `${namespace}_SELECT_SUPPLIER_DISCOUNT`;
-export const SELECT_CONDITIONAL_ROLES = `${namespace}_SELECT_CONDITIONAL_ROLES`;
+export const SET_PRICING_ROLE = `${namespace}_SET_PRICING_ROLE`;
+export const SET_DMR_DISCOUNT = `${namespace}_SET_DMR_DISCOUNT`;
+export const SET_EMPLOYEE_DISCOUNT = `${namespace}_SET_EMPLOYEE_DISCOUNT`;
+export const SET_SUPPLIER_DISCOUNT = `${namespace}_SET_SUPPLIER_DISCOUNT`;
+export const SET_CONDITIONAL_ROLES = `${namespace}_SET_CONDITIONAL_ROLES`;
 
 export const TRADE_SET_VALUE = `${namespace}_TRADE_SET_VALUE`;
 export const TRADE_SET_OWED = `${namespace}_TRADE_SET_OWED`;
 export const TRADE_SET_ESTIMATE = `${namespace}_TRADE_SET_ESTIMATE`;
 export const TRADE_SET = `${namespace}_TRADE_SET`;
+
+export const SET_URL_QUERY = `${namespace}_SET_URL_QUERY`;
+export const SET_FROM_INITIAL_QUOTE_PARAMS = `${namespace}_SET_FROM_INITIAL_QUOTE_PARAMS`;
