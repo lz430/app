@@ -11,7 +11,6 @@ export default class Page extends React.Component {
     };
 
     static async getInitialProps({ query }) {
-        console.log('getInitialProps', query);
         return {
             query: query ? query : {},
         };
