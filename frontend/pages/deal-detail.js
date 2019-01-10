@@ -13,11 +13,8 @@ export default class Page extends React.Component {
                     {config['REACT_APP_ENVIRONMENT'] === 'production' && (
                         <React.Fragment>
                             <script
-                                dangerouslySetInnerHTML={{
-                                    __html: `
-                                document.write('<scri'+'pt src="//mpp.vindicosuite.com/conv/m=2;t=26853;he=<hashed_email>;ts='+Math.random()+'"></scri'+'pt>');
-                        `,
-                                }}
+                                src={`//mpp.vindicosuite.com/conv/m=2;t=26853;he=<hashed_email>;ts=${Math.random()}`}
+                                async
                             />
                             <noscript>
                                 <img
