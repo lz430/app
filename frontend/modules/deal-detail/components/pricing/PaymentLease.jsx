@@ -9,7 +9,13 @@ import Separator from '../../../../apps/pricing/components/Separator';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 
 import PaymentLeaseTermsSelect from './PaymentLeaseTermsSelect';
-import { Input, FormGroup, Label } from 'reactstrap';
+import {
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    FormGroup,
+    Label,
+} from 'reactstrap';
 import Value from '../../../../apps/pricing/components/Value';
 import { Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -137,12 +143,17 @@ export default class PaymentLease extends React.PureComponent {
                             <Label for="down-payment" className="text-sm">
                                 Additional Down Payment
                             </Label>
-                            <Input
-                                type="text"
-                                name="down-payment"
-                                value={pricing.cashDue().toFormat('0,0')}
-                                onChange={this.handleCashDueChange}
-                            />
+                            <InputGroup>
+                                <InputGroupAddon addonType="prepend">
+                                    $
+                                </InputGroupAddon>
+                                <Input
+                                    type="text"
+                                    name="down-payment"
+                                    value={pricing.cashDue().toFormat('0,0')}
+                                    onChange={this.handleCashDueChange}
+                                />
+                            </InputGroup>
                         </FormGroup>
                     </div>
                     <Line isSectionTotal>
