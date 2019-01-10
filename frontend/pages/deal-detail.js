@@ -26,7 +26,7 @@ export default class Page extends React.Component {
                         </React.Fragment>
                     )}
                 </Head>
-                <DealDetail initialQuoteParams={this.props.query} />
+                <DealDetail />
             </React.Fragment>
         );
     }
