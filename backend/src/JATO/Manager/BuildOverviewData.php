@@ -41,7 +41,7 @@ class BuildOverviewData
                     $highway = isset($attributes['country/highway (mpg)']) ? $attributes['country/highway (mpg)']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Fuel economy',
-                        'label' => "city MPG hwy",
+                        'label' => 'city MPG hwy',
                         'value' => "{$city} | {$highway}",
                     ];
                 }
@@ -59,7 +59,7 @@ class BuildOverviewData
                     $capacity = $capacity - 1;
                     $labeledEquipment[] = [
                         'category' => 'Seating',
-                        'label' => "Passengers",
+                        'label' => 'Passengers',
                         'value' => "Up to {$capacity}",
                     ];
                 }
@@ -69,7 +69,7 @@ class BuildOverviewData
                     $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Warranty',
-                        'label' => "Vehicle Warranty",
+                        'label' => 'Vehicle Warranty',
                         'value' => "{$months} months / {$miles} miles warranty",
                     ];
                 }
@@ -79,8 +79,8 @@ class BuildOverviewData
                         $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
                         $labeledEquipment[] = [
                             'category' => 'Wheels',
-                            'label' => "Wheels",
-                            'value' => "{$rimSize}\" {$rimType} wheels",
+                            'label' => 'Wheels',
+                            'value' => "{$rimSize} {$rimType} wheels",
                         ];
                     }
                 }
@@ -88,15 +88,20 @@ class BuildOverviewData
                     $material = isset($attributes['main seat material']) ? $attributes['main seat material']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Seat upholstery',
-                        'label' => "Seat Material",
+                        'label' => 'Seat Material',
                         'value' => "{$material} seats",
+                    ];
+                    $labeledEquipment[] = [
+                        'category' => 'Interior',
+                        'label' => 'Interior Color',
+                        'value' => "{$dealData->interior_color} Interior",
                     ];
                 }
                 if ($equipment->name == 'Body style') {
                     $bodyStyle = isset($attributes['Body type']) ? $attributes['Body type']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Body style',
-                        'label' => "Body Style",
+                        'label' => 'Body Style',
                         'value' => "{$bodyStyle}",
                     ];
                 }
@@ -104,7 +109,7 @@ class BuildOverviewData
                     $fuel = isset($attributes['Fuel type']) ? $attributes['Fuel type']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Fuel',
-                        'label' => "Fuel Type",
+                        'label' => 'Fuel Type',
                         'value' => "{$fuel}",
                     ];
                 }
@@ -116,17 +121,10 @@ class BuildOverviewData
                         'value' => "{$driveTrain}",
                     ];
                 }
-                if (isset($dealData->interior_color)) {
-                    $labeledEquipment[] = [
-                        'category' => 'Interior',
-                        'label' => 'Interior Color',
-                        'value' => "{$dealData->interior_color} Interior",
-                    ];
-                }
-                if ($dealData->simpleExteriorColor() != '') {
+                if ($equipment->name == 'Paint') {
                     $labeledEquipment[] = [
                         'category' => 'Exterior',
-                        'label' => 'Interior Color',
+                        'label' => 'Exterior Color',
                         'value' => "{$dealData->simpleExteriorColor()} Exterior",
                     ];
                 }
@@ -141,7 +139,7 @@ class BuildOverviewData
         $this->deal = $deal;
 
         $this->equipment = $equipment
-            ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive'])
+            ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive', 'Paint'])
             ->groupBy('name', true);
         $this->labelEquipmentOnDeal($this->deal);
         return $this->equipmentOnDeal;
