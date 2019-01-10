@@ -24,6 +24,7 @@ import withTracker from '../components/withTracker';
 import { nextRouterType } from '../core/types';
 import Head from 'next/head';
 import { getUserPurchaseStrategy } from '../apps/user/selectors';
+import config from '../core/config';
 
 class Page extends React.Component {
     static propTypes = {
@@ -45,6 +46,24 @@ class Page extends React.Component {
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride</title>
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                        <React.Fragment>
+                            <script
+                                dangerouslySetInnerHTML={{
+                                    __html: `
+                                document.write('<scri'+'pt src="//mpp.vindicosuite.com/conv/m=2;t=26852;he=<hashed_email>;ts='+Math.random()+'"></scri'+'pt>');
+                        `,
+                                }}
+                            />
+                            <noscript>
+                                <img
+                                    src="//mpp.vindicosuite.com/conv/m=1;t=26852;he=<hashed_email>;ts=<ts>"
+                                    width="0"
+                                    height="1"
+                                />
+                            </noscript>
+                        </React.Fragment>
+                    )}
                 </Head>
                 <div>
                     <HomepageHero
