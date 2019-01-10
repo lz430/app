@@ -13,10 +13,12 @@ import {
     getUserLocation,
     getUserPurchaseStrategy,
 } from '../../apps/user/selectors';
+import { setPurchaseStrategy } from '../../apps/user/actions';
 import { initPage } from '../../apps/page/sagas';
 import { pageLoadingFinished, pageLoadingStart } from '../../apps/page/actions';
 
 import { INIT, REQUEST_DEAL_QUOTE } from './consts';
+
 import {
     getConditionalRoles,
     getDeal,
@@ -24,12 +26,16 @@ import {
     getTradeIn,
     getLease,
 } from './selectors';
+
 import {
     dealDetailReceiveDealQuote,
     receiveDeal,
     setQuoteIsLoading,
+    setQuoteParamsFromQuery,
 } from './actions';
+
 import { cancelRequest } from '../../store/httpclient';
+
 import config from '../../core/config';
 
 /*******************************************************************
@@ -96,6 +102,15 @@ function* dealDetailRequestDealQuote() {
 function* init(action) {
     yield put(pageLoadingStart());
     yield* initPage('deal-detail', false);
+    const { dealId, initialQuoteParams } = action;
+
+    if (initialQuoteParams.strategy) {
+        yield put(setPurchaseStrategy(initialQuoteParams.strategy));
+    }
+
+    if (initialQuoteParams) {
+        yield put(setQuoteParamsFromQuery(initialQuoteParams));
+    }
 
     const userLocation = yield select(getUserLocation);
 
@@ -104,7 +119,7 @@ function* init(action) {
     try {
         results = yield call(
             ApiClient.deal.get,
-            action.data,
+            dealId,
             userLocation.latitude,
             userLocation.longitude
         );

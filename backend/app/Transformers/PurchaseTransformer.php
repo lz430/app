@@ -13,6 +13,7 @@ class PurchaseTransformer extends TransformerAbstract
             'id' => $purchase->id,
             'status' => $purchase->status,
             'deal_id' => $purchase->deal_id,
+            'user_id' => $purchase->user_id,
             'rebates' => $purchase->rebates,
             'down_payment' => $purchase->down_payment,
             'term' => $purchase->term,

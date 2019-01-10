@@ -25,10 +25,7 @@ class BackButton extends React.PureComponent {
      */
     handleBackButton() {
         if (this.props.currentPage === 'checkout-confirm') {
-            this.props.router.push(
-                `/deal-detail?id=${this.props.checkout.deal.id}`,
-                `/deals/${this.props.checkout.deal.id}`
-            );
+            this.props.router.back();
         }
     }
 

@@ -512,7 +512,8 @@
                 font-weight: 400;
             }
             > div {
-                padding: 0 15px 15px 15px;
+                margin: 0 15px 15px 15px;
+                border: 1px solid $gray-300;
             }
 
             &-item {

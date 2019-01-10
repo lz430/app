@@ -122,35 +122,15 @@ export default class Pricing {
         this.msrp().subtract(this.discountedAndRebatedPrice());
 
     isEffectiveDiscountEmployee = () => {
-        return (
-            this.data.discountType === 'employee' &&
-            this.data.employeeBrand === this.data.deal.make
-        );
+        return this.data.discountType === 'employee';
     };
 
     isEffectiveDiscountSupplier = () => {
-        return (
-            this.data.discountType === 'supplier' &&
-            this.data.supplierBrand === this.data.deal.make
-        );
+        return this.data.discountType === 'supplier';
     };
 
     isEffectiveDiscountDmr = () => {
-        if (!this.data.discountType || this.data.discountType === 'dmr') {
-            return true;
-        }
-
-        if (
-            this.data.discountType === 'employee' &&
-            this.data.employeeBrand !== this.data.deal.make
-        ) {
-            return true;
-        }
-
-        return (
-            this.data.discountType === 'supplier' &&
-            this.data.supplierBrand !== this.data.deal.make
-        );
+        return !this.data.discountType || this.data.discountType === 'dmr';
     };
 
     withTaxAdded = amount => amount.add(this.taxesFor(amount));

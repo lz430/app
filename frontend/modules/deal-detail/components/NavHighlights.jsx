@@ -9,7 +9,6 @@ export default class extends React.PureComponent {
     };
 
     render() {
-        // console.log(this.props);
         return (
             <div className="deal__highlights">
                 <Sticky topOffset={533}>
