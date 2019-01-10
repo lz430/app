@@ -46,7 +46,7 @@ class Page extends React.Component {
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride</title>
-                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                    {config['REACT_APP_ENVIRONMENT'] === 'local' && (
                         <React.Fragment>
                             <script
                                 src={`//mpp.vindicosuite.com/conv/m=1;t=26852;he=<hashed_email>;ts=${Math.random()}`}
@@ -59,6 +59,17 @@ class Page extends React.Component {
                                     height="1"
                                 />
                             </noscript>
+                            <script
+                                dangerouslySetInnerHTML={{
+                                    __html: `
+                                               var ciads_settings = { rtSiteId: 28157 , rtUuId: '3fa75db9-7a06-403e-bcdc-ce04c5664654'  };
+                        `,
+                                }}
+                            />
+                            <script
+                                type="text/javascript"
+                                src="https://media-cdn.ipredictive.com/js/cirt_v2.min.js"
+                            />
                         </React.Fragment>
                     )}
                 </Head>
