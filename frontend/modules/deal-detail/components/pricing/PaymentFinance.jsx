@@ -5,7 +5,15 @@ import Loading from '../../../../components/Loading';
 import Group from '../../../../apps/pricing/components/Group';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
-import { Button, ButtonGroup, Input, FormGroup, Label } from 'reactstrap';
+import {
+    Button,
+    ButtonGroup,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    FormGroup,
+    Label,
+} from 'reactstrap';
 
 import Separator from '../../../../apps/pricing/components/Separator';
 
@@ -72,16 +80,21 @@ export default class PaymentFinance extends React.PureComponent {
                                         >
                                             Down Payment
                                         </Label>
-                                        <Input
-                                            type="text"
-                                            name="down-payment"
-                                            value={pricing
-                                                .downPayment()
-                                                .toFormat('0,0')}
-                                            onChange={
-                                                this.handleDownPaymentChange
-                                            }
-                                        />
+                                        <InputGroup>
+                                            <InputGroupAddon addonType="prepend">
+                                                $
+                                            </InputGroupAddon>
+                                            <Input
+                                                type="text"
+                                                name="down-payment"
+                                                value={pricing
+                                                    .downPayment()
+                                                    .toFormat('0,0')}
+                                                onChange={
+                                                    this.handleDownPaymentChange
+                                                }
+                                            />
+                                        </InputGroup>
                                     </FormGroup>
                                 </div>
                             </div>
@@ -93,7 +106,6 @@ export default class PaymentFinance extends React.PureComponent {
                                         <Button
                                             key={term}
                                             color="secondary"
-                                            outline
                                             onClick={() =>
                                                 this.handleTermChange(term)
                                             }
