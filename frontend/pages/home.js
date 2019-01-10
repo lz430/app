@@ -46,7 +46,7 @@ class Page extends React.Component {
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride</title>
-                    {config['REACT_APP_ENVIRONMENT'] === 'local' && (
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
                         <React.Fragment>
                             <script
                                 src={`//mpp.vindicosuite.com/conv/m=1;t=26852;he=<hashed_email>;ts=${Math.random()}`}
