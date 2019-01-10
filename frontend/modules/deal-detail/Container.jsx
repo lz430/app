@@ -104,14 +104,25 @@ class DealDetailContainer extends React.PureComponent {
         urlQuery: PropTypes.object.isRequired,
     };
 
+    state = {
+        dealQuoteStep: 0, // price || payment || detail
+        submitted: false,
+    };
+
     componentDidMount() {
+        if (this.props.initialQuoteParams.step) {
+            this.setState({
+                dealQuoteStep: parseInt(this.props.initialQuoteParams.step),
+            });
+        }
+
         this.props.initPage(
             this.props.router.query.id,
             this.props.initialQuoteParams
         );
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (
             prevProps.dealPricingData.tradeIn &&
             !equals(
@@ -129,7 +140,10 @@ class DealDetailContainer extends React.PureComponent {
             this.props.dealDetailRefreshDealQuote();
         }
 
-        if (!equals(prevProps.urlQuery, this.props.urlQuery)) {
+        if (
+            !equals(prevProps.urlQuery, this.props.urlQuery) ||
+            prevState.dealQuoteStep !== this.state.dealQuoteStep
+        ) {
             this.updateUrl();
         }
     }
@@ -166,6 +180,10 @@ class DealDetailContainer extends React.PureComponent {
         }
         this.props.dealDetailRefreshDealQuote();
     };
+
+    onUpdateQuoteStep(step) {
+        this.setState({ dealQuoteStep: step });
+    }
 
     handleRebatesChange = role => {
         let selectedRoles = [...this.props.selectedConditionalRoles];
@@ -205,7 +223,8 @@ class DealDetailContainer extends React.PureComponent {
             checkoutData.leaseAnnualMileage,
             checkoutData.employeeBrand,
             checkoutData.supplierBrand,
-            checkoutData.tradeIn
+            checkoutData.tradeIn,
+            this.props.urlQuery
         );
         this.props.checkoutStart(pricing);
     }
@@ -253,6 +272,7 @@ class DealDetailContainer extends React.PureComponent {
         let query = {
             ...this.props.router.query,
             ...this.props.urlQuery,
+            step: this.state.dealQuoteStep,
         };
 
         let prettyQuery = {
@@ -300,6 +320,10 @@ class DealDetailContainer extends React.PureComponent {
                             <Col md="6" lg="5" xl="4">
                                 <AddToCart
                                     deal={this.props.deal}
+                                    dealQuoteStep={this.state.dealQuoteStep}
+                                    onUpdateQuoteStep={this.onUpdateQuoteStep.bind(
+                                        this
+                                    )}
                                     initialQuoteParams={
                                         this.props.initialQuoteParams
                                     }
