@@ -59,6 +59,17 @@ class Page extends React.Component {
                                     height="1"
                                 />
                             </noscript>
+                            <script
+                                dangerouslySetInnerHTML={{
+                                    __html: `
+                                               var ciads_settings = { rtSiteId: 28157 , rtUuId: '3fa75db9-7a06-403e-bcdc-ce04c5664654'  };
+                        `,
+                                }}
+                            />
+                            <script
+                                type="text/javascript"
+                                src="https://media-cdn.ipredictive.com/js/cirt_v2.min.js"
+                            />
                         </React.Fragment>
                     )}
                 </Head>

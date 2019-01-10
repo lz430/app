@@ -23,6 +23,18 @@ export default class Page extends React.Component {
                                     height="1"
                                 />
                             </noscript>
+
+                            <script
+                                dangerouslySetInnerHTML={{
+                                    __html: `
+                                var ciads_settings = { rtSiteId: 28162 , rtUuId: '1d01d0c0-f87c-40a5-acb5-2872ee342180'  };
+                        `,
+                                }}
+                            />
+                            <script
+                                type="text/javascript"
+                                src="https://media-cdn.ipredictive.com/js/cirt_v2.min.js"
+                            />
                         </React.Fragment>
                     )}
                 </Head>
