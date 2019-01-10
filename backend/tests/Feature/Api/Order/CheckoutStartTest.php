@@ -5,15 +5,19 @@ namespace Tests\Feature\Api\Order;
 use App\Models\Deal;
 use Tests\TestCaseWithAuth;
 use App\Services\Quote\Factories\FakeQuote;
+use App\Models\User;
 
 class CheckoutStartTest extends TestCaseWithAuth
 {
-    /** @test */
-    public function it_works()
+    private $payload = [];
+
+    public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
+        parent::__construct($name, $data, $dataName);
+
         $deal = factory(Deal::class)->create();
 
-        $payload = [
+        $this->payload = [
             'deal_id' => $deal->id,
             'strategy' => 'lease',
             'quote' => (new FakeQuote())->get(),
@@ -31,9 +35,13 @@ class CheckoutStartTest extends TestCaseWithAuth
                 'estimate' => null,
             ],
         ];
+    }
 
+    /** @test */
+    public function it_works_as_anon()
+    {
         $response = $this
-            ->json('POST', 'api/checkout/start', $payload);
+            ->json('POST', 'api/checkout/start', $this->payload);
 
         $response
             ->assertStatus(200)
@@ -45,4 +53,25 @@ class CheckoutStartTest extends TestCaseWithAuth
                 ]
             );
     }
+
+    /** @test */
+    public function it_works_as_logged_in_user()
+    {
+        $user = factory(User::class)->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->json('POST', 'api/checkout/start', $this->payload);
+
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure(
+                [
+                    'status',
+                    'orderToken',
+                    'purchase',
+                ]
+            );
+    }
+
 }
