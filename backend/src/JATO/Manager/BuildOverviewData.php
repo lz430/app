@@ -3,6 +3,7 @@
 namespace DeliverMyRide\JATO\Manager;
 
 use Illuminate\Support\Collection;
+use App\Models\Deal;
 
 class BuildOverviewData
 {
@@ -11,6 +12,9 @@ class BuildOverviewData
 
     /* @var bool */
     private $debug;
+
+    /* @var \App\Models\Deal */
+    private $deal;
 
     private $equipmentOnDeal;
 
@@ -36,107 +40,59 @@ class BuildOverviewData
     {
         $labels = [];
         $attributes = [];
-
         foreach ($equipments->aspects as $attribute) {
             $attributes[$attribute->name] = $attribute;
         }
-        if ($equipments->name == 'Power') {
-            if (isset($attributes['Maximum power hp/PS'])) {
-                $labels[$attributes['Maximum power hp/PS']->schemaId] = $this->itemFactory(
-                    'Horse Power',
-                    "{$attributes['Maximum power hp/PS']->value}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-        }
-        if ($equipments->name == 'Transmission') {
-            if (isset($attributes['Transmission type'])) {
-                $labels[$attributes['Transmission type']->schemaId] = $this->itemFactory(
-                    'Transmission Type',
-                    "{$attributes['Transmission type']->value}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-            if (isset($attributes['number of speeds'])) {
-                $labels[$attributes['number of speeds']->schemaId] = $this->itemFactory(
-                    'Transmission Speed',
-                    "{$attributes['number of speeds']->value}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-            if (isset($attributes['transmission description'])) {
-                $labels[$attributes['transmission description']->schemaId] = $this->itemFactory(
-                    'Transmission Description',
-                    "{$attributes['transmission description']->value}",
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-        }
-        if ($equipments->name == 'Fuel economy') {
-            if (isset($attributes['urban (mpg)'])) {
-                $labels[$attributes['urban (mpg)']->schemaId] = $this->itemFactory(
-                    'City MPG',
-                    $attributes['urban (mpg)']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-            if (isset($attributes['country/highway (mpg)'])) {
-                $labels[$attributes['country/highway (mpg)']->schemaId] = $this->itemFactory(
-                    'Highway MPG',
-                    $attributes['country/highway (mpg)']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-        }
-        if ($equipments->name == 'Warranty whole vehicle - Total') {
-            $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
-            $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
+        if (in_array($equipments->name, ['Engine', 'Power'])) {
+            $liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
+            $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
+            $valves = isset($attributes['number of valves per cylinder']) ? $attributes['number of valves per cylinder']->value : '';
+            $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
             $labels[$equipments->schemaId] = $this->itemFactory(
-                'Warranty',
-                "{$months} months / {$miles} miles",
+                "{$liters}L v{$valves}{$configuration}",
+                "{$horsePower} hp",
                 [
                     'equipment' => $equipments,
                     'from' => 'Custom',
                 ]);
         }
-        /*
-        if ($equipments->name == 'Wheels') {
-            if (isset($attributes['rim type'])) {
-                $labels[$attributes['rim type']->schemaId] = $this->itemFactory(
-                    'Rim Type',
-                    $attributes['rim type']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
-            if (isset($attributes['rim diameter (in)'])) {
-                $labels[$attributes['rim diameter (in)']->schemaId] = $this->itemFactory(
-                    'Rim Diameter',
-                    $attributes['rim diameter (in)']->value,
-                    [
-                        'equipment' => $equipments,
-                        'from' => 'Custom',
-                    ]);
-            }
+        if ($equipments->name == 'Fuel economy') {
+            $city = isset($attributes['urban (mpg)']) ? $attributes['urban (mpg)']->value : '';
+            $highway = isset($attributes['country/highway (mpg)']) ? $attributes['country/highway (mpg)']->value : '';
+            $labels[$equipments->schemaId] = $this->itemFactory(
+                'city MPG hwy',
+                "{$city} | {$highway}",
+                [
+                    'equipment' => $equipments,
+                    'from' => 'Custom',
+                ]);
         }
-        */
+        /*if ($equipments->name == 'Warranty whole vehicle - Total') {
+            $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
+            $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
+            $labels[$equipments->schemaId] = $this->itemFactory(
+                'Warranty',
+                "{$months} months / {$miles} miles warranty",
+                [
+                    'equipment' => $equipments,
+                    'from' => 'Custom',
+                ]);
+        }
+        if ($equipments->name == 'Wheels') {
+            $rimType = isset($attributes['rim type']) ? $attributes['rim type']->value : '';
+            $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
+            $labels[$equipments->schemaId] = $this->itemFactory(
+                'Wheels',
+                "{$rimSize} {$rimType} wheels",
+                [
+                    'equipment' => $equipments,
+                    'from' => 'Custom',
+                ]);
+        }*/
         return $labels;
     }
 
-    private function labelEquipmentOnDeal()
+    /*private function labelEquipmentOnDeal()
     {
         $labeledEquipment = [];
         foreach ($this->equipment as $category => $equipments) {
@@ -161,21 +117,156 @@ class BuildOverviewData
         }
 
         $this->equipmentOnDeal = $labeledEquipment;
+    }*/
+
+    private function labelEquipmentOnDeal()
+    {
+        $labeledEquipment = [];
+        $attributes = [];
+        dd($this->deal);
+        foreach ($this->equipment as $category => $equipments) {
+            foreach ($equipments as $equipment) {
+                foreach ($equipment->aspects as $attribute) {
+                    $attributes[$attribute->name] = $attribute;
+                }
+                // Data for highlights section
+                if (in_array($equipment->name, ['Engine', 'Power'])) {
+                    $liters = isset($attributes['Liters']) ? $attributes['Liters']->value : '';
+                    $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
+                    $valves = isset($attributes['number of valves per cylinder']) ? $attributes['number of valves per cylinder']->value : '';
+                    $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Power',
+                        'label' => "{$liters}L v{$valves}{$configuration}",
+                        'value' => "{$horsePower} hp",
+                    ];
+                }
+                if ($equipment->name == 'Fuel economy') {
+                    $city = isset($attributes['urban (mpg)']) ? $attributes['urban (mpg)']->value : '';
+                    $highway = isset($attributes['country/highway (mpg)']) ? $attributes['country/highway (mpg)']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Fuel economy',
+                        'label' => "city MPG hwy",
+                        'value' => "{$city} | {$highway}",
+                    ];
+                }
+                if ($equipment->name == 'Transmission') {
+                    $type = isset($attributes['Transmission type']) ? $attributes['Transmission type']->value : '';
+                    $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Transmission',
+                        'label' => "{$type} transmission",
+                        'value' => "{$speeds}-speed",
+                    ];
+                }
+                if ($equipment->name == 'Seating') {
+                    $capacity = isset($attributes['Seating capacity']) ? $attributes['Seating capacity']->value : '';
+                    $capacity = $capacity - 1;
+                    $labeledEquipment[] = [
+                        'category' => 'Seating',
+                        'label' => "Passengers",
+                        'value' => "Up to {$capacity}",
+                    ];
+                }
+                // Data for overview section
+                if ($equipment->name == 'Warranty whole vehicle - Total') {
+                    $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
+                    $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Warranty',
+                        'label' => "Vehicle Warranty",
+                        'value' => "{$months} months / {$miles} miles warranty",
+                    ];
+                }
+                if ($equipment->name == 'Wheels') {
+                    if(isset($attributes['location']) && $attributes['location']->value == 'front') {
+                        $rimType = isset($attributes['rim type']) ? $attributes['rim type']->value : '';
+                        $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
+                        $labeledEquipment[] = [
+                            'category' => 'Wheels',
+                            'label' => "Wheels",
+                            'value' => "{$rimSize}\" {$rimType} wheels",
+                        ];
+                    }
+                }
+                if ($equipment->name == 'Seat upholstery') {
+                    $material = isset($attributes['main seat material']) ? $attributes['main seat material']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Seat upholstery',
+                        'label' => "Seat Material",
+                        'value' => "{$material} seats",
+                    ];
+                }
+                if ($equipment->name == 'Body style') {
+                    $bodyStyle = isset($attributes['Body type']) ? $attributes['Body type']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Body style',
+                        'label' => "Body Style",
+                        'value' => "{$bodyStyle}",
+                    ];
+                }
+                if ($equipment->name == 'Fuel') {
+                    $fuel = isset($attributes['Fuel type']) ? $attributes['Fuel type']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Fuel',
+                        'label' => "Fuel Type",
+                        'value' => "{$fuel}",
+                    ];
+                }
+                if ($equipment->name == 'Drive') {
+                    $driveTrain = isset($attributes['Driven wheels']) ? $attributes['Driven wheels']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Drive',
+                        'label' => 'Drive Train',
+                        'value' => "{$driveTrain}",
+                    ];
+                }
+            }
+        }
+
+        $this->equipmentOnDeal = $labeledEquipment;
     }
+
+    public function getOverviewData(Collection $equipment, Deal $deal)
+    {
+        $this->deal = $deal;
+
+        dd($this->deal->interior_color);
+
+        $this->equipment = $equipment
+            ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive'])
+            ->groupBy('name', true);
+        $this->labelEquipmentOnDeal();
+        return $this->equipmentOnDeal;
+        //dd($this->equipment);
+    }
+
+    public function getHighlightsData(Collection $equipment)
+    {
+        $this->equipment = $equipment
+            ->whereIn('name', ['Power', 'Engine', 'Fuel economy', 'Transmission', 'Seating'])
+            ->groupBy('name', true);
+
+        $this->labelEquipmentOnDeal();
+        return $this->equipmentOnDeal;
+        //dd($this->equipmentOnDeal);
+        //$this->equipmentOnDeal = $labeledEquipment;
+    }
+
 
     /**
      * @param Collection $equipment
      * @param bool $debug
      * @return mixed
      */
-    public function build(Collection $equipment, $debug = false)
+    /*public function build(Collection $equipment, $debug = false)
     {
         $this->debug = $debug;
         $this->equipment = $equipment
-            ->groupBy('category', true);
+            ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal();
 
         return $this->equipmentOnDeal;
-    }
+    }*/
 }
