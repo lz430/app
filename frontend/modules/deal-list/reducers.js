@@ -155,7 +155,7 @@ const reducer = function(state = initialState, action = {}) {
                 };
             }
 
-        case ActionTypes.SELECT_MODEL_YEAR:
+        case ActionTypes.SET_MODEL_YEAR:
             return {
                 ...state,
                 page: 1,

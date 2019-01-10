@@ -63,7 +63,7 @@ export function clearAllSecondaryFilters() {
 export function selectModelYear(vehicleModel) {
     return dispatch => {
         dispatch({
-            type: ActionTypes.SELECT_MODEL_YEAR,
+            type: ActionTypes.SET_MODEL_YEAR,
             data: vehicleModel,
         });
 
