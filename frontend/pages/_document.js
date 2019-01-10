@@ -20,6 +20,33 @@ export default class MyDocument extends Document {
         if (this.props.__NEXT_DATA__.query.csrfToken) {
             csrfToken = this.props.__NEXT_DATA__.query.csrfToken;
         }
+
+        let userId = null;
+        if (this.props.sessionData.user) {
+            userId = this.props.sessionData.user.id;
+        } else if (this.props.sessionData.guestUser) {
+            userId = this.props.sessionData.guestUser.id;
+        }
+
+        let userData = {};
+
+        if (this.props.sessionData.purchase) {
+            userData['purchaseId'] = this.props.sessionData.purchase.id;
+            userData['purchaseStatus'] = this.props.sessionData.purchase.status;
+        }
+
+        if (this.props.sessionData.user) {
+            userData['displayName'] = `${
+                this.props.sessionData.user.first_name
+            } ${this.props.sessionData.user.last_name}`;
+            userData['email'] = this.props.sessionData.user.email;
+        } else if (this.props.sessionData.guestUser) {
+            userData['displayName'] = `${
+                this.props.sessionData.guestUser.first_name
+            } ${this.props.sessionData.guestUser.last_name}`;
+            userData['email'] = this.props.sessionData.guestUser.email;
+        }
+
         return (
             <html>
                 <Head>
@@ -126,8 +153,27 @@ export default class MyDocument extends Document {
                             }}
                         />
                     )}
-                </Head>
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' &&
+                        userId && (
+                            <script
+                                dangerouslySetInnerHTML={{
+                                    __html: `
+                                FS.identify('${userId}');
+                        `,
+                                }}
+                            />
+                        )}
 
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                        <script
+                            dangerouslySetInnerHTML={{
+                                __html: `
+                                FS.setUserVars(${JSON.stringify(userData)});
+                        `,
+                            }}
+                        />
+                    )}
+                </Head>
                 <body>
                     <Main />
                     <NextScript />
