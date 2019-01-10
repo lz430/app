@@ -354,7 +354,7 @@ class Deal extends Model
                     'label' => [
                         'type' => 'text',
                     ],
-                    'value1' => [
+                    'value' => [
                         'type' => 'text',
                     ],
                 ],
