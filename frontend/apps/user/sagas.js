@@ -178,7 +178,6 @@ export function* loginUser(data) {
     if (user) {
         yield put(softUpdateSessionData({ user: user }));
     }
-
     //
     // Redirect to my account for testing
     formActions.setSubmitting(false);

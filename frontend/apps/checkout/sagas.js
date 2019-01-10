@@ -17,6 +17,10 @@ import { track } from '../../core/services';
 
 import Router from 'next/router';
 
+import { storeSessionData } from '../session/manager';
+import { softUpdateSessionData } from '../session/actions';
+import { getSessionCSRFToken } from '../session/selectors';
+
 function toDollarsAndCents(input) {
     return input.toFormat('0.00');
 }
@@ -66,8 +70,20 @@ export function* checkoutStart(action) {
             amounts,
             checkout.tradeIn
         );
+        results = results.data;
     } catch (e) {
         console.log(e);
+    }
+    if (results) {
+        const csrfToken = yield select(getSessionCSRFToken);
+        storeSessionData(
+            { purchase: { id: results.purchase.id } },
+            null,
+            csrfToken
+        );
+        yield put(
+            softUpdateSessionData({ purchase: { id: results.purchase.id } })
+        );
     }
 
     track('deal-detail:quote-form:submitted', {
@@ -75,7 +91,7 @@ export function* checkoutStart(action) {
     });
 
     if (results) {
-        yield put(receivePurchase(results.data));
+        yield put(receivePurchase(results));
         yield put(checkoutFinishedLoading());
         Router.push('/checkout-contact', '/checkout/contact');
     }
@@ -103,6 +119,7 @@ export function* checkoutContact(action) {
             values.phone_number,
             values.g_recaptcha_response
         );
+        results = results.data;
         actions.setStatus({ success: true });
     } catch (error) {
         actions.setStatus({ success: false });
@@ -115,8 +132,27 @@ export function* checkoutContact(action) {
     });
 
     if (results) {
-        yield put(receivePurchase(results.data));
-        Router.push(results.data.destination);
+        const csrfToken = yield select(getSessionCSRFToken);
+        const sessionData = {
+            guestUser: {
+                first_name: values.first_name,
+                last_name: values.last_name,
+                email: values.email,
+                id: results.purchase.user_id,
+            },
+            purchase: {
+                id: results.purchase.id,
+                status: results.purchase.status,
+            },
+        };
+
+        storeSessionData(sessionData, null, csrfToken);
+        yield put(softUpdateSessionData(sessionData));
+    }
+
+    if (results) {
+        yield put(receivePurchase(results));
+        Router.push(results.destination);
     }
 }
 
