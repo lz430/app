@@ -345,6 +345,16 @@ class Deal extends Model
                     ],
                 ],
             ],
+            'price_validation' => [
+                'properties' => [
+                    'value' => [
+                        'type' => 'boolean',
+                    ],
+                    'reason' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -664,6 +674,7 @@ class Deal extends Model
         }
 
         // The defaults when no rules exist.
+        // The default for 'pricing_is_valid' will be added to the object
         $prices = [
             'msrp' => $source->msrp,
             'default' => $source->msrp !== '' ? $source->msrp : null,
@@ -728,6 +739,47 @@ class Deal extends Model
         return (object) array_map('floatval', $prices);
     }
 
+    /*
+     * @Return array (true/false)
+      Pricing validation -
+      – Default price must be less than or equal to 200000
+      – Default price must be greater than or equal to 10000
+      – MSRP must be greater or equal to Default price
+      - Default price should be within 25% of MSRP
+     */
+    public function validateDealPriceRules($prices) {
+        $percentage = config('app.pricing_validation_percentage');
+
+        //$results = [];
+
+        if($prices->msrp < $prices->default)
+            $results = [
+                'value'=>false,
+                'reason' => 'Price gt Msrp',
+            ];
+        elseif($prices->default > 200000)
+            $results = [
+                'value'=>false,
+                'reason' => 'Price gt 200000',
+            ];
+        elseif($prices->default < 10000)
+            $results = [
+                'value'=>false,
+                'reason' => 'Price lt 10000',
+            ];
+        elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > $percentage)
+            $results = [
+                'value'=>false,
+                'reason' => 'Exceeds Percentage',
+            ];
+        else
+            $results = [
+                'value'=>true,
+                'reason' => 'All Good',
+            ];
+
+        return $results;
+    }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -825,6 +877,9 @@ class Deal extends Model
         return $data;
     }
 
+    /*
+     *
+     */
     /**
      * Get the indexable data array for the model.
      *
@@ -918,6 +973,9 @@ class Deal extends Model
         }
 
         $pricing = $this->prices();
+        $record['pricing'] = $pricing;
+        // Perform validation in the Prising array.
+        $record['price_validation'] = $this->validateDealPriceRules($pricing);
         $record['pricing'] = $pricing;
         $record['payments'] = $this->payments;
         $record['fees'] = [

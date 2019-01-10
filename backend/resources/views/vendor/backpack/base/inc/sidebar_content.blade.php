@@ -48,6 +48,7 @@
 </li>
 
 <li class="header">Reports</li>
+
 <li>
     <a href="/admin/archived-dumps">
         <i class="fa fa-file"></i>
@@ -70,5 +71,11 @@
     <a href="/admin/reports/versions-missing-images">
         <i class="fa fa-image"></i>
         <span>Version w/ No Photos</span>
+    </a>
+</li>
+<li>
+    <a href="/admin/reports/deals-violating-price-rules">
+        <i class="fa fa-file"></i>
+        <span>Deals Violating Pricing Rules</span>
     </a>
 </li>
