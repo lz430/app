@@ -55,7 +55,7 @@ export default class MyDocument extends Document {
                         name="viewport"
                         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
                     />
-                    <meta name="theme-color" content="#41b1ac" />
+                    <meta name="theme-color" content="#1ABDDD" />
                     {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
                         <meta name="robots" content="noindex,nofollow" />
                     )}
