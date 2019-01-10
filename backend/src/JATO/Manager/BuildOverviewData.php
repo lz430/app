@@ -2,8 +2,8 @@
 
 namespace DeliverMyRide\JATO\Manager;
 
-use Illuminate\Support\Collection;
 use App\Models\Deal;
+use Illuminate\Support\Collection;
 
 class BuildOverviewData
 {
@@ -74,7 +74,7 @@ class BuildOverviewData
                     ];
                 }
                 if ($equipment->name == 'Wheels') {
-                    if(isset($attributes['location']) && $attributes['location']->value == 'front') {
+                    if (isset($attributes['location']) && $attributes['location']->value == 'front') {
                         $rimType = isset($attributes['rim type']) ? $attributes['rim type']->value : '';
                         $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
                         $labeledEquipment[] = [
@@ -142,6 +142,7 @@ class BuildOverviewData
             ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive', 'Paint'])
             ->groupBy('name', true);
         $this->labelEquipmentOnDeal($this->deal);
+
         return $this->equipmentOnDeal;
     }
 
@@ -154,6 +155,7 @@ class BuildOverviewData
             ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal($this->deal);
+
         return $this->equipmentOnDeal;
     }
 }
