@@ -11,7 +11,7 @@ import {
 } from 'reactstrap';
 
 import Link from 'next/link';
-import NewLogo from '../../static/images/new-logo.svg';
+import Logo from '../../static/images/logo.svg';
 import ActiveLink from '../../components/ActiveLink';
 
 export default class Header extends React.Component {
@@ -35,7 +35,7 @@ export default class Header extends React.Component {
                 <Container>
                     <Link href="/home" as="/" passHref>
                         <NavbarBrand>
-                            <NewLogo />
+                            <Logo />
                         </NavbarBrand>
                     </Link>
                     <NavbarToggler
