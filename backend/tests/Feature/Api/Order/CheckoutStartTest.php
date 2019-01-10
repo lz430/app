@@ -3,16 +3,15 @@
 namespace Tests\Feature\Api\Order;
 
 use App\Models\Deal;
+use App\Models\User;
 use Tests\TestCaseWithAuth;
 use App\Services\Quote\Factories\FakeQuote;
-use App\Models\User;
 
 class CheckoutStartTest extends TestCaseWithAuth
 {
     /** @test */
     public function it_works_as_anon()
     {
-
         $deal = factory(Deal::class)->create();
 
         $payload = [
@@ -86,5 +85,4 @@ class CheckoutStartTest extends TestCaseWithAuth
                 ]
             );
     }
-
 }
