@@ -46,14 +46,11 @@ class Page extends React.Component {
             <React.Fragment>
                 <Head>
                     <title>Deliver My Ride</title>
-                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
+                    {config['REACT_APP_ENVIRONMENT'] === 'local' && (
                         <React.Fragment>
                             <script
-                                dangerouslySetInnerHTML={{
-                                    __html: `
-                                document.write('<scri'+'pt src="//mpp.vindicosuite.com/conv/m=2;t=26852;he=<hashed_email>;ts='+Math.random()+'"></scri'+'pt>');
-                        `,
-                                }}
+                                src={`//mpp.vindicosuite.com/conv/m=2;t=26852;he=<hashed_email>;ts=${Math.random()}`}
+                                async
                             />
                             <noscript>
                                 <img
