@@ -130,7 +130,7 @@ export default class MyDocument extends Document {
                         </noscript>
                     )}
 
-                    {config['REACT_APP_ENVIRONMENT'] === 'local' && (
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
                         <script
                             dangerouslySetInnerHTML={{
                                 __html: `
@@ -153,7 +153,7 @@ export default class MyDocument extends Document {
                             }}
                         />
                     )}
-                    {config['REACT_APP_ENVIRONMENT'] === 'local' &&
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' &&
                         userId && (
                             <script
                                 dangerouslySetInnerHTML={{
@@ -164,7 +164,7 @@ export default class MyDocument extends Document {
                             />
                         )}
 
-                    {config['REACT_APP_ENVIRONMENT'] === 'local' && (
+                    {config['REACT_APP_ENVIRONMENT'] === 'production' && (
                         <script
                             dangerouslySetInnerHTML={{
                                 __html: `
