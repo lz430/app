@@ -499,6 +499,8 @@ class VersionMunger
     public function build(array $row): array
     {
         $this->row = $row;
+        $this->debug['versionWasCreated'] = false;
+        $this->debug['versionWasRefreshed'] = false;
 
         //
         // Match Jato Version
@@ -513,14 +515,13 @@ class VersionMunger
         }
 
         $this->jatoVersion = $jatoVersion;
-        $this->debug['versionsCreated'] = 0;
-        $this->debug['versionsUpdated'] = 0;
         //
         // Decide if we need to create
         $version = Version::where('jato_uid', $jatoVersion->uid)->where('year', $this->row['Year'])->first();
         if (! $version) {
             $version = $this->create();
-            $this->debug['versionsCreated']++;
+            $this->debug['versionWasCreated'] = true;
+
             if ($version) {
                 $this->photos($version);
                 $this->quotes($version);
@@ -535,11 +536,12 @@ class VersionMunger
         // If the vehicle id has changed we need to update the vehicle id.
         if ($version->jato_vehicle_id != $jatoVersion->vehicle_ID) {
             $this->refresh($version, $jatoVersion);
-            $this->debug['versionsUpdated']++;
+            $this->debug['versionWasRefreshed'] = true;
         }
 
         if (! $version->photos()->count()) {
             $this->photos($version);
+
         }
 
         return [$version, $this->debug];
