@@ -1,9 +1,9 @@
 export default [
     {
         category: 'Person',
-        author: 'Monica P.',
+        author: 'Bill H.',
         content:
-            'The best way to buy or lease a new car, hands down. I never took time away from work or my weekends to visit a dealership.In fact, I finished my final paperwork on the golf course!',
+            'Highly recommended! We got the right vehicle/features, the price/terms were good, delivery was fast and paperwork easy. Thanks!',
         featured: true,
         location: '',
     },
