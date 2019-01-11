@@ -4,12 +4,14 @@ import { pricingType, dealType } from '../../../core/types';
 import classNames from 'classnames';
 import { Button } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
+
 import config from '../../../core/config';
 import Loading from '../../../components/Loading';
 
 import MSRPAndDiscount from './pricing/MSRPAndDiscount';
 import TradeIn from './pricing/TradeIn';
-
 import PaymentCash from './pricing/PaymentCash';
 import PaymentFinance from './pricing/PaymentFinance';
 import PaymentLease from './pricing/PaymentLease';
@@ -19,20 +21,22 @@ import TaxesAndFees from './pricing/TaxesAndFees';
 import DetailsLeaseDueAtDeliveryFees from './pricing/DetailsLeaseDueAtDeliveryFees';
 import DetailsSummary from './pricing/DetailsSummary';
 import DetailsPrice from './pricing/DetailsPrice';
+
 import Line from '../../../apps/pricing/components/Line';
 import Label from '../../../apps/pricing/components/Label';
 import Value from '../../../apps/pricing/components/Value';
-import DollarsAndCents from '../../../components/money/DollarsAndCents';
 import Separator from '../../../apps/pricing/components/Separator';
 import Group from '../../../apps/pricing/components/Group';
-import { track } from '../../../core/services';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckCircle } from '@fortawesome/pro-light-svg-icons';
+import DollarsAndCents from '../../../components/money/DollarsAndCents';
+
+import { track } from '../../../core/services';
 
 export default class AddToCart extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
+        initialQuoteParams: PropTypes.object.isRequired,
+        updateUrl: PropTypes.func.isRequired,
         purchaseStrategy: PropTypes.string.isRequired,
         isDealQuoteRefreshing: PropTypes.bool.isRequired,
         handlePaymentTypeChange: PropTypes.func.isRequired,
@@ -45,10 +49,11 @@ export default class AddToCart extends React.PureComponent {
         tradeSet: PropTypes.func.isRequired,
         userLocation: PropTypes.object.isRequired,
         pricing: pricingType.isRequired,
+        dealQuoteStep: PropTypes.number.isRequired,
+        onUpdateQuoteStep: PropTypes.func.isRequired,
     };
 
     state = {
-        step: 0, // price || payment || detail
         submitted: false,
     };
 
@@ -86,24 +91,25 @@ export default class AddToCart extends React.PureComponent {
 
     progressToNextStep() {
         track('deal-detail:quote-form:step-completed', {
-            'Form Step': this.steps[this.state.step].label,
+            'Form Step': this.steps[this.props.dealQuoteStep].label,
         });
 
         //
         // Progress to the next step
-        if (this.state.step < this.steps.length - 1) {
-            this.setState({ step: this.state.step + 1 });
+        if (this.props.dealQuoteStep < this.steps.length - 1) {
+            const newStep = this.props.dealQuoteStep + 1;
+            this.props.onUpdateQuoteStep(newStep);
         } else {
             this.handleSubmit();
         }
     }
 
     selectStep(step) {
-        if (step >= this.state.step) {
+        if (step >= this.props.dealQuoteStep) {
             return false;
         }
 
-        this.setState({ step: step });
+        this.props.onUpdateQuoteStep(step);
     }
 
     /**
@@ -129,7 +135,7 @@ export default class AddToCart extends React.PureComponent {
                 block
                 onClick={() => this.progressToNextStep()}
             >
-                {this.steps[this.state.step].cta}
+                {this.steps[this.props.dealQuoteStep].cta}
             </Button>
         );
     }
@@ -238,7 +244,7 @@ export default class AddToCart extends React.PureComponent {
         return (
             <div className="steps border border-medium border-bottom-0">
                 {this.steps.map((step, index) => {
-                    const isCompleted = this.state.step > index;
+                    const isCompleted = this.props.dealQuoteStep > index;
                     return (
                         <div
                             key={'step' + index}
@@ -246,8 +252,8 @@ export default class AddToCart extends React.PureComponent {
                             className={classNames(
                                 'step',
                                 { complete: isCompleted },
-                                { disabled: this.state.step < index },
-                                { active: this.state.step === index }
+                                { disabled: this.props.dealQuoteStep < index },
+                                { active: this.props.dealQuoteStep === index }
                             )}
                         >
                             {!isCompleted && (
@@ -278,7 +284,7 @@ export default class AddToCart extends React.PureComponent {
                     onChange={this.props.handleLeaseChange}
                 />
 
-                {config['REACT_APP_ENVIRONMENT'] === 'local' && (
+                {config['REACT_APP_ENVIRONMENT'] !== 'production' && (
                     <TradeIn
                         onCompleteTradeIn={this.props.tradeSet}
                         zipcode={this.props.userLocation.zipcode}
@@ -447,9 +453,9 @@ export default class AddToCart extends React.PureComponent {
                 {this.renderProgress()}
 
                 <div className="p-4 bg-white border border-medium border-top-0">
-                    {this.state.step === 0 && this.renderPriceStep()}
-                    {this.state.step === 1 && this.renderPaymentStep()}
-                    {this.state.step === 2 && this.renderDetailsStep()}
+                    {this.props.dealQuoteStep === 0 && this.renderPriceStep()}
+                    {this.props.dealQuoteStep === 1 && this.renderPaymentStep()}
+                    {this.props.dealQuoteStep === 2 && this.renderDetailsStep()}
                 </div>
                 {this.renderCta()}
             </div>

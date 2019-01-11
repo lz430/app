@@ -26,7 +26,7 @@ export default [
     {
         title: 'Vans & Minivans',
         value: 'minivan',
-        query: ['style:Minivan'],
+        query: ['style:Van'],
         icon: '/static/brochure/styles/VanMiniVan.jpg',
     },
     {
