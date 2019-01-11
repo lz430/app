@@ -345,6 +345,20 @@ class Deal extends Model
                     ],
                 ],
             ],
+            'highlights' => [
+                'type' => 'nested',
+                'properties' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -954,10 +968,15 @@ class Deal extends Model
         }
 
         $equipmentOnDeal = $this->getEquipment();
+        $dealDetailData = new BuildOverviewData();
+
+        // Highlights data for detail page above overview
+        $record['highlights'] = [];
+        $record['highlights'] = $dealDetailData->getHighlightsData($equipmentOnDeal, $this);
 
         // Overview data for detail page
         $record['overview'] = [];
-        $record['overview'] = (new BuildOverviewData())->build($equipmentOnDeal);
+        $record['overview'] = $dealDetailData->getOverviewData($equipmentOnDeal, $this);
 
         // Equipment on car
         $record['equipment'] = [];
