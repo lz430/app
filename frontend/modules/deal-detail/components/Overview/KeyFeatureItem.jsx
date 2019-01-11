@@ -37,7 +37,7 @@ export default class extends React.PureComponent {
         }
 
         if (item.label === 'Body Style') {
-            return <IconStyle style={item.value} size={1} />;
+            return <IconStyle style={item.value} size={'equipment'} />;
         }
 
         if (item.label === 'Drive Train') {
