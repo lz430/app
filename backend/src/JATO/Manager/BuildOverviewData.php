@@ -15,6 +15,22 @@ class BuildOverviewData
 
     private $equipmentOnDeal;
 
+    private const DRIVE_TRAIN_MAP = [
+        '4WD' => 'Four Wheel Drive (4x4)',
+        'AWD' => 'All Wheel Drive (AWD)',
+        'FWD' => 'Front Wheel Drive (FWD)',
+        'RWD' => 'Rear Wheel Drive (RWD)',
+    ];
+
+    private const FUEL_TYPE_MAP = [
+        'unleaded' => 'Unleaded Gas',
+        'premium unleaded' => 'Premium Unleaded Gas',
+        'electric' => 'Electric',
+        'diesel' => 'Diesel',
+        'E85' => 'E85',
+        'compressed natural gas' => 'Compressed Natural Gas',
+    ];
+
     private function labelEquipmentOnDeal($dealData)
     {
         $labeledEquipment = [];
@@ -30,11 +46,13 @@ class BuildOverviewData
                     $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
                     $valves = isset($attributes['number of valves per cylinder']) ? $attributes['number of valves per cylinder']->value : '';
                     $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
-                    $labeledEquipment[] = [
-                        'category' => 'Power',
-                        'label' => "{$liters}L v{$valves}{$configuration}",
-                        'value' => "{$horsePower} hp",
-                    ];
+                    if($horsePower != '') { // super hacky TODO:fix this
+                        $labeledEquipment[] = [
+                            'category' => 'Power',
+                            'label' => "{$liters}L {$valves}{$configuration}",
+                            'value' => "{$horsePower} hp",
+                        ];
+                    }
                 }
                 if ($equipment->name == 'Fuel economy') {
                     $city = isset($attributes['urban (mpg)']) ? $attributes['urban (mpg)']->value : '';
@@ -46,55 +64,50 @@ class BuildOverviewData
                     ];
                 }
                 if ($equipment->name == 'Transmission') {
-                    $type = isset($attributes['Transmission type']) ? $attributes['Transmission type']->value : '';
+                    $type = isset($attributes['Transmission type']) ? ucwords($attributes['Transmission type']->value) : '';
                     $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
                     $labeledEquipment[] = [
                         'category' => 'Transmission',
-                        'label' => "{$type} transmission",
-                        'value' => "{$speeds}-speed",
+                        'label' => "{$type} Transmission",
+                        'value' => "{$speeds}-Speed",
                     ];
                 }
-                if ($equipment->name == 'Seating') {
-                    $capacity = isset($attributes['Seating capacity']) ? $attributes['Seating capacity']->value : '';
-                    $capacity = $capacity - 1;
-                    $labeledEquipment[] = [
-                        'category' => 'Seating',
-                        'label' => 'Passengers',
-                        'value' => "Up to {$capacity}",
-                    ];
-                }
-                // Data for overview section
-                if ($equipment->name == 'Warranty whole vehicle - Total') {
-                    $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
-                    $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
-                    $labeledEquipment[] = [
-                        'category' => 'Warranty',
-                        'label' => 'Vehicle Warranty',
-                        'value' => "{$months} months / {$miles} miles warranty",
-                    ];
-                }
-                if ($equipment->name == 'Wheels') {
-                    if (isset($attributes['location']) && $attributes['location']->value == 'front') {
-                        $rimType = isset($attributes['rim type']) ? $attributes['rim type']->value : '';
-                        $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value : '';
+                if ($equipment->name == 'Head restraints') {
+                    if(isset($attributes['location']) && $attributes['location']->value == 'front seats') {
+                        $capacity = isset($dealData->seating_capacity) ? $dealData->seating_capacity : '';
                         $labeledEquipment[] = [
-                            'category' => 'Wheels',
-                            'label' => 'Wheels',
-                            'value' => "{$rimSize} {$rimType} wheels",
+                            'category' => 'Seating',
+                            'label' => 'Seating Capacity',
+                            'value' => "Up to {$capacity}",
                         ];
                     }
                 }
-                if ($equipment->name == 'Seat upholstery') {
-                    $material = isset($attributes['main seat material']) ? $attributes['main seat material']->value : '';
+                // Data for overview section
+                if ($equipment->name == 'Paint') {
+                    $exteriorColor = ucwords($dealData->simpleExteriorColor());
                     $labeledEquipment[] = [
-                        'category' => 'Seat upholstery',
-                        'label' => 'Seat Material',
-                        'value' => "{$material} seats",
+                        'category' => 'Exterior',
+                        'label' => 'Exterior Color',
+                        'value' => "{$exteriorColor} Exterior",
                     ];
                     $labeledEquipment[] = [
                         'category' => 'Interior',
                         'label' => 'Interior Color',
                         'value' => "{$dealData->interior_color} Interior",
+                    ];
+                }
+                if ($equipment->name == 'Seat upholstery') {
+                    $material = isset($attributes['main seat material']) ? ucwords($attributes['main seat material']->value) : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Seat upholstery',
+                        'label' => 'Seat Material',
+                        'value' => "{$material} Seats",
+                    ];
+                    $bodyStyle = isset($dealData->version->body_style) ? ucwords($dealData->version->body_style) : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Body style',
+                        'label' => 'Body Style',
+                        'value' => "{$bodyStyle}",
                     ];
                 }
                 if ($equipment->name == 'Body style') {
@@ -105,27 +118,40 @@ class BuildOverviewData
                         'value' => "{$bodyStyle}",
                     ];
                 }
-                if ($equipment->name == 'Fuel') {
-                    $fuel = isset($attributes['Fuel type']) ? $attributes['Fuel type']->value : '';
-                    $labeledEquipment[] = [
-                        'category' => 'Fuel',
-                        'label' => 'Fuel Type',
-                        'value' => "{$fuel}",
-                    ];
-                }
                 if ($equipment->name == 'Drive') {
-                    $driveTrain = isset($attributes['Driven wheels']) ? $attributes['Driven wheels']->value : '';
+                    $driveTrain = isset($attributes['Driven wheels']) ? self::DRIVE_TRAIN_MAP[$attributes['Driven wheels']->value] : '';
                     $labeledEquipment[] = [
                         'category' => 'Drive',
                         'label' => 'Drive Train',
                         'value' => "{$driveTrain}",
                     ];
                 }
-                if ($equipment->name == 'Paint') {
+                if ($equipment->name == 'Wheels') {
+                    if (isset($attributes['location']) && $attributes['location']->value == 'front') {
+                        $rimType = isset($attributes['rim type']) ? ucwords($attributes['rim type']->value) : '';
+                        $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value . '"' : '';
+                        $labeledEquipment[] = [
+                            'category' => 'Wheels',
+                            'label' => 'Wheels',
+                            'value' => "{$rimSize} {$rimType} Wheels",
+                        ];
+                    }
+                }
+                if ($equipment->name == 'Fuel') {
+                    $fuel = isset($attributes['Fuel type']) ? self::FUEL_TYPE_MAP[$attributes['Fuel type']->value] : '';
                     $labeledEquipment[] = [
-                        'category' => 'Exterior',
-                        'label' => 'Exterior Color',
-                        'value' => "{$dealData->simpleExteriorColor()} Exterior",
+                        'category' => 'Fuel',
+                        'label' => 'Fuel Type',
+                        'value' => "{$fuel}",
+                    ];
+                }
+                if ($equipment->name == 'Warranty whole vehicle - Total') {
+                    $months = isset($attributes['duration (months)']) ? $attributes['duration (months)']->value : '';
+                    $miles = isset($attributes['distance (miles)']) ? $attributes['distance (miles)']->value : '';
+                    $labeledEquipment[] = [
+                        'category' => 'Warranty',
+                        'label' => 'Vehicle Warranty',
+                        'value' => "{$months} Months / {$miles} Miles Warranty",
                     ];
                 }
             }
@@ -139,8 +165,9 @@ class BuildOverviewData
         $this->deal = $deal;
 
         $this->equipment = $equipment
-            ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Body style', 'Fuel', 'Drive', 'Paint'])
+            ->whereIn('name', ['Warranty whole vehicle - Total', 'Wheels', 'Seat upholstery', 'Fuel', 'Drive', 'Paint'])
             ->groupBy('name', true);
+
         $this->labelEquipmentOnDeal($this->deal);
 
         return $this->equipmentOnDeal;
@@ -150,8 +177,14 @@ class BuildOverviewData
     {
         $this->deal = $deal;
 
+        /**
+         * Rather hacky but chose an arbitrary equipment name to represent seating capacity since the
+         * actual Seating category name is not pulled since the availability is '-' for some vehicles instead of
+         * standard/optional so just used to show the data for the highlights seating data, which is pulled from
+         * the deals table instead of pulling from JATO
+         **/
         $this->equipment = $equipment
-            ->whereIn('name', ['Power', 'Engine', 'Fuel economy', 'Transmission', 'Seating'])
+            ->whereIn('name', ['Power', 'Engine', 'Fuel economy', 'Transmission', 'Head restraints'])
             ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal($this->deal);
