@@ -3,7 +3,7 @@
 @section('header')
     <section class="content-header">
         <h1>
-            Report :: Vehicles Violating Price Rules
+            Report :: Deals that Violate Price Rules
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{ backpack_url() }}">{{ config('backpack.base.project_name') }}</a></li>
@@ -16,20 +16,20 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-
             @foreach($deals as $item)
                 @component('components.box')
                 @slot('title')
-                    <a href="/admin/deal/{{$item['dealer']['id']}}/edit">{{$item['dealer']['id']}}
-                        - {{$item['dealer']['dealer_name']}}</a>
+                    {{$item['dealer']['dealer_name']}}
                 @endslot
                     <table class="table">
                         <thead>
                         <tr>
                             <th>ID</th>
                             <th>VIN</th>
-                            <th>Invalid Reason</th>
-                            <th>Actions</th>
+                            <th>STOCK NUMBER</th>
+                            <th>MSRP</th>
+                            <th>PRICE</th>
+                            <th>INVALID REASON</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -44,9 +44,17 @@
                             {{$content['deal']->vin}}
                         </td>
                         <td>
+                            {{$content['deal']->stock_number}}
+                        </td>
+                        <td>
+                            ${{number_format($content['deal']->msrp, 2)}}
+                        </td>
+                        <td>
+                            ${{number_format($content['deal']->price, 2)}}
+                        </td>
+                        <td>
                             {{$content['reason']}}
                         </td>
-                        <td>-----</td>
                     </tr>
                 @endforeach
                     </tbody>

@@ -755,20 +755,20 @@ class Deal extends Model
                 'value'=>false,
                 'reason' => 'Price > Msrp',
             ];
-        elseif($prices->default > 200000)
+        elseif($prices->default > config('dmr.maximum_price_allowed'))
             $results = [
                 'value'=>false,
-                'reason' => 'Price > 200000',
+                'reason' => 'Price > $'.number_format(config('dmr.maximum_price_allowed'),2),
             ];
-        elseif($prices->default < 10000)
+        elseif($prices->default < config('dmr.minimum_price_allowed'))
             $results = [
                 'value'=>false,
-                'reason' => 'Price < 10000',
+                'reason' => 'Price < $'.number_format(config('dmr.minimum_price_allowed'),2),
             ];
         elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > $percentage)
             $results = [
                 'value'=>false,
-                'reason' => 'Margin Exceeds Percentage '.$percentage.'%',
+                'reason' => 'MSRP Exceeds Price by '.$percentage.'%',
             ];
         else
             $results = [
