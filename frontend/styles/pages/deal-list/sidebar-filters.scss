@@ -153,7 +153,6 @@ $icon-size: 20px;
         cursor: pointer;
         display: flex;
         padding: 2px 5px;
-        font-size: 0.8rem;
 
         &__checkbox {
             @include selector-icon;
@@ -232,6 +231,7 @@ $icon-size: 20px;
         cursor: pointer;
 
         &__icon {
+            font-size: 3rem;
             path {
                 fill: $text-color;
             }

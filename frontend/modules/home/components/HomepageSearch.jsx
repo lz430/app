@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
-import StyleIcon from '../../../components/Deals/StyleIcon';
+import IconStyle from '../../../components/Deals/IconStyle';
 
 import { faSearch, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -102,7 +102,7 @@ class SearchWidget extends React.PureComponent {
 
     renderResultItemIcon(category, item) {
         if (category === 'style') {
-            return <StyleIcon style={item.icon} />;
+            return <IconStyle style={item.icon} />;
         }
 
         if (item.icon) {

@@ -106,7 +106,7 @@ class Importer
             'erroredVins' => 0,
             'erroredMisc' => 0,
             'versionsCreated' => 0,
-            'versionsUpdated' => 0,
+            'versionsRefreshed' => 0,
             'versionPhotosUpdated' => 0,
             'dealPhotosRefreshed' => 0,
             'dealStockPhotos' => 0,
@@ -219,10 +219,12 @@ class Importer
                 return;
             }
 
-            if ($version->wasRecentlyCreated) {
+            if ($versionDebugData['versionWasCreated']) {
                 $this->debug['versionsCreated']++;
-            } else {
-                $this->debug['versionsUpdated']++;
+            }
+
+            if ($versionDebugData['versionWasRefreshed']) {
+                $this->debug['versionsRefreshed']++;
             }
 
             $deal = Deal::withoutSyncingToSearch(function () use ($version, $row) {
@@ -397,7 +399,7 @@ class Importer
                 'Deals Skipped' => $this->debug['skipped'],
                 'Deals Set to Sold' => $queryUpdateSold->count(),
                 'Versions Created' => $this->debug['versionsCreated'],
-                'Versions Updated' => $this->debug['versionsUpdated'],
+                'Versions Refreshed' => $this->debug['versionsRefreshed'],
                 'Version Photos Updated' => $this->debug['versionPhotosUpdated'],
                 'Deal Errors No VINS' => $this->debug['erroredVins'],
                 'Misc Errors' => $this->debug['erroredMisc'],
