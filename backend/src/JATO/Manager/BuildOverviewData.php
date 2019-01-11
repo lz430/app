@@ -46,7 +46,7 @@ class BuildOverviewData
                     $configuration = isset($attributes['configuration']) ? $attributes['configuration']->value : '';
                     $valves = isset($attributes['number of valves per cylinder']) ? $attributes['number of valves per cylinder']->value : '';
                     $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
-                    if($horsePower != '') { // super hacky TODO:fix this
+                    if ($horsePower != '') { // super hacky TODO:fix this
                         $labeledEquipment[] = [
                             'category' => 'Power',
                             'label' => "{$liters}L {$valves}{$configuration}",
@@ -73,7 +73,7 @@ class BuildOverviewData
                     ];
                 }
                 if ($equipment->name == 'Head restraints') {
-                    if(isset($attributes['location']) && $attributes['location']->value == 'front seats') {
+                    if (isset($attributes['location']) && $attributes['location']->value == 'front seats') {
                         $capacity = isset($dealData->seating_capacity) ? $dealData->seating_capacity : '';
                         $labeledEquipment[] = [
                             'category' => 'Seating',
@@ -129,7 +129,7 @@ class BuildOverviewData
                 if ($equipment->name == 'Wheels') {
                     if (isset($attributes['location']) && $attributes['location']->value == 'front') {
                         $rimType = isset($attributes['rim type']) ? ucwords($attributes['rim type']->value) : '';
-                        $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value . '"' : '';
+                        $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value.'"' : '';
                         $labeledEquipment[] = [
                             'category' => 'Wheels',
                             'label' => 'Wheels',
@@ -177,7 +177,7 @@ class BuildOverviewData
     {
         $this->deal = $deal;
 
-        /**
+        /*
          * Rather hacky but chose an arbitrary equipment name to represent seating capacity since the
          * actual Seating category name is not pulled since the availability is '-' for some vehicles instead of
          * standard/optional so just used to show the data for the highlights seating data, which is pulled from
