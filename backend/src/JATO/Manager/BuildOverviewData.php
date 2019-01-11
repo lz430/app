@@ -86,12 +86,12 @@ class BuildOverviewData
                 if ($equipment->name == 'Paint') {
                     $exteriorColor = ucwords($dealData->simpleExteriorColor());
                     $labeledEquipment[] = [
-                        'category' => 'Exterior',
+                        'category' => 'Color1',
                         'label' => 'Exterior Color',
                         'value' => "{$exteriorColor} Exterior",
                     ];
                     $labeledEquipment[] = [
-                        'category' => 'Interior',
+                        'category' => 'Color2',
                         'label' => 'Interior Color',
                         'value' => "{$dealData->interior_color} Interior",
                     ];
@@ -99,21 +99,13 @@ class BuildOverviewData
                 if ($equipment->name == 'Seat upholstery') {
                     $material = isset($attributes['main seat material']) ? ucwords($attributes['main seat material']->value) : '';
                     $labeledEquipment[] = [
-                        'category' => 'Seat upholstery',
+                        'category' => 'Design of seats',
                         'label' => 'Seat Material',
                         'value' => "{$material} Seats",
                     ];
                     $bodyStyle = isset($dealData->version->body_style) ? ucwords($dealData->version->body_style) : '';
                     $labeledEquipment[] = [
-                        'category' => 'Body style',
-                        'label' => 'Body Style',
-                        'value' => "{$bodyStyle}",
-                    ];
-                }
-                if ($equipment->name == 'Body style') {
-                    $bodyStyle = isset($attributes['Body type']) ? $attributes['Body type']->value : '';
-                    $labeledEquipment[] = [
-                        'category' => 'Body style',
+                        'category' => 'Ext style',
                         'label' => 'Body Style',
                         'value' => "{$bodyStyle}",
                     ];
@@ -121,7 +113,7 @@ class BuildOverviewData
                 if ($equipment->name == 'Drive') {
                     $driveTrain = isset($attributes['Driven wheels']) ? self::DRIVE_TRAIN_MAP[$attributes['Driven wheels']->value] : '';
                     $labeledEquipment[] = [
-                        'category' => 'Drive',
+                        'category' => 'Format of axels',
                         'label' => 'Drive Train',
                         'value' => "{$driveTrain}",
                     ];
@@ -131,7 +123,7 @@ class BuildOverviewData
                         $rimType = isset($attributes['rim type']) ? ucwords($attributes['rim type']->value) : '';
                         $rimSize = isset($attributes['rim diameter (in)']) ? $attributes['rim diameter (in)']->value.'"' : '';
                         $labeledEquipment[] = [
-                            'category' => 'Wheels',
+                            'category' => 'Rims and wheels',
                             'label' => 'Wheels',
                             'value' => "{$rimSize} {$rimType} Wheels",
                         ];
@@ -169,10 +161,13 @@ class BuildOverviewData
             ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal($this->deal);
+        $collectedEquipment[] = collect($this->equipmentOnDeal)->sortBy(function($name){
+            return $name;
+        });
 
-        return $this->equipmentOnDeal;
+        return $collectedEquipment;
     }
-
+    
     public function getHighlightsData(Collection $equipment, Deal $deal)
     {
         $this->deal = $deal;
