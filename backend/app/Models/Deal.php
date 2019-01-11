@@ -348,7 +348,7 @@ class Deal extends Model
             'price_validation' => [
                 'properties' => [
                     'value' => [
-                        'type' => 'boolean',
+                        'type' => 'text',
                     ],
                     'reason' => [
                         'type' => 'text',
@@ -742,37 +742,37 @@ class Deal extends Model
     /*
      * @Return array (true/false)
       Pricing validation -
-      – Default price must be less than or equal to 200000
-      – Default price must be greater than or equal to 10000
+      – Default price must be less than or equal to config('dmr.pricing_validation_percentage')
+      – Default price must be greater than or equal to config('dmr.minimum_price_allowed')
       – MSRP must be greater or equal to Default price
       - Default price should be within 25% of MSRP
      */
     public function validateDealPriceRules($prices) {
-        $percentage = config('dmr.pricing_validation_percentage');
+        $percentage = config('dmr.pricing.validation_percentage');
 
         if($prices->msrp < $prices->default)
             $results = [
-                'value'=>false,
+                'value'=>'false',
                 'reason' => 'Price > Msrp',
             ];
-        elseif($prices->default > config('dmr.maximum_price_allowed'))
+        elseif($prices->default > config('dmr.pricing.maximum_allowed'))
             $results = [
-                'value'=>false,
-                'reason' => 'Price > $'.number_format(config('dmr.maximum_price_allowed'),2),
+                'value'=>'false',
+                'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'),2),
             ];
         elseif($prices->default < config('dmr.minimum_price_allowed'))
             $results = [
-                'value'=>false,
-                'reason' => 'Price < $'.number_format(config('dmr.minimum_price_allowed'),2),
+                'value'=>'false',
+                'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'),2),
             ];
         elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > $percentage)
             $results = [
-                'value'=>false,
+                'value'=>'false',
                 'reason' => 'MSRP Exceeds Price by '.$percentage.'%',
             ];
         else
             $results = [
-                'value'=>true,
+                'value'=>'true',
                 'reason' => 'All Good',
             ];
 
@@ -974,7 +974,7 @@ class Deal extends Model
         $record['pricing'] = $pricing;
         // Perform validation in the Prising array.
         $record['price_validation'] = $this->validateDealPriceRules($pricing);
-        $record['pricing'] = $pricing;
+
         $record['payments'] = $this->payments;
         $record['fees'] = [
             'acquisition' => (float) $this->dealer->acquisition_fee,

@@ -4,29 +4,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Price Validation Percentage
+    | Price Specific variables
     |--------------------------------------------------------------------------
     |
-    | This value is the percentage used in validating deal msrp vs deal default price.
-    | Passed as an integer
+    | Configurable variables that are applied to vehicle pricing
     */
-    'pricing_validation_percentage' => 25,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Minimum Price Allowed
-    |--------------------------------------------------------------------------
-    |
-    | Minimum Default Price allowed.
-    */
-    'minimum_price_allowed' => 10000,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Maximum Price Allowed
-    |--------------------------------------------------------------------------
-    |
-    | Minimum Default Price allowed.
-    */
-    'maximum_price_allowed' => 200000,
+    'pricing' => [
+        'validation_percentage' => 20,
+        'minimum_allowed' => 10000,
+        'maximum_allowed' => 200000,
+    ],
 ];

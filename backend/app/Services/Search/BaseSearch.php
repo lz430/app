@@ -66,6 +66,9 @@ abstract class BaseSearch
             ['term' => [
                 'status' => 'available',
             ]],
+            ['term' => [
+                'price_validation.value' => 'true'
+            ]],
         ],
         'must_not' => [
             ['terms' => [

@@ -3,7 +3,7 @@
 @section('header')
     <section class="content-header">
         <h1>
-            Report :: Deals that Violate Price Rules
+            Report :: Deals that Violate Price Rules Grouped by Dealer
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{ backpack_url() }}">{{ config('backpack.base.project_name') }}</a></li>
@@ -16,8 +16,12 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            @php
+                $counter = 0;
+            @endphp
+
             @foreach($deals as $item)
-                @component('components.box')
+                @component('components.box', ['collapsible'=>true, 'key' => $counter++ ])
                 @slot('title')
                     {{$item['dealer']['dealer_name']}}
                 @endslot
@@ -30,6 +34,7 @@
                             <th>MSRP</th>
                             <th>PRICE</th>
                             <th>INVALID REASON</th>
+                            <th>ACTIONS</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -54,6 +59,9 @@
                         </td>
                         <td>
                             {{$content['reason']}}
+                        </td>
+                        <td>
+                            <a href="/admin/deal/{{$content['deal']->id}}">View</a>
                         </td>
                     </tr>
                 @endforeach
