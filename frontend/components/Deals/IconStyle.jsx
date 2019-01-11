@@ -65,6 +65,7 @@ class IconStyle extends React.PureComponent {
                 return (
                     <Sedan width={size} className="filter-items__item__icon" />
                 );
+            case 'sport utility vehicle':
             case 'suv':
                 return (
                     <Suv width={size} className="filter-items__item__icon" />

@@ -8,8 +8,8 @@ import { LargeAndUp } from '../Responsive';
 import Header from './Header/Header';
 import Footer from './Footer';
 
-import BrochureHeader from '../brochure/brochure-header.jsx';
-import BrochureFooter from '../brochure/brochure-footer.jsx';
+import BrochureHeader from '../brochure/Header.jsx';
+import BrochureFooter from '../brochure/Footer.jsx';
 
 class App extends React.Component {
     static propTypes = {
