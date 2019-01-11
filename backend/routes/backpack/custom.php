@@ -50,10 +50,8 @@ Route::group([
     Route::get('reports/dealer-price-rules', 'ReportDealerPriceRulesController@index');
     Route::get('reports/dealer-price-rules/export', 'ReportDealerPriceRulesController@export');
     Route::get('reports/deals-violating-price-rules', 'ReportDealsViolatingPriceRulesController@index');
-    // might use later
-    //Route::get('reports/deals-violating-price-rules/export', 'ReportDealsViolatingPriceRulesController@export');
 
-
+    //
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
     Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');

@@ -16,13 +16,44 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+
+            @foreach($deals as $item)
                 @component('components.box')
-                    Hello
-                {{dd($deal)}}
+                @slot('title')
+                    <a href="/admin/deal/{{$item['dealer']['id']}}/edit">{{$item['dealer']['id']}}
+                        - {{$item['dealer']['dealer_name']}}</a>
+                @endslot
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>VIN</th>
+                            <th>Invalid Reason</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
+                {{--render each dealers deal --}}
+                @foreach($item['deals'] as $content)
+                    <tr>
+                        <td>
+                            {{$content['deal']->id}}
+                        </td>
+                        <td>
+                            {{$content['deal']->vin}}
+                        </td>
+                        <td>
+                            {{$content['reason']}}
+                        </td>
+                        <td>-----</td>
+                    </tr>
+                @endforeach
+                    </tbody>
 
+                </table>
                 @endcomponent
-
+            @endforeach
         </div>
     </div>
 @endsection

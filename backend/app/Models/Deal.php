@@ -748,29 +748,27 @@ class Deal extends Model
       - Default price should be within 25% of MSRP
      */
     public function validateDealPriceRules($prices) {
-        $percentage = config('app.pricing_validation_percentage');
-
-        //$results = [];
+        $percentage = config('dmr.pricing_validation_percentage');
 
         if($prices->msrp < $prices->default)
             $results = [
                 'value'=>false,
-                'reason' => 'Price gt Msrp',
+                'reason' => 'Price > Msrp',
             ];
         elseif($prices->default > 200000)
             $results = [
                 'value'=>false,
-                'reason' => 'Price gt 200000',
+                'reason' => 'Price > 200000',
             ];
         elseif($prices->default < 10000)
             $results = [
                 'value'=>false,
-                'reason' => 'Price lt 10000',
+                'reason' => 'Price < 10000',
             ];
         elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > $percentage)
             $results = [
                 'value'=>false,
-                'reason' => 'Exceeds Percentage',
+                'reason' => 'Margin Exceeds Percentage '.$percentage.'%',
             ];
         else
             $results = [
