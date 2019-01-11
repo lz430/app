@@ -541,7 +541,6 @@ class VersionMunger
 
         if (! $version->photos()->count()) {
             $this->photos($version);
-
         }
 
         return [$version, $this->debug];
