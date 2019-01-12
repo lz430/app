@@ -12,7 +12,7 @@ class ReportDealsViolatingPriceRulesController extends Controller
         $data = [];
 
         $percentage = config('dmr.pricing.validation_percentage');
-        $deals = DB::table('deals')->whereRaw('format((((deals.msrp-deals.price)/deals.msrp * 100)),0) > '.$percentage. ' and deals.status=\'available\' ORDER BY deals.dealer_id asc')->get();
+        $deals = DB::table('deals')->whereRaw('deals.status=\'available\' ORDER BY deals.dealer_id asc')->get();
         // Loop through the return and prep for output
         foreach ($deals as $deal) {
 
@@ -21,18 +21,21 @@ class ReportDealsViolatingPriceRulesController extends Controller
                 'msrp' => $deal->msrp,
                 'default' => $deal->price,
             ];
+            // Validate the $pricingArray
             $validationResult = $this->useDealValidation($pricingArray);
 
-            $item[$deal->dealer_id]['dealer'] = [
-                'id' => $deal->dealer_id,
-                'dealer_name' => $deal->dealer_name,
-            ];
-            $item[$deal->dealer_id]['deals'][] = [
-                'deal' => $deal,
-                'reason' => $validationResult['reason'],
-            ];
+            if($validationResult['value'] == 'false') {
+                $item[$deal->dealer_id]['dealer'] = [
+                    'id' => $deal->dealer_id,
+                    'dealer_name' => $deal->dealer_name,
+                ];
+                $item[$deal->dealer_id]['deals'][] = [
+                    'deal' => $deal,
+                    'reason' => $validationResult['reason'],
+                ];
+                $data = $item;
+            }
         }
-        $data = $item;
 
         return view('admin.reports.deals-violating-price-rules', ['deals' => $data]);
     }
