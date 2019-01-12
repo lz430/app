@@ -12,7 +12,7 @@ class ReportDealsViolatingPriceRulesController extends Controller
         $data = [];
 
         $percentage = config('dmr.pricing.validation_percentage');
-        $deals = DB::table('deals')->whereRaw('deals.status=\'available\' ORDER BY deals.dealer_id asc')->get();
+        $deals = DB::table('deals')->whereRaw('deals.status=\'available\' and deals.price is not null ORDER BY deals.dealer_id asc')->get();
         // Loop through the return and prep for output
         foreach ($deals as $deal) {
 

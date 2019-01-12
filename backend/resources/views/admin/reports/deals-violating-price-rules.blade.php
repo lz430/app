@@ -23,7 +23,7 @@
             @foreach($deals as $item)
                 @component('components.box', ['collapsible'=>true, 'key' => $counter++ ])
                 @slot('title')
-                    {{$item['dealer']['dealer_name']}}
+                    {{$item['dealer']['dealer_name']}} - {{count($item['deals'])}} Invalid VINs
                 @endslot
                     <table class="table">
                         <thead>
