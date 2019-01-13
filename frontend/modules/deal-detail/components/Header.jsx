@@ -17,29 +17,10 @@ export default class Header extends React.PureComponent {
         window.addEventListener('scroll', this.handleScroll);
     }
 
-    render() {
-        return (
-            <Container>
-                <Row className="deal-details__header">
-                    <Col sm="6">
-                        <div className="deal-details__title-year-make">
-                            {strings.dealYearMake(this.props.deal)}
-                        </div>
-                        <div className="deal-details__title-model-trim">
-                            {strings.dealModelTrim(this.props.deal)}
-                        </div>
-                    </Col>
-                    <Col sm="6" className="deal-details__stock-number">
-                        <DealStockNumber deal={this.props.deal} />
-                    </Col>
-                </Row>
-            </Container>
-        );
-    }
     // Sticky header
     render() {
         return (
-            <Sticky topOffset={100}>
+            <Sticky topOffset={10}>
                 {({ style, isSticky }) => (
                     <div
                         className={classNames('deal-details__new-header', {
