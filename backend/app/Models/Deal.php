@@ -748,35 +748,32 @@ class Deal extends Model
       - Default price should be within 25% of MSRP
      */
     public function validateDealPriceRules($prices) {
-        $percentage = config('dmr.pricing.validation_percentage');
 
         if($prices->msrp < $prices->default)
-            $results = [
+            return [
                 'value'=>'false',
                 'reason' => 'Price > Msrp',
             ];
         elseif($prices->default > config('dmr.pricing.maximum_allowed'))
-            $results = [
+            return [
                 'value'=>'false',
                 'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'),2),
             ];
         elseif($prices->default < config('dmr.minimum_price_allowed'))
-            $results = [
+            return [
                 'value'=>'false',
                 'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'),2),
             ];
-        elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > $percentage)
-            $results = [
+        elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage'))
+            return [
                 'value'=>'false',
-                'reason' => 'MSRP Exceeds Price by '.$percentage.'%',
+                'reason' => 'MSRP Exceeds Price by '.config('dmr.pricing.validation_percentage').'%',
             ];
         else
-            $results = [
+            return [
                 'value'=>'true',
                 'reason' => 'All Good',
             ];
-
-        return $results;
     }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

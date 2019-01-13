@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use Illuminate\Support\Facades\DB;
+use App\Models\Dealer;
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
+
 
 class ReportDealsViolatingPriceRulesController extends Controller
 {
@@ -12,7 +13,11 @@ class ReportDealsViolatingPriceRulesController extends Controller
         $data = [];
 
         $percentage = config('dmr.pricing.validation_percentage');
-        $deals = DB::table('deals')->whereRaw('deals.status=\'available\' and deals.price is not null ORDER BY deals.dealer_id asc')->get();
+
+        $deals = Deal::where('status', '=', 'available')
+            ->whereNotNull('price')
+            ->orderBy('dealer_id', 'ASC')->get();
+
         // Loop through the return and prep for output
         foreach ($deals as $deal) {
 
