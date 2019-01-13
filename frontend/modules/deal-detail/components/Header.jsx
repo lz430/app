@@ -5,9 +5,6 @@ import { Row, Col, Button, Container } from 'reactstrap';
 import classNames from 'classnames';
 import { Sticky } from 'react-sticky';
 
-import DealStockNumber from '../../../components/Deals/DealStockNumber';
-import strings from '../../../util/strings';
-
 export default class Header extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
