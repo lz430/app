@@ -232,6 +232,7 @@ $icon-size: 20px;
         cursor: pointer;
 
         &__icon {
+            font-size: 3rem;
             path {
                 fill: $text-color;
             }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class ColorSwatchIcon extends React.PureComponent {
+export default class IconColorSwatch extends React.PureComponent {
     static propTypes = {
         color: PropTypes.string.isRequired,
     };

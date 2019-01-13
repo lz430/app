@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import StyleIcon from '../../../../components/Deals/StyleIcon';
+import IconStyle from '../../../../components/Deals/IconStyle';
 import Loading from '../../../../components/Loading';
 
 class FilterStyleList extends React.PureComponent {
@@ -44,7 +44,7 @@ class FilterStyleList extends React.PureComponent {
                     this.props.onToggleSearchFilter(this.props.category, item)
                 }
             >
-                <StyleIcon key={item.icon} style={item.icon} />
+                <IconStyle key={item.icon} style={item.icon} />
                 <div className="filter-items__item__label">{item.label}</div>
             </div>
         );

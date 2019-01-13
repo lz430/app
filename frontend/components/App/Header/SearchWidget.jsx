@@ -4,7 +4,7 @@ import { MediumAndUp, SmallAndDown } from '../../Responsive';
 import classNames from 'classnames';
 
 import { buildSearchQueryUrl } from '../../../modules/deal-list/helpers';
-import StyleIcon from '../../Deals/StyleIcon';
+import IconStyle from '../../Deals/IconStyle';
 
 import { faSearch, faTimes, faSpinner } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -113,7 +113,7 @@ class SearchWidget extends React.PureComponent {
 
     renderResultItemIcon(category, item) {
         if (category === 'style') {
-            return <StyleIcon style={item.icon} />;
+            return <IconStyle style={item.icon} />;
         }
 
         return <img alt={item.label} src={item.icon} />;
