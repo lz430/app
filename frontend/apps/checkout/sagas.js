@@ -19,7 +19,7 @@ import Router from 'next/router';
 
 import { storeSessionData } from '../session/manager';
 import { softUpdateSessionData } from '../session/actions';
-import { getSessionCSRFToken } from '../session/selectors';
+import { getCSRFToken } from '../session/sagas';
 
 function toDollarsAndCents(input) {
     return input.toFormat('0.00');
@@ -75,7 +75,7 @@ export function* checkoutStart(action) {
         console.log(e);
     }
     if (results) {
-        const csrfToken = yield select(getSessionCSRFToken);
+        const csrfToken = yield call(getCSRFToken);
         storeSessionData(
             { purchase: { id: results.purchase.id } },
             null,
@@ -132,7 +132,7 @@ export function* checkoutContact(action) {
     });
 
     if (results) {
-        const csrfToken = yield select(getSessionCSRFToken);
+        const csrfToken = yield call(getCSRFToken);
         const sessionData = {
             guestUser: {
                 first_name: values.first_name,
