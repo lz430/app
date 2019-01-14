@@ -917,12 +917,12 @@ class Deal extends Model
 
         //
         // Features
-        foreach ($this->filters()->where('is_active', '=', 1)->get() as $feature) {
-            if (! isset($record[$feature->category->slug]) || ! is_array($record[$feature->category->slug])) {
-                $record[$feature->category->slug] = [];
+        foreach ($this->filters()->where('is_active', '=', 1)->get() as $filter) {
+            if (! isset($record[$filter->category->slug]) || ! is_array($record[$filter->category->slug])) {
+                $record[$filter->category->slug] = [];
             }
 
-            $record[$feature->category->slug][] = $feature->title;
+            $record[$filter->category->slug][] = $filter->title;
         }
 
         $pricing = $this->prices();

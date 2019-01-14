@@ -41,6 +41,6 @@ class Category extends Model
 
     public function filters()
     {
-        return $this->hasMany(Filter::class)->whereNotIn('features.id', [5, 9, 10, 14, 19, 20, 21, 29, 42, 44, 46, 54, 55, 59, 61])->orderBy('display_order', 'asc');
+        return $this->hasMany(Filter::class)->whereNotIn('filters.id', [5, 9, 10, 14, 19, 20, 21, 29, 42, 44, 46, 54, 55, 59, 61])->orderBy('display_order', 'asc');
     }
 }
