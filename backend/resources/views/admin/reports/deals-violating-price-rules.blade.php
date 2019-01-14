@@ -21,10 +21,19 @@
             @endphp
 
             @foreach($deals as $item)
-                @component('components.box', ['collapsible'=>true, 'key' => $counter++ ])
+                @component('components.box', ['collapsible'=>false, 'key' => $counter++ ])
                 @slot('title')
-                    {{$item['dealer']['dealer_name']}} - {{count($item['deals'])}} Invalid VINs
+                    {{$item['dealer']['dealer_name']}}
                 @endslot
+                    <div>
+                        <div>
+                            <label>
+                                Number of Invalid VINs:
+                            </label>
+                            {{count($item['deals'])}}
+                        </div>
+
+                    </div>
                     <table class="table">
                         <thead>
                         <tr>
@@ -61,7 +70,7 @@
                             {{$content['reason']}}
                         </td>
                         <td>
-                            <a href="/admin/deal/{{$content['deal']->id}}">View</a>
+                            <a href="/admin/deal/{{$content['deal']->id}}" target="_blank">View</a>
                         </td>
                     </tr>
                 @endforeach
