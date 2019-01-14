@@ -161,6 +161,7 @@ class BuildOverviewData
             ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal($this->deal);
+
         return collect($this->equipmentOnDeal)->sortBy(function ($name) {
             return $name;
         })->all();

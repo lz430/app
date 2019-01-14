@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
-use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 use DeliverMyRide\JATO\Manager\BuildOverviewData;
+use DeliverMyRide\JATO\Manager\BuildEquipmentData;
 
 class DealDataController extends Controller
 {
