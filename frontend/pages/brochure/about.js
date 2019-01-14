@@ -9,6 +9,8 @@ import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import { track } from '../../core/services';
 
+import OurPromise from '../../modules/deal-detail/components/Promise';
+
 class Page extends React.Component {
     componentDidMount() {
         track('page:brochure-about:view');
@@ -33,7 +35,7 @@ class Page extends React.Component {
                         }}
                     />
 
-                    <div className="about__twss mt-3 mb-3">
+                    <div className="mt-3 mb-3">
                         <Container>
                             <h2 className="text-center">
                                 There must be a better way!
@@ -101,78 +103,9 @@ class Page extends React.Component {
                         </Container>
                     </div>
 
-                    <div className="about__values  mt-5 mb-5">
-                        <Container>
-                            <h3 className="text-center">Our Values</h3>
-                            <Row className="text-center">
-                                <Col>
-                                    <div className="mb-2">
-                                        <img src="/static/brochure/Convenience.png" />
-                                    </div>
-                                    <h4>Convenience</h4>
-                                    <p className="text-sm">
-                                        Buy your new car on your time and your
-                                        terms. No more taking time off work. No
-                                        more hustling the kids in and out of the
-                                        dealership. No more wasting your
-                                        weekends. With Deliver My Ride, you can
-                                        shop, compare, calculate and purchase
-                                        your new car 100% online and 100%
-                                        convenient.
-                                    </p>
-                                </Col>
+                    <OurPromise />
 
-                                <Col>
-                                    <div className="mb-2">
-                                        <img src="/static/brochure/FreedomOfChoice.png" />
-                                    </div>
-                                    <h4>Choice</h4>
-                                    <p className="text-sm">
-                                        We are partnered with hundreds of local
-                                        dealers and aggregate their inventory
-                                        into one location. Now, customers can
-                                        view and search vehicle details of every
-                                        brand to find the car that’s right for
-                                        them.
-                                    </p>
-                                </Col>
-
-                                <Col>
-                                    <div className="mb-2">
-                                        <img src="/static/brochure/PrivateData.png" />
-                                    </div>
-                                    <h4>Privacy</h4>
-                                    <p className="text-sm">
-                                        We are not a lead provider so we never
-                                        sell your information, meaning you will
-                                        never get calls from <u>anyone</u>{' '}
-                                        trying to sell you a car. You control
-                                        the process and remain anonymous until
-                                        it’s time to take delivery.
-                                    </p>
-                                </Col>
-
-                                <Col>
-                                    <div className="mb-2">
-                                        <img src="/static/brochure/TransPricing.png" />
-                                    </div>
-                                    <h4>Transparency</h4>
-                                    <p className="text-sm">
-                                        We utilize the most accurate pricing,
-                                        incentives and interest rates so you can
-                                        see and compare actual pricing among
-                                        several dealers and determine which
-                                        rebates you qualify for. No more
-                                        unrealistic advertised prices just to
-                                        get you in the door. We give you the
-                                        tools to make an educated decision.
-                                    </p>
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
-
-                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4 bg-secondary">
+                    <div className="about__cost  mt-5 mb-5 pt-4 pb-4">
                         <Container>
                             <h3 className="text-center">
                                 What does Deliver My Ride Cost?
@@ -194,7 +127,7 @@ class Page extends React.Component {
                                     as="/brochure/faq"
                                     passHref
                                 >
-                                    <a className="btn btn-primary">FAQs</a>
+                                    <a className="btn btn-info">FAQs</a>
                                 </Link>
                             </div>
                         </Container>
