@@ -11,7 +11,6 @@ use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 
 class UserLocationController extends BaseAPIController
 {
-
     /**
      * Lets just do this the worst way possible.
      *
@@ -28,9 +27,8 @@ class UserLocationController extends BaseAPIController
         $fakeLocation->latitude = 42.3316;
         $fakeLocation->longitude = -83.049;
 
-
         $response = null;
-        if (strpos($ip, ":") !== false) {
+        if (strpos($ip, ':') !== false) {
             $ip = '['.$ip.']';
         }
 
@@ -46,7 +44,7 @@ class UserLocationController extends BaseAPIController
             $response = $fakeLocation;
         }
 
-        if (!$response->zip) {
+        if (! $response->zip) {
             $response = $fakeLocation;
         }
 
