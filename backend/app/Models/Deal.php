@@ -745,7 +745,7 @@ class Deal extends Model
       – Default price must be less than or equal to config('dmr.pricing_validation_percentage')
       – Default price must be greater than or equal to config('dmr.minimum_price_allowed')
       – MSRP must be greater or equal to Default price
-      - Default price should be within 25% of MSRP
+      - Default price should be within % of MSRP that is set in the config/dmr.php file
      */
     public function validateDealPriceRules($prices) {
 
@@ -754,26 +754,26 @@ class Deal extends Model
                 'value'=>'false',
                 'reason' => 'Price > Msrp',
             ];
-        elseif($prices->default > config('dmr.pricing.maximum_allowed'))
+        if($prices->default > config('dmr.pricing.maximum_allowed'))
             return [
                 'value'=>'false',
                 'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'),2),
             ];
-        elseif($prices->default < config('dmr.minimum_price_allowed'))
+        if($prices->default < config('dmr.minimum_price_allowed'))
             return [
                 'value'=>'false',
                 'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'),2),
             ];
-        elseif( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage'))
+        if( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage'))
             return [
                 'value'=>'false',
                 'reason' => 'MSRP Exceeds Price by '.config('dmr.pricing.validation_percentage').'%',
             ];
-        else
-            return [
-                'value'=>'true',
-                'reason' => 'All Good',
-            ];
+
+        return [
+            'value'=>'true',
+            'reason' => 'All Good',
+        ];
     }
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

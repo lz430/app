@@ -28,7 +28,7 @@
                     <div>
                         <div>
                             <label>
-                                Number of Invalid VINs:
+                                Number of Invalid Deals:
                             </label>
                             {{count($item['deals'])}}
                         </div>
@@ -42,7 +42,7 @@
                             <th>STOCK NUMBER</th>
                             <th>MSRP</th>
                             <th>PRICE</th>
-                            <th>INVALID REASON</th>
+                            <th>REASON FOR FAILURE</th>
                             <th>ACTIONS</th>
                         </tr>
                         </thead>
