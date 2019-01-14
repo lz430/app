@@ -98,7 +98,7 @@ export default class Footer extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                                 <li>
-                                    &copy; 2018 Deliver My Ride. All Rights
+                                    &copy; 2019 Deliver My Ride. All Rights
                                     Reserved.
                                 </li>
                             </ul>
