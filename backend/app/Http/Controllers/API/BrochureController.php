@@ -5,13 +5,14 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use DeliverMyRide\HubSpot\HubspotClient;
 use SevenShores\Hubspot\Exceptions\BadRequest;
+use App\Notifications\NotifyToSlackChannel;
+use Illuminate\Support\Facades\Notification;
 
 class BrochureController extends BaseAPIController
 {
     /**
      * @param Request $request
      * @param HubspotClient $client
-     * @return \Illuminate\Http\JsonResponse|void
      * @throws \Illuminate\Validation\ValidationException
      */
     public function contact(Request $request, HubspotClient $client)
@@ -83,6 +84,21 @@ class BrochureController extends BaseAPIController
             } catch (BadRequest $exception) {
                 return abort(400);
             }
+
+            $data = [
+                'title' => 'New HubSpot Ticket',
+                'message' => $ticketData['subject'],
+                'fields' => [
+                    'Environment' => config('app.env'),
+                    'First Name' => $request->firstname,
+                    'Last Name' => $request->lastname,
+                    'Ticket' => $client->getUrlForTicket($ticket),
+                    'Contact' => $client->getUrlForContact($contact),
+                ],
+            ];
+
+            Notification::route('slack', config('services.slack.webhook'))
+                ->notify(new NotifyToSlackChannel($data));
         }
 
         return response()->json(['status' => 'ok']);
