@@ -9,7 +9,7 @@ import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import { track } from '../../core/services';
 
-import OurPromise from '../../modules/deal-detail/components/Promise';
+import OurPromise from '../../components/General/Promise';
 
 class Page extends React.Component {
     componentDidMount() {
