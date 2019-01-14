@@ -5,11 +5,13 @@ namespace App\Http\Controllers\API\User;
 use GuzzleHttp;
 use App\Services\Search\DealSearch;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use App\Http\Controllers\API\BaseAPIController;
 use Geocoder\Laravel\ProviderAndDumperAggregator as Geocoder;
 
 class UserLocationController extends BaseAPIController
 {
+
     /**
      * Lets just do this the worst way possible.
      *
@@ -18,24 +20,34 @@ class UserLocationController extends BaseAPIController
      */
     private function getLocationForIp($ip)
     {
+        $fakeLocation = new \stdClass();
+        $fakeLocation->city = 'Detroit';
+        $fakeLocation->region_code = 'MI';
+        $fakeLocation->country_code = 'US';
+        $fakeLocation->zip = '48226';
+        $fakeLocation->latitude = 42.3316;
+        $fakeLocation->longitude = -83.049;
+
+
         $response = null;
+        if (strpos($ip, ":") !== false) {
+            $ip = '['.$ip.']';
+        }
 
         try {
-            $client = new GuzzleHttp\Client(['base_uri' => 'http://api.ipstack.com/']);
+            $client = new GuzzleHttp\Client(['base_uri' => 'https://api.ipstack.com/']);
             $key = config('services.ipstack.api_key');
             $response = $client->request('GET', $ip, [
                 'connect_timeout' => 3,
                 'query' => ['access_key' => $key, 'format' => 1],
             ]);
             $response = json_decode($response->getBody());
-        } catch (ConnectException $e) {
-            $response = new \stdClass();
-            $response->city = 'Detroit';
-            $response->region_code = 'MI';
-            $response->country_code = 'US';
-            $response->zip = '48226';
-            $response->latitude = 42.3316;
-            $response->longitude = -83.049;
+        } catch (RequestException | ConnectException $e) {
+            $response = $fakeLocation;
+        }
+
+        if (!$response->zip) {
+            $response = $fakeLocation;
         }
 
         if ($response) {
@@ -122,15 +134,17 @@ class UserLocationController extends BaseAPIController
         } else {
             $ip = request('ip', null);
             if (! $ip) {
-                $ip = request()->header('X-Real-IP');
-            }
-            if (! $ip) {
-                $ip = request()->ip();
-            }
+                if (! $ip) {
+                    $ip = request()->header('X-Real-IP');
+                }
+                if (! $ip) {
+                    $ip = request()->ip();
+                }
 
-            // Fix for local development
-            if (config('app.env') == 'local') {
-                $ip = '68.36.45.13';
+                // Fix for local development
+                if (config('app.env') == 'local') {
+                    $ip = '68.36.45.13';
+                }
             }
 
             $location = $this->getLocationForIp($ip);
