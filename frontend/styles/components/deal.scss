@@ -246,52 +246,52 @@
             }
         }
     }
-}
 
-.deal__section-overview {
-    &-highlights {
-        background: $color-lightgrey;
-        padding: 20px 0;
-    }
+    &__section-overview {
+        &-highlights {
+            background: $color-lightgrey;
+            padding: 20px 0;
+        }
 
-    &-features-item {
-        padding: 0.25rem 2rem;
-        .icon {
-            width: 100px;
-            text-align: center;
-            font-size: 2rem;
-            > div {
-                height: 2rem;
-                width: 2rem;
-                border-radius: 1rem;
-                border: 2px solid $gray-500;
-                vertical-align: -0.125em;
+        &-features-item {
+            padding: 0.25rem 2rem;
+            .icon {
+                width: 100px;
+                text-align: center;
+                font-size: 2rem;
+                > div {
+                    height: 2rem;
+                    width: 2rem;
+                    border-radius: 1rem;
+                    border: 2px solid $gray-500;
+                    vertical-align: -0.125em;
+                }
+            }
+            .content {
+                font-size: 1rem;
+                @include media-breakpoint-up(md) {
+                    font-size: 1.2rem;
+                }
             }
         }
-        .content {
-            font-size: 1rem;
-            @include media-breakpoint-up(md) {
-                font-size: 1.2rem;
-            }
+
+        &-options {
+            border-top: 1px solid $gray-300;
+            padding: 0.5rem 0;
+        }
+        &-options-group-header {
+            padding: 0.25rem 2rem;
+            font-weight: bold;
+        }
+        &-options-item {
+            padding: 0.25rem 2rem;
         }
     }
 
-    &-options {
-        border-top: 1px solid $gray-300;
-        padding: 0.5rem 0;
-    }
-    &-options-group-header {
-        padding: 0.25rem 2rem;
-        font-weight: bold;
-    }
-    &-options-item {
-        padding: 0.25rem 2rem;
-    }
-}
-
-.thumbnail-container {
-    img {
-        max-width: 100%;
+    .thumbnail-container {
+        img {
+            max-width: 100%;
+        }
     }
 }
 
