@@ -22,7 +22,7 @@
                 @endslot
                 <ul class="list-group no-padding no-margin">
                     <li class="list-group-item">
-                        <b>Created At</b>: {{$purchase->deal->created_at}}
+                        <b>Created At</b>: {{$purchase->deal->created_at->format(config('app.default_datetime_format'))}}
                     </li>
                 </ul>
             @endcomponent
@@ -47,6 +47,7 @@
                     </li>
                     <li class="list-group-item">
                         <b>Packages</b>: {{$purchase->deal->package_codes ? implode(", ", $purchase->deal->package_codes) : "None"}}
+                        <b>Options</b>: {{$purchase->deal->option_codes ? implode(", ", $purchase->deal->option_codes) : "None"}}
                     </li>
                     <li class="list-group-item">
                         <b>Deal Status</b>: {{$purchase->deal->status}}
