@@ -14,6 +14,7 @@ class RenameFeaturesTableToFilters extends Migration
     public function up()
     {
         Schema::rename('features', 'filters');
+        Schema::rename('deal_feature', 'deal_filter');
     }
 
     /**
