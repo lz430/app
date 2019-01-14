@@ -248,6 +248,17 @@
     }
 
     &__section-overview {
+        background: $color-darkestgrey;
+        z-index: 9;
+
+        .col {
+            padding: 15px;
+
+            h6 {
+                color: $color-text-white;
+                border-right: 1px solid $color-text-white;
+            }
+        }
         &-highlights {
             background: $color-lightgrey;
             padding: 20px 0;

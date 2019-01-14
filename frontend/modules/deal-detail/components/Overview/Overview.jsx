@@ -1,6 +1,8 @@
 import React from 'react';
 import { dealType } from '../../../../core/types';
 import { Row, Col, Container } from 'reactstrap';
+import classNames from 'classnames';
+import { Sticky } from 'react-sticky';
 
 import HighlightItem from './HighlightItem';
 import KeyFeatureItem from './KeyFeatureItem';
@@ -25,7 +27,6 @@ export default class extends React.PureComponent {
             <Row
                 className="deal__section-overview-highlights  rounded-top"
                 id="overview"
-                noGutters
             >
                 {this.props.deal.highlights.map((item, index) => {
                     return (
@@ -110,21 +111,63 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <div className="deal__section-overview  pt-3 pb-3">
-                <Container>
-                    <Row className="deal__section-heading">
-                        <Col>
-                            <h3 className="text-center"> Overview </h3>
-                        </Col>
-                    </Row>
+            <Container>
+                <Sticky topOffset={585}>
+                    {({ style, isSticky }) => (
+                        <div
+                            className={classNames('deal__section-overview', {
+                                stickied: isSticky,
+                            })}
+                            style={{
+                                ...style,
+                                marginTop: isSticky ? '83px' : '0',
+                            }}
+                        >
+                            <Container>
+                                <Row className="deal__section-heading pt-3 pb-3">
+                                    <Col>
+                                        <h6 className="text-center">
+                                            {' '}
+                                            Overview{' '}
+                                        </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6 className="text-center"> Specs </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6 className="text-center">
+                                            {' '}
+                                            Additional Information{' '}
+                                        </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6 className="text-center">
+                                            {' '}
+                                            Our Promise
+                                        </h6>
+                                    </Col>
+                                    <Col>
+                                        <h6 className="text-center border-0">
+                                            {' '}
+                                            FAQs
+                                        </h6>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </div>
+                    )}
+                </Sticky>
 
-                    <div className="border rounded shadow-sm bg-white">
-                        {this.renderHighlight()}
-                        {this.renderKeyFeatures()}
-                        {this.renderPackagesAndOptions()}
-                    </div>
+                <Container>
+                    <Row className="flex-column">
+                        <div className="border rounded shadow-sm bg-white">
+                            {this.renderHighlight()}
+                            {this.renderKeyFeatures()}
+                            {this.renderPackagesAndOptions()}
+                        </div>
+                    </Row>
                 </Container>
-            </div>
+            </Container>
         );
     }
 }
