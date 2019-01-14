@@ -161,11 +161,10 @@ class BuildOverviewData
             ->groupBy('name', true);
 
         $this->labelEquipmentOnDeal($this->deal);
-        $collectedEquipment[] = collect($this->equipmentOnDeal)->sortBy(function ($name) {
-            return $name;
-        });
 
-        return $collectedEquipment;
+        return collect($this->equipmentOnDeal)->sortBy(function ($name) {
+            return $name;
+        })->all();
     }
 
     public function getHighlightsData(Collection $equipment, Deal $deal)

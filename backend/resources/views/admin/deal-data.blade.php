@@ -163,16 +163,129 @@
             </div>
         @endforeach
     </div>
+    <h3>
+        Equipment
+    </h3>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3">
             @component('components.box')
                 @slot('title')
-                    Vauto Features
+                    Packages
                 @endslot
-                {{implode(', ', explode("|",$deal->vauto_features))}}
+                @if (count($packages))
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>MSRP</th>
+                                <th>Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($packages as $package)
+                                <tr>
+                                    <td>{{$package['option_code']}}</td>
+                                    <td>{{$package['option_name']}}</td>
+                                    <td>{{$package['msrp']}}</td>
+                                    <td>{{$package['invoice_price']}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    None
+                @endif
+            @endcomponent
+        </div>
+        <div class="col-md-3">
+            @component('components.box')
+                @slot('title')
+                    Options
+                @endslot
+                    @if (count($options))
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>MSRP</th>
+                                <th>Invoice</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($options as $option)
+                                <tr>
+                                    <td>{{$option['option_code']}}</td>
+                                    <td>{{$option['option_name']}}</td>
+                                    <td>{{$option['msrp']}}</td>
+                                    <td>{{$option['invoice_price']}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        None
+                    @endif
+            @endcomponent
+        </div>
+        <div class="col-md-3">
+                @component('components.box')
+                    @slot('title')
+                        Highlights
+                    @endslot
+                        @if (count($highlights))
+                            <table class="table table-bordered table-condensed">
+                                <thead>
+                                <tr>
+                                    <th>Label</th>
+                                    <th>Value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($highlights as $highlight)
+                                    <tr>
+                                        <td>{{$highlight['label']}}</td>
+                                        <td>{{$highlight['value']}}</td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            None
+                        @endif
+                @endcomponent
+        </div>
+        <div class="col-md-3">
+            @component('components.box')
+                @slot('title')
+                    Overview
+                @endslot
+                    @if (count($overview))
+                        <table class="table table-bordered table-condensed">
+                            <thead>
+                            <tr>
+                                <th>Label</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($overview as $overviewItem)
+                                <tr>
+                                    <td>{{$overviewItem['label']}}</td>
+                                    <td>{{$overviewItem['value']}}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @else
+                        None
+                    @endif
             @endcomponent
         </div>
     </div>
+
+
     @component('components.box')
         @slot('title')
             Equipment
@@ -217,7 +330,16 @@
         @endforeach
 
     @endcomponent
-
+    <div class="row">
+        <div class="col-md-12">
+            @component('components.box')
+                @slot('title')
+                    Vauto Features
+                @endslot
+                {{implode(', ', explode("|",$deal->vauto_features))}}
+            @endcomponent
+        </div>
+    </div>
     <h1>
         Models
     </h1>
