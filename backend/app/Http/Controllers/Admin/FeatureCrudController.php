@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 namespace App\Http\Controllers\Admin;
 
@@ -17,7 +17,7 @@ class FeatureCrudController extends CrudController
         | BASIC CRUD INFORMATION
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel('App\Models\Feature');
+        $this->crud->setModel('App\Models\Filter');
         $this->crud->setRoute(config('backpack.base.route_prefix').'/feature');
         $this->crud->setEntityNameStrings('feature', 'features');
 

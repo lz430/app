@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use League\Csv\Reader;
-use App\Models\Feature;
+use App\Models\Filter;
 use Illuminate\Console\Command;
 use DeliverMyRide\JATO\JatoClient;
 
@@ -49,12 +49,12 @@ class ImportVautoMapData extends Command
 
         foreach ($csv as $record) {
             // Remove counts at the end of the string
-            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", '', $record['vAuto Feature Stipped']);
+            $vauto_feature = preg_replace("/( *\d+(, *\d+)*|s\..*)$/", '', $record['vAuto Filter Stipped']);
 
             // Remove utf8 chars.
             $vauto_feature = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $vauto_feature);
 
-            if ($record['DMR Feature'] !== 'Yes') {
+            if ($record['DMR Filter'] !== 'Yes') {
                 continue;
             }
 
@@ -68,7 +68,7 @@ class ImportVautoMapData extends Command
             $features = array_filter($features);
 
             foreach ($features as $feature_name) {
-                $feature = Feature::where('title', $feature_name)->first();
+                $feature = Filter::where('title', $feature_name)->first();
                 if ($feature) {
                     $vautoData = $feature->map_vauto_features;
                     if (! $vautoData) {

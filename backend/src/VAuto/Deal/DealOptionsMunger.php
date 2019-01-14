@@ -3,7 +3,7 @@
 namespace DeliverMyRide\VAuto\Deal;
 
 use App\Models\Deal;
-use App\Models\Feature;
+use App\Models\Filter;
 use DeliverMyRide\VAuto\Map;
 use App\Models\JATO\Equipment;
 
@@ -129,7 +129,7 @@ class DealOptionsMunger
                     $this->debug['options_extracted_codes'][] = [
                         'Option Code' => $code,
                         'Option Title' => $option_name,
-                        'Feature' => $feature,
+                        'Filter' => $feature,
                         'Score' => $score,
                     ];
                     $additional_option_codes[] = $code;
@@ -194,7 +194,7 @@ class DealOptionsMunger
                     $this->debug['options_extracted_codes'][] = [
                         'Option Code' => $option->option_code,
                         'Option Title' => $option->option_name,
-                        'Feature' => 'Transmission',
+                        'Filter' => 'Transmission',
                         'Score' => $score,
                     ];
 

@@ -13,7 +13,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use Carbon\Carbon;
-use App\Models\Feature;
+use App\Models\Filter;
 use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
 
@@ -161,9 +161,9 @@ $factory->define(App\Models\Category::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(Feature::class, function (Faker\Generator $faker) {
+$factory->define(Filter::class, function (Faker\Generator $faker) {
     return [
-        'title' => 'First Feature',
+        'title' => 'First Filter',
         'slug' => 'first-feature',
         'category_id' => factory(Category::class)->create(),
         'display_order' => 1,

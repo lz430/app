@@ -4,7 +4,7 @@ namespace DeliverMyRide\VAuto\Deal;
 
 use Carbon\Carbon;
 use App\Models\Deal;
-use App\Models\Feature;
+use App\Models\Filter;
 use App\Models\Category;
 use DeliverMyRide\VAuto\Map;
 use App\Models\JATO\Equipment;
@@ -46,12 +46,12 @@ class DealFiltersMunger
 
         // An iffy way to check if we have updated features. we don't
         // do this often, so probably not that big of a deal right now.
-        $updatedFeatures = Feature::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
+        $updatedFeatures = Filter::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
         if ($force || $updatedFeatures) {
-            $this->deal->features()->sync([]);
+            $this->deal->filters()->sync([]);
         }
 
-        if ($this->deal->features()->count()) {
+        if ($this->deal->filters()->count()) {
             return $this->debug;
         }
 
@@ -121,7 +121,7 @@ class DealFiltersMunger
         foreach ($this->discovered_features as $category => $features) {
             $featureIds = array_merge($featureIds, array_keys($features));
         }
-        $this->deal->features()->sync($featureIds);
+        $this->deal->filters()->sync($featureIds);
     }
 
     /**
@@ -161,7 +161,7 @@ class DealFiltersMunger
     {
         $features = $this->vauto_features
             ->map(function ($item) {
-                return Feature::withVautoFeature($item)->first();
+                return Filter::withVautoFeature($item)->first();
             })
             ->filter()
             ->unique()
@@ -304,19 +304,19 @@ class DealFiltersMunger
 
     /**
      * @param $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function getFeatureFromJatoSchemaId($equipment): ?Feature
+    private function getFeatureFromJatoSchemaId($equipment): ?Filter
     {
-        return Feature::withJatoSchemaId($equipment->schema_id)->first();
+        return Filter::withJatoSchemaId($equipment->schema_id)->first();
     }
 
     /**
      * Given a specific equipment, return a feature or null if no feature was found.
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function getFeatureFromSlugLookup(Equipment $equipment): ?Feature
+    private function getFeatureFromSlugLookup(Equipment $equipment): ?Filter
     {
         $feature = null;
 
@@ -358,9 +358,9 @@ class DealFiltersMunger
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncVehicleSize(Equipment $equipment): ?Feature
+    private function syncVehicleSize(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 176) {
             return null;
@@ -383,14 +383,14 @@ class DealFiltersMunger
             return null;
         }
 
-        return Feature::where('slug', $segment)->first();
+        return Filter::where('slug', $segment)->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncFuelType(Equipment $equipment): ?Feature
+    private function syncFuelType(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 8701) {
             return null;
@@ -417,15 +417,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncTransmission(Equipment $equipment): ?Feature
+    private function syncTransmission(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 20601) {
             return null;
@@ -441,14 +441,14 @@ class DealFiltersMunger
             return null;
         }
 
-        return Feature::where('slug', 'transmission_'.$transmission)->first();
+        return Filter::where('slug', 'transmission_'.$transmission)->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncDriveTrain(Equipment $equipment): ?Feature
+    private function syncDriveTrain(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 6501) {
             return null;
@@ -460,15 +460,15 @@ class DealFiltersMunger
             })
             ->pluck('value')
             ->map(function ($slugKey) {
-                return Feature::where('slug', 'drive_train_'.strtolower($slugKey))->first();
+                return Filter::where('slug', 'drive_train_'.strtolower($slugKey))->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncSeatMaterials(Equipment $equipment): ?Feature
+    private function syncSeatMaterials(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 17401) {
             return null;
@@ -493,15 +493,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncSeatingConfiguration(Equipment $equipment): ?Feature
+    private function syncSeatingConfiguration(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 701) {
             return null;
@@ -534,15 +534,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncPickup(Equipment $equipment): ?Feature
+    private function syncPickup(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 14201) {
             return null;
@@ -554,7 +554,7 @@ class DealFiltersMunger
             })
             ->pluck('value')
             ->map(function ($slugKey) {
-                return Feature::where('slug', strtolower($slugKey).'_bed')->first();
+                return Filter::where('slug', strtolower($slugKey).'_bed')->first();
             })->first();
     }
 
@@ -661,7 +661,7 @@ class DealFiltersMunger
                     ->first();
 
                 if ($hasParkingSensors == 'camera & radar') {
-                    return Feature::where('slug', 'backup_camera')->first();
+                    return Filter::where('slug', 'backup_camera')->first();
                 }
             }
         }

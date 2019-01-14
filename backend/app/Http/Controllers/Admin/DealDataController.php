@@ -14,7 +14,7 @@ class DealDataController extends Controller
     private function buildFilters()
     {
         $features = [];
-        foreach ($this->deal->features()->with('category')->get() as $feature) {
+        foreach ($this->deal->filters()->with('category')->get() as $feature) {
             if (! isset($features[$feature->category->title])) {
                 $features[$feature->category->title] = [];
             }

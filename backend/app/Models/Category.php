@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $display_order
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Feature[] $features
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Filter[] $filters
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereDisplayOrder($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category whereHasCustomJatoMapping($value)
@@ -39,8 +39,8 @@ class Category extends Model
         'display_order',
     ];
 
-    public function features()
+    public function filters()
     {
-        return $this->hasMany(Feature::class)->whereNotIn('features.id', [5, 9, 10, 14, 19, 20, 21, 29, 42, 44, 46, 54, 55, 59, 61])->orderBy('display_order', 'asc');
+        return $this->hasMany(Filter::class)->whereNotIn('features.id', [5, 9, 10, 14, 19, 20, 21, 29, 42, 44, 46, 54, 55, 59, 61])->orderBy('display_order', 'asc');
     }
 }
