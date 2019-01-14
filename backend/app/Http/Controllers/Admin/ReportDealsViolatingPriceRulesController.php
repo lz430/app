@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
-use App\Models\Dealer;
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
 
@@ -11,8 +10,6 @@ class ReportDealsViolatingPriceRulesController extends Controller
     public function index()
     {
         $data = [];
-
-        $percentage = config('dmr.pricing.validation_percentage');
 
         $deals = Deal::where('status', '=', 'available')
             ->whereNotNull('price')
