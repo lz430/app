@@ -17,5 +17,9 @@ export default class CashPricing extends Pricing {
             .add(this.cvrFeeWithTaxes())
             .add(this.salesTax());
 
-    totalPrice = () => this.yourPrice().add(this.taxesAndFees());
+    totalPrice = () =>
+        this.discountedPrice()
+            .subtract(this.rebates())
+            .add(this.taxesAndFees());
+    //this.yourPrice().add(this.taxesAndFees());
 }

@@ -91,7 +91,6 @@ export default class Pricing {
         if (this.isEffectiveDiscountDmr()) {
             return this.defaultPrice();
         }
-
         return this.msrp();
     };
 
@@ -132,7 +131,11 @@ export default class Pricing {
     };
 
     isEffectiveDiscountDmr = () => {
-        return !this.data.discountType || this.data.discountType === 'dmr';
+        return (
+            !this.data.discountType ||
+            this.data.discountType === 'dmr' ||
+            this.data.discountType === 'default'
+        );
     };
 
     withTaxAdded = amount => amount.add(this.taxesFor(amount));

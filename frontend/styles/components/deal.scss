@@ -553,7 +553,10 @@
         column-count: 4;
     }
     li {
-        padding: 5px;
+        font-size: 0.85rem;
+        @include media-breakpoint-up(md) {
+            padding: 0 5px;
+        }
         word-break: normal;
     }
 }
