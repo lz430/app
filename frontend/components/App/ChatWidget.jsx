@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import classNames from 'classnames';
-
 import { faComments } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -26,48 +24,46 @@ class ChatWidget extends React.PureComponent {
             label = 'Get Help';
         }
 
-        if (this.props.presentation === 'modal') {
+        if (this.props.presentation === 'modal' && !chatSettings.chatShow) {
             return (
-                <div className={classNames('modal-widget', 'chat-button')}>
-                    {!chatSettings.chatShow && (
-                        <Link href="/brochure/contact" as="/contact">
-                            <a className="btn btn-primary">
-                                <FontAwesomeIcon icon={faComments} />
-                                {label}
-                            </a>
-                        </Link>
-                    )}
+                <Link href="/brochure/contact" as="/contact">
+                    <a>
+                        <FontAwesomeIcon icon={faComments} />
 
-                    {chatSettings.chatShow && (
-                        <span
-                            className="btn btn-primary"
-                            onClick={() => chatSettings.onOpenChat()}
-                        >
-                            <FontAwesomeIcon icon={faComments} />
-                            <span className="d-md-inline">{label}</span>
-                        </span>
-                    )}
-                </div>
+                        <span className="btn btn-primary">{label}</span>
+                    </a>
+                </Link>
+            );
+        }
+
+        if (this.props.presentation === 'modal' && chatSettings.chatShow) {
+            return (
+                <span onClick={() => chatSettings.onOpenChat()}>
+                    <FontAwesomeIcon icon={faComments} />
+                    <span className="btn btn-primary d-md-inline">{label}</span>
+                </span>
             );
         }
 
         if (!chatSettings.chatShow) {
-            return false;
+            return (
+                <Link href="/brochure/contact" as="/contact">
+                    <a className="chat-button">
+                        <FontAwesomeIcon icon={faComments} /> {label}
+                    </a>
+                </Link>
+            );
         }
 
         return (
-            <span
-                className={classNames('chat-button', {
-                    hidden: !chatSettings.chatShow,
-                })}
-            >
+            <span className="chat-button cursor-pointer">
                 <span onClick={() => chatSettings.onOpenChat()}>
-                    <FontAwesomeIcon icon={faComments} />
-                    <span>{label}</span>
+                    <FontAwesomeIcon icon={faComments} /> {label}
                 </span>
             </span>
         );
     }
+
     /*
     renderHubSpotChat() {
         if (this.props.presentation === 'modal') {

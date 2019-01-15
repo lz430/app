@@ -11,6 +11,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import TopWorkplace from '../../static/brochure/top-workplace/twp2018.svg';
+import ChatWidget from '../App/ChatWidget';
 
 export default class Footer extends React.PureComponent {
     render() {
@@ -65,9 +66,7 @@ export default class Footer extends React.PureComponent {
                                     </Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link href="#hs-chat-open" passHref>
-                                        <NavLink>Live Chat</NavLink>
-                                    </Link>
+                                    <ChatWidget presentation="footer" />
                                 </NavItem>
                             </ul>
                         </Col>
