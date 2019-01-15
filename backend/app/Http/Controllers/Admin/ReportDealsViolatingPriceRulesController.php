@@ -26,7 +26,7 @@ class ReportDealsViolatingPriceRulesController extends Controller
             // Validate the $pricingArray
             $validationResult = $this->useDealValidation($pricingArray);
 
-            if($validationResult['isPricingValid'] == false) {
+            if ($validationResult['isPricingValid'] == false) {
                 $item[$deal->dealer->id]['dealer'] = [
                     'id' => $deal->dealer->id,
                     'dealer_name' => $deal->dealer->name,
@@ -45,7 +45,8 @@ class ReportDealsViolatingPriceRulesController extends Controller
      *  internal function to reach out to the Deal.php controller.
      *  Call and Return results from validateDealPriceRules()
      */
-    public function useDealValidation($pricingArray) {
+    public function useDealValidation($pricingArray)
+    {
         $newDeal = new Deal();
         return $newDeal->validateDealPriceRules($pricingArray);
     }
