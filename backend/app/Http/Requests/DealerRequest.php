@@ -36,6 +36,8 @@ class DealerRequest extends FormRequest
             'state' => 'required',
             'zip' => 'required',
             'doc_fee' => 'required',
+            'cvr_fee' => 'required',
+            'registration_fee' => 'required',
         ];
     }
 

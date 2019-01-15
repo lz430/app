@@ -150,6 +150,10 @@ class UserService {
         );
     };
 
+    getCsrfToken() {
+        return sessionClient.get('/csrf');
+    }
+
     /**
      * Calls the express session storage url. Used for the client set info in the session.
      * @param data

@@ -6,6 +6,7 @@ import DealPrice from './DealPrice';
 import { dealType } from '../../core/types';
 
 import { Card, CardBody, CardHeader, CardFooter } from 'reactstrap';
+
 import Link from 'next/link';
 
 class Deal extends React.Component {
