@@ -17,7 +17,7 @@ import PaymentFinance from './pricing/PaymentFinance';
 import PaymentLease from './pricing/PaymentLease';
 import PaymentStrategySelect from './pricing/PaymentStrategySelect';
 import Rebates from './pricing/Rebates';
-import TaxesAndFees from './pricing/TaxesAndFees';
+import DetailsTaxesAndFees from './pricing/DetailsTaxesAndFees';
 import DetailsLeaseDueAtDeliveryFees from './pricing/DetailsLeaseDueAtDeliveryFees';
 import DetailsSummary from './pricing/DetailsSummary';
 import DetailsPrice from './pricing/DetailsPrice';
@@ -329,7 +329,7 @@ export default class AddToCart extends React.PureComponent {
                         purchaseStrategy={purchaseStrategy}
                     />
 
-                    <TaxesAndFees pricing={pricing} />
+                    <DetailsTaxesAndFees pricing={pricing} />
                     <Line isImportant>
                         <Label>Total Selling Price</Label>
                         <Value>
@@ -351,7 +351,7 @@ export default class AddToCart extends React.PureComponent {
                         pricing={pricing}
                         purchaseStrategy={purchaseStrategy}
                     />
-                    <TaxesAndFees pricing={pricing} />
+                    <DetailsTaxesAndFees pricing={pricing} />
                     <Group>
                         <Line>
                             <Label>Final Price</Label>

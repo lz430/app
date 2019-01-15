@@ -72,6 +72,8 @@ export default class Pricing {
 
     docFee = () => fromWholeDollars(this.data.deal.fees.doc);
     cvrFee = () => fromWholeDollars(this.data.deal.fees.cvr);
+    docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
+    cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
 
     defaultPrice = () => fromWholeDollars(this.data.deal.pricing.default);
     employeePrice = () => fromWholeDollars(this.data.deal.pricing.employee);

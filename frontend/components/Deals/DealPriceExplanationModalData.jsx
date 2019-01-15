@@ -85,7 +85,7 @@ class DealPriceExplanationModalData extends React.PureComponent {
                             </Line>
                         )}
 
-                        <div className="deal__buttons">
+                        <div>
                             <Link
                                 href={{
                                     pathname: '/deal-detail',
