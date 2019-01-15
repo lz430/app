@@ -119,7 +119,7 @@ class App extends React.Component {
                 </ChatContext.Provider>
 
                 {config.LIVECHAT_LICENSE &&
-                    config.REACT_APP_ENVIRONMENT === 'production' &&
+                    config.REACT_APP_ENVIRONMENT !== 'local' &&
                     this.state.initChat && (
                         <LiveChat
                             onChatLoaded={ref => this.onChatLoaded(ref)}
