@@ -23,8 +23,9 @@ class ReportDealsViolatingPriceRulesController extends Controller
                 'msrp' => $deal->prices()->msrp,
                 'default' => $deal->prices()->default,
             ];
+
             // Validate the $pricingArray
-            $validationResult = $this->useDealValidation($pricingArray);
+            $validationResult =  $deal->validateDealPriceRules($pricingArray);
 
             if ($validationResult['isPricingValid'] == false) {
                 $item[$deal->dealer->id]['dealer'] = [
@@ -40,14 +41,5 @@ class ReportDealsViolatingPriceRulesController extends Controller
         }
 
         return view('admin.reports.deals-violating-price-rules', ['deals' => $data]);
-    }
-    /*
-     *  internal function to reach out to the Deal.php controller.
-     *  Call and Return results from validateDealPriceRules()
-     */
-    public function useDealValidation($pricingArray)
-    {
-        $newDeal = new Deal();
-        return $newDeal->validateDealPriceRules($pricingArray);
     }
 }
