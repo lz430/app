@@ -29,6 +29,7 @@ class BuildOverviewData
         'diesel' => 'Diesel',
         'E85' => 'E85',
         'compressed natural gas' => 'Compressed Natural Gas',
+        'LPG' => 'Liquid Petroleum Gas'
     ];
 
     private function labelEquipmentOnDeal($dealData)
