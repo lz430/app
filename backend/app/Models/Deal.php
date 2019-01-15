@@ -345,16 +345,6 @@ class Deal extends Model
                     ],
                 ],
             ],
-            'price_validation' => [
-                'properties' => [
-                    'value' => [
-                        'type' => 'text',
-                    ],
-                    'reason' => [
-                        'type' => 'text',
-                    ],
-                ],
-            ],
         ],
     ];
 
@@ -751,27 +741,27 @@ class Deal extends Model
 
         if($prices->msrp < $prices->default)
             return [
-                'value'=>'false',
+                'isPricingValid'=>false,
                 'reason' => 'Price > Msrp',
             ];
         if($prices->default > config('dmr.pricing.maximum_allowed'))
             return [
-                'value'=>'false',
+                'isPricingValid'=>false,
                 'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'),2),
             ];
         if($prices->default < config('dmr.minimum_price_allowed'))
             return [
-                'value'=>'false',
+                'isPricingValid'=>false,
                 'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'),2),
             ];
         if( (($prices->msrp - $prices->default ) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage'))
             return [
-                'value'=>'false',
+                'isPricingValid'=>false,
                 'reason' => 'MSRP Exceeds Price by '.config('dmr.pricing.validation_percentage').'%',
             ];
 
         return [
-            'value'=>'true',
+            'isPricingValid'=>true,
             'reason' => 'All Good',
         ];
     }
