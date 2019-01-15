@@ -2,10 +2,10 @@ import React from 'react';
 import { dealType } from '../../../../core/types';
 import { Row, Col, Container } from 'reactstrap';
 import classNames from 'classnames';
-import { Sticky } from 'react-sticky';
 
 import HighlightItem from './HighlightItem';
 import KeyFeatureItem from './KeyFeatureItem';
+import OverviewNav from './OverviewNav';
 
 import { faCheck } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -111,53 +111,8 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <Container>
-                <Sticky topOffset={585}>
-                    {({ style, isSticky }) => (
-                        <div
-                            className={classNames('deal__section-overview', {
-                                stickied: isSticky,
-                            })}
-                            style={{
-                                ...style,
-                                marginTop: isSticky ? '83px' : '0',
-                            }}
-                        >
-                            <Container>
-                                <Row className="deal__section-heading pt-3 pb-3">
-                                    <Col>
-                                        <h6 className="text-center">
-                                            {' '}
-                                            Overview{' '}
-                                        </h6>
-                                    </Col>
-                                    <Col>
-                                        <h6 className="text-center"> Specs </h6>
-                                    </Col>
-                                    <Col>
-                                        <h6 className="text-center">
-                                            {' '}
-                                            Additional Information{' '}
-                                        </h6>
-                                    </Col>
-                                    <Col>
-                                        <h6 className="text-center">
-                                            {' '}
-                                            Our Promise
-                                        </h6>
-                                    </Col>
-                                    <Col>
-                                        <h6 className="text-center border-0">
-                                            {' '}
-                                            FAQs
-                                        </h6>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </div>
-                    )}
-                </Sticky>
-
+            <Container className="deal__overview">
+                <OverviewNav />
                 <Container>
                     <Row className="flex-column">
                         <div className="border rounded shadow-sm bg-white">
