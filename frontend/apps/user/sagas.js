@@ -39,7 +39,6 @@ export function* requestIpLocation(data) {
     ) {
         return;
     }
-    const csrfToken = yield call(getCSRFToken);
     const ip = data ? data.ip : null;
 
     let location;
@@ -66,9 +65,14 @@ export function* requestIpLocation(data) {
         };
     }
 
-    storeSessionData({ location: location }, data.session, csrfToken);
-    yield put(softUpdateSessionData({ location: location }));
+    if (data.session) {
+        storeSessionData({ location: location }, data.session, null);
+    } else {
+        const csrfToken = yield call(getCSRFToken);
+        storeSessionData({ location: location }, null, csrfToken);
+    }
 
+    yield put(softUpdateSessionData({ location: location }));
     yield put(receiveLocation(location));
 }
 

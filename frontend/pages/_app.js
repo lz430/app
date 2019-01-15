@@ -15,6 +15,8 @@ import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
+//
+// TODO: Fix this, we have to store both, because we need this in express and in next.
 const brochureSiteRoutes = [
     '/home',
     '/brochure/contact',
@@ -44,12 +46,13 @@ class MyApp extends App {
             if (ctx.query.csrfToken) {
                 await setCSRFToken(ctx.query.csrfToken);
             }
-
             //
             // Location
             if (
-                (!session.location || !session.location.is_valid) &&
-                !brochureSiteRoutes.includes(ctx.req.path)
+                !session.location ||
+                !session.location
+                    .is_valid /*&&
+                !brochureSiteRoutes.includes(ctx.req.path) */
             ) {
                 await ctx.store.dispatch(
                     requestIpLocation(ctx.req.ip, ctx.req.session)

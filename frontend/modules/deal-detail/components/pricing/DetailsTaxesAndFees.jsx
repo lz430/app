@@ -8,7 +8,10 @@ import Header from '../../../../apps/pricing/components/Header';
 import DollarsAndCents from '../../../../components/money/DollarsAndCents';
 import { pricingType } from '../../../../core/types';
 
-export default class TaxesAndFees extends React.PureComponent {
+/**
+ * Used for cash and finance
+ */
+export default class DetailsTaxesAndFees extends React.PureComponent {
     static propTypes = {
         pricing: pricingType.isRequired,
     };
@@ -22,13 +25,13 @@ export default class TaxesAndFees extends React.PureComponent {
                 <Line>
                     <Label>Doc Fee</Label>
                     <Value>
-                        <DollarsAndCents value={pricing.docFee()} />
+                        <DollarsAndCents value={pricing.docFeeWithTaxes()} />
                     </Value>
                 </Line>
                 <Line>
                     <Label>Electronic Filing Fee</Label>
                     <Value>
-                        <DollarsAndCents value={pricing.cvrFee()} />
+                        <DollarsAndCents value={pricing.cvrFeeWithTaxes()} />
                     </Value>
                 </Line>
                 <Line>

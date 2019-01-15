@@ -78,7 +78,7 @@ class ContactForm extends React.Component {
                             <Button
                                 className="border-radius-0"
                                 type="submit"
-                                color="success"
+                                color="primary"
                                 size="lg"
                                 block
                             >
