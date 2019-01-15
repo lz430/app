@@ -4,12 +4,6 @@ import { Row, Col, Container } from 'reactstrap';
 import classNames from 'classnames';
 import { Sticky } from 'react-sticky';
 
-import HighlightItem from './HighlightItem';
-import KeyFeatureItem from './KeyFeatureItem';
-
-import { faCheck } from '@fortawesome/pro-light-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 export default class extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,

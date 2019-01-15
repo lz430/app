@@ -1,7 +1,6 @@
 import React from 'react';
 import { dealType } from '../../../../core/types';
 import { Row, Col, Container } from 'reactstrap';
-import classNames from 'classnames';
 
 import HighlightItem from './HighlightItem';
 import KeyFeatureItem from './KeyFeatureItem';
