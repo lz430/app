@@ -865,7 +865,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['seating_capacity'] = ($this->seating_capacity ? $this->seating_capacity : null);
 
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
