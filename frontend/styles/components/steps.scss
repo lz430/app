@@ -9,7 +9,7 @@
         padding: 4px 0 4px 17px;
         text-align: center;
         width: 100%;
-        background: #333;
+        background: $success;
         color: #fff;
         margin: 0 2px;
 
@@ -25,7 +25,7 @@
 
         &:after {
             content: '';
-            border-left: 17px solid #333;
+            border-left: 17px solid $success;
             border-top: 17px solid transparent;
             border-bottom: 16px solid transparent;
             position: absolute;
