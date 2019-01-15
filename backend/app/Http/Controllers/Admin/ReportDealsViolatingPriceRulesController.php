@@ -20,18 +20,18 @@ class ReportDealsViolatingPriceRulesController extends Controller
 
             // build the priceingArray to call function validateDealPriceRules used in Deal.php to populate ES
             $pricingArray = (object) [
-                'msrp' => $deal->msrp,
-                'default' => $deal->price,
+                'msrp' => $deal->prices()->msrp,
+                'default' => $deal->prices()->default,
             ];
             // Validate the $pricingArray
             $validationResult = $this->useDealValidation($pricingArray);
 
             if($validationResult['isPricingValid'] == false) {
-                $item[$deal->dealer_id]['dealer'] = [
-                    'id' => $deal->dealer_id,
-                    'dealer_name' => $deal->dealer_name,
+                $item[$deal->dealer->id]['dealer'] = [
+                    'id' => $deal->dealer->id,
+                    'dealer_name' => $deal->dealer->name,
                 ];
-                $item[$deal->dealer_id]['deals'][] = [
+                $item[$deal->dealer->id]['deals'][] = [
                     'deal' => $deal,
                     'reason' => $validationResult['reason'],
                 ];
