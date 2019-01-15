@@ -4,9 +4,9 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use DeliverMyRide\HubSpot\HubspotClient;
-use SevenShores\Hubspot\Exceptions\BadRequest;
 use App\Notifications\NotifyToSlackChannel;
 use Illuminate\Support\Facades\Notification;
+use SevenShores\Hubspot\Exceptions\BadRequest;
 
 class BrochureController extends BaseAPIController
 {
