@@ -24,7 +24,7 @@ export default class extends React.PureComponent {
 
         return (
             <Row
-                className="deal__section-overview-highlights  rounded-top"
+                className="deal__section-overview-highlights  rounded-top no-gutters"
                 id="overview"
             >
                 {this.props.deal.highlights.map((item, index) => {
