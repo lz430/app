@@ -123,7 +123,7 @@ export default class AddToCart extends React.PureComponent {
 
         if (this.state.submitted) {
             return (
-                <Button color="success" block disabled={true}>
+                <Button color="primary" block disabled={true}>
                     <Loading size={1} /> Loading, please wait.
                 </Button>
             );
@@ -131,7 +131,7 @@ export default class AddToCart extends React.PureComponent {
 
         return (
             <Button
-                color="success"
+                color="primary"
                 block
                 onClick={() => this.progressToNextStep()}
             >

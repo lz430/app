@@ -79,7 +79,7 @@ class ViewDeals extends React.PureComponent {
                         href={`/deal-detail?id=${deal.id}`}
                         as={`/deals/${deal.id}`}
                     >
-                        <a className="btn btn-outline-success btn-sm">View</a>
+                        <a className="btn btn-outline-primary btn-sm">View</a>
                     </Link>
                 </div>
             </Deal>
