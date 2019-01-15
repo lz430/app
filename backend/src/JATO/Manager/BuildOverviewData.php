@@ -75,12 +75,14 @@ class BuildOverviewData
                 }
                 if ($equipment->name == 'Head restraints') {
                     if (isset($attributes['location']) && $attributes['location']->value == 'front seats') {
-                        $capacity = isset($dealData->seating_capacity) ? $dealData->seating_capacity : '';
-                        $labeledEquipment[] = [
-                            'category' => 'Seating',
-                            'label' => 'Seating Capacity',
-                            'value' => "Up to {$capacity}",
-                        ];
+                        $capacity = $dealData->seating_capacity;
+                        if ($capacity != null) {
+                            $labeledEquipment[] = [
+                                'category' => 'Seating',
+                                'label' => 'Seating Capacity',
+                                'value' => "Up to {$capacity}",
+                            ];
+                        }
                     }
                 }
                 // Data for overview section
