@@ -10,6 +10,7 @@ import ContactForm from '../../modules/contact/components/ContactForm';
 
 import Head from 'next/head';
 import { track } from '../../core/services';
+import ChatWidget from '../../components/App/ChatWidget';
 
 class Page extends React.Component {
     componentDidMount() {
@@ -53,7 +54,7 @@ class Page extends React.Component {
                                 <a href="mailto:support@delivermyride.com">
                                     support@delivermyride.com
                                 </a>
-                                <a href="#hs-chat-open">Live Chat</a>
+                                <ChatWidget presentation="footer" />
                             </div>
                         </Col>
                         <Col xl={8}>
