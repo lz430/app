@@ -278,7 +278,8 @@ class Deal extends Model
                 'type' => 'double',
             ],
             'seating_capacity' => [
-                'type' => 'integer',
+                'type' => 'keyword',
+                'null_value' => 'NULL',
             ],
             'options' => [
                 'type' => 'nested',
@@ -865,7 +866,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['seating_capacity'] = ($this->seating_capacity != null) ? (int) $this->seating_capacity : '';
 
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
