@@ -13,7 +13,7 @@ export default class AdditionalInformation extends React.PureComponent {
         }
 
         return (
-            <div className="pb-5 pt-5">
+            <div className="deal-details__container pb-5 pt-5">
                 <Container>
                     <Row className="deal__section-heading">
                         <Col>

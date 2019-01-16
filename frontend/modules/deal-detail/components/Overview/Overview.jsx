@@ -23,10 +23,7 @@ export default class extends React.PureComponent {
         }
 
         return (
-            <Row
-                className="deal__section-overview-highlights  rounded-top no-gutters"
-                id="overview"
-            >
+            <Row className="deal__section-overview-highlights rounded-top no-gutters">
                 {this.props.deal.highlights.map((item, index) => {
                     return (
                         <HighlightItem
@@ -110,9 +107,9 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <Container className="deal__overview">
+            <Container className="deal-details__container deal__overview ">
                 <OverviewNav />
-                <Container>
+                <Container className="deal__section-heading">
                     <Row className="flex-column">
                         <div className="border rounded shadow-sm bg-white">
                             {this.renderHighlight()}

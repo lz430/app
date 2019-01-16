@@ -5,7 +5,7 @@ import { MediumAndUp, SmallAndDown } from '../Responsive';
 export default class extends React.PureComponent {
     render() {
         return (
-            <div className="pb-5 pt-5">
+            <div className="deal-details__container pb-5 pt-5">
                 <Container>
                     <Row className="deal__section-heading">
                         <Col>

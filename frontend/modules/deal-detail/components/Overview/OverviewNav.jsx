@@ -9,6 +9,10 @@ export default class extends React.PureComponent {
         deal: dealType.isRequired,
     };
 
+    state = {
+        activeSection: 'Overview',
+    };
+
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
@@ -17,66 +21,53 @@ export default class extends React.PureComponent {
         window.removeEventListener('scroll', this.handleScroll);
     }
 
-    handleScroll() {
-        let mainNavLinks = document.querySelectorAll(
-            '.section-header-overview'
-        );
-        let mainSections = document.querySelectorAll('.deal__section-heading');
+    // window.addEventListener('scroll', event => {
+    //     let fromTop = window.scrollY;
 
-        // let  div = document.getElementById("overview");
-        // let  rect = div.getBoundingClientRect();
-        // let y = rect.top;
+    //     mainNavLinks.forEach(link => {
+    //         let section = document.querySelector(link.hash);
+    //         let rect = section.getBoundingClientRect();
 
-        // console.log(y);
+    //         if (
+    //           rect.top <= fromTop &&
+    //           rect.top + section.offsetHeight > fromTop
+    //         ) {
+    //              this.setState({ activeSection: true });
+    //         } else {
+    //              this.setState({ activeSection: false });
+    //         }
+    //         // console.log(this.state.activeSection);
+    //     });
+    // });
 
-        window.addEventListener('scroll', event => {
-            let fromTop = window.scrollY;
+    // Todo: Put IDs on each section...then do the math on those particular sections vs. the top nav.
+    handleScroll = () => {
+        let sections = document.querySelectorAll('.deal-details__container'),
+            nav = document.querySelectorAll('.overview-nav'),
+            navHeight = nav[0].clientHeight;
 
-            mainNavLinks.forEach(link => {
-                let section = document.querySelector(link.id);
-                let sectionFromTop = section.getBoundingClientRect();
-                let y = rect.top;
+        window.addEventListener('scroll', () => {
+            let theTop = this.scrollTop;
 
-                console.log(y);
+            sections.forEach(section => {
+                let topOffset = section.getBoundingClientRect().top;
+                let top = topOffset - navHeight,
+                    bottom = top + section.outerHeight;
 
-                if (
-                    section.offsetTop <= fromTop &&
-                    section.offsetTop + section.offsetHeight > fromTop
-                ) {
-                    link.classList.add('current');
-                    // console.log("Did we do it");
+                if (theTop >= top && theTop <= bottom) {
+                    this.setState({ activeSection: true });
                 } else {
-                    link.classList.remove('current');
-                    // console.log("Or didn't we");
+                    this.setState({ activeSection: false });
                 }
             });
+            console.log(this);
         });
-
-        /*window.addEventListener("scroll", event => {
-            let overviewNav = document.getElementsByClassName("section-header-overview");
-            let fromTop = window.scrollY;
-
-            overviewNav.forEach(link => {
-                let section = document.querySelector(this.link.id);
-                if(section){
-                    console.log(section);
-                }else{
-                    console.log("No section!");
-                }
-                // if ( section.scrollTop <= fromTop && section.scrollTop + section.offsetHeight > fromTop) {
-                //     link.classList.add("current");
-                // } else {
-                //     link.classList.remove("current");
-                // }
-            });
-        });
-*/
-    }
+    };
 
     render() {
         return (
             <div className="p-0">
-                <Sticky topOffset={585}>
+                <Sticky topOffset={520}>
                     {({ style, isSticky }) => (
                         <div
                             className={classNames('deal__section-overview', {
@@ -88,46 +79,81 @@ export default class extends React.PureComponent {
                             }}
                         >
                             <Container>
-                                <Row className="deal__section-heading">
+                                <Row className="deal__section-heading overview-nav">
                                     <Col>
-                                        <h6
-                                            id="overview"
-                                            className="section-header-overview text-center mb-0"
-                                        >
-                                            Overview
+                                        <h6 className="section-header-overview text-center mb-0">
+                                            <a
+                                                href="#overview"
+                                                className={
+                                                    this.state.activeSection ===
+                                                    true
+                                                        ? 'active'
+                                                        : ''
+                                                }
+                                            >
+                                                Overview
+                                            </a>
                                         </h6>
                                     </Col>
                                     <Col>
-                                        <h6
-                                            id="specs"
-                                            className="section-header-overview text-center mb-0"
-                                        >
-                                            {' '}
-                                            Specs{' '}
+                                        <h6 className="section-header-overview text-center mb-0">
+                                            <a
+                                                href="#specs"
+                                                className={
+                                                    this.state.activeSection ===
+                                                    true
+                                                        ? 'active'
+                                                        : ''
+                                                }
+                                            >
+                                                {' '}
+                                                Specs{' '}
+                                            </a>
                                         </h6>
                                     </Col>
                                     <Col>
-                                        <h6
-                                            id="additional-information"
-                                            className="section-header-overview text-center mb-0"
-                                        >
-                                            Additional Information
+                                        <h6 className="section-header-overview text-center mb-0">
+                                            <a
+                                                href="#additional-information"
+                                                className={
+                                                    this.state.activeSection ===
+                                                    true
+                                                        ? 'active'
+                                                        : ''
+                                                }
+                                            >
+                                                Additional Information
+                                            </a>
                                         </h6>
                                     </Col>
                                     <Col>
-                                        <h6
-                                            id="our-promise"
-                                            className="section-header-overview text-center mb-0"
-                                        >
-                                            Our Promise
+                                        <h6 className="section-header-overview text-center mb-0">
+                                            <a
+                                                href="#our-promise"
+                                                className={
+                                                    this.state.activeSection ===
+                                                    true
+                                                        ? 'active'
+                                                        : ''
+                                                }
+                                            >
+                                                Our Promise
+                                            </a>
                                         </h6>
                                     </Col>
                                     <Col>
-                                        <h6
-                                            id="faqs"
-                                            className="section-header-overview text-center mb-0 border-0"
-                                        >
-                                            FAQs
+                                        <h6 className="section-header-overview text-center mb-0 border-0">
+                                            <a
+                                                href="#faqs"
+                                                className={
+                                                    this.state.activeSection ===
+                                                    true
+                                                        ? 'active'
+                                                        : ''
+                                                }
+                                            >
+                                                FAQs
+                                            </a>
                                         </h6>
                                     </Col>
                                 </Row>

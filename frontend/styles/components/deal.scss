@@ -258,6 +258,14 @@
             h6 {
                 color: $color-text-white;
                 border-right: 1px solid $color-text-white;
+
+                a {
+                    color: $color-text-white;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
             }
         }
         &-highlights {

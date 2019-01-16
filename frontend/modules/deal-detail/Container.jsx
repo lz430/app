@@ -368,7 +368,7 @@ class DealDetailContainer extends React.PureComponent {
                     <Specs deal={this.props.deal} />
                     <AdditionalInformation deal={this.props.deal} />
                     <OurPromise />
-                    <div className="pb-5">
+                    <div className="deal-details__container pb-5">
                         <Container className="deal__container-faq-contact">
                             <Row className="shadow-sm">
                                 <Col
