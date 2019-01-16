@@ -49,7 +49,7 @@ class BuildOverviewData
                     $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
                     if ($horsePower != '') { // super hacky TODO:fix this
                         $labeledEquipment[] = [
-                            'category' => 'Power',
+                            'category' => 'Engine',
                             'label' => "{$liters}L {$valves}{$configuration}",
                             'value' => "{$horsePower} hp",
                         ];
@@ -68,7 +68,7 @@ class BuildOverviewData
                     $type = isset($attributes['Transmission type']) ? ucwords($attributes['Transmission type']->value) : '';
                     $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
                     $labeledEquipment[] = [
-                        'category' => 'Transmission',
+                        'category' => 'Engine Speed',
                         'label' => "{$type} Transmission",
                         'value' => "{$speeds}-Speed",
                     ];
@@ -186,6 +186,8 @@ class BuildOverviewData
 
         $this->labelEquipmentOnDeal($this->deal);
 
-        return $this->equipmentOnDeal;
+        return collect($this->equipmentOnDeal)->sortBy(function ($name) {
+            return $name;
+        })->values()->all();
     }
 }
