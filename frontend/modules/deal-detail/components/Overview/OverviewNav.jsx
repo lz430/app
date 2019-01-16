@@ -10,57 +10,63 @@ export default class extends React.PureComponent {
     };
 
     state = {
-        activeSection: 'Overview',
+        activeSection: false,
     };
 
     componentDidMount() {
-        window.addEventListener('scroll', this.handleScroll);
+        // window.addEventListener('scroll', this.handleScroll);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.handleScroll);
+        // window.removeEventListener('scroll', this.handleScroll);
     }
 
-    // window.addEventListener('scroll', event => {
-    //     let fromTop = window.scrollY;
-
-    //     mainNavLinks.forEach(link => {
-    //         let section = document.querySelector(link.hash);
-    //         let rect = section.getBoundingClientRect();
-
-    //         if (
-    //           rect.top <= fromTop &&
-    //           rect.top + section.offsetHeight > fromTop
-    //         ) {
-    //              this.setState({ activeSection: true });
-    //         } else {
-    //              this.setState({ activeSection: false });
-    //         }
-    //         // console.log(this.state.activeSection);
-    //     });
-    // });
-
-    // Todo: Put IDs on each section...then do the math on those particular sections vs. the top nav.
     handleScroll = () => {
         let sections = document.querySelectorAll('.deal-details__container'),
+            totalScroll = document.body.getBoundingClientRect().top,
             nav = document.querySelectorAll('.overview-nav'),
             navHeight = nav[0].clientHeight;
 
         window.addEventListener('scroll', () => {
-            let theTop = this.scrollTop;
-
             sections.forEach(section => {
-                let topOffset = section.getBoundingClientRect().top;
-                let top = topOffset - navHeight,
-                    bottom = top + section.outerHeight;
+                let topOffset = section.getBoundingClientRect().top; //How far from the top are we
+                let top = topOffset - navHeight, //How far from the top minus the height of the nav
+                    bottom = top + section.clientHeight; //Find where the bottom of the current section is
 
-                if (theTop >= top && theTop <= bottom) {
+                if (totalScroll >= top && totalScroll <= bottom) {
+                    // console.log("Truth");
                     this.setState({ activeSection: true });
                 } else {
+                    // console.log("False");
                     this.setState({ activeSection: false });
                 }
+                // console.log(section);
+
+                // console.log("TotalScroll: " + totalScroll);
+                // console.log("Top: " + top);
+                // console.log("Bottom: " + bottom);
             });
-            console.log(this);
+        });
+        // console.log(totalScroll);
+    };
+    // Todo: match the href with the id of the target element
+    handleClick = e => {
+        this.setState({
+            activeSection: name,
+        });
+        let sections = document.querySelectorAll('.deal-details__container');
+
+        // Helpful
+
+        sections.forEach(section => {
+            let topOffset = section.getBoundingClientRect().top; //How far from the top is the element
+        }); //Should I make this it's own function?
+
+        // let eTop = this.getBoundingClientRect().top;
+        console.log(e.target);
+        window.scrollTo({
+            top: 620,
+            behavior: 'smooth',
         });
     };
 
@@ -90,6 +96,9 @@ export default class extends React.PureComponent {
                                                         ? 'active'
                                                         : ''
                                                 }
+                                                onClick={e =>
+                                                    this.handleClick(e)
+                                                }
                                             >
                                                 Overview
                                             </a>
@@ -104,6 +113,9 @@ export default class extends React.PureComponent {
                                                     true
                                                         ? 'active'
                                                         : ''
+                                                }
+                                                onClick={e =>
+                                                    this.handleClick(e)
                                                 }
                                             >
                                                 {' '}
@@ -121,6 +133,9 @@ export default class extends React.PureComponent {
                                                         ? 'active'
                                                         : ''
                                                 }
+                                                onClick={e =>
+                                                    this.handleClick(e)
+                                                }
                                             >
                                                 Additional Information
                                             </a>
@@ -136,6 +151,9 @@ export default class extends React.PureComponent {
                                                         ? 'active'
                                                         : ''
                                                 }
+                                                onClick={e =>
+                                                    this.handleClick(e)
+                                                }
                                             >
                                                 Our Promise
                                             </a>
@@ -150,6 +168,9 @@ export default class extends React.PureComponent {
                                                     true
                                                         ? 'active'
                                                         : ''
+                                                }
+                                                onClick={e =>
+                                                    this.handleClick(e)
                                                 }
                                             >
                                                 FAQs
