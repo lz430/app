@@ -167,7 +167,7 @@ class BuildOverviewData
 
         return collect($this->equipmentOnDeal)->sortBy(function ($name) {
             return $name;
-        })->all();
+        })->values()->all();
     }
 
     public function getHighlightsData(Collection $equipment, Deal $deal)
