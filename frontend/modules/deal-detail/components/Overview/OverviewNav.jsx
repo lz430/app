@@ -56,7 +56,7 @@ export default class extends React.PureComponent {
         });
         let sections = document.querySelectorAll('.deal-details__container');
 
-        // Helpful
+        // Helpful: https://stackoverflow.com/questions/9880472/determine-distance-from-the-top-of-a-div-to-top-of-window-with-javascript/9880571
 
         sections.forEach(section => {
             let topOffset = section.getBoundingClientRect().top; //How far from the top is the element
