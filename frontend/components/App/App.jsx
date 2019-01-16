@@ -9,7 +9,6 @@ import Header from './Header/Header';
 import Footer from './Footer';
 
 import BrochureHeader from '../brochure/Header.jsx';
-import BrochureFooter from '../brochure/Footer.jsx';
 import LiveChat from 'react-livechat';
 import config from '../../core/config';
 
@@ -75,9 +74,6 @@ class App extends React.Component {
      * @returns {*}
      */
     renderFooter() {
-        if (this.props.isBrochureSite) {
-            return <BrochureFooter />;
-        }
         if (this.props.desktopOnlyFooter) {
             return (
                 <LargeAndUp>

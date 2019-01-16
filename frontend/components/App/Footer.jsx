@@ -15,10 +15,10 @@ export default class Footer extends React.PureComponent {
                     <Col xs={6} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Deliver My Ride</div>
 
-                        <Link href="/about" as="/about" passHref>
+                        <Link href="/brochure/about" as="/about" passHref>
                             <a>About</a>
                         </Link>
-                        <Link href="/how-it-works" as="/how-it-works" passHref>
+                        <Link href="/brochure/faq" as="/faq" passHref>
                             <a>How It Works</a>
                         </Link>
 
