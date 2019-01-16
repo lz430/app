@@ -25,6 +25,7 @@ import { nextRouterType } from '../core/types';
 import Head from 'next/head';
 import { getUserPurchaseStrategy } from '../apps/user/selectors';
 import config from '../core/config';
+import { track } from '../core/services';
 
 class Page extends React.Component {
     static propTypes = {
@@ -40,6 +41,10 @@ class Page extends React.Component {
     state = {
         activeIndex: 0,
     };
+
+    componentDidMount() {
+        track('page:brochure-homepage:view');
+    }
 
     render() {
         return (
