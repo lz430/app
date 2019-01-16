@@ -14,21 +14,22 @@ export default class Footer extends React.PureComponent {
                 <Row>
                     <Col xs={6} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Deliver My Ride</div>
-
                         <Link href="/brochure/about" as="/about" passHref>
                             <a>About</a>
                         </Link>
                         <Link href="/brochure/faq" as="/faq" passHref>
-                            <a>How It Works</a>
+                            <a>FAQs</a>
                         </Link>
 
                         <a href="https://blog.delivermyride.com/blog">Blog</a>
                     </Col>
                     <Col xs={6} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
-                        <a href={config.MARKETING_URL + '/contact/'}>
-                            <FontAwesomeIcon icon={faEnvelope} /> Email Us
-                        </a>
+                        <Link href="/brochure/contact" as="/contact" passHref>
+                            <a href={config.MARKETING_URL + '/contact/'}>
+                                <FontAwesomeIcon icon={faEnvelope} /> Email Us
+                            </a>
+                        </Link>
                         <a href="tel:855-675-7301">
                             <FontAwesomeIcon icon={faPhone} /> (855) 675-7301
                         </a>
