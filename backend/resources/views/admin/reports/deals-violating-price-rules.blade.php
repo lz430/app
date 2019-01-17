@@ -39,9 +39,9 @@
                         <tr>
                             <th>ID</th>
                             <th>VIN</th>
-                            <th>STOCK NUMBER</th>
+                            <th>TITLE</th>
                             <th>MSRP</th>
-                            <th>PRICE</th>
+                            <th>DEFAULT PRICE</th>
                             <th>REASON FOR FAILURE</th>
                             <th>ACTIONS</th>
                         </tr>
@@ -58,13 +58,13 @@
                             {{$content['deal']->vin}}
                         </td>
                         <td>
-                            {{$content['deal']->stock_number}}
+                            {{$content['deal']->title()}}
                         </td>
                         <td>
-                            ${{number_format($content['deal']->msrp, 2)}}
+                            ${{number_format($content['prices']->msrp, 2)}}
                         </td>
                         <td>
-                            ${{number_format($content['deal']->price, 2)}}
+                            ${{number_format($content['prices']->default, 2)}}
                         </td>
                         <td>
                             {{$content['reason']}}

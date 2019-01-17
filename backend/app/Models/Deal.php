@@ -750,7 +750,7 @@ class Deal extends Model
         if ($prices->msrp < $prices->default) {
             return [
                 'isPricingValid' => false,
-                'reason' => 'Price > Msrp',
+                'reason' => 'Price > MSRP',
             ];
         }
         if ($prices->default > config('dmr.pricing.maximum_allowed')) {
