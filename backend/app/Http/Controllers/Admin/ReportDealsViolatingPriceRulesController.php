@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
-
 
 class ReportDealsViolatingPriceRulesController extends Controller
 {
