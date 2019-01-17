@@ -116,14 +116,15 @@ class DealMunger
 
         $deal = Deal::where('vin', '=', $row['VIN'])->first();
         if ($deal) {
-             if ($deal->status !== 'unpublished') {
-                 $data['status'] = 'available';
-             }
-             $deal->update($data);
+            if ($deal->status !== 'unpublished') {
+                $data['status'] = 'available';
+            }
+            $deal->update($data);
         } else {
             $data['status'] = 'available';
             $deal = Deal::create($data);
         }
+
         return $deal;
     }
 
