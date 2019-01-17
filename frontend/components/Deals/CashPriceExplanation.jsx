@@ -25,9 +25,7 @@ export default class CashPriceExplanation extends React.Component {
                     <Line>
                         <Label>Discount</Label>
                         <Value isNegative={true}>
-                            <DollarsAndCents
-                                value={dealPricing.dmrDiscount()}
-                            />
+                            <DollarsAndCents value={dealPricing.discount()} />
                         </Value>
                     </Line>
                     <Line>
@@ -47,10 +45,10 @@ export default class CashPriceExplanation extends React.Component {
                             />
                         </Value>
                     </Line>
-                    <Line isImportant={true} isSectionTotal={true}>
+                    <Line isImportant={true}>
                         <Label>Cash Price</Label>
                         <Value>
-                            <DollarsAndCents value={dealPricing.yourPrice()} />*
+                            <DollarsAndCents value={dealPricing.totalPrice()} />
                         </Value>
                     </Line>
                 </Group>

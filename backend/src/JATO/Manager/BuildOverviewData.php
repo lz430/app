@@ -29,6 +29,7 @@ class BuildOverviewData
         'diesel' => 'Diesel',
         'E85' => 'E85',
         'compressed natural gas' => 'Compressed Natural Gas',
+        'LPG' => 'Liquid Petroleum Gas',
     ];
 
     private function labelEquipmentOnDeal($dealData)
@@ -48,7 +49,7 @@ class BuildOverviewData
                     $horsePower = isset($attributes['Maximum power hp/PS']) ? $attributes['Maximum power hp/PS']->value : '';
                     if ($horsePower != '') { // super hacky TODO:fix this
                         $labeledEquipment[] = [
-                            'category' => 'Power',
+                            'category' => 'Engine',
                             'label' => "{$liters}L {$valves}{$configuration}",
                             'value' => "{$horsePower} hp",
                         ];
@@ -67,19 +68,21 @@ class BuildOverviewData
                     $type = isset($attributes['Transmission type']) ? ucwords($attributes['Transmission type']->value) : '';
                     $speeds = isset($attributes['number of speeds']) ? $attributes['number of speeds']->value : '';
                     $labeledEquipment[] = [
-                        'category' => 'Transmission',
+                        'category' => 'Engine Speed',
                         'label' => "{$type} Transmission",
                         'value' => "{$speeds}-Speed",
                     ];
                 }
                 if ($equipment->name == 'Head restraints') {
                     if (isset($attributes['location']) && $attributes['location']->value == 'front seats') {
-                        $capacity = isset($dealData->seating_capacity) ? $dealData->seating_capacity : '';
-                        $labeledEquipment[] = [
-                            'category' => 'Seating',
-                            'label' => 'Seating Capacity',
-                            'value' => "Up to {$capacity}",
-                        ];
+                        $capacity = $dealData->seating_capacity;
+                        if ($capacity != null) {
+                            $labeledEquipment[] = [
+                                'category' => 'Seating',
+                                'label' => 'Seating Capacity',
+                                'value' => "Up to {$capacity}",
+                            ];
+                        }
                     }
                 }
                 // Data for overview section
@@ -164,7 +167,7 @@ class BuildOverviewData
 
         return collect($this->equipmentOnDeal)->sortBy(function ($name) {
             return $name;
-        })->all();
+        })->values()->all();
     }
 
     public function getHighlightsData(Collection $equipment, Deal $deal)
@@ -183,6 +186,8 @@ class BuildOverviewData
 
         $this->labelEquipmentOnDeal($this->deal);
 
-        return $this->equipmentOnDeal;
+        return collect($this->equipmentOnDeal)->sortBy(function ($name) {
+            return $name;
+        })->values()->all();
     }
 }

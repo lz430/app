@@ -28,7 +28,7 @@ export default class Value extends React.PureComponent {
         const style = { ...this.props.style };
 
         if (this.props.isNegative) {
-            style.color = '#41b1ac';
+            style.color = '#1cbfde';
         }
 
         return (

@@ -254,6 +254,13 @@ class DealDetailContainer extends React.PureComponent {
     }
 
     renderDealOutOfRange() {
+        if (
+            this.props.deal['is_in_range'] ||
+            this.props.userLocation.state !== 'MI'
+        ) {
+            return false;
+        }
+
         return (
             <Container className="mt-2">
                 <Alert className="mb-0 text-sm p-2">
@@ -307,8 +314,7 @@ class DealDetailContainer extends React.PureComponent {
         return (
             <React.Fragment>
                 <Breadcrumb searchQuery={this.props.searchQuery} />
-
-                {!this.props.deal['is_in_range'] && this.renderDealOutOfRange()}
+                {this.renderDealOutOfRange()}
 
                 <StickyContainer>
                     <Header deal={this.props.deal} />

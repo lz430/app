@@ -216,7 +216,7 @@
 
     .pricing-explanation-open {
         cursor: pointer;
-        margin: 8px;
+        margin-left: 8px;
     }
 }
 
@@ -236,6 +236,10 @@
     cursor: default;
     color: #fff;
     text-align: center;
+    font-size: 0.85rem;
+    @include media-breakpoint-up(md) {
+        font-size: 1rem;
+    }
     &__icon {
         font-size: 3rem;
         margin-bottom: 2rem;

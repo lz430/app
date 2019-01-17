@@ -24,7 +24,7 @@ export default class extends React.Component {
             <div className="home__hero">
                 <div
                     className="home__hero__banner"
-                    style={{ background: 'url(' + backgroundUrl + ') center' }}
+                    style={{ backgroundImage: 'url(' + backgroundUrl + ')' }}
                 >
                     <h1>Buy or Lease a New Car, Your Way</h1>
                     <HomepageSearch

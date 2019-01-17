@@ -9,6 +9,7 @@ import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 import { track } from '../../core/services';
+import ChatWidget from '../../components/App/ChatWidget';
 
 class Page extends Component {
     state = {
@@ -60,6 +61,19 @@ class Page extends Component {
         );
     }
 
+    renderContact() {
+        return (
+            <div className="faq__contact">
+                <h4>Not finding what you&apos;re looking for?</h4>
+                <a href="tel:855-675-7301">855-675-7301</a>
+                <a href="mailto:support@delivermyride.com">
+                    support@delivermyride.com
+                </a>
+                <ChatWidget presentation="footer" />
+            </div>
+        );
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -76,19 +90,7 @@ class Page extends Component {
                     <Row>
                         <Col sm="3" className="faq__nav">
                             {this.renderNav()}
-                            <MediumAndUp>
-                                <div className="faq__contact">
-                                    <h4>
-                                        Not finding what you&apos;re looking
-                                        for?
-                                    </h4>
-                                    <a href="tel:855-675-7301">855-675-7301</a>
-                                    <a href="mailto:support@delivermyride.com">
-                                        support@delivermyride.com
-                                    </a>
-                                    <a href="#hs-chat-open">Live Chat</a>
-                                </div>
-                            </MediumAndUp>
+                            <MediumAndUp>{this.renderContact()}</MediumAndUp>
                         </Col>
                         <Col sm="9">
                             <div className="faq__accordion">
@@ -96,19 +98,7 @@ class Page extends Component {
                                     <FaqGroup key={item.title} item={item} />
                                 ))}
                             </div>
-                            <SmallAndDown>
-                                <div className="faq__contact">
-                                    <h4>
-                                        Not finding what you&apos;re looking
-                                        for?
-                                    </h4>
-                                    <a href="tel:855-675-7301">855-675-7301</a>
-                                    <a href="mailto:support@delivermyride.com">
-                                        support@delivermyride.com
-                                    </a>
-                                    <a href="#hs-chat-open">Live Chat</a>
-                                </div>
-                            </SmallAndDown>
+                            <SmallAndDown>{this.renderContact()}</SmallAndDown>
                         </Col>
                     </Row>
                 </Container>

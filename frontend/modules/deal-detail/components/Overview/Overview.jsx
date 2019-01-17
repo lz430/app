@@ -116,6 +116,7 @@ export default class extends React.PureComponent {
                             {this.renderKeyFeatures()}
                             {this.renderPackagesAndOptions()}
                         </div>
+
                     </Row>
                 </Container>
             </Container>
