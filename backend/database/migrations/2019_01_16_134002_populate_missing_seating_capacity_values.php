@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class PopulateMissingSeatingCapacityValues extends Migration
@@ -13,9 +11,9 @@ class PopulateMissingSeatingCapacityValues extends Migration
      */
     public function up()
     {
-       $deals = \App\Models\Deal::where('status', 'available')->whereNull('seating_capacity')->get();
+        $deals = \App\Models\Deal::where('status', 'available')->whereNull('seating_capacity')->get();
 
-        foreach($deals as $deal) {
+        foreach ($deals as $deal) {
             $equipmentOnDeal = $deal->getEquipment();
             $seatingCategory = $equipmentOnDeal
                 ->filter(function ($equipment) {
