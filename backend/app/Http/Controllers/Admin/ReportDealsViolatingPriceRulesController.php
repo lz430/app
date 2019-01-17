@@ -11,29 +11,23 @@ class ReportDealsViolatingPriceRulesController extends Controller
     {
         $data = [];
 
-        $deals = Deal::where('status', '=', 'available')
+        $deals = Deal::with('dealer')->where('status', '=', 'available')
             ->whereNotNull('price')
             ->orderBy('dealer_id', 'ASC')->get();
 
         // Loop through the return and prep for output
         foreach ($deals as $deal) {
+            $prices = $deal->prices();
+            $validationResult =  $deal->validateDealPriceRules($prices);
 
-            // build the priceingArray to call function validateDealPriceRules used in Deal.php to populate ES
-            $pricingArray = (object) [
-                'msrp' => $deal->prices()->msrp,
-                'default' => $deal->prices()->default,
-            ];
-
-            // Validate the $pricingArray
-            $validationResult =  $deal->validateDealPriceRules($pricingArray);
-
-            if ($validationResult['isPricingValid'] == false) {
+            if (!$validationResult['isPricingValid']) {
                 $item[$deal->dealer->id]['dealer'] = [
                     'id' => $deal->dealer->id,
                     'dealer_name' => $deal->dealer->name,
                 ];
                 $item[$deal->dealer->id]['deals'][] = [
                     'deal' => $deal,
+                    'prices' => $prices,
                     'reason' => $validationResult['reason'],
                 ];
                 $data = $item;

@@ -49,33 +49,59 @@
 
 <li class="header">Reports</li>
 
-<li>
-    <a href="/admin/archived-dumps">
-        <i class="fa fa-file"></i>
-        <span>Archived Dumps</span>
-    </a>
-</li>
-<li>
-    <a href="/admin/reports/deals-without-rules">
-        <i class="fa fa-image"></i>
-        <span>Deals Missing Source Price</span>
-    </a>
-</li>
+
 <li>
     <a href="/admin/reports/dealer-price-rules">
-        <i class="fa fa-file-text"></i>
+        <i class="fa fa-table"></i>
         <span>Dealer Price Rules</span>
     </a>
 </li>
-<li>
-    <a href="/admin/reports/versions-missing-images">
-        <i class="fa fa-image"></i>
-        <span>Version w/ No Photos</span>
+
+<li class="treeview">
+    <a href="#">
+        <i class="fa fa-table"></i> <span>Version Reports</span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
     </a>
+    <ul class="treeview-menu">
+        <li>
+            <a href="/admin/reports/versions-missing-images">
+                <i class="fa fa-table"></i>
+                <span>Version w/ No Photos</span>
+            </a>
+        </li>
+    </ul>
 </li>
+
+
+
+<li class="treeview">
+    <a href="#">
+        <i class="fa fa-table"></i> <span>Deal Reports</span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+    </a>
+    <ul class="treeview-menu">
+        <li>
+            <a href="/admin/reports/deals-without-rules">
+                <i class="fa fa-circle-o"></i>
+                <span>Deals Missing Source Price</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/reports/deals-violating-price-rules">
+                <i class="fa fa-circle-o"></i>
+                <span>Deals Violating Pricing Rules</span>
+            </a>
+        </li>
+    </ul>
+</li>
+
 <li>
-    <a href="/admin/reports/deals-violating-price-rules">
-        <i class="fa fa-file"></i>
-        <span>Deals Violating Pricing Rules</span>
+    <a href="/admin/archived-dumps">
+        <i class="fa fa-table"></i>
+        <span>Vauto Archive Files</span>
     </a>
 </li>
