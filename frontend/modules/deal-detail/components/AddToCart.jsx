@@ -400,8 +400,11 @@ export default class AddToCart extends React.PureComponent {
 
     render() {
         const { deal, pricing } = this.props;
-
-        if (deal.status === 'sold') {
+        if (
+            deal.status === 'sold' ||
+            deal.status === 'unpublished' ||
+            deal.status === 'error'
+        ) {
             return (
                 <div className="bg-white border border-medium p-4">
                     <div className="mb-2">
