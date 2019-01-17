@@ -14,21 +14,22 @@ export default class Footer extends React.PureComponent {
                 <Row>
                     <Col xs={6} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Deliver My Ride</div>
-
-                        <Link href="/about" as="/about" passHref>
+                        <Link href="/brochure/about" as="/about" passHref>
                             <a>About</a>
                         </Link>
-                        <Link href="/how-it-works" as="/how-it-works" passHref>
-                            <a>How It Works</a>
+                        <Link href="/brochure/faq" as="/faq" passHref>
+                            <a>FAQs</a>
                         </Link>
 
                         <a href="https://blog.delivermyride.com/blog">Blog</a>
                     </Col>
                     <Col xs={6} md={3} lg={2} xl={2} className="footer-box">
                         <div className="footer-box__title">Contact</div>
-                        <a href={config.MARKETING_URL + '/contact/'}>
-                            <FontAwesomeIcon icon={faEnvelope} /> Email Us
-                        </a>
+                        <Link href="/brochure/contact" as="/contact" passHref>
+                            <a href={config.MARKETING_URL + '/contact/'}>
+                                <FontAwesomeIcon icon={faEnvelope} /> Email Us
+                            </a>
+                        </Link>
                         <a href="tel:855-675-7301">
                             <FontAwesomeIcon icon={faPhone} /> (855) 675-7301
                         </a>
@@ -68,7 +69,7 @@ export default class Footer extends React.PureComponent {
                         </Link>
                     </Col>
                     <Col xs={12} sm={6} className="text-md-right">
-                        &copy; 2018 Deliver My Ride. All Rights Reserved.
+                        &copy; 2019 Deliver My Ride. All Rights Reserved.
                     </Col>
                 </Row>
             </Container>

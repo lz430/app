@@ -52,6 +52,7 @@ class DealDetailSearchTransformer extends TransformerAbstract
             'options' => isset($deal->options) ? $deal->options : [],
             'packages' => isset($deal->packages) ? $deal->packages : [],
             'equipment' => isset($deal->equipment) ? $deal->equipment : [],
+            'highlights' => isset($deal->highlights) ? $deal->highlights : [],
             'overview' => isset($deal->overview) ? $deal->overview : [],
             'seating_materials' => isset($deal->seating_materials) ? $deal->seating_materials : null,
 

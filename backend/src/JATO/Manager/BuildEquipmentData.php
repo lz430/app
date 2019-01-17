@@ -19,7 +19,6 @@ class BuildEquipmentData
         'Paint',
         'Rear door',
         'Rear axle',
-        'Cargo capacity',
         'Emission control level',
         'Additional fuel types',
     ];
@@ -473,6 +472,38 @@ class BuildEquipmentData
                     [],
                     $customMeta
                 );
+                break;
+            case 'Cargo area dimensions':
+                if (isset($attributes['width between wheelhouses (in)'])) {
+                    $this->addItemFactoryFromSingleAttribute(
+                        $labels,
+                        $attributes,
+                        'width between wheelhouses (in)',
+                        'Width',
+                        [],
+                        $customMeta
+                    );
+                }
+                if (isset($attributes['height (in)'])) {
+                    $this->addItemFactoryFromSingleAttribute(
+                        $labels,
+                        $attributes,
+                        'height (in)',
+                        'Height',
+                        [],
+                        $customMeta
+                    );
+                }
+                if (isset($attributes['loading floor height (in)'])) {
+                    $this->addItemFactoryFromSingleAttribute(
+                        $labels,
+                        $attributes,
+                        'loading floor height (in)',
+                        'Loading Floor Height',
+                        [],
+                        $customMeta
+                    );
+                }
                 break;
 
             default:

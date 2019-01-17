@@ -21,16 +21,12 @@ export default class FinancePricing extends Pricing {
 
     yourPrice = () => this.sellingPrice().subtract(this.rebates());
 
-    salesTax = () =>
-        this.discountedPrice()
-            .add(this.docFee())
-            .add(this.cvrFee())
-            .multiply(this.taxRate());
+    salesTax = () => this.discountedPrice().multiply(this.taxRate());
 
     taxesAndFees = () =>
         zero
-            .add(this.docFee())
-            .add(this.cvrFee())
+            .add(this.docFeeWithTaxes())
+            .add(this.cvrFeeWithTaxes())
             .add(this.salesTax());
 
     calculateDownPayment = downPaymentPercent => {

@@ -4,22 +4,30 @@
     z-index: 50;
 
     &--brochure {
-        padding: 0.7rem 0.5rem !important;
-
+        height: 62px;
         @include media-breakpoint-down(md) {
             .container {
                 max-width: none;
                 width: 100%;
             }
         }
-        .navbar-toggler {
-        }
+
         .navbar-nav {
             .nav-item {
                 padding: 0 10px;
                 .nav-link {
                     color: $text-color;
+                    font-weight: bold;
                     font-size: 1rem;
+                    &.active {
+                        color: $primary;
+                    }
+                }
+                .btn-outline-primary {
+                    color: #20202b;
+                }
+                .btn-outline-primary:hover {
+                    color: #fff;
                 }
             }
         }

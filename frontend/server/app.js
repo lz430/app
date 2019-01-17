@@ -95,6 +95,7 @@ app.prepare()
 
         server.get('/deals/:id', csrfProtection, (req, res) => {
             const queryParams = {
+                ...req.query,
                 id: req.params.id,
                 csrfToken: req.csrfToken(),
             };

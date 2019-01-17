@@ -345,6 +345,20 @@ class Deal extends Model
                     ],
                 ],
             ],
+            'highlights' => [
+                'type' => 'nested',
+                'properties' => [
+                    'category' => [
+                        'type' => 'text',
+                    ],
+                    'label' => [
+                        'type' => 'text',
+                    ],
+                    'value' => [
+                        'type' => 'text',
+                    ],
+                ],
+            ],
         ],
     ];
 
@@ -377,10 +391,7 @@ class Deal extends Model
 
         //
         // Standard Equipment
-        $query = Equipment::query();
-        $query = $query->whereHas('version', function ($query) {
-            $query->where('id', '=', $this->version_id);
-        });
+        $query = Equipment::where('version_id', '=', $this->version_id);
         $query = $query->whereIn('availability', ['standard', '-']);
 
         $equipmentOnDeal = $query->get()->keyBy(function ($equipment) {
@@ -390,10 +401,7 @@ class Deal extends Model
         //
         // Optional Equipment
         if (count($codes)) {
-            $query = Equipment::query();
-            $query = $query->whereHas('version', function ($query) {
-                $query->where('id', '=', $this->version_id);
-            });
+            $query = Equipment::where('version_id', '=', $this->version_id);
             $options = Option::whereIn('option_code', $codes)
                 ->get()
                 ->pluck('option_id');
@@ -901,7 +909,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['seating_capacity'] = ($this->seating_capacity ? $this->seating_capacity : null);
 
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
@@ -1007,10 +1015,15 @@ class Deal extends Model
         }
 
         $equipmentOnDeal = $this->getEquipment();
+        $dealDetailData = new BuildOverviewData();
+
+        // Highlights data for detail page above overview
+        $record['highlights'] = [];
+        $record['highlights'] = $dealDetailData->getHighlightsData($equipmentOnDeal, $this);
 
         // Overview data for detail page
         $record['overview'] = [];
-        $record['overview'] = (new BuildOverviewData())->build($equipmentOnDeal);
+        $record['overview'] = $dealDetailData->getOverviewData($equipmentOnDeal, $this);
 
         // Equipment on car
         $record['equipment'] = [];

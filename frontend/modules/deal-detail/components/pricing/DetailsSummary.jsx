@@ -16,14 +16,8 @@ export default class TaxesAndFees extends React.PureComponent {
                 <div className="mb-2">Cash Deal Summary</div>
                 <h5 className="font-weight-bold border-bottom border-medium d-inline-block m-0">
                     Final Price:{' '}
-                    <DollarsAndCents value={this.props.pricing.yourPrice()} />
+                    <DollarsAndCents value={this.props.pricing.totalPrice()} />
                 </h5>
-                <div className="text-sm">
-                    Taxes & Fees:{' '}
-                    <DollarsAndCents
-                        value={this.props.pricing.taxesAndFees()}
-                    />
-                </div>
             </React.Fragment>
         );
     }

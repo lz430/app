@@ -8,8 +8,11 @@ import { LargeAndUp } from '../Responsive';
 import Header from './Header/Header';
 import Footer from './Footer';
 
-import BrochureHeader from '../brochure/brochure-header.jsx';
-import BrochureFooter from '../brochure/brochure-footer.jsx';
+import BrochureHeader from '../brochure/Header.jsx';
+import LiveChat from 'react-livechat';
+import config from '../../core/config';
+
+import { ChatContext } from '../../core/contexts';
 
 class App extends React.Component {
     static propTypes = {
@@ -22,6 +25,39 @@ class App extends React.Component {
         desktopOnlyFooter: false,
         isBrochureSite: false,
     };
+
+    state = {
+        initChat: false,
+        chatShow: false,
+        chatAgents: false,
+    };
+
+    /**
+     * This is not called on the SSRs, and there is a reference to window
+     * in the react-livechat library, breaking SSR real hard.
+     */
+    componentDidMount() {
+        this.setState({ initChat: true });
+    }
+
+    onOpenChat() {
+        if (this.livechat) {
+            this.livechat.open_chat_window();
+        }
+    }
+
+    onChatLoaded(ref) {
+        this.livechat = ref;
+        let _this = this;
+        if (typeof ref === 'object') {
+            ref.on_after_load = function() {
+                _this.setState({
+                    chatShow: true,
+                    chatAgents: ref.agents_are_available(),
+                });
+            };
+        }
+    }
 
     /**
      * @returns {*}
@@ -38,9 +74,6 @@ class App extends React.Component {
      * @returns {*}
      */
     renderFooter() {
-        if (this.props.isBrochureSite) {
-            return <BrochureFooter />;
-        }
         if (this.props.desktopOnlyFooter) {
             return (
                 <LargeAndUp>
@@ -55,23 +88,40 @@ class App extends React.Component {
     render() {
         return (
             <div className="app">
-                {this.renderHeader()}
-                <div
-                    className={classNames(
-                        'app-content-wrapper',
-                        {
-                            'app-content-wrapper--brochure': this.props
-                                .isBrochureSite,
-                        },
-                        {
-                            'app-content-wrapper--app': !this.props
-                                .isBrochureSite,
-                        }
-                    )}
+                <ChatContext.Provider
+                    value={{
+                        chatAgents: this.state.chatAgents,
+                        chatShow: this.state.chatShow,
+                        onOpenChat: this.onOpenChat.bind(this),
+                    }}
                 >
-                    <div className="app-content">{this.props.children}</div>
-                    {this.renderFooter()}
-                </div>
+                    {this.renderHeader()}
+                    <div
+                        className={classNames(
+                            'app-content-wrapper',
+                            {
+                                'app-content-wrapper--brochure': this.props
+                                    .isBrochureSite,
+                            },
+                            {
+                                'app-content-wrapper--app': !this.props
+                                    .isBrochureSite,
+                            }
+                        )}
+                    >
+                        <div className="app-content">{this.props.children}</div>
+                        {this.renderFooter()}
+                    </div>
+                </ChatContext.Provider>
+
+                {config.LIVECHAT_LICENSE &&
+                    config.REACT_APP_ENVIRONMENT !== 'local' &&
+                    this.state.initChat && (
+                        <LiveChat
+                            onChatLoaded={ref => this.onChatLoaded(ref)}
+                            license={parseInt(config.LIVECHAT_LICENSE)}
+                        />
+                    )}
             </div>
         );
     }

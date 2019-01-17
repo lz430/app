@@ -71,6 +71,7 @@
         "react-image-gallery": "^0.8.9",
         "react-imgix": "^8.4.0",
         "react-lazyload": "^2.3.0",
+        "react-livechat": "^1.1.1",
         "react-popper": "^1.3.0",
         "react-redux": "^5.0.7",
         "react-responsive": "^5.0.0",

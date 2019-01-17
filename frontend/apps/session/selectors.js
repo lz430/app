@@ -24,5 +24,9 @@ export const getSessionCSRFToken = state => {
         }
     }
 
+    if (typeof token == 'undefined') {
+        token = null;
+    }
+
     return token;
 };

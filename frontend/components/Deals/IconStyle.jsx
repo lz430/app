@@ -10,7 +10,7 @@ import Sedan from '../../static/icons/body-styles/sedan.svg';
 import Suv from '../../static/icons/body-styles/suv.svg';
 import Wagon from '../../static/icons/body-styles/wagon.svg';
 
-class StyleIcon extends React.PureComponent {
+export default class IconStyle extends React.PureComponent {
     static propTypes = {
         style: PropTypes.string.isRequired,
         size: PropTypes.string.isRequired,
@@ -20,14 +20,20 @@ class StyleIcon extends React.PureComponent {
         size: 'small',
     };
 
-    renderIcon(icon) {
+    render() {
+        const { style } = this.props;
+
         let size = '70px';
 
         if (this.props.size === 'large') {
             size = '180px';
         }
 
-        switch (icon) {
+        if (this.props.size === 'equipment') {
+            size = '3rem';
+        }
+
+        switch (style.toLowerCase()) {
             case 'convertible':
                 return (
                     <Convertible
@@ -61,6 +67,7 @@ class StyleIcon extends React.PureComponent {
                 return (
                     <Sedan width={size} className="filter-items__item__icon" />
                 );
+            case 'sport utility vehicle':
             case 'suv':
                 return (
                     <Suv width={size} className="filter-items__item__icon" />
@@ -73,10 +80,4 @@ class StyleIcon extends React.PureComponent {
                 return false;
         }
     }
-
-    render() {
-        return this.renderIcon(this.props.style);
-    }
 }
-
-export default StyleIcon;

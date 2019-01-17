@@ -8,7 +8,7 @@ import StaticImage from '../../../components/StaticImage';
 export default class extends React.Component {
     renderMedia(media) {
         return (
-            <Col md="2" sm="6" key={media.name}>
+            <Col xs="6" md="2" key={media.name}>
                 <a
                     href={media.link}
                     rel="noopener noreferrer nofollow"

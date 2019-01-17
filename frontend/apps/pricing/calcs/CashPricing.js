@@ -9,17 +9,17 @@ export default class CashPricing extends Pricing {
     sellingPrice = () => this.withTaxAdded(this.basePrice());
     yourPrice = () => this.basePrice().subtract(this.rebates());
 
-    salesTax = () =>
-        this.discountedPrice()
-            .add(this.docFee())
-            .add(this.cvrFee())
-            .multiply(this.taxRate());
+    salesTax = () => this.discountedPrice().multiply(this.taxRate());
 
     taxesAndFees = () =>
         zero
-            .add(this.docFee())
-            .add(this.cvrFee())
+            .add(this.docFeeWithTaxes())
+            .add(this.cvrFeeWithTaxes())
             .add(this.salesTax());
 
-    totalPrice = () => this.yourPrice().add(this.taxesAndFees());
+    totalPrice = () =>
+        this.discountedPrice()
+            .subtract(this.rebates())
+            .add(this.taxesAndFees());
+    //this.yourPrice().add(this.taxesAndFees());
 }

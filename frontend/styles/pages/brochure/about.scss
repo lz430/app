@@ -1,4 +1,5 @@
 .about {
+    background: $color-background-primary;
     h2 {
         font-size: 1.8rem;
         font-weight: 700;
@@ -10,17 +11,13 @@
         margin-bottom: 30px;
     }
 
-    &__twss {
-        background: $color-background-secondary;
-    }
-
     &__story {
         .row {
             box-shadow: $box-shadow;
         }
 
         &-content {
-            background: #e7f1f7;
+            background: #1cbfde1a;
             padding: 45px;
             font-size: 0.8rem;
         }
@@ -37,18 +34,8 @@
         }
     }
 
-    &__values {
-        h4 {
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
-
-        .text-sm {
-            font-size: 0.75rem;
-        }
-    }
-
     &__cost {
+        background: #1cbfde1a;
         .btn {
             width: 15%;
 

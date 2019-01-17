@@ -91,9 +91,11 @@ export default class LeaseDetails extends React.PureComponent {
                         </Value>
                     </Line>
                     <Line>
-                        <Label>Tax on Rebates</Label>
+                        <Label>Taxes</Label>
                         <Value>
-                            <DollarsAndCents value={pricing.taxOnRebates()} />
+                            <DollarsAndCents
+                                value={pricing.taxesDueAtDelivery()}
+                            />
                         </Value>
                     </Line>
                     <Line isSectionTotal={true} isImportant={true}>

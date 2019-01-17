@@ -72,6 +72,8 @@ export default class Pricing {
 
     docFee = () => fromWholeDollars(this.data.deal.fees.doc);
     cvrFee = () => fromWholeDollars(this.data.deal.fees.cvr);
+    docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
+    cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
 
     defaultPrice = () => fromWholeDollars(this.data.deal.pricing.default);
     employeePrice = () => fromWholeDollars(this.data.deal.pricing.employee);
@@ -89,7 +91,6 @@ export default class Pricing {
         if (this.isEffectiveDiscountDmr()) {
             return this.defaultPrice();
         }
-
         return this.msrp();
     };
 
@@ -122,34 +123,18 @@ export default class Pricing {
         this.msrp().subtract(this.discountedAndRebatedPrice());
 
     isEffectiveDiscountEmployee = () => {
-        return (
-            this.data.discountType === 'employee' &&
-            this.data.employeeBrand === this.data.deal.make
-        );
+        return this.data.discountType === 'employee';
     };
 
     isEffectiveDiscountSupplier = () => {
-        return (
-            this.data.discountType === 'supplier' &&
-            this.data.supplierBrand === this.data.deal.make
-        );
+        return this.data.discountType === 'supplier';
     };
 
     isEffectiveDiscountDmr = () => {
-        if (!this.data.discountType || this.data.discountType === 'dmr') {
-            return true;
-        }
-
-        if (
-            this.data.discountType === 'employee' &&
-            this.data.employeeBrand !== this.data.deal.make
-        ) {
-            return true;
-        }
-
         return (
-            this.data.discountType === 'supplier' &&
-            this.data.supplierBrand !== this.data.deal.make
+            !this.data.discountType ||
+            this.data.discountType === 'dmr' ||
+            this.data.discountType === 'default'
         );
     };
 
