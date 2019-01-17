@@ -54,5 +54,4 @@ Route::group([
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
     Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');
-
 });
