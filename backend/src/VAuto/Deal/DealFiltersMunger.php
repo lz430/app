@@ -132,7 +132,7 @@ class DealFiltersMunger
         foreach ($this->discovered_filters as $category => $filters) {
             echo "======= {$category} ======= \n";
             foreach ($filters as $filter) {
-                echo "  --- {$filter->filter->title} - {$filter->equipment->schema_id} - {$filter->equipment->option_id}\n";
+                echo "  --- {$filter->feature->title} - {$filter->equipment->schema_id} - {$filter->equipment->option_id}\n";
             }
         }
     }
@@ -188,12 +188,12 @@ class DealFiltersMunger
         }
 
         foreach ($filters as $filter) {
-            $category = $filter->filter->category->title;
+            $category = $filter->feature->category->title;
             if (! isset($this->discovered_filters[$category])) {
                 $this->discovered_filters[$category] = [];
             }
 
-            $this->discovered_filters[$category][$filter->filter->id] = $filter;
+            $this->discovered_filters[$category][$filter->feature->id] = $filter;
         }
     }
 
@@ -237,7 +237,7 @@ class DealFiltersMunger
                 return $attribute->value != 'yes';
             })
             ->map(function ($attribute) {
-                $filter = $this->getFeatureFromJatoSchemaId((object) ['schema_id' => $attribute->schemaId]);
+                $filter = $this->getFilterFromJatoSchemaId((object) ['schema_id' => $attribute->schemaId]);
                 if (! $filter) {
                     return false;
                 }
