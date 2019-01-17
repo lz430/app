@@ -626,8 +626,8 @@ class DealFiltersMunger
             ->first();
 
         if ($engine && $engine->availability !== 'not available') {
-            if ($engine && isset($engine->attributes)) {
-                $engineType = collect($engine->attributes);
+            if ($engine && isset($engine->aspects)) {
+                $engineType = collect($engine->aspects);
 
                 return $engineType
                     ->filter(function ($attribute) {
@@ -651,8 +651,9 @@ class DealFiltersMunger
             return;
         }
         if ($parkingSafety && $parkingSafety->availability !== 'not available') {
-            if ($parkingSafety && isset($parkingSafety->attributes)) {
-                $backupCamera = collect($parkingSafety->attributes);
+            if ($parkingSafety && isset($parkingSafety->aspects)) {
+                $backupCamera = collect($parkingSafety->aspects);
+
                 $hasParkingSensors = $backupCamera
                     ->filter(function ($attribute) {
                         return $attribute->name == 'type';
