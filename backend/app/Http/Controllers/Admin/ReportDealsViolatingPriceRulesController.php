@@ -18,9 +18,9 @@ class ReportDealsViolatingPriceRulesController extends Controller
         // Loop through the return and prep for output
         foreach ($deals as $deal) {
             $prices = $deal->prices();
-            $validationResult =  $deal->validateDealPriceRules($prices);
+            $validationResult = $deal->validateDealPriceRules($prices);
 
-            if (!$validationResult['isPricingValid']) {
+            if (! $validationResult['isPricingValid']) {
                 $item[$deal->dealer->id]['dealer'] = [
                     'id' => $deal->dealer->id,
                     'dealer_name' => $deal->dealer->name,
