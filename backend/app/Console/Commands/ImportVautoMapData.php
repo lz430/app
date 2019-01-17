@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use League\Csv\Reader;
 use App\Models\Filter;
+use League\Csv\Reader;
 use Illuminate\Console\Command;
 use DeliverMyRide\JATO\JatoClient;
 
