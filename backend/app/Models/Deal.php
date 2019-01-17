@@ -962,7 +962,7 @@ class Deal extends Model
         $record['max_delivery_distance'] = (float) $this->dealer->max_delivery_miles;
 
         //
-        // Features
+        // Filters
         foreach ($this->filters()->where('is_active', '=', 1)->get() as $filter) {
             if (! isset($record[$filter->category->slug]) || ! is_array($record[$filter->category->slug])) {
                 $record[$filter->category->slug] = [];
