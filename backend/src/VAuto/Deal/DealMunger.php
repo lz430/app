@@ -78,10 +78,7 @@ class DealMunger
             $vauto_features = null;
         }
 
-        /* @var Deal $deal */
-        $deal = Deal::updateOrCreate([
-            'vin' => $row['VIN'],
-        ], [
+        $data = [
             'file_hash' => $fileHash,
             'dealer_id' => $row['DealerId'],
             'stock_number' => $row['Stock #'],
@@ -114,11 +111,19 @@ class DealMunger
             'days_old' => (is_numeric($row['Age'])) ? $row['Age'] : 0,
             'version_id' => $version->id,
             'source_price' => $pricing,
-            // TODO: we should mark things as available if they are in the feed, but only if they weren't sold via DMR somehow.
-            'status' => 'available',
             'sold_at' => null,
-        ]);
+        ];
 
+        $deal = Deal::where('vin', '=', $row['VIN'])->first();
+        if ($deal) {
+             if ($deal->status !== 'unpublished') {
+                 $data['status'] = 'available';
+             }
+             $deal->update($data);
+        } else {
+            $data['status'] = 'available';
+            $deal = Deal::create($data);
+        }
         return $deal;
     }
 
