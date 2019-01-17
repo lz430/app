@@ -5,14 +5,14 @@ namespace App\Providers;
 use App\Models\Deal;
 use  App\Models\User;
 use App\Models\Dealer;
-use App\Models\Feature;
+use App\Models\Filter;
 use App\Models\JATO\Version;
 use App\Models\Order\Purchase;
 use App\Observers\DealObserver;
 use App\Observers\UserObserver;
 use App\Models\JATO\VersionQuote;
 use App\Observers\DealerObserver;
-use App\Observers\FeatureObserver;
+use App\Observers\FilterObserver;
 use App\Observers\VersionObserver;
 use App\Observers\PurchaseObserver;
 use Illuminate\Support\Facades\URL;
@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         if (in_array(config('app.env'), ['staging', 'production'])) {
             //Observers for model event listeners
             Dealer::observe(DealerObserver::class);
-            Feature::observe(FeatureObserver::class);
+            Filter::observe(FilterObserver::class);
             Version::observe(VersionObserver::class);
         }
 

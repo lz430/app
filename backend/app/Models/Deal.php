@@ -63,7 +63,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Version $version
  * @property Purchase[] $purchases
  * @property DealPhoto[] $photos
- * @property Feature[] $features
+ * @property Filter[] $filters
  * @property int $seating_capacity
  * @property string $vehicle_color
  * @property string $status
@@ -447,9 +447,9 @@ class Deal extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function features(): BelongsToMany
+    public function filters(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class);
+        return $this->belongsToMany(Filter::class);
     }
 
     private function getRealPhotos()
@@ -811,7 +811,7 @@ class Deal extends Model
             return false;
         }
 
-        if (! $this->features->count()) {
+        if (! $this->filters->count()) {
             return false;
         }
 
@@ -962,13 +962,13 @@ class Deal extends Model
         $record['max_delivery_distance'] = (float) $this->dealer->max_delivery_miles;
 
         //
-        // Features
-        foreach ($this->features()->where('is_active', '=', 1)->get() as $feature) {
-            if (! isset($record[$feature->category->slug]) || ! is_array($record[$feature->category->slug])) {
-                $record[$feature->category->slug] = [];
+        // Filters
+        foreach ($this->filters()->where('is_active', '=', 1)->get() as $filter) {
+            if (! isset($record[$filter->category->slug]) || ! is_array($record[$filter->category->slug])) {
+                $record[$filter->category->slug] = [];
             }
 
-            $record[$feature->category->slug][] = $feature->title;
+            $record[$filter->category->slug][] = $filter->title;
         }
 
         $pricing = $this->prices();

@@ -4,7 +4,7 @@ namespace DeliverMyRide\VAuto\Deal;
 
 use Carbon\Carbon;
 use App\Models\Deal;
-use App\Models\Feature;
+use App\Models\Filter;
 use App\Models\Category;
 use DeliverMyRide\VAuto\Map;
 use App\Models\JATO\Equipment;
@@ -22,7 +22,7 @@ class DealFiltersMunger
     /* @var \Illuminate\Support\Collection */
     private $equipmentOnDeal;
 
-    private $discovered_features;
+    private $discovered_filters;
 
     /**
      * @param Deal $deal
@@ -36,7 +36,7 @@ class DealFiltersMunger
 
         //
         // Reset importer class
-        $this->discovered_features = [];
+        $this->discovered_filters = [];
         $this->vauto_features = [];
 
         $this->debug = [
@@ -46,12 +46,12 @@ class DealFiltersMunger
 
         // An iffy way to check if we have updated features. we don't
         // do this often, so probably not that big of a deal right now.
-        $updatedFeatures = Feature::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
-        if ($force || $updatedFeatures) {
-            $this->deal->features()->sync([]);
+        $updatedFilters = Filter::whereDate('updated_at', '>=', Carbon::now()->subDays(2))->count();
+        if ($force || $updatedFilters) {
+            $this->deal->filters()->sync([]);
         }
 
-        if ($this->deal->features()->count()) {
+        if ($this->deal->filters()->count()) {
             return $this->debug;
         }
 
@@ -78,12 +78,12 @@ class DealFiltersMunger
         $this->buildFiltersForColors();
 
         //
-        // Remove conflicting features
-        $this->removeConflictingFeatures();
+        // Remove conflicting filters
+        $this->removeConflictingFilters();
 
         //
         // Save discovered features to deal.
-        $this->updateDealWithDiscoveredFeatures();
+        $this->updateDealWithDiscoveredFilters();
         $this->deal->save();
 
         return $this->debug;
@@ -98,41 +98,41 @@ class DealFiltersMunger
      *
      * TODO: I'm not sure we need this anymore, as equipment has been filtered out in advance.
      */
-    private function removeConflictingFeatures()
+    private function removeConflictingFilters()
     {
         $reduced = [];
 
-        foreach ($this->discovered_features as $category => $features) {
-            foreach ($features as $feature) {
-                if (! isset($reduced[$feature->equipment->schema_id])) {
-                    $reduced[$feature->equipment->schema_id] = $feature;
-                } elseif ($reduced[$feature->equipment->schema_id]->equipment->option_id < $feature->equipment->option_id) {
-                    $reduced[$feature->equipment->schema_id] = $feature;
+        foreach ($this->discovered_filters as $category => $filters) {
+            foreach ($filters as $filter) {
+                if (! isset($reduced[$filter->equipment->schema_id])) {
+                    $reduced[$filter->equipment->schema_id] = $filter;
+                } elseif ($reduced[$filter->equipment->schema_id]->equipment->option_id < $filter->equipment->option_id) {
+                    $reduced[$filter->equipment->schema_id] = $filter;
                 }
             }
         }
 
-        $this->categorizeDiscoveredFeatures($reduced, true);
+        $this->categorizeDiscoveredFilters($reduced, true);
     }
 
-    private function updateDealWithDiscoveredFeatures()
+    private function updateDealWithDiscoveredFilters()
     {
-        $featureIds = [];
-        foreach ($this->discovered_features as $category => $features) {
-            $featureIds = array_merge($featureIds, array_keys($features));
+        $filterIds = [];
+        foreach ($this->discovered_filters as $category => $filters) {
+            $filterIds = array_merge($filterIds, array_keys($filters));
         }
-        $this->deal->features()->sync($featureIds);
+        $this->deal->filters()->sync($filterIds);
     }
 
     /**
      * Fancy print Discovered Features.
      */
-    public function printDiscoveredFeatures()
+    public function printDiscoveredFilters()
     {
-        foreach ($this->discovered_features as $category => $features) {
+        foreach ($this->discovered_filters as $category => $filters) {
             echo "======= {$category} ======= \n";
-            foreach ($features as $feature) {
-                echo "  --- {$feature->feature->title} - {$feature->equipment->schema_id} - {$feature->equipment->option_id}\n";
+            foreach ($filters as $filter) {
+                echo "  --- {$filter->feature->title} - {$filter->equipment->schema_id} - {$filter->equipment->option_id}\n";
             }
         }
     }
@@ -159,41 +159,41 @@ class DealFiltersMunger
 
     private function buildFiltersForMappedVautoData()
     {
-        $features = $this->vauto_features
+        $filters = $this->vauto_features
             ->map(function ($item) {
-                return Feature::withVautoFeature($item)->first();
+                return Filter::withVautoFeature($item)->first();
             })
             ->filter()
             ->unique()
-            ->map(function ($feature) {
+            ->map(function ($filter) {
                 return (object) [
-                    'feature' => $feature,
+                    'feature' => $filter,
                     'equipment' => (object) [
                         'option_id' => 0,
-                        'schema_id' => 'VA|'.$feature->title,
+                        'schema_id' => 'VA|'.$filter->title,
                     ],
                 ];
             });
-        $this->categorizeDiscoveredFeatures($features);
+        $this->categorizeDiscoveredFilters($filters);
     }
 
     /**
      * @param $features
      * @param bool $reset
      */
-    private function categorizeDiscoveredFeatures($features, $reset = false)
+    private function categorizeDiscoveredFilters($filters, $reset = false)
     {
         if ($reset) {
-            $this->discovered_features = [];
+            $this->discovered_filters = [];
         }
 
-        foreach ($features as $feature) {
-            $category = $feature->feature->category->title;
-            if (! isset($this->discovered_features[$category])) {
-                $this->discovered_features[$category] = [];
+        foreach ($filters as $filter) {
+            $category = $filter->feature->category->title;
+            if (! isset($this->discovered_filters[$category])) {
+                $this->discovered_filters[$category] = [];
             }
 
-            $this->discovered_features[$category][$feature->feature->id] = $feature;
+            $this->discovered_filters[$category][$filter->feature->id] = $filter;
         }
     }
 
@@ -202,14 +202,14 @@ class DealFiltersMunger
      */
     private function buildFiltersForEquipmentOnDeal()
     {
-        $features = $this->equipmentOnDeal
+        $filters = $this->equipmentOnDeal
             ->map(function ($equipment) {
-                return $this->getFeatureFromEquipment($equipment);
+                return $this->getFilterFromEquipment($equipment);
             })
             ->filter()
             ->unique();
 
-        $this->categorizeDiscoveredFeatures($features);
+        $this->categorizeDiscoveredFilters($filters);
     }
 
     /**
@@ -226,7 +226,7 @@ class DealFiltersMunger
             17801, // Front seat
         ];
 
-        $features = $this->equipmentOnDeal
+        $filters = $this->equipmentOnDeal
             ->reject(function ($equipment) use ($parentSchemasIds) {
                 return ! in_array($equipment->schema_id, $parentSchemasIds);
             })
@@ -237,13 +237,13 @@ class DealFiltersMunger
                 return $attribute->value != 'yes';
             })
             ->map(function ($attribute) {
-                $feature = $this->getFeatureFromJatoSchemaId((object) ['schema_id' => $attribute->schemaId]);
-                if (! $feature) {
+                $filter = $this->getFilterFromJatoSchemaId((object) ['schema_id' => $attribute->schemaId]);
+                if (! $filter) {
                     return false;
                 }
 
                 return (object) [
-                    'feature' => $feature,
+                    'feature' => $filter,
                     'equipment' => (object) [
                         'option_id' => 0,
                         'schema_id' => $attribute->schemaId,
@@ -252,16 +252,16 @@ class DealFiltersMunger
             })
             ->filter();
 
-        $this->categorizeDiscoveredFeatures($features);
+        $this->categorizeDiscoveredFilters($filters);
     }
 
     private function buildFiltersForColors()
     {
-        $features = [];
+        $filters = [];
         if (isset(\DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color])) {
             $category = Category::where('slug', '=', 'vehicle_color')->first();
             $color = \DeliverMyRide\Fuel\Map::COLOR_MAP[$this->deal->color];
-            $feature = $category->features()->firstOrCreate(
+            $filter = $category->filters()->firstOrCreate(
                 [
                     'title' => $color,
                 ],
@@ -271,32 +271,32 @@ class DealFiltersMunger
                 ]
             );
 
-            $features[] = (object) [
-                'feature' => $feature,
+            $filters[] = (object) [
+                'feature' => $filter,
                 'equipment' => (object) [
                     'option_id' => 0,
-                    'schema_id' => 'CU|'.$feature->title,
+                    'schema_id' => 'CU|'.$filter->title,
                 ],
             ];
         }
 
-        $this->categorizeDiscoveredFeatures($features);
+        $this->categorizeDiscoveredFilters($filters);
     }
 
     /**
      * @param Equipment $equipment
      * @return null|\stdClass
      */
-    private function getFeatureFromEquipment(Equipment $equipment): ?\stdClass
+    private function getFilterFromEquipment(Equipment $equipment): ?\stdClass
     {
-        $feature = $this->getFeatureFromSlugLookup($equipment);
+        $filter = $this->getFilterFromSlugLookup($equipment);
 
-        if (! $feature) {
-            $feature = $this->getFeatureFromJatoSchemaId($equipment);
+        if (! $filter) {
+            $filter = $this->getFilterFromJatoSchemaId($equipment);
         }
 
-        if ($feature) {
-            return (object) ['feature' => $feature, 'equipment' => $equipment];
+        if ($filter) {
+            return (object) ['feature' => $filter, 'equipment' => $equipment];
         }
 
         return null;
@@ -304,63 +304,63 @@ class DealFiltersMunger
 
     /**
      * @param $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function getFeatureFromJatoSchemaId($equipment): ?Feature
+    private function getFilterFromJatoSchemaId($equipment): ?Filter
     {
-        return Feature::withJatoSchemaId($equipment->schema_id)->first();
+        return Filter::withJatoSchemaId($equipment->schema_id)->first();
     }
 
     /**
      * Given a specific equipment, return a feature or null if no feature was found.
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function getFeatureFromSlugLookup(Equipment $equipment): ?Feature
+    private function getFilterFromSlugLookup(Equipment $equipment): ?Filter
     {
-        $feature = null;
+        $filter = null;
 
         //
         // Specifically pull out the schema ids we know we care about.
         switch ($equipment->schema_id) {
             case 176:
-                $feature = $this->syncVehicleSize($equipment);
+                $filter = $this->syncVehicleSize($equipment);
                 break;
             case 8701:
-                $feature = $this->syncFuelType($equipment);
+                $filter = $this->syncFuelType($equipment);
                 break;
             case 20601:
-                $feature = $this->syncTransmission($equipment);
+                $filter = $this->syncTransmission($equipment);
                 break;
             case 6501:
-                $feature = $this->syncDriveTrain($equipment);
+                $filter = $this->syncDriveTrain($equipment);
                 break;
             case 17401:
-                $feature = $this->syncSeatMaterials($equipment);
+                $filter = $this->syncSeatMaterials($equipment);
                 break;
             case 14201:
-                $feature = $this->syncPickup($equipment);
+                $filter = $this->syncPickup($equipment);
                 break;
             case 701:
-                $feature = $this->syncSeatingConfiguration($equipment);
+                $filter = $this->syncSeatingConfiguration($equipment);
                 break;
             case 5601:
-                $feature = $this->syncBackupCamera();
+                $filter = $this->syncBackupCamera();
                 break;
         }
 
-        if ($feature) {
-            return $feature;
+        if ($filter) {
+            return $filter;
         }
 
-        return $feature;
+        return $filter;
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncVehicleSize(Equipment $equipment): ?Feature
+    private function syncVehicleSize(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 176) {
             return null;
@@ -383,14 +383,14 @@ class DealFiltersMunger
             return null;
         }
 
-        return Feature::where('slug', $segment)->first();
+        return Filter::where('slug', $segment)->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncFuelType(Equipment $equipment): ?Feature
+    private function syncFuelType(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 8701) {
             return null;
@@ -417,15 +417,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncTransmission(Equipment $equipment): ?Feature
+    private function syncTransmission(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 20601) {
             return null;
@@ -441,14 +441,14 @@ class DealFiltersMunger
             return null;
         }
 
-        return Feature::where('slug', 'transmission_'.$transmission)->first();
+        return Filter::where('slug', 'transmission_'.$transmission)->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncDriveTrain(Equipment $equipment): ?Feature
+    private function syncDriveTrain(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 6501) {
             return null;
@@ -460,15 +460,15 @@ class DealFiltersMunger
             })
             ->pluck('value')
             ->map(function ($slugKey) {
-                return Feature::where('slug', 'drive_train_'.strtolower($slugKey))->first();
+                return Filter::where('slug', 'drive_train_'.strtolower($slugKey))->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncSeatMaterials(Equipment $equipment): ?Feature
+    private function syncSeatMaterials(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 17401) {
             return null;
@@ -493,15 +493,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncSeatingConfiguration(Equipment $equipment): ?Feature
+    private function syncSeatingConfiguration(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 701) {
             return null;
@@ -534,15 +534,15 @@ class DealFiltersMunger
             ->filter()
             ->unique()
             ->map(function ($slugKey) {
-                return Feature::where('slug', $slugKey)->first();
+                return Filter::where('slug', $slugKey)->first();
             })->first();
     }
 
     /**
      * @param Equipment $equipment
-     * @return Feature|null
+     * @return Filter|null
      */
-    private function syncPickup(Equipment $equipment): ?Feature
+    private function syncPickup(Equipment $equipment): ?Filter
     {
         if ($equipment->schema_id !== 14201) {
             return null;
@@ -554,7 +554,7 @@ class DealFiltersMunger
             })
             ->pluck('value')
             ->map(function ($slugKey) {
-                return Feature::where('slug', strtolower($slugKey).'_bed')->first();
+                return Filter::where('slug', strtolower($slugKey).'_bed')->first();
             })->first();
     }
 
@@ -626,8 +626,8 @@ class DealFiltersMunger
             ->first();
 
         if ($engine && $engine->availability !== 'not available') {
-            if ($engine && isset($engine->attributes)) {
-                $engineType = collect($engine->attributes);
+            if ($engine && isset($engine->aspects)) {
+                $engineType = collect($engine->aspects);
 
                 return $engineType
                     ->filter(function ($attribute) {
@@ -651,8 +651,9 @@ class DealFiltersMunger
             return;
         }
         if ($parkingSafety && $parkingSafety->availability !== 'not available') {
-            if ($parkingSafety && isset($parkingSafety->attributes)) {
-                $backupCamera = collect($parkingSafety->attributes);
+            if ($parkingSafety && isset($parkingSafety->aspects)) {
+                $backupCamera = collect($parkingSafety->aspects);
+
                 $hasParkingSensors = $backupCamera
                     ->filter(function ($attribute) {
                         return $attribute->name == 'type';
@@ -661,7 +662,7 @@ class DealFiltersMunger
                     ->first();
 
                 if ($hasParkingSensors == 'camera & radar') {
-                    return Feature::where('slug', 'backup_camera')->first();
+                    return Filter::where('slug', 'backup_camera')->first();
                 }
             }
         }

@@ -14,30 +14,30 @@ class DealDataController extends Controller
 
     private function buildFilters()
     {
-        $features = [];
-        foreach ($this->deal->features()->with('category')->get() as $feature) {
-            if (! isset($features[$feature->category->title])) {
-                $features[$feature->category->title] = [];
+        $filters = [];
+        foreach ($this->deal->filters()->with('category')->get() as $filter) {
+            if (! isset($filters[$filter->category->title])) {
+                $filters[$filter->category->title] = [];
             }
-            $features[$feature->category->title][] = $feature;
+            $filters[$filter->category->title][] = $filter;
         }
 
         $groups = [
             [
-                'Vehicle Size' => isset($features['Size']) ? $features['Size'] : [],
-                'Drive Train' => isset($features['Drive Train']) ? $features['Drive Train'] : [],
-                'Transmission' => isset($features['Transmission']) ? $features['Transmission'] : [],
-                'Fuel Type' => isset($features['Fuel Type']) ? $features['Fuel Type'] : [],
+                'Vehicle Size' => isset($filters['Size']) ? $filters['Size'] : [],
+                'Drive Train' => isset($filters['Drive Train']) ? $filters['Drive Train'] : [],
+                'Transmission' => isset($filters['Transmission']) ? $filters['Transmission'] : [],
+                'Fuel Type' => isset($filters['Fuel Type']) ? $filters['Fuel Type'] : [],
             ],
             [
-                'Seating' => isset($features['Seating']) ? $features['Seating'] : [],
-                'Seat Materials' => isset($features['Seat Materials']) ? $features['Seat Materials'] : [],
-                'Interior' => isset($features['Interior']) ? $features['Interior'] : [],
-                'Safety & Driver Assist' => isset($features['Safety & Driver Assist']) ? $features['Safety & Driver Assist'] : [],
+                'Seating' => isset($filters['Seating']) ? $filters['Seating'] : [],
+                'Seat Materials' => isset($filters['Seat Materials']) ? $filters['Seat Materials'] : [],
+                'Interior' => isset($filters['Interior']) ? $filters['Interior'] : [],
+                'Safety & Driver Assist' => isset($filters['Safety & Driver Assist']) ? $filters['Safety & Driver Assist'] : [],
             ],
             [
-                'Infotainment' => isset($features['Infotainment']) ? $features['Infotainment'] : [],
-                'Comfort & Convenience' => isset($features['Comfort & Convenience']) ? $features['Comfort & Convenience'] : [],
+                'Infotainment' => isset($filters['Infotainment']) ? $filters['Infotainment'] : [],
+                'Comfort & Convenience' => isset($filters['Comfort & Convenience']) ? $filters['Comfort & Convenience'] : [],
             ],
         ];
 

@@ -23,24 +23,24 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property Category $category
  * @property int $is_active
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Deal[] $deals
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereDisplayOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereJatoSchemaIds($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereMapVautoFeatures($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withJatoSchemaId($schemaId)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature withVautoFeature($feature)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereDisplayOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereIsActive($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereJatoSchemaIds($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereMapVautoFeatures($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter withJatoSchemaId($schemaId)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter withVautoFeature($feature)
  * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Feature query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Filter query()
  */
-class Feature extends Model
+class Filter extends Model
 {
     use CrudTrait;
 
