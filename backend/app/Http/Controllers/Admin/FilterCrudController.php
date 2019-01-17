@@ -1,13 +1,13 @@
- <?php
+<?php
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Requests\FeatureRequest as StoreRequest;
+use App\Http\Requests\FilterRequest as StoreRequest;
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\FeatureRequest as UpdateRequest;
+use App\Http\Requests\FilterRequest as UpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
-class FeatureCrudController extends CrudController
+class FilterCrudController extends CrudController
 {
     public function setup()
     {
@@ -18,8 +18,8 @@ class FeatureCrudController extends CrudController
         |--------------------------------------------------------------------------
         */
         $this->crud->setModel('App\Models\Filter');
-        $this->crud->setRoute(config('backpack.base.route_prefix').'/feature');
-        $this->crud->setEntityNameStrings('feature', 'features');
+        $this->crud->setRoute(config('backpack.base.route_prefix').'/filter');
+        $this->crud->setEntityNameStrings('filter', 'filters');
 
         /*
         |--------------------------------------------------------------------------

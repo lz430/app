@@ -19,7 +19,7 @@ Route::group([
     // Models
     CRUD::resource('deal', 'DealCrudController');
     CRUD::resource('dealer', 'DealerCrudController');
-    CRUD::resource('feature', 'FeatureCrudController');
+    CRUD::resource('filter', 'FilterCrudController');
     CRUD::resource('category', 'CategoryCrudController');
     CRUD::resource('purchase', 'OrderCrudController');
 
