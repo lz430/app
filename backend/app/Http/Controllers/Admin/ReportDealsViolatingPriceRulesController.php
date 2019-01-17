@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Models\Deal;
 use App\Http\Controllers\Controller;
-
 
 class ReportDealsViolatingPriceRulesController extends Controller
 {
@@ -25,7 +25,7 @@ class ReportDealsViolatingPriceRulesController extends Controller
             ];
 
             // Validate the $pricingArray
-            $validationResult =  $deal->validateDealPriceRules($pricingArray);
+            $validationResult = $deal->validateDealPriceRules($pricingArray);
 
             if ($validationResult['isPricingValid'] == false) {
                 $item[$deal->dealer->id]['dealer'] = [

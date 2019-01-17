@@ -747,7 +747,6 @@ class Deal extends Model
      */
     public function validateDealPriceRules($prices)
     {
-
         if ($prices->msrp < $prices->default) {
             return [
                 'isPricingValid' => false,
@@ -757,26 +756,28 @@ class Deal extends Model
         if ($prices->default > config('dmr.pricing.maximum_allowed')) {
             return [
                 'isPricingValid' => false,
-                'reason' => 'Price > $' . number_format(config('dmr.pricing.maximum_allowed'), 2),
+                'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'), 2),
             ];
         }
         if ($prices->default < config('dmr.minimum_price_allowed')) {
             return [
                 'isPricingValid' => false,
-                'reason' => 'Price < $' . number_format(config('dmr.pricing.minimum_allowed'), 2),
+                'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'), 2),
             ];
         }
-        if ((($prices->msrp - $prices->default ) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage')) {
+        if ((($prices->msrp - $prices->default) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage')) {
             return [
                 'isPricingValid' => false,
-                'reason' => 'MSRP Exceeds Price by ' . config('dmr.pricing.validation_percentage') . '%',
+                'reason' => 'MSRP Exceeds Price by '.config('dmr.pricing.validation_percentage').'%',
             ];
         }
+
         return [
             'isPricingValid'=>true,
             'reason' => 'All Good',
         ];
     }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -877,6 +878,7 @@ class Deal extends Model
     /*
      *
      */
+
     /**
      * Get the indexable data array for the model.
      *
