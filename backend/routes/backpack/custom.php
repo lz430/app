@@ -25,7 +25,6 @@ Route::group([
 
     //
     // Deal tools
-    Route::get('deal/{deal}/debugger', 'DealDebuggerController@show');
     Route::get('deal/{deal}', 'DealDataController@show');
     Route::get('deal/{deal}/financing', 'DealFinancingController@show');
     Route::get('deal/{deal}/jato', 'DealJatoDataController@show');
@@ -56,8 +55,4 @@ Route::group([
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
     Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');
 
-    //
-    // Custom Debug tools
-    Route::get('jato-logs/{date}', 'JatoLogController@showDay');
-    Route::get('jato-logs', 'JatoLogController@index');
 });

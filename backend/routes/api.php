@@ -20,8 +20,6 @@ Route::group(['prefix' => 'deals'], function () {
     Route::get('/', 'DealsController@list')->name('deals.index');
     Route::get('{deal}', 'DealsController@detail')->name('deals.detail');
     Route::get('{deal}/quote', 'DealQuoteController@quote')->name('deals.quote');
-    Route::get('{deal}/warranties', 'DealWarrantiesController@getWarranties')->name('warranties.getWarranties');
-    Route::get('{deal}/dimensions', 'DealDimensionsController@getDimensions')->name('dimensions.getDimensions');
 });
 
 Route::group(['prefix' => 'checkout', 'namespace' => 'Order'], function () {

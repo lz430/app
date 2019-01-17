@@ -24,19 +24,4 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <div class="box-title">Legacy Admin Pages</div>
-                </div>
-
-                <div class="box-body">
-                    <ul>
-                        <li><a href="/admin/jato-logs/">JATO Logs</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
