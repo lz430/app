@@ -570,8 +570,8 @@ class DealFiltersMunger
             })
             ->first();
 
-        if ($seatingCategory && isset($seatingCategory->attributes)) {
-            $seatingCapacity = collect($seatingCategory->attributes);
+        if ($seatingCategory && isset($seatingCategory->aspects)) {
+            $seatingCapacity = collect($seatingCategory->aspects);
 
             $capacity = $seatingCapacity
                 ->filter(function ($attribute) {

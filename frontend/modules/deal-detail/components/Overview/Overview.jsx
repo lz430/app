@@ -110,7 +110,7 @@ export default class extends React.PureComponent {
 
     render() {
         return (
-            <div className="deal__section-overview  pt-3 pb-3">
+            <div className="deal__section-overview  pt-3 pb-4">
                 <Container>
                     <Row className="deal__section-heading">
                         <Col>

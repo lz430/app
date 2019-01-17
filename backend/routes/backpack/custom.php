@@ -49,7 +49,9 @@ Route::group([
     Route::get('reports/deals-without-rules', 'ReportDealsWithoutRulesController@index');
     Route::get('reports/dealer-price-rules', 'ReportDealerPriceRulesController@index');
     Route::get('reports/dealer-price-rules/export', 'ReportDealerPriceRulesController@export');
+    Route::get('reports/deals-violating-price-rules', 'ReportDealsViolatingPriceRulesController@index');
 
+    //
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
     Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');

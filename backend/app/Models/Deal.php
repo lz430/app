@@ -672,6 +672,7 @@ class Deal extends Model
         }
 
         // The defaults when no rules exist.
+        // The default for 'pricing_is_valid' will be added to the object
         $prices = [
             'msrp' => $source->msrp,
             'default' => $source->msrp !== '' ? $source->msrp : null,
@@ -734,6 +735,47 @@ class Deal extends Model
         }
 
         return (object) array_map('floatval', $prices);
+    }
+
+    /*
+     * @Return array (true/false)
+      Pricing validation -
+      – Default price must be less than or equal to config('dmr.pricing_validation_percentage')
+      – Default price must be greater than or equal to config('dmr.minimum_price_allowed')
+      – MSRP must be greater or equal to Default price
+      - Default price should be within % of MSRP that is set in the config/dmr.php file
+     */
+    public function validateDealPriceRules($prices)
+    {
+        if ($prices->msrp < $prices->default) {
+            return [
+                'isPricingValid' => false,
+                'reason' => 'Price > MSRP',
+            ];
+        }
+        if ($prices->default > config('dmr.pricing.maximum_allowed')) {
+            return [
+                'isPricingValid' => false,
+                'reason' => 'Price > $'.number_format(config('dmr.pricing.maximum_allowed'), 2),
+            ];
+        }
+        if ($prices->default < config('dmr.minimum_price_allowed')) {
+            return [
+                'isPricingValid' => false,
+                'reason' => 'Price < $'.number_format(config('dmr.pricing.minimum_allowed'), 2),
+            ];
+        }
+        if ((($prices->msrp - $prices->default) / $prices->msrp * 100) > config('dmr.pricing.validation_percentage')) {
+            return [
+                'isPricingValid' => false,
+                'reason' => 'MSRP Exceeds Price by '.config('dmr.pricing.validation_percentage').'%',
+            ];
+        }
+
+        return [
+            'isPricingValid'=>true,
+            'reason' => 'All Good',
+        ];
     }
 
     /**
@@ -833,6 +875,10 @@ class Deal extends Model
         return $data;
     }
 
+    /*
+     *
+     */
+
     /**
      * Get the indexable data array for the model.
      *
@@ -865,7 +911,7 @@ class Deal extends Model
         $record['model_code'] = $this->model_code;
         $record['series'] = $this->translateIndexSeries();
         $record['style'] = $this->version->style();
-        $record['seating_capacity'] = (int) $this->seating_capacity;
+        $record['seating_capacity'] = ($this->seating_capacity ? $this->seating_capacity : null);
 
         // name is confusing. This is the simple (filterable) value
         // in the sidebar.
@@ -927,6 +973,9 @@ class Deal extends Model
 
         $pricing = $this->prices();
         $record['pricing'] = $pricing;
+        // Perform validation in the Prising array.
+        $record['price_validation'] = $this->validateDealPriceRules($pricing);
+
         $record['payments'] = $this->payments;
         $record['fees'] = [
             'acquisition' => (float) $this->dealer->acquisition_fee,

@@ -10,7 +10,7 @@ import Sedan from '../../static/icons/body-styles/sedan.svg';
 import Suv from '../../static/icons/body-styles/suv.svg';
 import Wagon from '../../static/icons/body-styles/wagon.svg';
 
-class IconStyle extends React.PureComponent {
+export default class IconStyle extends React.PureComponent {
     static propTypes = {
         style: PropTypes.string.isRequired,
         size: PropTypes.string.isRequired,
@@ -20,7 +20,9 @@ class IconStyle extends React.PureComponent {
         size: 'small',
     };
 
-    renderIcon(icon) {
+    render() {
+        const { style } = this.props;
+
         let size = '70px';
 
         if (this.props.size === 'large') {
@@ -31,7 +33,7 @@ class IconStyle extends React.PureComponent {
             size = '3rem';
         }
 
-        switch (icon) {
+        switch (style.toLowerCase()) {
             case 'convertible':
                 return (
                     <Convertible
@@ -78,10 +80,4 @@ class IconStyle extends React.PureComponent {
                 return false;
         }
     }
-
-    render() {
-        return this.renderIcon(this.props.style);
-    }
 }
-
-export default IconStyle;

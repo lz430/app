@@ -22,7 +22,7 @@ import {
 import { setCookie, destroyCookie } from 'nookies';
 
 import Router from 'next/router';
-import { getSessionCSRFToken } from '../session/selectors';
+import { getCSRFToken } from '../session/sagas';
 
 /*******************************************************************
  * Request IP Location
@@ -39,8 +39,6 @@ export function* requestIpLocation(data) {
     ) {
         return;
     }
-
-    const csrfToken = yield select(getSessionCSRFToken);
     const ip = data ? data.ip : null;
 
     let location;
@@ -67,9 +65,14 @@ export function* requestIpLocation(data) {
         };
     }
 
-    storeSessionData({ location: location }, data.session, csrfToken);
-    yield put(softUpdateSessionData({ location: location }));
+    if (data.session) {
+        storeSessionData({ location: location }, data.session, null);
+    } else {
+        const csrfToken = yield call(getCSRFToken);
+        storeSessionData({ location: location }, null, csrfToken);
+    }
 
+    yield put(softUpdateSessionData({ location: location }));
     yield put(receiveLocation(location));
 }
 
@@ -80,7 +83,7 @@ export function* requestIpLocation(data) {
 export function* requestLocation(data) {
     let newData;
     let location;
-    const csrfToken = yield select(getSessionCSRFToken);
+    const csrfToken = yield call(getCSRFToken);
 
     try {
         location = yield call(api.user.getLocation, data.data);
@@ -119,7 +122,7 @@ export function* requestLocation(data) {
 export function* loginUser(data) {
     const values = data.values;
     const formActions = data.actions;
-    const csrfToken = yield select(getSessionCSRFToken);
+    const csrfToken = yield call(getCSRFToken);
     let token, user;
 
     //
@@ -187,7 +190,7 @@ export function* loginUser(data) {
 }
 
 export function* logoutUser() {
-    const csrfToken = yield select(getSessionCSRFToken);
+    const csrfToken = yield call(getCSRFToken);
 
     //
     // Delete tokens from API
@@ -217,7 +220,7 @@ export function* logoutUser() {
 export function* updateUser(data) {
     const values = data.values;
     const formActions = data.actions;
-    const csrfToken = yield select(getSessionCSRFToken);
+    const csrfToken = yield call(getCSRFToken);
 
     let user;
 

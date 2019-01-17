@@ -39,7 +39,7 @@ export default class Header extends React.Component {
                 <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
 
                 <Collapse isOpen={!this.state.collapsed} navbar>
-                    <Nav className="ml-auto" navbar>
+                    <Nav navbar>
                         <NavItem>
                             <ActiveLink href="/about" as="/about" passHref>
                                 <NavLink>About</NavLink>
@@ -55,6 +55,8 @@ export default class Header extends React.Component {
                                 <NavLink>FAQ</NavLink>
                             </ActiveLink>
                         </NavItem>
+                    </Nav>
+                    <Nav className="ml-auto" navbar>
                         <NavItem>
                             <Link
                                 href="/deal-list?entity=model&sort=payment&purchaseStrategy=lease"

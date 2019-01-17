@@ -1,11 +1,11 @@
 import React from 'react';
 import { Row, Col, Container } from 'reactstrap';
-import { MediumAndUp, SmallAndDown } from '../../../components/Responsive';
+import { MediumAndUp, SmallAndDown } from '../Responsive';
 
 export default class extends React.PureComponent {
     render() {
         return (
-            <div className="pb-5 pt-5">
+            <div className="pb-3 pt-3">
                 <Container>
                     <Row className="deal__section-heading">
                         <Col>

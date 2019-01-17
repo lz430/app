@@ -72,6 +72,8 @@ export default class Pricing {
 
     docFee = () => fromWholeDollars(this.data.deal.fees.doc);
     cvrFee = () => fromWholeDollars(this.data.deal.fees.cvr);
+    docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
+    cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
 
     defaultPrice = () => fromWholeDollars(this.data.deal.pricing.default);
     employeePrice = () => fromWholeDollars(this.data.deal.pricing.employee);
@@ -89,7 +91,6 @@ export default class Pricing {
         if (this.isEffectiveDiscountDmr()) {
             return this.defaultPrice();
         }
-
         return this.msrp();
     };
 
@@ -130,7 +131,11 @@ export default class Pricing {
     };
 
     isEffectiveDiscountDmr = () => {
-        return !this.data.discountType || this.data.discountType === 'dmr';
+        return (
+            !this.data.discountType ||
+            this.data.discountType === 'dmr' ||
+            this.data.discountType === 'default'
+        );
     };
 
     withTaxAdded = amount => amount.add(this.taxesFor(amount));

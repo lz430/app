@@ -14,13 +14,11 @@ export default class LeasePricing extends Pricing {
             .subtract(this.tradeIn().value);
 
     sellingPrice = () => this.withTaxAdded(this.basePrice());
-
     yourPrice = () => this.sellingPrice().subtract(this.rebates());
-
-    docFeeWithTaxes = () => this.withTaxAdded(this.docFee());
-    cvrFeeWithTaxes = () => this.withTaxAdded(this.cvrFee());
     taxOnRebates = () => this.taxesFor(this.rebates());
     cashDownCCR = () => this.paymentDinero(payment => payment.cashDownCCR);
+    taxesDueAtDelivery = () =>
+        this.taxOnRebates().add(this.taxesFor(this.cashDownCCR()));
 
     totalAmountAtDriveOff = () => {
         return this.paymentDinero(payment => payment.totalAmountAtDriveOff).add(
