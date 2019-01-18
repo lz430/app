@@ -11,7 +11,7 @@ export default class extends React.PureComponent {
     };
 
     state = {
-        activeSection: false,
+        activeSection: 'Overview',
     };
 
     componentDidMount() {
@@ -51,20 +51,18 @@ export default class extends React.PureComponent {
         // console.log(totalScroll);
     };
     // Todo: match the href with the id of the target element
-    handleClick = e => {
+    handleClick = () => {
         this.setState({
             activeSection: name,
         });
 
         configureAnchors({ offset: -110, scrollDuration: 800 });
-
-        // let eTop = theEle.getBoundingClientRect().top;
     };
 
     render() {
         return (
             <div className="p-0">
-                <Sticky topOffset={520}>
+                <Sticky topOffset={585}>
                     {({ style, isSticky }) => (
                         <div
                             className={classNames('deal__section-overview', {
@@ -83,7 +81,7 @@ export default class extends React.PureComponent {
                                                 href="#overview"
                                                 className={
                                                     this.state.activeSection ===
-                                                    true
+                                                    'overview'
                                                         ? 'active'
                                                         : ''
                                                 }

@@ -30,7 +30,7 @@ export default class Header extends React.PureComponent {
                     >
                         <Container>
                             <Row>
-                                <Col sm="6">
+                                <Col md="6">
                                     <div className="deal-details__new-header title-year-make">
                                         {this.props.deal.year}{' '}
                                         {this.props.deal.make}{' '}
@@ -40,7 +40,12 @@ export default class Header extends React.PureComponent {
                                         {this.props.deal.series}
                                     </div>
                                 </Col>
-                                <Col lg="auto" className="payment">
+                                <Col
+                                    md="auto"
+                                    sm="6"
+                                    xs="6"
+                                    className="payment"
+                                >
                                     <p className="m-0">As low as</p>
                                     <span className="dmr-price border-right">
                                         <sub>$</sub>
@@ -48,9 +53,10 @@ export default class Header extends React.PureComponent {
                                     </span>
                                 </Col>
                                 <Col
-                                    lg="auto"
+                                    md="auto"
                                     sm="6"
-                                    className="deal-details__new-header payment"
+                                    xs="6"
+                                    className="deal-details__new-header payment align-self-sm-end"
                                 >
                                     <p className="m-0">Lease from</p>
                                     <p>
@@ -62,7 +68,7 @@ export default class Header extends React.PureComponent {
                                     </p>
                                 </Col>
                                 <Col
-                                    lg="auto"
+                                    md="auto"
                                     className="d-flex ml-auto align-items-center"
                                 >
                                     <Button className="" color="primary">

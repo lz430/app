@@ -323,11 +323,20 @@
     &.title-year-make {
         font-size: 1.6rem;
         font-weight: 700;
+        @include media-breakpoint-down(sm) {
+            font-size: 1.2rem;
+            float: left;
+            padding-right: 10px;
+        }
     }
 
     &.title-model-trim {
         font-size: 1.3rem;
         font-weight: 400;
+        @include media-breakpoint-down(sm) {
+            font-size: 1.2rem;
+            float: left;
+        }
     }
 
     &.payment {
@@ -354,16 +363,6 @@
         }
     }
 
-    .title-year-make {
-        font-size: 1.6rem;
-        font-weight: 700;
-    }
-
-    .title-model-trim {
-        font-size: 1.3rem;
-        font-weight: 400;
-    }
-
     .payment {
         sup {
             top: -0.7em;
@@ -379,11 +378,19 @@
             font-size: 2rem;
             line-height: 1;
             padding-right: 20px;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 1.2rem;
+            }
         }
 
         &__monthly {
             font-size: 2rem;
             line-height: 1;
+
+            @include media-breakpoint-down(sm) {
+                font-size: 1.2rem;
+            }
         }
 
         .tooltip {
