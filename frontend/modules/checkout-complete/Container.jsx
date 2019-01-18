@@ -24,7 +24,6 @@ import CashDetails from '../../apps/checkout/components/CashDetails';
 import InvalidCheckoutPage from '../../apps/checkout/components/InvalidCheckoutPage';
 import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
-import withTracker from '../../components/withTracker';
 import CheckoutSteps from '../../apps/checkout/components/CheckoutSteps';
 import CheckoutPageLoading from '../../apps/checkout/components/CheckoutPageLoading';
 import { getCurrentPage } from '../../apps/page/selectors';
@@ -194,6 +193,5 @@ export default compose(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(CheckoutCompleteContainer);

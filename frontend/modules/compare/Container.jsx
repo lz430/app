@@ -14,7 +14,6 @@ import { getComparedDeals, getEquipmentCategories } from './selectors';
 import { getIsPageLoading } from '../../apps/page/selectors';
 
 import Loading from '../../components/Loading';
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import { getSearchQuery } from '../deal-list/selectors';
 import { batchRequestDealQuotes } from '../../apps/pricing/actions';
@@ -147,6 +146,5 @@ export default compose(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(ComparePageContainer);

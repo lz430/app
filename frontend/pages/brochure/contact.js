@@ -5,7 +5,6 @@ import { Container, Row, Col } from 'reactstrap';
 import { SmallAndUp } from '../../components/Responsive';
 
 import { withRouter } from 'next/router';
-import withTracker from '../../components/withTracker';
 import ContactForm from '../../modules/contact/components/ContactForm';
 
 import Head from 'next/head';
@@ -67,4 +66,4 @@ class Page extends React.Component {
     }
 }
 
-export default withRouter(withTracker(Page));
+export default withRouter(Page);

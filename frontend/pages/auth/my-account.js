@@ -11,7 +11,6 @@ import { Container, Row, Col, Breadcrumb, BreadcrumbItem } from 'reactstrap';
 
 import Page from '../../components/Page';
 import { withRouter } from 'next/router';
-import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { getUser } from '../../apps/session/selectors';
 import { logoutUser } from '../../apps/user/actions';
@@ -93,7 +92,6 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
     withRouter,
-    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps

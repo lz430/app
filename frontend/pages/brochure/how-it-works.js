@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PageHero from '../../components/brochure/PageHero';
 import { Container } from 'reactstrap';
 import Link from 'next/link';
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 import { track } from '../../core/services';
@@ -114,4 +113,4 @@ class Page extends Component {
     }
 }
 
-export default withRouter(withTracker(Page));
+export default withRouter(Page);
