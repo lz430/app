@@ -18,6 +18,7 @@
 
             @include media-breakpoint-up(sm) {
                 height: 240px;
+                background-size: 700px;
             }
             @include media-breakpoint-up(md) {
                 background-size: cover;
