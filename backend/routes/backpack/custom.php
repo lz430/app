@@ -19,13 +19,12 @@ Route::group([
     // Models
     CRUD::resource('deal', 'DealCrudController');
     CRUD::resource('dealer', 'DealerCrudController');
-    CRUD::resource('feature', 'FeatureCrudController');
+    CRUD::resource('filter', 'FilterCrudController');
     CRUD::resource('category', 'CategoryCrudController');
     CRUD::resource('purchase', 'OrderCrudController');
 
     //
     // Deal tools
-    Route::get('deal/{deal}/debugger', 'DealDebuggerController@show');
     Route::get('deal/{deal}', 'DealDataController@show');
     Route::get('deal/{deal}/financing', 'DealFinancingController@show');
     Route::get('deal/{deal}/jato', 'DealJatoDataController@show');
@@ -55,9 +54,4 @@ Route::group([
     // Archived vAuto Dumps
     Route::get('archived-dumps', 'VAutoDumpController@getFiles');
     Route::get('archived-dumps/download/{filename}', 'VAutoDumpController@downloadFile');
-
-    //
-    // Custom Debug tools
-    Route::get('jato-logs/{date}', 'JatoLogController@showDay');
-    Route::get('jato-logs', 'JatoLogController@index');
 });

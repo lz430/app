@@ -19,6 +19,13 @@ const setup = ({ server, app }) => {
         app.render(req, res, '/brochure/contact', req.query);
     });
 
+    server.get('/story/:slug', (req, res) => {
+        const queryParams = {
+            slug: req.params.slug,
+        };
+        return app.render(req, res, '/brochure/story', queryParams);
+    });
+
     server.get('/privacy-policy', (req, res) => {
         app.render(req, res, '/brochure/privacy-policy', req.query);
     });

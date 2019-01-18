@@ -118,7 +118,7 @@ class DealToVehicle
 
     private function translateTransmission()
     {
-        $transmission = $this->deal->features()->whereHas('category', function ($query) {
+        $transmission = $this->deal->filters()->whereHas('category', function ($query) {
             $query->where('title', '=', 'transmission');
         })->first();
 

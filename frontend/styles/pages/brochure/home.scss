@@ -1,26 +1,43 @@
 .home {
     &__hero {
+        position: relative;
+
         &__banner {
             width: 100%;
-            background-size: cover;
-            background-position: center center;
-            position: relative;
+            background-size: 504px;
+            background-position: top;
+
             display: flex;
-            flex-direction: column;
+            flex-direction: column-reverse;
+
             align-items: center;
             justify-items: center;
             justify-content: center;
             text-align: center;
-            box-shadow: inset 0 0 0 1000px #419bb1c4;
             height: 200px;
+
             @include media-breakpoint-up(sm) {
                 height: 240px;
+                background-size: 700px;
             }
             @include media-breakpoint-up(md) {
+                background-size: cover;
+                background-position: center center;
+                padding: 2rem 4rem 4rem 4rem;
+                height: 360px;
+                border-bottom: 40px solid $primary;
+                flex-direction: row;
+            }
+            @include media-breakpoint-up(lg) {
                 padding: 4rem 4rem 6rem 4rem;
                 height: 420px;
-                box-shadow: none;
             }
+
+            @include media-breakpoint-up(xl) {
+                padding: 4rem 4rem 6rem 4rem;
+                height: 580px;
+            }
+
             h1 {
                 color: #fff;
                 font-weight: bold;
@@ -33,6 +50,103 @@
                     font-size: 4rem;
                 }
             }
+
+            &-story {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                color: $color-lightgrey;
+                background: $primary;
+                padding: 8px;
+                font-size: 0.8rem;
+                height: 160px;
+                margin-bottom: -83px;
+                @include media-breakpoint-up(md) {
+                    margin: auto;
+                    height: 100%;
+                    font-size: 1.2rem;
+                    background: transparent;
+                    width: auto;
+                    max-width: 40%;
+                    min-width: 40%;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                > div {
+                    width: 100%;
+                    display: flex;
+                    text-align: left;
+                    @include media-breakpoint-up(md) {
+                        display: block;
+                        text-align: center;
+                        margin-left: auto;
+                        width: auto;
+                    }
+                }
+
+                &-quote-wrapper {
+                    width: 100%;
+                }
+
+                &-from {
+                    font-size: 0.9rem;
+                }
+
+                .btn {
+                    width: 150px;
+
+                    @include media-breakpoint-up(md) {
+                        width: auto;
+                        margin-top: 10px;
+                    }
+                }
+            }
+
+            &-motto {
+                justify-content: center;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                color: $color-lightgrey;
+                padding: 20px;
+                @include media-breakpoint-up(md) {
+                    height: 100%;
+                }
+
+                ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                    margin-left: auto;
+                    font-size: 1.5rem;
+                    line-height: 1.3;
+                    text-align: left;
+                    font-weight: bold;
+                    text-shadow: 0.25rem 0.125rem 2rem rgba(0, 0, 0, 0.8);
+
+                    @include media-breakpoint-up(md) {
+                        font-size: 2rem;
+                    }
+                    @include media-breakpoint-up(lg) {
+                        font-size: 3rem;
+                    }
+                }
+                span {
+                    margin-left: auto;
+
+                    font-weight: bold;
+                    text-shadow: 0.25rem 0.125rem 2rem rgba(0, 0, 0, 0.8);
+                    @include media-breakpoint-up(md) {
+                        margin-top: 20px;
+                        font-size: 1.35rem;
+                    }
+                    @include media-breakpoint-up(lg) {
+                        font-size: 2rem;
+                    }
+                }
+            }
         }
     }
     &__search-container {
@@ -43,22 +157,32 @@
     }
     &__search {
         background: $color-background-secondary;
-        max-width: 480px;
-        min-width: 480px;
         box-shadow: $box-shadow-sm;
         border-radius: 5px;
-        margin: 0 auto -47px auto;
         padding: 20px;
         position: relative;
+        max-width: 95%;
+        min-width: 95%;
+        margin: 0 auto -120px auto;
 
-        @include media-breakpoint-down(sm) {
-            max-width: 95%;
-            min-width: 95%;
+        @include media-breakpoint-up(sm) {
+            max-width: 480px;
+            min-width: 480px;
+        }
+
+        @include media-breakpoint-up(md) {
+            max-width: 600px;
+            min-width: 600px;
+            margin: 0 auto -30px auto;
         }
 
         h2 {
-            font-size: 0.8rem;
-            font-weight: bold;
+            font-size: 1rem;
+            @include media-breakpoint-up(md) {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 1rem;
+            }
         }
 
         .search__input {
@@ -69,7 +193,7 @@
                 background: #f3f4f5;
                 border: 1px solid #f1f1f1;
                 border-radius: $border-radius;
-                font-size: 0.8em;
+                font-size: 1rem;
                 height: 100%;
                 padding: 0.5rem 0.5rem 0.5rem 1.7rem;
                 width: 100%;
@@ -135,7 +259,10 @@
 .callout {
     &__categories {
         background: #f5f6f7;
-        padding: 80px 0 50px;
+        padding: 150px 0 50px;
+        @include media-breakpoint-up(md) {
+            padding: 80px 0 50px;
+        }
 
         .navigation {
             display: flex;

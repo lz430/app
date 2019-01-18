@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 import TypeFormIframe from '../../modules/concierge/components/TypeFormIframe';
 
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 
@@ -24,4 +23,4 @@ class Page extends Component {
     }
 }
 
-export default withRouter(withTracker(Page));
+export default withRouter(Page);

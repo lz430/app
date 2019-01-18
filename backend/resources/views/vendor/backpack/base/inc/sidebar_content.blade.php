@@ -25,9 +25,9 @@
     </a>
 </li>
 <li>
-    <a href="/admin/feature">
+    <a href="/admin/filter">
         <i class="fa fa-rocket"></i>
-        <span>Features</span>
+        <span>Filters</span>
     </a>
 </li>
 <li class="treeview">

@@ -17,7 +17,6 @@ import { getCurrentPage, getIsPageLoading } from '../../apps/page/selectors';
 import Loading from '../../components/Loading';
 import RouteOneIframe from './components/RouteOneIframe';
 import CompleteFinancingForm from './components/CompleteFinancingForm';
-import withTracker from '../../components/withTracker';
 import CheckoutSteps from '../../apps/checkout/components/CheckoutSteps';
 import { nextRouterType } from '../../core/types';
 import CheckoutPageLoading from '../../apps/checkout/components/CheckoutPageLoading';
@@ -119,6 +118,5 @@ export default compose(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(CheckoutFinancingContainer);

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Container, Row, Col } from 'reactstrap';
 import Head from 'next/head';
 
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import { track } from '../../core/services';
 
@@ -57,9 +56,9 @@ class Page extends React.Component {
 
                     <div className="about__story mt-5 mb-5">
                         <Container>
-                            <Row noGutters>
+                            <Row noGutters className="rounded">
                                 <Col>
-                                    <div className="about__story-content">
+                                    <div className="about__story-content rounded">
                                         <h3 className="">Our Story</h3>
                                         <p>
                                             After a 30 year career in and around
@@ -241,4 +240,4 @@ class Page extends React.Component {
     }
 }
 
-export default withRouter(withTracker(Page));
+export default withRouter(Page);

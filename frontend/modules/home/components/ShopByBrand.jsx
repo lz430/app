@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { track } from '../../../core/services';
 import StaticImage from '../../../components/StaticImage';
+import LazyLoad from 'react-lazyload';
 
 export default class extends React.Component {
     state = {
@@ -52,12 +53,14 @@ export default class extends React.Component {
                                 this.trackLinkClick(filteredMakes[s], query)
                             }
                         >
-                            <StaticImage
-                                path={filteredMakes[s].logo}
-                                width={120}
-                                height={120}
-                                alt={filteredMakes[s].title + ' logo'}
-                            />
+                            <LazyLoad once={true} height={120} offset={200}>
+                                <StaticImage
+                                    path={filteredMakes[s].logo}
+                                    width={120}
+                                    height={120}
+                                    alt={filteredMakes[s].title + ' logo'}
+                                />
+                            </LazyLoad>
                         </a>
                     </Link>
                 </div>

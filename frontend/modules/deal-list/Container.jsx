@@ -51,7 +51,6 @@ import { requestDealQuote } from '../../apps/pricing/actions';
 
 import { setPurchaseStrategy, requestLocation } from '../../apps/user/actions';
 import ListTopMessaging from './components/Cta/ListTopMessaging';
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import dealPage from './selectors';
 import { toggleCompare } from '../../apps/common/actions';
@@ -348,6 +347,5 @@ export default compose(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(Container);

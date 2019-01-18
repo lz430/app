@@ -20,7 +20,6 @@ import {
 } from '../apps/page/actions';
 
 import { withRouter } from 'next/router';
-import withTracker from '../components/withTracker';
 import { nextRouterType } from '../core/types';
 import Head from 'next/head';
 import { getUserPurchaseStrategy } from '../apps/user/selectors';
@@ -140,7 +139,6 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
     withRouter,
-    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 
 import PropTypes from 'prop-types';
-import { dealType } from '../../core/types';
+import { nextRouterType, dealType } from '../../core/types';
 
 import { track } from '../../core/services';
 
@@ -49,8 +49,6 @@ import {
 } from './selectors';
 import ScrollableAnchor from 'react-scrollable-anchor';
 import Breadcrumb from './components/Breadcrumb';
-import withTracker from '../../components/withTracker';
-import { nextRouterType } from '../../core/types';
 import { withRouter } from 'next/router';
 import { getSearchQuery } from '../deal-list/selectors';
 import { StickyContainer } from 'react-sticky';
@@ -451,7 +449,6 @@ const mapDispatchToProps = mapAndBindActionCreators({
 
 export default compose(
     withRouter,
-    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps

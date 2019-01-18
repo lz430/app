@@ -27,3 +27,12 @@
 .text-xs {
     font-size: 0.75rem;
 }
+
+.btn-outline-white {
+    color: $color-text-white;
+    border-color: $color-text-white;
+    &:hover {
+        color: darken($color-text-white, 20);
+        border-color: darken($color-text-white, 20);
+    }
+}

@@ -4,6 +4,7 @@ import { Container, Row, Col } from 'reactstrap';
 
 import featuredMedia from '../../../content/media';
 import StaticImage from '../../../components/StaticImage';
+import LazyLoad from 'react-lazyload';
 
 export default class extends React.Component {
     renderMedia(media) {
@@ -14,7 +15,9 @@ export default class extends React.Component {
                     rel="noopener noreferrer nofollow"
                     target="_blank"
                 >
-                    <StaticImage path={media.logo} alt={media.name} />
+                    <LazyLoad once={true} height={120} offset={200}>
+                        <StaticImage path={media.logo} alt={media.name} />
+                    </LazyLoad>
                 </a>
             </Col>
         );

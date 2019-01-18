@@ -12,6 +12,8 @@ import config from '../core/config';
 import { requestIpLocation } from '../apps/user/actions';
 import { PersistGate } from 'redux-persist/integration/react';
 import { softUpdateSessionData, setCSRFToken } from '../apps/session/actions';
+import Router from 'next/router';
+import { initGA, logPageView } from '../util/analytics';
 
 const SENTRY_PUBLIC_DSN = config['SENTRY_DSN'];
 
@@ -91,6 +93,12 @@ class MyApp extends App {
 
         // This is needed to render errors correctly in development / production
         super.componentDidCatch(error, errorInfo);
+    }
+
+    componentDidMount() {
+        initGA();
+        logPageView();
+        Router.router.events.on('routeChangeComplete', logPageView);
     }
 
     render() {
