@@ -11,7 +11,6 @@ import SignupForm from '../../apps/user/components/SignupForm';
 import Link from 'next/link';
 import { getUser } from '../../apps/session/selectors';
 import { withRouter } from 'next/dist/lib/router';
-import withTracker from '../../components/withTracker';
 import Page from '../../components/Page';
 import PropTypes from 'prop-types';
 import { nextRouterType } from '../../core/types';
@@ -108,7 +107,6 @@ const mapDispatchToProps = () => {
 
 export default compose(
     withRouter,
-    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps

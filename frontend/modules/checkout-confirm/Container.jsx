@@ -22,7 +22,6 @@ import DealColors from '../../components/Deals/DealColors';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import ContactForm from './components/ContactForm';
 
-import withTracker from '../../components/withTracker';
 import CheckoutSteps from '../../apps/checkout/components/CheckoutSteps';
 import { nextRouterType } from '../../core/types';
 import CheckoutPageLoading from '../../apps/checkout/components/CheckoutPageLoading';
@@ -164,6 +163,5 @@ export default compose(
     connect(
         mapStateToProps,
         mapDispatchToProps
-    ),
-    withTracker
+    )
 )(CheckoutConfirmContainer);

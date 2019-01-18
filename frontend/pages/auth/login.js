@@ -16,7 +16,6 @@ import Link from 'next/link';
 import Page from '../../components/Page';
 import { loginUser } from '../../apps/user/actions';
 import { withRouter } from 'next/router';
-import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
 import { getUser } from '../../apps/session/selectors';
 import LoadingIcon from '../../components/Loading';
@@ -118,7 +117,6 @@ const mapDispatchToProps = dispatch => {
 
 export default compose(
     withRouter,
-    withTracker,
     connect(
         mapStateToProps,
         mapDispatchToProps

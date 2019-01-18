@@ -5,7 +5,6 @@ import { Container, Row, Col } from 'reactstrap';
 import { MediumAndUp, SmallAndDown } from '../../components/Responsive';
 import Faqs from '../../content/faqs';
 import FaqGroup from '../../components/brochure/brochure-faqGroup';
-import withTracker from '../../components/withTracker';
 import { withRouter } from 'next/router';
 import Head from 'next/head';
 import { track } from '../../core/services';
@@ -107,4 +106,4 @@ class Page extends Component {
     }
 }
 
-export default withRouter(withTracker(Page));
+export default withRouter(Page);
