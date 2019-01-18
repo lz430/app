@@ -47,7 +47,7 @@ import {
     getUrlQuery,
     pricingFromDealDetail,
 } from './selectors';
-
+import ScrollableAnchor from 'react-scrollable-anchor';
 import Breadcrumb from './components/Breadcrumb';
 import withTracker from '../../components/withTracker';
 import { nextRouterType } from '../../core/types';
@@ -370,30 +370,40 @@ class DealDetailContainer extends React.PureComponent {
                             <NavHighlights deal={this.props.deal} />
                         </div> */}
                     </Container>
-                    <Overview deal={this.props.deal} />
-                    <Specs deal={this.props.deal} />
-                    <AdditionalInformation deal={this.props.deal} />
-                    <OurPromise />
-                    <div className="deal-details__container pb-5">
-                        <Container className="deal__container-faq-contact">
-                            <Row className="shadow-sm">
-                                <Col
-                                    md="6"
-                                    sm="12"
-                                    className="bg-white shadow-sm rounded no-gutters container-faq"
-                                >
-                                    <Faq />
-                                </Col>
-                                <Col
-                                    md="6"
-                                    sm="12"
-                                    className="bg-white shadow-sm rounded no-gutters container-contact"
-                                >
-                                    <ContactForm deal={this.props.deal} />
-                                </Col>
-                            </Row>
-                        </Container>
-                    </div>
+                    <ScrollableAnchor id={'overview'}>
+                        <Overview deal={this.props.deal} />
+                    </ScrollableAnchor>
+                    <ScrollableAnchor id={'specs'}>
+                        <Specs deal={this.props.deal} />
+                    </ScrollableAnchor>
+                    <ScrollableAnchor id={'additional-information'}>
+                        <AdditionalInformation deal={this.props.deal} />
+                    </ScrollableAnchor>
+                    <ScrollableAnchor id={'our-promise'}>
+                        <OurPromise />
+                    </ScrollableAnchor>
+                    <ScrollableAnchor id={'faqs'}>
+                        <div className="deal-details__container pb-5">
+                            <Container className="deal__container-faq-contact">
+                                <Row className="shadow-sm">
+                                    <Col
+                                        md="6"
+                                        sm="12"
+                                        className="bg-white shadow-sm rounded no-gutters container-faq"
+                                    >
+                                        <Faq />
+                                    </Col>
+                                    <Col
+                                        md="6"
+                                        sm="12"
+                                        className="bg-white shadow-sm rounded no-gutters container-contact"
+                                    >
+                                        <ContactForm deal={this.props.deal} />
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </div>
+                    </ScrollableAnchor>
                 </StickyContainer>
             </React.Fragment>
         );

@@ -3,6 +3,7 @@ import { dealType } from '../../../../core/types';
 import { Row, Col, Container } from 'reactstrap';
 import classNames from 'classnames';
 import { Sticky } from 'react-sticky';
+import { configureAnchors } from 'react-scrollable-anchor';
 
 export default class extends React.PureComponent {
     static propTypes = {
@@ -54,20 +55,10 @@ export default class extends React.PureComponent {
         this.setState({
             activeSection: name,
         });
-        let sections = document.querySelectorAll('.deal-details__container');
 
-        // Helpful: https://stackoverflow.com/questions/9880472/determine-distance-from-the-top-of-a-div-to-top-of-window-with-javascript/9880571
+        configureAnchors({ offset: -110, scrollDuration: 800 });
 
-        sections.forEach(section => {
-            let topOffset = section.getBoundingClientRect().top; //How far from the top is the element
-        }); //Should I make this it's own function?
-
-        // let eTop = this.getBoundingClientRect().top;
-        console.log(e.target);
-        window.scrollTo({
-            top: 620,
-            behavior: 'smooth',
-        });
+        // let eTop = theEle.getBoundingClientRect().top;
     };
 
     render() {
