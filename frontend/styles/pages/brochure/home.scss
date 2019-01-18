@@ -22,10 +22,19 @@
             @include media-breakpoint-up(md) {
                 background-size: cover;
                 background-position: center center;
-                padding: 4rem 4rem 6rem 4rem;
-                height: 580px;
+                padding: 2rem 4rem 4rem 4rem;
+                height: 360px;
                 border-bottom: 40px solid $primary;
                 flex-direction: row;
+            }
+            @include media-breakpoint-up(lg) {
+                padding: 4rem 4rem 6rem 4rem;
+                height: 420px;
+            }
+
+            @include media-breakpoint-up(xl) {
+                padding: 4rem 4rem 6rem 4rem;
+                height: 580px;
             }
 
             h1 {
@@ -79,6 +88,10 @@
                     width: 100%;
                 }
 
+                &-from {
+                    font-size: 0.9rem;
+                }
+
                 .btn {
                     width: 150px;
 
@@ -108,21 +121,29 @@
                     margin-left: auto;
                     font-size: 1.5rem;
                     line-height: 1.3;
-                    @include media-breakpoint-up(md) {
-                        font-size: 3rem;
-                    }
                     text-align: left;
                     font-weight: bold;
                     text-shadow: 0.25rem 0.125rem 2rem rgba(0, 0, 0, 0.8);
+
+                    @include media-breakpoint-up(md) {
+                        font-size: 2rem;
+                    }
+                    @include media-breakpoint-up(lg) {
+                        font-size: 3rem;
+                    }
                 }
                 span {
                     margin-left: auto;
-                    @include media-breakpoint-up(md) {
-                        margin-top: 20px;
-                        font-size: 2rem;
-                    }
+
                     font-weight: bold;
                     text-shadow: 0.25rem 0.125rem 2rem rgba(0, 0, 0, 0.8);
+                    @include media-breakpoint-up(md) {
+                        margin-top: 20px;
+                        font-size: 1.35rem;
+                    }
+                    @include media-breakpoint-up(lg) {
+                        font-size: 2rem;
+                    }
                 }
             }
         }
