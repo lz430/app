@@ -90,7 +90,7 @@ export default class Specs extends React.PureComponent {
         }
 
         return (
-            <div className="deal-details__container pt-4 pb-3">
+            <div className="deal-details__container pt-5 pb-5">
                 <Container>
                     <Row className="deal__section-heading" noGutters>
                         <Col>

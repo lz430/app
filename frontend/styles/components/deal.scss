@@ -320,12 +320,16 @@
 }
 
 .deal-details__new-header {
+    &.stickied {
+        padding-top: 10px;
+    }
     &.title-year-make {
         font-size: 1.6rem;
         font-weight: 700;
         @include media-breakpoint-down(sm) {
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             float: left;
+            line-height: 0.9rem;
             padding-right: 10px;
         }
     }
@@ -334,7 +338,7 @@
         font-size: 1.3rem;
         font-weight: 400;
         @include media-breakpoint-down(sm) {
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             float: left;
         }
     }
@@ -364,6 +368,12 @@
     }
 
     .payment {
+        @include media-breakpoint-down(sm) {
+            p {
+                font-size: 0.9rem;
+                line-height: 0.9rem;
+            }
+        }
         sup {
             top: -0.7em;
             font-size: 50%;
@@ -401,16 +411,38 @@
             }
         }
     }
+    .container-button {
+        button {
+            align-self: center;
+            margin-left: auto;
 
-    button {
-        align-self: center;
-        margin-left: auto;
+            @include media-breakpoint-down(sm) {
+                text-align: center;
+                width: 100%;
+            }
+        }
     }
 
     &.stickied {
         background: $color-background-secondary;
         z-index: 999;
         border-bottom: 1px solid $color-darkgrey;
+
+        .container-button {
+            @include media-breakpoint-down(md) {
+                bottom: 0;
+                position: absolute;
+                left: 0;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            button {
+                @include media-breakpoint-down(md) {
+                    border-radius: 0;
+                    width: 100%;
+                }
+            }
+        }
     }
 }
 

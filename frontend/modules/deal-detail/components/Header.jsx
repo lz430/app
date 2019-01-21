@@ -9,13 +9,13 @@ export default class Header extends React.PureComponent {
     static propTypes = {
         deal: dealType.isRequired,
     };
-
     componentDidMount() {
         window.addEventListener('scroll', this.handleScroll);
     }
 
     // Sticky header
     render() {
+        console.log(this.props.deal);
         return (
             <Sticky topOffset={10}>
                 {({ style, isSticky }) => (
@@ -26,11 +26,18 @@ export default class Header extends React.PureComponent {
                         style={{
                             ...style,
                             marginTop: isSticky ? '0' : '0',
+                            minHeight: isSticky ? '100px' : 'none',
                         }}
                     >
                         <Container>
                             <Row>
-                                <Col md="6">
+                                <Col
+                                    className={
+                                        !isSticky
+                                            ? 'col-md-6 col-lg-7 col-xl-8'
+                                            : 'col-md-6'
+                                    }
+                                >
                                     <div className="deal-details__new-header title-year-make">
                                         {this.props.deal.year}{' '}
                                         {this.props.deal.make}{' '}
@@ -42,9 +49,12 @@ export default class Header extends React.PureComponent {
                                 </Col>
                                 <Col
                                     md="auto"
-                                    sm="6"
-                                    xs="6"
+                                    sm="3"
+                                    xs="3"
                                     className="payment"
+                                    style={{
+                                        marginRight: isSticky ? '' : 'auto',
+                                    }}
                                 >
                                     <p className="m-0">As low as</p>
                                     <span className="dmr-price border-right">
@@ -54,9 +64,12 @@ export default class Header extends React.PureComponent {
                                 </Col>
                                 <Col
                                     md="auto"
-                                    sm="6"
-                                    xs="6"
-                                    className="deal-details__new-header payment align-self-sm-end"
+                                    sm="3"
+                                    xs="3"
+                                    className="payment align-self-sm-end"
+                                    style={{
+                                        marginRight: isSticky ? '' : 'auto',
+                                    }}
                                 >
                                     <p className="m-0">Lease from</p>
                                     <p>
@@ -68,11 +81,18 @@ export default class Header extends React.PureComponent {
                                     </p>
                                 </Col>
                                 <Col
-                                    md="auto"
-                                    className="d-flex ml-auto align-items-center"
+                                    className={
+                                        !isSticky
+                                            ? 'col-md-auto ml-auto align-items-center'
+                                            : 'align-items-sm-center sticky container-button'
+                                    }
+                                    style={{
+                                        display: isSticky ? 'flex' : 'none',
+                                        marginRight: isSticky ? 'auto' : '',
+                                    }}
                                 >
                                     <Button className="" color="primary">
-                                        <b>Next: </b> Begin Purchase
+                                        <b>Get Started: </b> Configure Price
                                     </Button>
                                 </Col>
                             </Row>

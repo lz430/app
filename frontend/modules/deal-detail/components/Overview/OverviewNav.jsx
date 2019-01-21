@@ -50,8 +50,8 @@ export default class extends React.PureComponent {
         });
         // console.log(totalScroll);
     };
-    // Todo: match the href with the id of the target element
-    handleClick = () => {
+
+    handleClick = e => {
         this.setState({
             activeSection: name,
         });
