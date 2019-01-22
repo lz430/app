@@ -26,7 +26,6 @@ export default class Header extends React.PureComponent {
                         style={{
                             ...style,
                             marginTop: isSticky ? '0' : '0',
-                            minHeight: isSticky ? '100px' : 'none',
                         }}
                     >
                         <Container>
@@ -59,7 +58,10 @@ export default class Header extends React.PureComponent {
                                     <p className="m-0">As low as</p>
                                     <span className="dmr-price border-right">
                                         <sub>$</sub>
-                                        45,375
+                                        {this.props.deal.pricing.employee.toLocaleString(
+                                            navigator.language,
+                                            { minimumFractionDigits: 0 }
+                                        )}
                                     </span>
                                 </Col>
                                 <Col

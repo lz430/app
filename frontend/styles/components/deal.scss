@@ -426,7 +426,13 @@
     &.stickied {
         background: $color-background-secondary;
         z-index: 999;
-        border-bottom: 1px solid $color-darkgrey;
+        // border-bottom: 1px solid $color-darkgrey;
+        @include media-breakpoint-down(sm) {
+            min-height: 110px;
+        }
+        @include media-breakpoint-down(xs) {
+            min-height: 100px;
+        }
 
         .container-button {
             @include media-breakpoint-down(md) {
